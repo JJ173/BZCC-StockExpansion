@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibpgen"
+scrapCost = 0
+scrapValue = 0
+maxHealth = 5000
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[Lod1]

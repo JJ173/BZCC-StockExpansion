@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ibrecy"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem4 = "ivcon5_fix"
+buildItem5 = ""
+buildItem6 = ""
+
+[RecyclerClass]
+
+[Lod1]

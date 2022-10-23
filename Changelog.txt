@@ -1,0 +1,59 @@
+Campaign:
+
+General:
+- Added cooperative support to all SP missions.
+- Improved mission difficulty (enemies spawned, time between events, etc) based on difficulty options.
+	- In cooperative, this will be an option as part of the lobby when you host.
+	- In SP mode, this will be controlled by the difficulty option in your options.
+- Subtitles added to all mission-critical dialogue. 
+- Immersion improved. Logic has been added to try and combat the odds of a player seeing an enemy/ally spawn in from nowhere (common BZ2/BZCC issue in Stock).
+- Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
+
+
+ISDF05 (The Dark Planet):
+- Scion units will now attack the player from multiple angles, rather than spawning in one place and attacking.
+- Shabayev will no longer cause mission failure if her Tank is destroyed. Instead she will have the Recycler build a replacement Scout for her to pilot.
+	- Mission will fail if her pilot is killed.
+- Players now spawn in a "ivtank" instead of using whatever is saved in BZN by the editor.
+- Shabayev now spawns in "ivtank" instead of "ivtan5".
+- Re-added missing "isdf0501.wav" dialogue to the start of the mission.
+- Manson spawns at the start of the mission to reduce the likelihood of players seeing him "pop in".
+- Manson is now triggered when the player has successfully deployed the second Scavenger.
+- Renamed Power Generator to Power for consistency.
+- Renamed Cmdr. Shabayev to Cmd. Shabayev for consistency.
+- Constructor now costs 40 scrap instead of being free.
+	- This addresses an issue where if they player cancels the free constructor, they are refunded 20 scrap.
+
+- Fixed a bug where players could cancel the constructor build order on the Recycler which would stall the mission.
+- Fixed a bug where ibpge5 had a Scion sound.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF06 (The Wormhole):
+- Scavengers are now deployed as part of the BZN. It made no sense for a whole ISDF base to be present with no biometal intake.
+- Added Bomber to the start of the mission so it doesn't spawn in mid-mission.
+- Added Constructor to the start of the mission so it doesn't spawn in mid-mission.
+- Added Scavenger to the start of the mission so it doesn't spawn in mid-mission.
+- Moved the "breachers" spawn outside of the map boundaries so the player won't seem their spawn.
+- Changes to ISDF base to make it more "alive":
+	- Added a couple of turrets.
+- Added Green Squad to support Manson's dialogue about initial attacks and Scavenger discovery.
+	- Green Squad will return to attack the enemy base.
+- Added larger attacks against the Gun Towers at the front of the base to improve the feeling of potential danger.
+- All Missile Scouts now have the Shadower Missile instead of just the player.
+- Scion units will actively attack the player and the Constructor during the second phase of the mission (where the player has to attack the Scion Extractor).
+- Logic added to make sure the player builds their Relay Bunker and Gun Towers within 100 meter of the pool objective.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF07 ():
+- Added a dropship to the start of the mission to simulate landing.
+- Shabayev will now wait until directly ordered before moving to the ruins to investigate.
+- Players now spawn in a "ivtank" instead of using whatever is saved in BZN by the editor.
+
+- General QOL (Quality of Life) improvements.
+
+Instant Action/MPI:
+- CPU will now have a Commander unit.
+- CPU will spawn with 1 Scav that is commanded to go straight to the nearest pool to help reduce scrap stalling.
+- CPU will now follow a specific set of base paths to construct their bases so they are more strategic.

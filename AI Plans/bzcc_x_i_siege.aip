@@ -1,0 +1,10 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscavcpu"
+consClass = "ivcons"
+
+[IdleDispatcher]
+
+[Match]
+
+[Plan1]

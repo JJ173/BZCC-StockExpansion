@@ -91,7 +91,6 @@ local Mission =
     m_RecyclerBuildingConstructor = false,
     m_RecyclerBuildingRescueScout = false,
     m_HandleTurretWarning = false,
-    m_FriendlyFireAudioPlaying = false,
     m_ShabAttacking = false,
     m_MansonWaiting = true,
     m_MansonGunTowerMessage = false,
@@ -108,7 +107,6 @@ local Mission =
     m_ScionAttackDelay = 0,
     m_MortarBikeTime = 0,
     m_ConstructorMovieTime = 0,
-    m_FriendlyFireReset = 0,
     m_MansonDelayTime = 0,
     m_MansonNagTime = 0,
     m_MissionGunTowerTimer = 0,
@@ -246,7 +244,7 @@ function AddObject(h)
         Retreat(Mission.m_Blue2, "manson_path1", 1);
 
         -- Play our audio.
-        _Subtitles.AudioWithSubtitles("isdf0542.wav");
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0542.wav");
 
         -- So we don't loop.
         Mission.m_MansonRetreating = true;
@@ -261,7 +259,7 @@ function DeleteObject(h)
     if (class == "CLASS_SATCHELCHARGE" and IsAround(Mission.m_Teleportal)) then
         if (GetDistance(h, Mission.m_Teleportal) <= 75) then
             -- Kill it.
-            Damage(Mission.m_Teleportal, GetMaxHealth(Mission.m_Teleportal) + 9000);
+            Damage(Mission.m_Teleportal, 99999);
         end
     end
 end
@@ -270,6 +268,7 @@ function Start()
     -- Set difficulty based on whether it's coop or not.
     if (Mission.m_IsCooperativeMode) then
         -- TODO: introduce new ivar for difficulty?
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     else
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
@@ -309,8 +308,6 @@ function Start()
     Mission.m_Teleportal = GetHandle("unnamed_ibtele");
     -- Set it's name.
     SetObjectiveName(Mission.m_Teleportal, TranslateString("Mission0503"));
-    -- Make it immortal.
-    SetMaxHealth(Mission.m_Teleportal, 0);
 
     -- Create Shabayev.
     Mission.m_Shabayev = BuildObject("ivtank", Mission.m_HostTeam, "shab_start");
@@ -395,6 +392,10 @@ function AddPlayer(id, Team, IsNewPlayer)
     return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
 end
 
+function DeletePlayer(id) 
+    return _Cooperative.DeletePlayer(id);
+end
+
 function PlayerEjected(DeadObjectHandle)
     return _Cooperative.PlayerEjected(DeadObjectHandle);
 end
@@ -413,21 +414,28 @@ end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
     -- Handle Shabayev getting into the rescue Scout.
-    if (pilotHandle == Mission.m_ShabayevPilot and emptyCraftHandle == Mission.m_RescueScout) then
+    if (emptyCraftHandle == Mission.m_RescueScout) then
         -- Reset this variable for future use.
         Mission.m_RescueScout = nil;
 
-        -- Set Shabayev's variable to the new ship.
-        Mission.m_Shabayev = emptyCraftHandle;
+        if (pilotHandle == Mission.m_ShabayevPilot) then
+            -- Set Shabayev's variable to the new ship.
+            Mission.m_Shabayev = emptyCraftHandle;
 
-        -- Rename the Scout.
-        SetObjectiveName(emptyCraftHandle, "Cmd. Shabayev");
+            -- Reset the team back to 1.
+            SetTeamNum(emptyCraftHandle, Mission.m_HostTeam);
 
-        -- Resume previous order of defending Constructor.
-        Defend2(emptyCraftHandle, Mission.m_Constructor, 1);
+            -- Rename the Scout.
+            SetObjectiveName(emptyCraftHandle, "Cmd. Shabayev");
+            SetObjectiveOn(emptyCraftHandle);
+            SetSkill(emptyCraftHandle, 3);
 
-        -- Make sure Shabayev is set back to her good state.
-        Mission.m_ShabayevState = SHAB_OKAY;
+            -- Resume previous order of defending Constructor.
+            Defend2(emptyCraftHandle, Mission.m_Constructor, 1);
+
+            -- Make sure Shabayev is set back to her good state.
+            Mission.m_ShabayevState = SHAB_OKAY;
+        end
     end
 
 	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
@@ -439,6 +447,20 @@ end
 
 function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
     return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF);
+end
+
+function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (IsAudioMessageDone(Mission.m_Audioclip) and IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam) then
+        if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
+            -- Fire FF message.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
+        end
+
+        if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
+            -- Fire FF message.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
+        end
+    end
 end
 
 ---------------------------
@@ -466,8 +488,6 @@ function HandleMissionLogic()
             HandleMansonState();
         end
 
-        -- Friendly fire.
-        HandleFriendlyFire();
         -- Handle Shabayev.
         HandleShabayevLogic();
         -- For failures.
@@ -496,9 +516,9 @@ function CheckVitalObjectsExist()
         -- Game over.
          if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Recycler!");
-            DoGameover(10);
+            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
         else
-            FailMission(10, "isdf04l2.txt");
+            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf04l2.txt");
         end
     end
 end
@@ -644,8 +664,7 @@ function HandleBaseBuildingState()
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
-                    Dropoff(Mission.m_Constructor, "pgen1", 1);
-                    
+                    Dropoff(Mission.m_Constructor, "pgen1", 1);              
                     -- So we don't loop. 
                     Mission.m_ConstructorDropoffGiven = true;
                 end
@@ -658,7 +677,6 @@ function HandleBaseBuildingState()
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "pgen2", 1);
-
                     -- So we don't loop. 
                     Mission.m_ConstructorDropoffGiven = true;
                 end
@@ -671,7 +689,6 @@ function HandleBaseBuildingState()
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "rbunker1", 1);
-
                     -- So we don't loop. 
                     Mission.m_ConstructorDropoffGiven = true;
                 end
@@ -733,7 +750,7 @@ function HandleScionAttackState()
                 Goto(Mission.m_Enemy2, "recy_deploy", 1);
 
                 if (Mission.m_MissionDifficulty > 1) then
-                    Mission.m_Enemy3 = BuildObjectAtSafePath("fvsent", Mission.m_EnemyTeam, "raid1", "raid3", _Cooperative.m_TotalPlayerCount), Mission.m_Constructor, 1;
+                    Mission.m_Enemy3 = BuildObjectAtSafePath("fvscout", Mission.m_EnemyTeam, "raid1", "raid3", _Cooperative.m_TotalPlayerCount), Mission.m_Constructor, 1;
                     Goto(Mission.m_Enemy3, "recy_deploy", 1);
 
                     if (Mission.m_MissionDifficulty > 2) then
@@ -975,8 +992,8 @@ function HandleMansonState()
         Follow(Mission.m_Blue1, Mission.m_Manson, 1);
         Follow(Mission.m_Blue2, Mission.m_Blue1, 1);
 
-        -- Delay 10 seconds before ordering player to follow.
-        Mission.m_MansonDelayTime = Mission.m_MissionTime + SecondsToTurns(10);
+        -- Delay 7 seconds before ordering player to follow.
+        Mission.m_MansonDelayTime = Mission.m_MissionTime + SecondsToTurns(7);
 
         -- Advance this stage.
         Mission.m_MissionMansonStage = Mission.m_MissionMansonStage + 1;
@@ -1052,7 +1069,7 @@ function HandleMansonState()
         -- Run a check here and advance to the next state when Manson plays his message about the Spires.
         if (not Mission.m_MansonGunTowerMessage and GetDistance(Mission.m_Manson, "guntower1") < 200) then
             -- Manson: "There are a lot more of these puppies ahead"
-            _Subtitles.AudioWithSubtitles("isdf0516.wav");
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0516.wav");
 
             -- Objectives.
             AddObjectiveOverride("isdf0514.otf", "WHITE", 10, true);
@@ -1069,10 +1086,10 @@ function HandleMansonState()
             -- Couple of audio clips for his nagging.
             if (Mission.m_MissionGunTowerTimer == SecondsToTurns(30)) then
                 -- Nag for the first time.
-                _Subtitles.AudioWithSubtitles("isdf0528.wav");
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0528.wav");
             elseif (Mission.m_MissionGunTowerTimer > SecondsToTurns(45)) then
                 -- Nag for the last time, player took too long.
-                _Subtitles.AudioWithSubtitles("isdf0529.wav");
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0529.wav");
                 -- Took too long, kill Manson and his Minions.
             end
 
@@ -1088,7 +1105,7 @@ function HandleMansonState()
     elseif (Mission.m_MissionMansonStage == 4) then
         if (IsAudioMessageDone(Mission.m_Audioclip)) then
             -- Get Manson to yell at you.
-            _Subtitles.AudioWithSubtitles("isdf0517.wav");
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0517.wav");
 
             -- Turn his beacon off.
             SetObjectiveOff(Mission.m_Manson);
@@ -1120,10 +1137,15 @@ function HandleMansonState()
         -- Do a check to make sure the teleportal is dead from the blast of the Satchel.
         if (not IsAround(Mission.m_Teleportal)) then
             -- Manson: "Great balls of fire Cooke!"
-            _Subtitles.AudioWithSubtitles("isdf0518.wav");
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0518.wav");
 
             -- Complete the game and move on so we don't loop.
-            SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf05w1.txt");
+            if (Mission.m_IsCooperativeMode) then
+                -- TODO: introduce new ivar for difficulty?
+                DoGameover(10);
+            else
+                SucceedMission(10, "isdf05w1.txt");
+            end
 
             -- Advance this stage.
             Mission.m_MissionMansonStage = Mission.m_MissionMansonStage + 1;
@@ -1140,28 +1162,28 @@ function HandleShabayevLogic()
             Mission.m_ExpectingRescueScout = true;
 
             -- Stop her from Recycling.
-            SetIndependence(Mission.m_ShabayevPilot, 0);
+            SetTeamNum(Mission.m_ShabayevPilot, Mission.m_AlliedTeam);
 
             -- Inform the player of the cost so they aren't stopping her.
             AddObjectiveOverride("Shabayev has lost her ship, she will build a Scout to rescue her.", "YELLOW", 10, false);
 
             -- Set her name so we know it's her.
-            SetObjectiveName(h, "Cmd. Shabayev");
+            SetObjectiveName(Mission.m_ShabayevPilot, "Cmd. Shabayev");
 
             -- Highlight her pilot.
-            -- if (not Mission.m_MissionScavengerStateActive) then
-                SetObjectiveOn(h);
-            -- end
+            if (not Mission.m_MissionScavengerStateActive) then
+                SetObjectiveOn(Mission.m_ShabayevPilot);
+            end
 
             -- Have her retreat to the Recycler.
-            Goto(h, GetPosition(GetHandle("autonav")), 1);
+            Goto(Mission.m_ShabayevPilot, GetPosition(GetHandle("autonav")), 1);
 
             -- Set Shabayev's state so she is on foot.
             Mission.m_ShabayevState = SHAB_ONFOOT;
         end
     elseif (Mission.m_ShabayevState == SHAB_ONFOOT) then
         -- Get the Recycler to build a Scout to rescue her.
-        if (not IsAround(Mission.m_RescueScout) and GetScrap(Mission.m_HostTeam) >= 50) then
+        if (not IsAround(Mission.m_RescueScout) and GetScrap(Mission.m_HostTeam) >= 50 and not IsBusy(Mission.m_Recycler)) then
             if (not Mission.m_RecyclerBuildingRescueScout) then
                 -- Recycler will now build the Scout.
                 Build(Mission.m_Recycler, "ivscout", 1);
@@ -1182,37 +1204,6 @@ function HandleShabayevLogic()
             -- Set the state so we don't loop.
             Mission.m_ShabayevState = SHAB_TOSCOUT;
         end
-    end
-end
-
-function HandleFriendlyFire()
-    if (not Mission.m_FriendlyFireAudioPlaying and IsAudioMessageDone(Mission.m_Audioclip)) then
-        if (IsAlive(Mission.m_Shabayev) and IsPlayer(GetWhoShotMe(Mission.m_Shabayev))) then
-            -- Fire FF message.
-            _Subtitles.AudioWithSubtitles("ff01.wav");
-
-            -- So we don't spam.
-            Mission.m_FriendlyFireAudioPlaying = true;
-
-            -- Set the timer to 2 seconds to 2 seconds so we reset.
-            Mission.m_FriendlyFireReset = Mission.m_MissionTime + SecondsToTurns(2);
-        end
-
-        if (IsAlive(Mission.m_Manson) and IsPlayer(GetWhoShotMe(Mission.m_Manson))) then
-            -- Fire FF message.
-            _Subtitles.AudioWithSubtitles("isdf0555.wav");
-
-            -- So we don't spam.
-            Mission.m_FriendlyFireAudioPlaying = true;
-
-            -- Set the timer to 2 seconds to 2 seconds so we reset.
-            Mission.m_FriendlyFireReset = Mission.m_MissionTime + SecondsToTurns(2);
-        end
-    end
-
-    -- Check to see if the audio has been reset and is ready to be fired.
-    if (Mission.m_FriendlyFireReset < Mission.m_MissionTime) then
-        Mission.m_FriendlyFireAudioPlaying = false;
     end
 end
 

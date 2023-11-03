@@ -170,6 +170,7 @@ function Start()
     -- Set difficulty based on whether it's coop or not.
     if (Mission.m_IsCooperativeMode) then
         -- TODO: introduce new ivar for difficulty?
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     else
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end

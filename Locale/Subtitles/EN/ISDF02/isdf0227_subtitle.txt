@@ -1,0 +1,3 @@
+Shabayev
+Good. The Service Truck's command menu is now available to you. Now order the Service Truck 
+to follow you by pressing the '1' key.

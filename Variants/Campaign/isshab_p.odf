@@ -10,10 +10,6 @@ needLimit = 0
 canDetect = 1
 canTarget = 1
 canRecycle = 0
-
-aiName = "SoldierProcess"
-aiName2 = "SoldierProcess"
-
 heatSignature = 0.2
 imageSignature = 0.2
 radarSignature = 0.1

@@ -8,7 +8,21 @@ General:
 - Subtitles added to all mission-critical dialogue. 
 - Immersion improved. Logic has been added to try and combat the odds of a player seeing an enemy/ally spawn in from nowhere (common BZ2/BZCC issue in Stock).
 - Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
+- Increased ISDF pilot walking animation to look more realistic.
+- Added step sound to Scion builder.
 
+ISDF02 (A Simple S & R): 
+- Replaced training versions of Sentries with either normal Scion Scouts or normal Scion Sentries based on chosen difficulty.
+- Re-added missing "isdf0228.wav" after the first Jammer is destroyed.
+- Replaced Guardian turrets from the training variant to the normal variant.
+- Updated Shabayev's pilot to use the new `isshab_p` ODF.
+- When attacking the second Jammer, Shabayev's broken radio dialog will repeat until the Jammer is destroyed. Before, it only played once.
+- Fixed first path for Shabayev so she doesn't run into the communications building when she's leaving.
+- Fixed missing construction sounds on the Scion builder.
+- During the final part of the mission, there is a Sentry that sits in the base when Shabayev is in the Constructor. That has been made smarter and will attack when Shabayev enters the base perimeter.
+- If the player strays away from Shabayev, there are some warnings. The duration between these events has been reduced.
+
+- General QOL (Quality of Life) improvements.
 
 ISDF05 (The Dark Planet):
 - Scion units will now attack the player from multiple angles, rather than spawning in one place and attacking.

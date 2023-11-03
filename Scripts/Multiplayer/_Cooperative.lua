@@ -100,6 +100,7 @@ end
 
 function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
     local spawnpointPosition = SetVector(0, 0, 0);
+    local RespawnDistanceAwayXZRange = 32.0;
 
     if (Team < 1 or Team >= MAX_TEAMS) then
         spawnpointPosition = GetSafestspawnpoint();
@@ -109,7 +110,7 @@ function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
     end
 
     -- Respawn at a set altitude.
-    local respawnHeight = RespawnPilotHeight;
+    local respawnHeight = 200.0;
 
     -- Randomize starting position somewhat. This gives a range of +/-
 	spawnpointPosition.x = spawnpointPosition.x + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange);
@@ -125,23 +126,23 @@ function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
 
      -- Bounce them in the air to prevent multi-kills
     spawnpointPosition.y = spawnpointPosition.y + respawnHeight;
-	spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * RespawnDistanceAwayYRange;
+	spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * 8.0;
 
     -- Always spawn with pilot.
     local NewPilot = BuildObject(MissionPilotODF, Team, spawnpointPosition);
 
     -- Give control to the user.
-    SetAsUser(NewPerson, Team);
+    SetAsUser(NewPilot, Team);
 
     -- Add Pilot.
-    AddPilotByHandle(NewPerson);
+    AddPilotByHandle(NewPilot);
 
     -- Look somewhere.
-    SetRandomHeadingAngle(NewPerson);
+    SetRandomHeadingAngle(NewPilot);
 
     -- If we're on Team 0, make inert.
     if (Team == 0) then
-        MakeInert(NewPerson);
+        MakeInert(NewPilot);
     end
 
     -- Return handled.
@@ -220,9 +221,15 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
     end
 end
 
-function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF)
+function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly)
     -- Put the player in ivtank, as that's what the original mission uses.
-    local PlayerH = BuildObject(MissionShipODF, Team, GetPositionNear("player_start"), 25, 25);
+    local PlayerH = nil;
+
+    if (SpawnPilotOnly) then
+        PlayerH = BuildObject(MissionPilotODF, Team, GetPositionNear("player_start"), 25, 25);
+    else
+        PlayerH = BuildObject(MissionShipODF, Team, GetPositionNear("player_start"), 25, 25);
+    end
 
     -- Give them a pilot class.
     SetPilotClass(PlayerH, MissionPilotODF);

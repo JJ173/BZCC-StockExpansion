@@ -1,0 +1,4 @@
+Shabayev
+We'll take the Service Truck with us. You'll need to have the Service Truck follow you.
+To give orders to the Service Truck, first, open it's command menu by pressing the F1 key.
+Or by pointing at the Service Truck with your reticle, and pressing your space bar.

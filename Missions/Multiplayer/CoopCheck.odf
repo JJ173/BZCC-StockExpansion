@@ -1,0 +1,11 @@
+[Check]
+
+//Coop
+Check1 = "ibpge5_fix"
+Check2 = "ibrec5_fix"
+Check3 = "isshab_p"
+Check4 = "ivcon5_fix"
+Check5 = "ivcon6_fix"
+Check6 = "ivrec5_fix"
+Check7 = "ipdrop"
+Check8 = "fpdrop"

@@ -189,6 +189,8 @@ function Load(MissionData)
 end
 
 function AddObject(h)
+    local ODFName = GetCfg(h);
+
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty); 
@@ -197,7 +199,7 @@ function AddObject(h)
         SetObjectiveName(h, "Unknown");
 
         -- Check that the Jammer has been built.
-        if (Mission.m_Jammer == nil and IsOdf(h, "fbpjam")) then
+        if (Mission.m_Jammer == nil and ODFName == "fbpjam") then
             Mission.m_Jammer = h;
         end
 
@@ -208,10 +210,10 @@ function AddObject(h)
     elseif (GetTeamNum(h) == Mission.m_HostTeam) then
         -- We need to grab Shabayev when she jumps out of the Scout.
         if (Mission.m_MissionState >= 44) then
-            if (IsOdf(h, "isshab_p")) then
+            if (ODFName == "isshab_p") then
                 Mission.m_Shabayev = h;
                 SetObjectiveName(h, "Cmd. Shabayev");
-            elseif (IsOdf(h, "ibpgn1")) then
+            elseif (ODFName == "ibpgn1") then
                 Mission.m_BasePower = h;
             end
         end
@@ -1507,9 +1509,10 @@ end
 
 Functions[56] = function()
     if (Mission.m_IsCooperativeMode) then
-        DoGameover(2.1);
+        NoteGameoverWithCustomMessage("Mission Accomplished.");
+        DoGameover(Mission.m_MissionTime + SecondsToTurns(2.1));
     else
-        SucceedMission(2.1, "isdf02w1.txt");
+        SucceedMission(Mission.m_MissionTime + SecondsToTurns(2.1), "isdf02w1.txt");
     end
 end
 

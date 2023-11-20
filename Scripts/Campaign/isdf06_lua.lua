@@ -363,9 +363,9 @@ function CheckVitalObjectsExist()
          -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Because you lost the Constructor, the mission could not be completed.");
-            DoGameover(10);
+            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
         else
-            FailMission(10, "isdf06l2.txt");
+            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf06l2.txt");
         end
     end
 end
@@ -663,9 +663,9 @@ function HandleFinalPart()
             -- Game over.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("Mission Accomplished.");
-                DoGameover(10);
+                DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
             else
-                SucceedMission(10, "isdf06w1.txt");
+                SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf06w1.txt");
             end
 
             -- Advance a step.

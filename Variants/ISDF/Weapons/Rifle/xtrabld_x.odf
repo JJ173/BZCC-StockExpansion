@@ -1,0 +1,5 @@
+[ExplosionClass]
+classLabel = "xbulbld"
+explSound = "snip02.wav"
+
+[Core]

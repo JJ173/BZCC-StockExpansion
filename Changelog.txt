@@ -1,4 +1,22 @@
-Campaign:
+GENERAL
+- Satellite has been added to the 4 hotkey.
+
+FACTIONS
+
+ISDF:
+- Increased ISDF/Scion pilot walking animation to look more realistic.
+- Updated Plasma Ordance Sound
+- Turret omegaTurret value increased to 2.0, was 1.25.
+- Updated impact sounds for Pulse Rifle and Sniper
+- Rocket Tanks have been given Assault Tank AI.
+
+Scion:
+- Added step sound to Scion builder.
+- Increased ISDF/Scion pilot walking animation to look more realistic.
+- Updated impact sounds for Pulse Rifle and Sniper
+- Turret omegaTurret value increased to 2.0, was 1.25.
+
+CAMPAIGN
 
 General:
 - Added cooperative support to all SP missions.
@@ -8,8 +26,6 @@ General:
 - Subtitles added to all mission-critical dialogue. 
 - Immersion improved. Logic has been added to try and combat the odds of a player seeing an enemy/ally spawn in from nowhere (common BZ2/BZCC issue in Stock).
 - Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
-- Increased ISDF pilot walking animation to look more realistic.
-- Added step sound to Scion builder.
 
 ISDF02 (A Simple S & R): 
 - Replaced training versions of Sentries with either normal Scion Scouts or normal Scion Sentries based on chosen difficulty.
@@ -60,10 +76,41 @@ ISDF06 (The Wormhole):
 
 - General QOL (Quality of Life) improvements.
 
-ISDF07 ():
+ISDF07 (Through the Looking Glass):
 - Added a dropship to the start of the mission to simulate landing.
 - Shabayev will now wait until directly ordered before moving to the ruins to investigate.
 - Players now spawn in a "ivtank" instead of using whatever is saved in BZN by the editor.
+
+- General QOL (Quality of Life) improvements.
+
+Scion02 (Ambush):
+- Added music
+- Mission has been given a complete overhaul.
+- New mission map: now uses the same map as ISDF09 (Rumble in the Jungle).
+- Alcehmator added to ISDF base
+- Various units added to ISDF base to add life
+- Patrols added to ISDF base
+- Jammer has been added to the player base at the start of the mission. This is to add a reason as to why the enemy units must scout to find you, instead of just radioing back to base.
+- Starter units now depend on mission difficulty for the player.
+- Added a new failure: if a Scout finds your base and your base Jammer is dead, the mission will fail. (This has been done to line up with the idea that enemy units can just radio back to base if their communications aren't being jammed). Make sure to keep your base Jammer alive!
+- ISDF base will sound an alarm if you are spotted or it has been alerted.
+- ISDF base will send attacks after being alerted during the second phase of the mission.
+- ISDF base will rebuild destroyed power. Destroy the constructor in the base to stop this.
+
+- General QOL (Quality of Life) improvements.
+
+Scion05 (An Unlikely Rescue):
+- AAN will no longer steal pools outside of their base.
+- AAN colour has been changed to blue.
+- Added attacks from Braddock against the AAN base.
+- Added Major Manson to the AAN base.
+- Added Manson's Friendly Fire dialogue.
+- Mission will no longer fail if the player goes to the AAN base early.
+- New logic for the bridge objective has been added. Instead of the player running out of time, Braddock will send attacks over the bridge that increase in intensity to defeat the AAN.
+- Improved Braddock's attacks against the player.
+- Dialogue from Manson is no longer triggered randomly. He will only announce losses to his base when his buildings are destroyed.
+- Updated terrain so Braddock's treaded units can only use the bridge to attack the AAN.
+- Upon the destruction of the bridge, Braddock will only be able to use hover units to attack the AAN.
 
 - General QOL (Quality of Life) improvements.
 

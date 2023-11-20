@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivrecy"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+deployedMsg = "ivrecy08.wav"
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ibrecy_x"
+
+[RecyclerVehicleClass]
+
+[Lod1]

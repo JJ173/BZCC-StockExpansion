@@ -1,0 +1,8 @@
+[OrdnanceClass]
+classLabel = "snipe"
+
+xplGround = "xtragnd_x"
+xplVehicle = "xtracar_x"
+xplBuilding = "xtrabld_x"
+
+[SniperShellClass]

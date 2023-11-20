@@ -1,0 +1,13 @@
+[ExplosionClass]
+classLabel = "xbulgnd"
+explSound = "snip03.wav"
+
+[MiniChar]
+
+[Light]
+
+[KickSprite]
+
+[ShardSprite]
+
+[Smoke]

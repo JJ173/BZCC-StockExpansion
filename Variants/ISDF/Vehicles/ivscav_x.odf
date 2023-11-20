@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ivscav"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+selectPickupMsg = "ivscav05.wav"
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "ibscav_x"
+
+[Lod1]
+
+[Lod2]

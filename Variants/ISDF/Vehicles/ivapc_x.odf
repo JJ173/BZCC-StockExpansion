@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivapc"
+PilotConfig = "ispilo_x"
+
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+lightHard2 = "hp_light_2"
+lightName2 = "spotblue2"  
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[HoverCraftClass]
+
+[APCClass]
+
+[Lod1]

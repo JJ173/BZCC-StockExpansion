@@ -1,0 +1,163 @@
+[MissionInfo]
+countISDF = 5
+
+[ISDF 1]
+missionTitle = "02: A Simple S & R"
+missionInfo = "isdf02.des"
+missionFile = "isdf02_lua.bzn"
+planetName = "Pluto"
+planetInfo = "pluto.des"
+planetGeom = "pluto.fbx"
+
+techCount = 2
+techName1 = "ISDF Constructor"
+techInfo1 = "ivcons.inf"
+techGeom1 = "ivcons_skel.fbx"
+techName2 = "Scion Scout"
+techInfo2 = "fvscout.inf"
+techGeom2 = "fvscout_skel.fbx"
+
+mailCount = 2
+mailName1 = "Commander Shabayev"
+mailInfo1 = "isdf02_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0201.wav"
+mailName2 = "General Braddock"
+mailInfo2 = "isdf02_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0202.wav"
+briefInfo = "isdf02.brf"
+
+launchMessage = "load02.wav"
+launchBackground = "pluto_load.tga"
+
+[ISDF 2]
+missionTitle = "05: The Dark Planet"
+missionInfo = "isdf05.des"
+missionFile = "isdf05_lua.bzn"
+planetName = "Dark Planet"
+planetInfo = "dark.des"
+planetGeom = "dark.fbx"
+
+techCount = 1
+techName1 = "ISDF Mortar Bike"
+techInfo1 = "ivmbike.inf"
+techGeom1 = "ivmbik00.fbx"
+
+mailCount = 3
+mailName1 = "Commander Shabayev"
+mailInfo1 = "isdf05_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0501.wav"
+
+mailName2 = "General Braddock"
+mailInfo2 = "isdf05_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0502.wav"
+
+mailName3 = "General Braddock"
+mailInfo3 = "isdf05_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes0503.wav"
+
+briefInfo = "isdf05.brf"
+
+launchMessage = "load05.wav"
+launchBackground = "dark_load.tga"
+
+[ISDF 3]
+missionTitle = "06: The Wormhole"
+missionInfo = "isdf06.des"
+missionFile = "isdf06_lua.bzn"
+planetName = "Dark Planet"
+planetInfo = "dark.des"
+planetGeom = "dark.fbx"
+
+techCount = 2
+techName1 = "ISDF Missile Scout"
+techInfo1 = "ivmisl.inf"
+techGeom1 = "ivmisl00.fbx"
+techName2 = "ISDF Bomber"
+techInfo2 = "ivbomb.inf"
+techGeom2 = "ivbomb00.fbx"
+
+mailCount = 3
+
+mailName1 = "Major Manson"
+mailInfo1 = "isdf06_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0601.wav"
+
+mailName2 = "Major Manson"
+mailInfo2 = "isdf06_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0602.wav"
+
+mailName3 = "Major Manson"
+mailInfo3 = "isdf06_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes0603.wav"
+
+briefInfo = "isdf06.brf"
+
+launchMessage = "load06.wav"
+launchBackground = "dark_load.tga"
+
+successMovie = "wormhole.ogv"
+
+[ISDF 4]
+missionTitle = "S02: Ambush - Remade"
+missionInfo = "scion02.des"
+missionFile = "scion02_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 1
+techName1 = "Scion Kiln"
+techInfo1 = "fbkiln.inf"
+techGeom1 = "fbkiln00.fbx"
+techView1 = 1
+
+mailCount = 1
+mailName1 = "Padisha Burns"
+mailInfo1 = "scion02_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0201.wav"
+
+briefInfo = "scion02.brf"
+
+launchMessage = "loadsc02.wav"
+launchBackground = "mire_load.tga"
+
+[ISDF 5]
+missionTitle = "S05: An Unlikely Rescue"
+missionInfo = "scion05.des"
+missionFile = "scion05_lua.bzn"
+planetName = "Bane"
+planetInfo = "bane.des"
+planetGeom = "bane.fbx"
+
+techCount = 1
+techName1 = "Scion Healer"
+techInfo1 = "fvserv.inf"
+techGeom1 = "fvserv00.fbx"
+
+mailCount = 3
+mailName1 = "Padisha Burns"
+mailInfo1 = "scion05_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0501.wav"
+mailName2 = "Padisha Burns"
+mailInfo2 = "scion05_m2.des"
+mailGeom2 = ""
+mailWave2 = "messc0502.wav"
+mailName3 = "Yelena Shabayev"
+mailInfo3 = "scion05_m3.des"
+mailGeom3 = ""
+mailWave3 = "messc0503.wav"
+
+briefInfo = "scion05.brf"
+
+launchMessage = "loadsc05.wav"
+launchBackground = "bane_load.tga"

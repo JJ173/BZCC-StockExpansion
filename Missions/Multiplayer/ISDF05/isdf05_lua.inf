@@ -1,6 +1,6 @@
 [DESCRIPTION]
 missionName = "Coop: 05 - The Dark Planet"
-mapTga = ""
+mapTga = "isdf05_lua.bmp"
 mapDesc = "isdf05.des"
 mySide = 1
 

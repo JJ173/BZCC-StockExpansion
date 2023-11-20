@@ -1,0 +1,16 @@
+[OrdnanceClass]
+classLabel = "ssnipe"
+
+xplGround = "xftracgnd_x"
+xplVehicle = "xftraccar_x"
+xplBuilding = "xftraccar_x"
+
+[SniperShellClass]
+
+[Render]
+
+[Core]
+
+[Halo]
+
+[Trail]

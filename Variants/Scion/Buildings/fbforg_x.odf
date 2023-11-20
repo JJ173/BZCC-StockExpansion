@@ -1,0 +1,17 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "fbforg"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent_x"
+buildItem2 = "fvarch_x"
+buildItem3 = "fvtank_x"
+buildItem4 = "fvartl_x"
+buildItem5 = "fvwalk_x"
+buildItem6 = "fvatank_x"
+
+[Lod1]

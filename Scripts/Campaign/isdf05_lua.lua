@@ -1141,10 +1141,10 @@ function HandleMansonState()
 
             -- Complete the game and move on so we don't loop.
             if (Mission.m_IsCooperativeMode) then
-                -- TODO: introduce new ivar for difficulty?
-                DoGameover(10);
+                NoteGameoverWithCustomMessage("Mission Accomplished.");
+                DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
             else
-                SucceedMission(10, "isdf05w1.txt");
+                SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf05w1.txt");
             end
 
             -- Advance this stage.

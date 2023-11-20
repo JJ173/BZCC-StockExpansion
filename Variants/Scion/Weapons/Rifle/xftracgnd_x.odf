@@ -1,0 +1,17 @@
+[ExplosionClass]
+classLabel = "xfsnipgnd"
+explSound = "snip03.wav"
+
+[MiniChar]
+
+[char]
+
+[Light]
+
+[KickSprite]
+
+[ShardSprite]
+
+[Smoke]
+
+[Chunks]

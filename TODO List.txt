@@ -1,2 +1,8 @@
 ISDF 02:
 - Test Service Truck following reminder through the mission and fix to be less frequent.
+
+Scion 02: 
+- Add alarm sound mine to ISDF base
+
+Scion 05:
+- Add logic so Manson's pilot is invincible, but he can pilot other tanks.

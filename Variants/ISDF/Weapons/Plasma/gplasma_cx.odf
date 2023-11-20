@@ -1,0 +1,28 @@
+[WeaponClass]
+classLabel = "gplasma_c"
+altName = "gplasma_ax"
+ordName = "plasma_cx"
+
+[CannonClass]
+
+[Flash]
+
+[LightFlash]
+
+[ForeFlash]
+
+[SmokePuff]
+
+[Smoke]
+
+[SparkPuff]
+
+[Spark]
+
+[EnergyPuff]
+
+[EnergyPuffB]
+
+[EnergyPuffC]
+
+[Core]

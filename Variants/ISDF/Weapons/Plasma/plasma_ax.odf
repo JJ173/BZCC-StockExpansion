@@ -1,0 +1,23 @@
+[OrdnanceClass]
+classLabel = "plasma_a"
+shotSound = "plasmaT2.wav"
+
+[Render]
+
+[Light]
+
+[Core]
+
+[Trail]
+
+[SmokePuffs]
+
+[SmokeCluster]
+
+[SparksTrail]
+
+[GreenFlameTrail]
+
+[EnergyPuffA]
+
+[EnergyPuffB]

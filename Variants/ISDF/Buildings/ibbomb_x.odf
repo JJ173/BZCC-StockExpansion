@@ -1,0 +1,12 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "ibbomb"
+
+[BuildingClass]
+
+[BomberBayClass]
+bomberType = "ivbomb_x"
+
+[PoweredBuildingClass]
+
+[Lod1]

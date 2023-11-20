@@ -1,6 +1,6 @@
 [DESCRIPTION]
 missionName = "Coop: 06 - The Wormhole"
-mapTga = ""
+mapTga = "isdf06_lua.bmp"
 mapDesc = "isdf06.des"
 mySide = 1
 

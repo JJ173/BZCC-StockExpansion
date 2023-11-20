@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "fvcons"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbkiln_x"
+buildItem2 = "fbspir_x"
+buildItem3 = "fbantm_x"
+buildItem4 = "fbdowe_x"
+buildItem5 = "fbstro_x"
+buildItem6 = "fbjamm_x"
+
+stepSound  = "fwstep01.wav"

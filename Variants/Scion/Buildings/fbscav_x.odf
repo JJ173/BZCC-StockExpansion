@@ -1,0 +1,10 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "fbscav"
+unitName = "Extractor I"
+
+upgradeName = "fbscup_x"
+
+[BuildingClass]
+
+[ExtractorClass]

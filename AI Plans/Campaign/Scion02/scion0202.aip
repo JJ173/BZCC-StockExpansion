@@ -1,0 +1,70 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+CheckProvides = true
+idleAllCraft = false
+
+[Cheat]
+moneyAmount = 5 
+moneyDelay = 2
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = false
+
+[Plan1]
+planType="BaseBuildMinimums"
+planPriority = 50
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "power_1"
+planCondition = "Lua"
+LuaFunction = "RebuildFirstPowerCondition"
+
+[Plan2]
+planType="BaseBuildMinimums"
+planPriority = 40
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "power_2"
+planCondition = "Lua"
+LuaFunction = "RebuildSecondPowerCondition"
+
+[Plan3]
+planType="Attacker"
+planPriority = 30
+targetType = "VIRTUAL_CLASS_ARTILLERY"
+attackType1 = "ivscout_x"
+attackType2 = "ivscout_x"
+attackType3 = "ivtank_x"
+buildIfNoIdle = true
+AttackAnything = true
+maxAttacks = 99
+planCondition = "Lua"
+LuaFunction = "AttackArtilleryCondition"
+
+[Plan4]
+planType="Attacker"
+planPriority = 20
+targetType = "DefendUnit"
+attackType1 = "ivmbike_x"
+attackType2 = "ivmbike_x"
+attackType3 = "ivmisl_x"
+buildIfNoIdle = true
+AttackAnything = true
+maxAttacks = 99
+planCondition = "Lua"
+LuaFunction = "AttackVehiclesCondition"
+
+[Plan5]
+planType="Attacker"
+planPriority = 10
+targetType = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "ivrckt_x"
+attackType2 = "ivrckt_x"
+buildIfNoIdle = true
+AttackAnything = true
+maxAttacks = 99
+planCondition = "Lua"
+LuaFunction = "AttackGunTowersCondition"

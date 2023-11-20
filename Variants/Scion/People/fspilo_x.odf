@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "fspilo"
+canInteract = 1
+isSealth = 1
+canDetect = 1
+canSelect = 0
+isAssault = 1
+
+weaponName1 = "fgsnip_cx"
+weaponName2 = "fgsnip_ax"
+
+[PersonClass]
+animRate = 13.0

@@ -1,0 +1,14 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "ibcbun"
+
+categoryTypeOverride = 4
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[PoweredBuildingClass]
+panelIcon = "icon_base_sat.tga"
+
+[Lod1]

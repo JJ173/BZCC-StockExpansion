@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivturr"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]
+omegaTurret = 2.0 // Was 1.25 - AI_Unit

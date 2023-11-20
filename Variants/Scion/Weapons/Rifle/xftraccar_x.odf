@@ -1,0 +1,5 @@
+[ExplosionClass]
+classLabel = "xfsnipcar"
+explSound = "snip02.wav"
+
+[Sparks]

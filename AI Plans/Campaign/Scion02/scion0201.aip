@@ -1,0 +1,35 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+idleAllCraft = false
+
+[Cheat]
+moneyAmount = 5 
+moneyDelay = 2
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = false
+
+[Plan1]
+planType="BuildMinimums"
+planPriority = 40
+planCondition1 = "NotExists"
+planConditionClass1 = "ivscout_x"
+planConditionCount1 = 1
+buildType1 = "ivscout_x"
+buildCount1 = 1
+MinTtlScrap = 60
+MinCurScrap = 50
+
+[Plan2]
+planType="BuildMinimums"
+planPriority = 30
+planCondition1 = "NotExists"
+planConditionClass1 = "ivturr_x"
+planConditionCount1 = 3
+buildType1 = "ivturr_x"
+buildCount1 = 3
+MinTtlScrap = 60
+MinCurScrap = 40

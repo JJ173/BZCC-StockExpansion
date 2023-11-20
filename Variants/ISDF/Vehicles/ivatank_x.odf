@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "ivatank"
+PilotConfig = "ispilo_x"
+
+weaponName1 = "gplasma_ax"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]

@@ -1,0 +1,16 @@
+[OrdnanceClass]
+classLabel = "fsnip_c"
+
+xplGround = "xftracgnd_x"
+xplVehicle = "xftraccar_x"
+xplBuilding = "xftraccar_x"
+
+[Render]
+
+[Core]
+
+[tracer]
+
+[Trail]
+
+[burst]

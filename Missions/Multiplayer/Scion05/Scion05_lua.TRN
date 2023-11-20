@@ -1,0 +1,31 @@
+[Size]
+MetersPerGrid = 8.0
+HeightGranularity = 0.1
+MinX = -2048.0
+MinZ = -2048.0
+Width = 4096.0
+Depth = 4096.0
+Height = 100
+Tile = 1
+Color = "255 255 255 255"
+
+[NormalView] 
+DiffuseColor = "204 204 204"
+SpecularColor = "10 10 10"
+SpecularPower = 1024.0
+
+[World]
+MusicTrack1=13
+MusicTrack2=9
+MusicTrack3=10
+MusicTrack4=11
+MusicTrack5=12
+
+[Texture]
+TileTexture1  = "bane.tga"
+TileTexture2  = "bane2.tga"
+TileTexture3  = "bane3.tga"
+TileTexture4  = "bane4.tga"
+TileTexture5  = "bane5.tga"
+TileTexture6  = "bbextf01.pic"
+TileTexture7  = "bbextf02.pic"

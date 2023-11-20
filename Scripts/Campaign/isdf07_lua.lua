@@ -240,9 +240,9 @@ function CheckVitalObjectsExist()
          -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You allowed your Recycler to be destroyed. Without it, ISDF Beatrice base cannot survive.");
-            DoGameover(10);
+            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
         else
-            FailMission(10, "isdf07l1.txt");
+            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf07l1.txt");
         end
     end
 end

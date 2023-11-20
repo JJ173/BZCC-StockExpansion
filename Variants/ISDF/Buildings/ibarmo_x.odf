@@ -1,0 +1,27 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "ibarmo"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[ArmoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+buildItem4 = "applas_x"
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+buildItem2 = "apsnip_x"
+
+[steam]

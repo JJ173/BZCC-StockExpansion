@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fvatank"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

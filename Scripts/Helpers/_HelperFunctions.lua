@@ -5,7 +5,7 @@ function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers
     local isSafe = true;
 
     -- No player should see anything spawn.
-    if (IsPlayerWithinDistance(path, 200, totalPlayers)) then
+    if (IsPlayerWithinDistance(path, 250, totalPlayers)) then
         isSafe = false;
     end
 
@@ -39,6 +39,26 @@ function IsPlayerWithinDistance(handleOrPath, distance, totalPlayers)
             return false;
         end
     end
+end
+
+-- Credit to Rhade for this.
+function TableRemoveByHandle(table, handle)
+	local length = #table;
+
+    -- Return early if the last handle is what we need to remove.
+	if (table[length] == handle) then
+		table[length] = nil;
+		return
+	end
+
+	-- Check the rest of the table.
+	for i = 1, length - 1 do
+		if (table[i] == handle) then
+			table[i] = table[length];
+			table[length] = nil;
+			return;
+		end
+	end
 end
 
 return _HelperFunctions;

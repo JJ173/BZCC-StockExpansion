@@ -1,0 +1,9 @@
+[ExplosionClass]
+classLabel = "xbulcar"
+explSound = "snip02.wav"
+
+[Core]
+
+[Spark]
+
+[Trail]

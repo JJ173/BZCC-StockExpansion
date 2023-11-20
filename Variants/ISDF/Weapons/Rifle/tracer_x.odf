@@ -1,0 +1,14 @@
+[OrdnanceClass]
+classLabel = "tracer"
+
+xplGround = "xtragnd_x"
+xplVehicle = "xtracar_x"
+xplBuilding = "xtrabld_x"
+
+[Render]
+
+[Core]
+
+[tracer]
+
+[Trail]

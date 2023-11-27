@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "fvpcon"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+soundDeploy = "avartle0.wav"
+soundUndeploy = "avartle4.wav"
+
+[ConstructionRigClass]
+stepSound  = "fwstep01.wav"

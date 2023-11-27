@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ispilo"
+
+weaponName1 = "igsnipx_cx"
+weaponName2 = ""
+weaponName3 = ""
+
+[CraftClass]
+
+[PersonClass]

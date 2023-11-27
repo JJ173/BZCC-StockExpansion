@@ -1,0 +1,3 @@
+Braddock
+Good. Now build a Relay Bunker. The radar uplink of the Relay Bunker is necessary
+for the Gun Tower. You can build the bunker anywhere, so long as it's on flat terrain.

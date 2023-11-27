@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "ivscout"
+
+[CraftClass]
+// For scion 2
+engageRange = 75.0
+
+[HoverCraftClass]

@@ -1,0 +1,13 @@
+[Start]
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+IdleAllCraft = false // Prevent Interrupting AI.
+
+[IdleDispatcher]
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Plan1]
+planType = "BuildMinimums"
+planPriority = 100
+buildType1 = "ivturr_x"
+buildCount1 = 1

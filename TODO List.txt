@@ -1,5 +1,9 @@
 ISDF 02:
 - Test Service Truck following reminder through the mission and fix to be less frequent.
+- Run through and rewrite some of the logic
+
+ISDF 08:
+- Add campfire sound effect to mire ruin.
 
 Scion 02: 
 - Add alarm sound mine to ISDF base

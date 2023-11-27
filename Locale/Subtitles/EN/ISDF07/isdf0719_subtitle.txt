@@ -1,0 +1,3 @@
+Braddock
+Now build a Gun Tower to protect your base. You can build a Gun Tower on level ground
+adjacent to your main base, or on level ground adjacent to any Relay Bunker.

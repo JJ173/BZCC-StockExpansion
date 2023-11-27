@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 5
+countISDF = 7
 
 [ISDF 1]
 missionTitle = "02: A Simple S & R"
@@ -32,6 +32,48 @@ launchMessage = "load02.wav"
 launchBackground = "pluto_load.tga"
 
 [ISDF 2]
+missionTitle = "04: Too Hot"
+missionInfo = "isdf04.des"
+missionFile = "isdf04_lua.bzn"
+planetName = "Pluto"
+planetInfo = "pluto.des"
+planetGeom = "pluto.fbx"
+
+techCount = 2
+techName1 = "ISDF Scavenger"
+techInfo1 = "ivscav.inf"
+techGeom1 = "ivscav00.fbx"
+techName2 = "ISDF Turret"
+techInfo2 = "ivturr.inf"
+techGeom2 = "ivturr00.fbx"
+
+mailCount = 2
+mailName1 = "General Braddock"
+mailInfo1 = "isdf04_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0401.wav"
+
+mailName2 = "Intercepted Transmission"  
+mailInfo2 = "isdf04_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0402.wav"
+
+mailName3 = "General Braddock"  
+mailInfo3 = "isdf04_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes0403.wav"
+
+mailName4 = "General Braddock"  
+mailInfo4 = "isdf04_m4.des"
+mailGeom4 = ""
+mailWave4 = "mes0404.wav"
+
+briefInfo = "isdf04.brf"
+
+launchMessage = "load04.wav"
+launchBackground = "pluto_load.tga"
+
+[ISDF 3]
 missionTitle = "05: The Dark Planet"
 missionInfo = "isdf05.des"
 missionFile = "isdf05_lua.bzn"
@@ -65,7 +107,7 @@ briefInfo = "isdf05.brf"
 launchMessage = "load05.wav"
 launchBackground = "dark_load.tga"
 
-[ISDF 3]
+[ISDF 4]
 missionTitle = "06: The Wormhole"
 missionInfo = "isdf06.des"
 missionFile = "isdf06_lua.bzn"
@@ -105,8 +147,38 @@ launchBackground = "dark_load.tga"
 
 successMovie = "wormhole.ogv"
 
-[ISDF 4]
-missionTitle = "S02: Ambush - Remade"
+[ISDF 5]
+missionTitle = "12: Counterattack"
+missionInfo = "isdf12.des"
+missionFile = "isdf12_lua.bzn"
+planetName = "Bane"
+planetInfo = "Bane.des"
+planetGeom = "bane.fbx"
+
+techCount = 1
+techName1 = "Training Facility"
+techInfo1 = "ibtrain.inf"
+techGeom1 = "ibtrain00.fbx"
+techView1 = 1
+
+mailCount = 2
+mailName1 = "Major Manson"
+mailInfo1 = "isdf12_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes1201.wav"
+
+mailName2 = "General Braddock"
+mailInfo2 = "isdf12_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes1202.wav"
+
+briefInfo = "isdf12.brf"
+
+launchMessage = "load12.wav"
+launchBackground = "bane_load.tga"
+
+[ISDF 6]
+missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
 planetName = "Mire"
@@ -130,7 +202,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 5]
+[ISDF 7]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

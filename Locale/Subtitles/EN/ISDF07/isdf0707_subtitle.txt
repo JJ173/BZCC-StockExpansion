@@ -1,0 +1,2 @@
+Braddock
+Order that Scavenger to deploy on the scrap pool.

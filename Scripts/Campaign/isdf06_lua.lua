@@ -347,11 +347,11 @@ function HandleMissionLogic()
             SpawnAndSendScionPoolAttacks();
         end
 
-        CheckVitalObjectsExist();
+        HandleFailureConditions();
     end
 end
 
-function CheckVitalObjectsExist()
+function HandleFailureConditions()
     -- Recycler is dead, mission failed.
     if (not IsAround(Mission.m_Constructor) and not Mission.m_MissionFailed) then
         -- Manson: "That constructor was vital!"

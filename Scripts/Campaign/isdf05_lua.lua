@@ -450,7 +450,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsAudioMessageDone(Mission.m_Audioclip) and IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (IsAudioMessageDone(Mission.m_Audioclip) or Mission.m_Audioclip == nil)) then
         if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
@@ -491,7 +491,7 @@ function HandleMissionLogic()
         -- Handle Shabayev.
         HandleShabayevLogic();
         -- For failures.
-        CheckVitalObjectsExist();
+        HandleFailureConditions();
         -- Fix bug where aborting constructor build will break mission.
         MonitorRecyclerConstructorProduction();
 
@@ -504,7 +504,7 @@ function HandleMissionLogic()
     end
 end
 
-function CheckVitalObjectsExist()
+function HandleFailureConditions()
     -- Recycler is dead, mission failed.
     if (not IsAround(Mission.m_Recycler) and not Mission.m_MissionFailed) then
         -- Objectives.

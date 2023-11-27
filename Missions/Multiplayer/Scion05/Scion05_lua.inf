@@ -16,13 +16,13 @@ ivar8 = 1 // Sync Join. 0=off, 1=on.
 ivar9 = 30 //unit limit, 0 is unlimited
 ivar11 = 1 // locks team play
 ivar12 = 1 // lock all to team 1
-ivar13 = 102 // CPU Team is Scion
+ivar13 = 105 // CPU Team is ISDF
 ivar25 = 1 // Lock CPU team
 
 // Svar0 (.bzn filename, used to look for an .inf file like this)
 // *not* read in, as that would cause an infinite loop
 svar1 = "Players" // Team name for team 1
-svar2 = "Unknown" // Team name for team 2
+svar2 = "ISDF" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "bane.fbx"

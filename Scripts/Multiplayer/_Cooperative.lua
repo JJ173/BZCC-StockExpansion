@@ -3,10 +3,10 @@ local _Cooperative =
     m_TotalPlayerCount = 1,
 };
 
-function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF)
+function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     if (IsNewPlayer) then
         -- Create the player for the server.
-        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF);
+        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset);
 
         -- Make sure we give the player control of their ship.
         SetAsUser(PlayerH, Team);
@@ -221,14 +221,31 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
     end
 end
 
-function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly)
+function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     -- Put the player in ivtank, as that's what the original mission uses.
     local PlayerH = nil;
 
-    if (SpawnPilotOnly) then
-        PlayerH = BuildObject(MissionPilotODF, Team, GetPositionNear("player_start"), 25, 25);
+    -- Handle spawning via a vector.
+    local spawnPos = GetPositionNear("player_start", 25, 25);
+
+    -- For safety so we don't spawn in the ground.
+    if (HeightOffset == nil or HeightOffset == 0) then
+        -- Make sure we spawn above ground.
+        local curFloor = TerrainFindFloor(spawnPos.x, spawnPos.z) + 2.5;
+
+        -- For safety, if the y axis of the spawn point is underground, correct it to the current height of the floor.
+        if (spawnPos.y < curFloor) then
+            spawnPos.y = curFloor;
+        end
     else
-        PlayerH = BuildObject(MissionShipODF, Team, GetPositionNear("player_start"), 25, 25);
+        spawnPos.y = spawnPos.y + HeightOffset;
+        spawnPos.y = spawnPos.y + GetRandomFloat(1.0) * 8.0;
+    end
+
+    if (SpawnPilotOnly) then
+        PlayerH = BuildObject(MissionPilotODF, Team, spawnPos);
+    else
+        PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
     end
 
     -- Give them a pilot class.

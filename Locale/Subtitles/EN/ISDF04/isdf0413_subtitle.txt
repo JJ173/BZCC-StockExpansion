@@ -1,0 +1,2 @@
+Shabayev
+Turrets will automatically deploy wherever you order them to go.

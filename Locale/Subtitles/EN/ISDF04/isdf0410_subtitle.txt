@@ -1,0 +1,3 @@
+Shabayev
+Notice the resource bar in your HUD. The new segment indicates that you have deployed the Scavenger
+successfully. Not bad, Lieutenant. You're a quick learner.... or, maybe I'm a good teacher.

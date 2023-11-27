@@ -43,7 +43,7 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "isuser";
+    m_PlayerPilotODF = "isuser_mx";
     -- Specific to mission.
     m_PlayerShipODF = "ivscout";
 

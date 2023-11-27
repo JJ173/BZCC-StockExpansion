@@ -1,0 +1,3 @@
+Shabayev
+I'm building a Scavenger. It's a scrap collecting unit - very important, since we require scrap to produce
+all other units and buildings.

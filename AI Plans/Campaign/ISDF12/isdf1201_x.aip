@@ -1,0 +1,171 @@
+// Re-purposed for difficulty selection.
+// ISDF12: Easy AIP
+
+[Start]
+scrapCount = 100
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
+IdleAllCraft = false // Prevent Interrupting AI.
+CheckProvides = true
+
+[Cheat]
+moneyAmount = 4
+moneyDelay = 2
+
+[IdleDispatcher]
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Plan1]
+planType = "Recover"
+planPriority = 100
+serviceUnit = "fbdowe_x"
+unitType1 = "fvtank_x"
+unitType2 = "fvscout_x"
+unitType3 = "fvarch_x"
+unitType4 = "fvsent_x"
+
+[Plan2] 
+planType = "Service"
+planPriority = 100
+serviceUnit = "fvserv_x"
+unitType1 = "fbrecy_x"
+unitType2 = "fbforg_x"
+unitType3 = "fbover_x"
+unitType4 = "fbantm_x"
+unitType5 = "fbdowe_x"
+unitType6 = "fblung"
+unitType7 = "fvcons_x"
+
+[Plan3]
+planType = "BuildMinimums"
+planPriority = 90
+planCondition1 = "Exists"
+planConditionClass1 = "fbdowe_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+buildType1 = "fvserv_x"
+buildCount1 = 2
+
+[Plan4]
+planType = "BuildMinimums"
+planPriority = 80
+planCondition1 = "Exists"
+planConditionClass1 = "fbrecy_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+buildType1 = "fvcons_x"
+buildCount1 = 1
+
+[Plan5] 
+planType = "CollectField"
+planPriority = 70
+planCondition1 = "Exists"
+planConditionClass1 = "fbrecy_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+buildIfNoIdle = true
+
+[Plan6] 
+planType = "CollectField"
+planPriority = 65
+planCondition1 = "Exists"
+planConditionClass1 = "fbrecy_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+buildIfNoIdle = true
+
+[Plan7]
+planType = "Attacker"
+planPriority = 60
+planCondition1 = "HisExists"
+planConditionClass1 = "ibgtow_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "ibgtow_x"
+attackType1 = "fvartl_x"
+attackType2 = "fvartl_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 0
+ForceStagePoint = 3
+
+[Plan8]
+planType = "Attacker"
+planPriority = 50
+targetType1 = "ibgtow_x"
+targetType2 = "ivtank_x"
+targetType3 = "ivscout_x"
+targetType4 = "ivrckt_x"
+targetType5 = "ivatank_x"
+attackType1 = "fvtank_x"
+attackType2 = "fvtank_x"
+attackType3 = "fvtank_x"
+attackType4 = "fvtank_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 0
+
+[Plan9]
+planType = "Attacker"
+planPriority = 50
+targetType1 = "ibgtow_x"
+targetType2 = "ivtank_x"
+targetType3 = "ivscout_x"
+targetType4 = "ivrckt_x"
+targetType5 = "ivatank_x"
+attackType1 = "fvtank_x"
+attackType2 = "fvsent_x"
+attackType3 = "fvsent_x"
+attackType4 = "fvtank_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 0
+
+[Plan10]
+planType = "Attacker"
+planPriority = 50
+targetType1 = "ibgtow_x"
+targetType2 = "ivtank_x"
+targetType3 = "ivscout_x"
+targetType4 = "ivrckt_x"
+targetType5 = "ivatank_x"
+attackType1 = "fvarch_x"
+attackType2 = "fvarch_x"
+attackType3 = "fvsent_x"
+attackType4 = "fvsent_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 0
+
+[Plan11]
+planType = "Attacker"
+planPriority = 50
+planCondition1 = "HisExists"
+planConditionClass1 = "ivscout_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "ivscout_x"
+attackType1 = "fvscout_x"
+attackType2 = "fvscout_x"
+attackType3 = "fvsent_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 3
+
+[Plan12]
+planType = "Attacker"
+planPriority = 50
+planCondition1 = "HisExists"
+planConditionClass1 = "ivcons_x"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "ivcons_x"
+attackType1 = "fvscout_x"
+attackType2 = "fvscout_x"
+attackType3 = "fvsent_x"
+AttackAnything = true
+buildIfNoIdle = true
+maxAttacks = 0

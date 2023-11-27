@@ -41,6 +41,18 @@ function IsPlayerWithinDistance(handleOrPath, distance, totalPlayers)
     end
 end
 
+function IsPlayerInBuilding(totalPlayers)
+    for i = 1, totalPlayers do
+        local p = GetPlayerHandle(i);
+
+        if (InBuilding(p)) then
+            return true;
+        else
+            return false;
+        end
+    end
+end
+
 -- Credit to Rhade for this.
 function TableRemoveByHandle(table, handle)
 	local length = #table;

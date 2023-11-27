@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "ibrecy_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem2 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+
+[RecyclerClass]
+
+[Lod1]

@@ -1,0 +1,147 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+CheckProvides = true
+idleAllCraft = false
+baseDir = 1
+baseLoc = "manson_recy"
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = true
+UnitIdleSeconds = 999999
+
+[Cheat]
+moneyAmount = 3 
+moneyDelay = 2
+
+[Plan1]
+planType = "CollectPool"
+planPriority = 100
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+
+[Plan2] 
+planType = "BuildMinimums"
+planPriority = 90
+planCondition = "Lua"
+buildType1 = "ivcons_x"
+buildCount1 = 2
+LuaFunction = "ConstructorCondition"
+
+[Plan3]
+planType = "BaseBuildMinimums"
+planPriority = 85
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "manson_pgen1"
+LuaFunction = "Power1Condition"
+pathpointsCanBeMissing = true
+
+[Plan4]
+planType = "BaseBuildMinimums"
+planPriority = 80
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "manson_pgen2"
+LuaFunction = "Power2Condition"
+
+[Plan5]
+planType = "BaseBuildMinimums"
+planPriority = 75
+planCondition = "Lua"
+buildType1 = "ibfact_x"
+buildCount1 = 1
+buildLoc1 = "manson_fact"
+LuaFunction = "FactoryCondition"
+
+[Plan6] 
+planType = "BuildMinimums"
+planPriority = 70
+planCondition = "Lua"
+buildType1 = "ivscout_x"
+buildCount1 = 2
+LuaFunction = "ScoutCondition"
+
+[Plan7]
+planType = "BaseBuildMinimums"
+planPriority = 65
+planCondition = "Lua"
+buildType1 = "ibcbun_x"
+buildCount1 = 1
+buildLoc1 = "manson_cbun1"
+LuaFunction = "Bunker1Condition"
+
+[Plan8]
+planType = "BaseBuildMinimums"
+planPriority = 60
+planCondition = "Lua"
+buildType1 = "ibsbay_x"
+buildCount1 = 1
+buildLoc1 = "manson_sbay"
+LuaFunction = "ServiceBayCondition"
+
+[Plan9]
+planType = "BaseBuildMinimums"
+planPriority = 55
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "manson_pgen3"
+LuaFunction = "Power3Condition"
+
+[Plan10]
+planType = "BaseBuildMinimums"
+planPriority = 50
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildCount1 = 1
+buildLoc1 = "manson_gtow1"
+LuaFunction = "GunTower1Condition"
+
+[Plan11]
+planType = "BaseBuildMinimums"
+planPriority = 45
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildCount1 = 1
+buildLoc1 = "manson_gtow2"
+LuaFunction = "GunTower2Condition"
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 40
+planCondition = "Lua"
+buildType1 = "ibcbun_x"
+buildCount1 = 1
+buildLoc1 = "manson_cbun2"
+LuaFunction = "Bunker2Condition"
+
+[Plan13]
+planType = "BaseBuildMinimums"
+planPriority = 35
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildCount1 = 1
+buildLoc1 = "manson_gtow3"
+LuaFunction = "GunTower3Condition"
+
+[Plan14] 
+planType = "BuildMinimums"
+planPriority = 30
+planCondition = "Lua"
+buildType1 = "ivtank_x"
+buildCount1 = 4
+LuaFunction = "TankCondition"
+
+[Plan15] 
+planType = "BuildMinimums"
+planPriority = 25
+planCondition = "Lua"
+buildType1 = "ivserv_x"
+buildCount1 = 2
+LuaFunction = "ServiceTruckCondition"

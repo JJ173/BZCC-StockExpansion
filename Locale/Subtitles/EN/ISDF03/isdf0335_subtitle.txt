@@ -1,0 +1,3 @@
+Shabayev
+Select the armory by pressing the 3 key. Order it to produce
+a missile power-up.

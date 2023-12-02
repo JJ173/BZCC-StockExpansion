@@ -52,7 +52,7 @@ local Mission =
     m_IsCooperativeMode = false,
     m_StartDone = false,    
     m_MissionStartDone = false,
-    m_MissionFailed = false,
+    m_MissionOver = false,
     m_GreenSquadRemoved = false,
     m_ServiceBayMessagePlayed = false,
     m_ScrapPoolPartActive = false,
@@ -267,9 +267,6 @@ function Start()
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
 
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
-
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
 
@@ -326,7 +323,7 @@ end
 -- Mission Related Logic
 ---------------------------
 function HandleMissionLogic()
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (not Mission.m_MissionStartDone) then
             HandleMissionStart();
         end
@@ -353,12 +350,12 @@ end
 
 function HandleFailureConditions()
     -- Recycler is dead, mission failed.
-    if (not IsAround(Mission.m_Constructor) and not Mission.m_MissionFailed) then
+    if (not IsAround(Mission.m_Constructor) and not Mission.m_MissionOver) then
         -- Manson: "That constructor was vital!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0607.wav");
 
         -- Mission failed.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
          -- Game over.
         if (Mission.m_IsCooperativeMode) then

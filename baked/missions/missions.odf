@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 7
+countISDF = 9
 
 [ISDF 1]
 missionTitle = "02: A Simple S & R"
@@ -148,6 +148,72 @@ launchBackground = "dark_load.tga"
 successMovie = "wormhole.ogv"
 
 [ISDF 5]
+missionTitle = "07: Through the Looking Glass"
+missionInfo = "isdf07.des"
+missionFile = "isdf07_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 2
+techName1 = "Scion Lancer"
+techInfo1 = "fvarch.inf"
+techGeom1 = "fvlancer_skel.fbx"
+techName2 = "Scion Artillery"
+techInfo2 = "fvartl.inf"
+techGeom2 = "fvartl_skel.fbx"
+
+mailCount = 4
+mailName1 = "Major Manson"
+mailInfo1 = "isdf07_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0701.wav"
+
+mailName2 = "General Braddock"
+mailInfo2 = "isdf07_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0702.wav"
+
+mailName3 = "Commander Shabayev"
+mailInfo3 = "isdf07_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes0703.wav"
+
+mailName4 = "Scion Transmission"
+mailInfo4 = "isdf07_m4.des"
+mailGeom4 = ""
+mailWave4 = "mes0704.wav"
+
+briefInfo = "isdf07.brf"
+
+launchMessage = "load07.wav"
+launchBackground = "mire_load.tga"
+
+[ISDF 6]
+missionTitle = "08: Get Help"
+missionInfo = "isdf08.des"
+missionFile = "isdf08_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 1
+techName1 = "Jak-Killer"
+techInfo1 = "mcjak01.inf"
+techGeom1 = "jak_skel.fbx"
+
+mailCount = 1
+mailName1 = "Commander Shabayev"
+mailInfo1 = "isdf08_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0801.wav"
+
+briefInfo = "isdf08.brf"
+
+launchMessage = "load08.wav"
+launchBackground = "mire_load.tga"
+
+[ISDF 7]
 missionTitle = "12: Counterattack"
 missionInfo = "isdf12.des"
 missionFile = "isdf12_lua.bzn"
@@ -177,7 +243,7 @@ briefInfo = "isdf12.brf"
 launchMessage = "load12.wav"
 launchBackground = "bane_load.tga"
 
-[ISDF 6]
+[ISDF 8]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -202,7 +268,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 7]
+[ISDF 9]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

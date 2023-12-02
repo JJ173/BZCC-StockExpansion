@@ -5,6 +5,9 @@ local _Cooperative =
 
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     if (IsNewPlayer) then
+        -- Keep track of how many player are in the game.
+        _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
+
         -- Create the player for the server.
         local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset);
 
@@ -13,9 +16,6 @@ function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPi
 
         -- Make sure the handle has a pilot so the player can hop out.
         AddPilotByHandle(PlayerH);
-
-        -- Keep track of how many player are in the game.
-        _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
     end
 
     return true;
@@ -223,36 +223,43 @@ end
 
 function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     -- Put the player in ivtank, as that's what the original mission uses.
-    local PlayerH = nil;
+    local PlayerH = GetHandle("player_spawn_" .. _Cooperative.m_TotalPlayerCount);
 
-    -- Handle spawning via a vector.
-    local spawnPos = GetPositionNear("player_start", 25, 25);
+    if (PlayerH == nil) then
+        -- Handle spawning via a vector.
+        local spawnPos = GetPositionNear("player_start", 25, 25);
 
-    -- For safety so we don't spawn in the ground.
-    if (HeightOffset == nil or HeightOffset == 0) then
-        -- Make sure we spawn above ground.
-        local curFloor = TerrainFindFloor(spawnPos.x, spawnPos.z) + 2.5;
+        -- For safety so we don't spawn in the ground.
+        if (HeightOffset == nil or HeightOffset == 0) then
+            -- Make sure we spawn above ground.
+            local curFloor = TerrainFindFloor(spawnPos.x, spawnPos.z) + 2.5;
 
-        -- For safety, if the y axis of the spawn point is underground, correct it to the current height of the floor.
-        if (spawnPos.y < curFloor) then
-            spawnPos.y = curFloor;
+            -- For safety, if the y axis of the spawn point is underground, correct it to the current height of the floor.
+            if (spawnPos.y < curFloor) then
+                spawnPos.y = curFloor;
+            end
+        else
+            spawnPos.y = spawnPos.y + HeightOffset;
+            spawnPos.y = spawnPos.y + GetRandomFloat(1.0) * 8.0;
         end
+
+        if (SpawnPilotOnly) then
+            PlayerH = BuildObject(MissionPilotODF, Team, spawnPos);
+        else
+            PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
+        end
+
+        -- Give them a pilot class.
+        SetPilotClass(PlayerH, MissionPilotODF);
+
+        -- Make sure the handle has a pilot so the player can hop out.
+        AddPilotByHandle(PlayerH);
+
+        -- Look somewhere.
+        SetRandomHeadingAngle(PlayerH);
     else
-        spawnPos.y = spawnPos.y + HeightOffset;
-        spawnPos.y = spawnPos.y + GetRandomFloat(1.0) * 8.0;
+        SetTeamNum(PlayerH, Team);
     end
-
-    if (SpawnPilotOnly) then
-        PlayerH = BuildObject(MissionPilotODF, Team, spawnPos);
-    else
-        PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
-    end
-
-    -- Give them a pilot class.
-    SetPilotClass(PlayerH, MissionPilotODF);
-
-    -- Look somewhere.
-    SetRandomHeadingAngle(PlayerH);
 
     -- Return object to caller.
     return PlayerH;

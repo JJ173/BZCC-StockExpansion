@@ -7,6 +7,7 @@ aiName2 = "AssaultTankProcess"
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
 [TrackedVehicleClass]
 

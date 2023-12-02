@@ -1,6 +1,6 @@
 [DESCRIPTION]
 missionName = "Coop: 08 - Get Help"
-mapTga = ""
+mapTga = "isdf08_lua.bmp"
 mapDesc = "isdf08.des"
 mySide = 1
 

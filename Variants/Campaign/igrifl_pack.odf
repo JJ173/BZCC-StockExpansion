@@ -1,0 +1,16 @@
+[WeaponClass]
+classLabel = "satchelpack"
+geometryName = "igsnip_skel_back.fbx"
+geometryScale = 1
+wpnName = "Rifle Pack"
+wpnIcon = ""
+fireSound = ""
+wpnReticle = ""
+wpnLadder = ""
+wpnCategory = "PACK"
+localAmmo = 0
+canSelect = false
+
+[SatchelPackClass]
+objectClass = ""
+shotDelay = 0

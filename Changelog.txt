@@ -1,6 +1,9 @@
 GENERAL
 - Satellite has been added to the 4 hotkey.
 
+- Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will
+drive into buildings and get stuck. 
+
 FACTIONS
 
 ISDF:
@@ -37,6 +40,12 @@ ISDF02 (A Simple S & R):
 - Fixed missing construction sounds on the Scion builder.
 - During the final part of the mission, there is a Sentry that sits in the base when Shabayev is in the Constructor. That has been made smarter and will attack when Shabayev enters the base perimeter.
 - If the player strays away from Shabayev, there are some warnings. The duration between these events has been reduced.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF03 ():
+- Improved Shabayev's logic so she should have no issue entering the tunnels.
+- Scion Dropship will land and take off, this stops the player seeing units spawn next to it.
 
 - General QOL (Quality of Life) improvements.
 
@@ -101,9 +110,12 @@ ISDF07 (Through the Looking Glass):
 ISDF08 (Get Help):
 - New mission map: now uses the same map as ISDF09 (Rumble in the Jungle).
 - The base that you built in ISDF07 (Through the Looking Glass) will now appear in this mission.
+	- Scion units are spawned in here to simulate destruction of the base.
 - Added full base from ISDF09 instead of a partial base for the player to run to.
 - Added Manson to the base.
 - Added full Scion base.
+- Added rifle to Shabayev's back.
+- Increased the range of the trigger where Scion vehicles chase you to add some suspense.
 
 - General QOL (Quality of Life) improvements.
 

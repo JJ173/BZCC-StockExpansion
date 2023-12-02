@@ -1,0 +1,4 @@
+Shabayev
+Once you've located them, drop a nav beacon at their location for me to follow.
+To create a nav beacon in the satellite view, press the N key. To place it, 
+position it near Red 1 and press your space bar.

@@ -1,0 +1,4 @@
+Shabayev
+Look for the interface terminal along one of the walls and point your 
+reticle at it. When your reticle is over the terminal, press your space bar
+to interface with it.

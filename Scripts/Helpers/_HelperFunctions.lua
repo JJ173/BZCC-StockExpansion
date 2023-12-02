@@ -73,4 +73,27 @@ function TableRemoveByHandle(table, handle)
 	end
 end
 
+function CleanSpawns()
+    local s1 = GetHandle("player_spawn_1");
+    local s2 = GetHandle("player_spawn_2");
+    local s3 = GetHandle("player_spawn_3");
+    local s4 = GetHandle("player_spawn_4");
+
+    if (not IsPlayer(s1)) then
+        RemoveObject(s1);
+    end
+
+    if (not IsPlayer(s2)) then
+        RemoveObject(s2);
+    end
+
+    if (not IsPlayer(s3)) then
+        RemoveObject(s3);
+    end
+
+    if (not IsPlayer(s4)) then
+        RemoveObject(s4);
+    end
+end
+
 return _HelperFunctions;

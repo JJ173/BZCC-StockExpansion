@@ -74,6 +74,7 @@ local Mission =
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
+    m_MissionOver = false,
     m_SentRecycler = false,
     m_SentScavenger = false,
     m_DropshipTakeoff = false,
@@ -94,7 +95,6 @@ local Mission =
     m_ShabAttacking = false,
     m_MansonWaiting = true,
     m_MansonGunTowerMessage = false,
-    m_MissionFailed = false,
     m_SpawnedFirstLurker = false,
     m_SpawnedSecondLurker = false,
     m_MansonRetreating = false,
@@ -365,9 +365,6 @@ function Start()
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
 
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
-
     -- Give the player some scrap.
     SetScrap(Mission.m_HostTeam, 40);
 
@@ -450,7 +447,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (IsAudioMessageDone(Mission.m_Audioclip) or Mission.m_Audioclip == nil)) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
@@ -467,7 +464,7 @@ end
 -- Mission Related Logic
 ---------------------------
 function HandleMissionLogic()
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (not Mission.m_MissionStartDone) then
             HandleMissionStart();
         end
@@ -506,12 +503,12 @@ end
 
 function HandleFailureConditions()
     -- Recycler is dead, mission failed.
-    if (not IsAround(Mission.m_Recycler) and not Mission.m_MissionFailed) then
+    if (not IsAround(Mission.m_Recycler) and not Mission.m_MissionOver) then
         -- Objectives.
         AddObjectiveOverride("isdf0523.otf", "RED", 10, true);
 
         -- Mission failed.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Game over.
          if (Mission.m_IsCooperativeMode) then

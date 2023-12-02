@@ -67,7 +67,7 @@ local Mission =
 
     m_IsCooperativeMode = false,
     m_StartDone = false,    
-    m_MissionFailed = false,
+    m_MissionOver = false,
     m_ScoutRetreating = false,
     m_PlayerHasArcher = false,
     
@@ -300,9 +300,6 @@ function Start()
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
 
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
-
     -- Give the player some scrap.
     SetScrap(Mission.m_HostTeam, 40);
 
@@ -343,7 +340,7 @@ function Update()
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
     -- Start mission logic.
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -684,7 +681,7 @@ function PlayerDetected()
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0220.wav");
 
     -- Stop the mission.
-    Mission.m_MissionFailed = true;
+    Mission.m_MissionOver = true;
 
     -- Failure.
     if (Mission.m_IsCooperativeMode) then
@@ -725,7 +722,7 @@ function HandleFailureConditions()
 
     if (not IsAlive(Mission.m_EnemyRecycler)) then
         -- Stop the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Show failure objective.
         AddObjectiveOverride("scion02l2.txt", "RED", 10, true);
@@ -741,7 +738,7 @@ function HandleFailureConditions()
     
     if (not IsAlive(Mission.m_PlayerRecycler)) then
         -- Stop the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Show failure objective.
         AddObjectiveOverride("scion02l1.txt", "RED", 10, true);

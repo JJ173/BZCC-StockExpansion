@@ -2,7 +2,38 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibpgen"
 
+collisionRadius = 3.0
+UseCollisionMeshForPathing = 1
+
 [BuildingClass]
+soundAmbient = "" // TEMP
+
+// Experimental
+tunnelCount = 4
+
+tunnel01X0 = 0.2
+tunnel01Z0 = 1
+tunnel01Dx = 0.8
+tunnel01Dz = 2
+tunnel01Edge = "fwft"
+
+tunnel02X0 = 3.0
+tunnel02Z0 = 1
+tunnel02Dx = 0.8
+tunnel02Dz = 2
+tunnel02Edge = "ftfw"
+
+tunnel03X0 = 1
+tunnel03Z0 = 0.2
+tunnel03Dx = 2
+tunnel03Dz = 0.8
+tunnel03Edge = "tfwf"
+
+tunnel04X0 = 1
+tunnel04Z0 = 3
+tunnel04Dx = 2
+tunnel04Dz = 0.8
+tunnel04Edge = "wftf"
 
 [PoweredBuildingClass]
 

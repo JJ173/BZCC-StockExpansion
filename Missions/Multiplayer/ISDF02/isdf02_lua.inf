@@ -27,3 +27,7 @@ svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "pluto.fbx"
 svar15 = "isdf02.brf"
+svar16 = "load02.wav"
+
+single.mailCount = 1
+single.mailWave1 = "load02.wav"

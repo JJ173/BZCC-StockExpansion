@@ -2,10 +2,38 @@
 classLabel = "fvtank"
 PilotConfig = "fspilo_x"
 
+aiName = "AttachWingman"
+aiName2 = "AttachWingman"
+
 [CraftClass]
-GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning.
+AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning.
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+// Experimental
+blastDist = 40
+RetargetOnStrafe = true
+
+attackTask = "MortarBikeAttack"
+subAttackTask = "MortarBikeSubAttack"
+waitTask = "SitSpinTask"
+subAttackClass = "ANN"
+
+brAccelFactor = 0.5f;
+strafeFactor = 1.4f;
+steerFactor = 5.0f;
+omegaFactor = 0.35f;
+
+alphaScale = 0.8
+omegaScale = 0.85
+
+steerScatter = 0.4
+pitchScatter = 0.1
+
+avoidSpeed = 32
 
 [HoverCraftClass]
+aiAccelDrag = 16
 
 [MorphTankClass]
 

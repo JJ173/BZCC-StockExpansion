@@ -74,7 +74,7 @@ local Mission =
     m_IsCooperativeMode = false,
     m_StartDone = false,    
     m_MissionStartDone = false,
-    m_MissionFailed = false,
+    m_MissionOver = false,
     m_IntroDialogPlayed = false,
     m_IntroObjectivesDisplayed = false,
     m_BasePoweredDialogPlayed = false,
@@ -226,13 +226,10 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 100);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
 
     -- Grab all of our pre-placed handles.
     Mission.m_Manson = GetHandle("manson");
@@ -317,7 +314,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -382,7 +379,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (IsAudioMessageDone(Mission.m_Audioclip) or Mission.m_Audioclip == nil)) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
@@ -593,7 +590,7 @@ Functions[5] = function()
         end
 
         -- Mission is a success.
-        if (not Mission.m_SucceedMission) then
+        if (not Mission.m_MissionOver) then
             if (IsAlive(Mission.m_KeyDevice) and IsAlive(Mission.m_Tug)) then
                 -- Check to see what is carrying the power source.
                 local tugger = GetTug(Mission.m_KeyDevice);
@@ -610,7 +607,7 @@ Functions[5] = function()
                     end
         
                     -- So we don't loop.
-                    Mission.m_SucceedMission = true; 
+                    Mission.m_MissionOver = true; 
                 end
             end
         end
@@ -647,7 +644,7 @@ end
 
 function HandleFailureConditions()
     -- Recycler is dead, mission failed.
-    if (not IsAround(Mission.m_Tug) and not Mission.m_MissionFailed) then
+    if (not IsAround(Mission.m_Tug) and not Mission.m_MissionOver) then
         -- Objectives.
         AddObjectiveOverride("isdf0408.otf", "RED", 10, true);
 
@@ -658,7 +655,7 @@ function HandleFailureConditions()
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1204.wav");
 
         -- Mission failed.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Game over.
         if (Mission.m_IsCooperativeMode) then

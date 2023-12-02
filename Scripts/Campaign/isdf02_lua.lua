@@ -45,7 +45,7 @@ local Mission =
     -- Specific to mission.
     m_PlayerPilotODF = "isuser_mx";
     -- Specific to mission.
-    m_PlayerShipODF = "ivscout";
+    m_PlayerShipODF = "ivscout_x";
 
     m_IsCooperativeMode = false,
     m_StartDone = false,    
@@ -260,13 +260,10 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 0.2);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
 
     -- Grab all of our pre-placed handles.
     Mission.m_Shabayev = GetHandle("shab");
@@ -424,7 +421,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsAudioMessageDone(Mission.m_Audioclip) and IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (VictimHandle == Mission.m_Shabayev) then
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
         elseif (VictimHandle == Mission.m_Truck) then

@@ -87,7 +87,7 @@ local Mission =
 
     m_IsCooperativeMode = false,
     m_StartDone = false,    
-    m_MissionFailed = false,
+    m_MissionOver = false,
     m_DropshipTakeOff = false,
     m_ShabFollowRecycler = false,
     m_ShabMoving = false,
@@ -102,6 +102,7 @@ local Mission =
     m_KillersSpawned = false,
     m_StopShabPilot = false,
     m_ShabKillersSpawned = false,
+    m_BuildRescueNav = false,
 
     m_Audioclip = nil,
 
@@ -255,9 +256,6 @@ function Start()
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
 
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
-
     -- Grab all of our pre-placed handles.
     Mission.m_Recycler = GetHandle("recycler");
     Mission.m_Manson = GetHandle("manson");
@@ -342,7 +340,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -411,7 +409,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (IsAudioMessageDone(Mission.m_Audioclip) or Mission.m_Audioclip == nil)) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
@@ -881,19 +879,6 @@ end
 
 Functions[20] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
-        -- Shab: I'm in trouble Cooke...
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0725.wav");
-
-        -- Create a nav.
-        Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "kill_shab_ship");
-
-        -- Set name and highlight
-        SetObjectiveName(Mission.m_Nav, "Rescue");
-        SetObjectiveOn(Mission.m_Nav);
-
-        -- Show objectives.
-        AddObjectiveOverride("isdf0707.otf", "WHITE", 10, true);
-
         -- This will have her hop out of her tank.
         HopOut(Mission.m_Shabayev);
 
@@ -920,6 +905,9 @@ Functions[21] = function()
         -- Kill off Shabayev's original tank.
         RemoveObject(Mission.m_Shabayev);
 
+        -- Shab: I'm in trouble Cooke...
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0725.wav");
+
         -- Change her AI
         SetAvoidType(Mission.m_ShabPilot, 0);
         SetAvoidType(Mission.m_Ruins, 0);
@@ -927,12 +915,44 @@ Functions[21] = function()
         -- Build the new tank.
         Mission.m_Shabayev = BuildObject("petank", Mission.m_HostTeam, pos);
 
+        if (not Mission.m_IsCooperativeMode) then
+            CameraReady();
+
+            -- Delay by a couple of seconds
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
+        end
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[22] = function()
+    if (not Mission.m_BuildRescueNav) then
+        if (not Mission.m_IsCooperativeMode) then
+            CameraObject(Mission.m_Shabayev, 2, 5, -15, Mission.m_Shabayev);
+        end
+
+        if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+            if (not Mission.m_IsCooperativeMode) then
+                CameraFinish();
+            end
+
+            -- Create a nav.
+            Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "kill_shab_ship");
+
+            -- Set name and highlight
+            SetObjectiveName(Mission.m_Nav, "Rescue");
+            SetObjectiveOn(Mission.m_Nav);
+
+            -- Show objectives.
+            AddObjectiveOverride("isdf0707.otf", "WHITE", 10, true);
+
+            -- So we don't loop.
+            Mission.m_BuildRescueNav = true;
+        end
+    end
+
     -- Build 5 Warriors to attack.
     if (not Mission.m_KillersSpawned) then
         if (IsPlayerWithinDistance("spawn_killers", 150, _Cooperative.m_TotalPlayerCount)) then
@@ -1141,7 +1161,7 @@ end
 function HandleFailureConditions()   
     if (not IsAlive(Mission.m_Recycler)) then
         -- Stop the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Show objectives.
         AddObjectiveOverride("isdf0523.otf", "RED", 10, true);
@@ -1159,7 +1179,7 @@ function HandleFailureConditions()
     if (Mission.m_MissionState >= 22) then
         if (not IsAlive(Mission.m_ShabPilot)) then
             -- Stop the mission.
-            Mission.m_MissionFailed = true;
+            Mission.m_MissionOver = true;
 
             -- Shab: They're all over me!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0732.wav");

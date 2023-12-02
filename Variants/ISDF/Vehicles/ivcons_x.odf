@@ -8,6 +8,7 @@ GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle 
 otherMsg = "ivcons08.wav"
 
 [HoverCraftClass]
+setAltitude = 0.0f
 
 [DeployableClass]
 

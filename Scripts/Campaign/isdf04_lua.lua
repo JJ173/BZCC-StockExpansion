@@ -62,7 +62,7 @@ local Mission =
     m_IsCooperativeMode = false,
     m_StartDone = false,    
     m_MissionStartDone = false,
-    m_MissionFailed = false,
+    m_MissionOver = false,
     m_TugPickup = false,
     m_Tug1Move = false,
     m_Tug2Move = false,
@@ -278,10 +278,7 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
-
+    
     -- Grab all of our pre-placed handles.
     Mission.m_Recycler = GetHandle("recycler");
     Mission.m_Manson = GetHandle("manson");
@@ -351,7 +348,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
             -- If the mission has advanced enough, start setting scrap so we can't build any more units.
             if (Mission.m_MissionState >= 39) then
@@ -418,7 +415,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (IsAudioMessageDone(Mission.m_Audioclip) or Mission.m_Audioclip == nil)) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
@@ -1800,7 +1797,7 @@ function HandleFailureConditions()
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0426.wav");
                 
                 -- Fail the mission.
-                Mission.m_MissionFailed = true;
+                Mission.m_MissionOver = true;
 
                 -- Game over.
                 if (Mission.m_IsCooperativeMode) then
@@ -1814,12 +1811,12 @@ function HandleFailureConditions()
     end
 
     -- Scavenger died, mission failed.
-    if (Mission.m_ScavengerConditionActive and not IsAround(Mission.m_Scavenger) and not Mission.m_MissionFailed) then
+    if (Mission.m_ScavengerConditionActive and not IsAround(Mission.m_Scavenger) and not Mission.m_MissionOver) then
         -- Objectives.
         AddObjectiveOverride("isdf0405.otf", "RED", 10, true);
 
         -- Mission failed.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
@@ -1831,12 +1828,12 @@ function HandleFailureConditions()
     end
 
     -- Recycler is dead, mission failed.
-    if (not IsAround(Mission.m_Recycler) and not Mission.m_MissionFailed) then
+    if (not IsAround(Mission.m_Recycler) and not Mission.m_MissionOver) then
         -- Objectives.
         AddObjectiveOverride("isdf0408.otf", "RED", 10, true);
 
         -- Mission failed.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Game over.
         if (Mission.m_IsCooperativeMode) then

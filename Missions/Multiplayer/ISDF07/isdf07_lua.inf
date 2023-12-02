@@ -1,6 +1,6 @@
 [DESCRIPTION]
 missionName = "Coop: 07 - Through the Looking Glass"
-mapTga = ""
+mapTga = "isdf07_lua.bmp"
 mapDesc = "isdf07.des"
 mySide = 1
 

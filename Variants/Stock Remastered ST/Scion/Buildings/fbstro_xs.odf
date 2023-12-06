@@ -1,0 +1,64 @@
+[GameObjectClass]
+classLabel = "fbstro_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbforg
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[ArmoryClass]
+
+[ArmoryGroup1]
+buildLabel = "Guns"
+buildItem1 = "apiong_xs"
+buildItem2 = "aplock_xs"
+buildItem3 = "apgaus_xs"
+
+[ArmoryGroup2]
+buildLabel = "Cannons"
+buildItem1 = "apsplasma_xs"
+buildItem2 = "apsonic_xs"
+buildItem3 = "apquil_xs"
+buildItem4 = "aparcc_xs"
+
+[ArmoryGroup3]
+buildLabel = "Rockets"
+buildItem1 = "apmlock_xs"
+buildItem2 = "apsting_xs"
+
+[ArmoryGroup4]
+buildLabel = "Mortars"
+buildItem1 = "apsartl_xs"
+buildItem2 = "apgas_xs"
+buildItem3 = "apresn_xs"
+buildItem4 = "appopg_xs"
+
+[ArmoryGroup5]
+buildLabel = "Mines"
+buildItem1 = "apflar_s_xs"
+buildItem2 = "apseek_xs"
+buildItem3 = "approx_xs"
+
+[ArmoryGroup6]
+buildLabel = "Specials"
+buildItem1 = "apblnk_xs"
+buildItem2 = "apstatic_xs"
+
+[ArmoryGroup7]
+buildLabel = "Shields"
+buildItem1 = "apshld_xs"
+buildItem2 = "apdefl_xs"
+buildItem3 = "apabso_xs"
+
+[ArmoryGroup8]
+buildItem1 = "fpbazo_xs"
+buildItem2 = "fpsnip_xs"
+buildItem3 = "fpgren_xs"
+buildItem4 = "fpjetp_xs"
+
+[Lod1]

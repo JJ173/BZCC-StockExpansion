@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "apsartl"
+
+requireCount = 2
+requireName1 = "fbover_xs" // fbstro
+requireText1 = "Build Overseer"
+requireName2 = "fbforg_xs"
+requireText2 = "Build Forge"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "fvsent_x"
+
+scrapCost = 40 // 50
+customCost = 45 // 50
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbkiln
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

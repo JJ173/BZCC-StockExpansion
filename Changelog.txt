@@ -45,7 +45,7 @@ ISDF02 (A Simple S & R):
 
 ISDF03 ():
 - Improved Shabayev's logic so she should have no issue entering the tunnels.
-- Scion Dropship will land and take off, this stops the player seeing units spawn next to it.
+- First Hauler is unkillable until it exits the tunnels. This is to make sure there's no funky behaviour with other units if a relic is placed in the tunnel.
 
 - General QOL (Quality of Life) improvements.
 

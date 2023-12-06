@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "fbspir_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 1
+requireName1 = "fbantm_xs"
+requireText1 = "Build Antenna"
+
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

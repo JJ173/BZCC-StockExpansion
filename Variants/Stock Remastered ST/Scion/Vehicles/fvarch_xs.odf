@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "fvarch_x"
+
+scrapCost = 60 // 55
+customCost = 60 // Not specified in balance.
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbkiln
+requireName2 = "fbantm_xs" // fbantm
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

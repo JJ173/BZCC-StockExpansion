@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "fbjamm_x"
+
+scrapCost = 60 // 50
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbover_xs" // fbover
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[JammerTowerClass]

@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "fvatank_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 3
+requireName1 = "fbforg_xs" // fbforg
+requireName2 = "fbover_xs" // fbover
+requireName3 = "fbdowe_xs" // fbstro
+requireText3 = "Build Dower"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

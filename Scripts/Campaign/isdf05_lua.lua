@@ -513,9 +513,9 @@ function HandleFailureConditions()
         -- Game over.
          if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Recycler!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf04l2.txt");
+            FailMission(GetTime() + 10, "isdf04l2.txt");
         end
     end
 end
@@ -1139,9 +1139,9 @@ function HandleMansonState()
             -- Complete the game and move on so we don't loop.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("Mission Accomplished.");
-                DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+                DoGameover(10);
             else
-                SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf05w1.txt");
+                SucceedMission(GetTime() + 10, "isdf05w1.txt");
             end
 
             -- Advance this stage.

@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "apsplasma"
+
+requireCount = 0 // 1
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

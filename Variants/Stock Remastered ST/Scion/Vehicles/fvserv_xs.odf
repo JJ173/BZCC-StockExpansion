@@ -1,0 +1,23 @@
+[GameObjectClass]
+classLabel = "fvserv"
+PilotConfig = "fspilo_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbkiln
+requireName2 = "fbdowe_xs" // fbdowe
+
+////////////////////////////////////
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]

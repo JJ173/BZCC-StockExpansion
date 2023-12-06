@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "fvscout_m"
+
+scrapCost = 20
+customCost = 30 // 55
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

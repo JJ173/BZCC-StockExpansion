@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "apsting"
+
+requireName1 = "fbantm_xs" // fbstro
+requireText1 = "Build Antenna"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

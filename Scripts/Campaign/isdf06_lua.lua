@@ -360,9 +360,9 @@ function HandleFailureConditions()
          -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Because you lost the Constructor, the mission could not be completed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf06l2.txt");
+            FailMission(GetTime() + 10, "isdf06l2.txt");
         end
     end
 end
@@ -660,9 +660,9 @@ function HandleFinalPart()
             -- Game over.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("Mission Accomplished.");
-                DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+                DoGameover(10);
             else
-                SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf06w1.txt");
+                SucceedMission(GetTime() + 10, "isdf06w1.txt");
             end
 
             -- Advance a step.

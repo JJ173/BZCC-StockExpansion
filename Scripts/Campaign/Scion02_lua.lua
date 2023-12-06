@@ -611,9 +611,9 @@ Functions[12] = function()
     -- Game over.
     if (Mission.m_IsCooperativeMode) then
         NoteGameoverWithCustomMessage("Mission Accomplished.");
-        DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+        DoGameover(10);
     else
-        SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "scion02w1.txt");
+        SucceedMission(GetTime() + 10, "scion02w1.txt");
     end
 end
 
@@ -686,9 +686,9 @@ function PlayerDetected()
     -- Failure.
     if (Mission.m_IsCooperativeMode) then
         NoteGameoverWithCustomMessage("You were discovered!");
-        DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+        DoGameover(10);
     else
-        FailMission(Mission.m_MissionTime + SecondsToTurns(10));
+        FailMission(GetTime() + 10);
     end
 end
 
@@ -730,9 +730,9 @@ function HandleFailureConditions()
         -- Failure.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Enemy Recycler was destroyed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "scion02l2.txt");
+            FailMission(GetTime() + 10, "scion02l2.txt");
         end
     end
     
@@ -746,9 +746,9 @@ function HandleFailureConditions()
         -- Failure.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Your Matriarch was destroyed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "scion02l1.txt");
+            FailMission(GetTime() + 10, "scion02l1.txt");
         end
     end
 end

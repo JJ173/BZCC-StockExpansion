@@ -937,9 +937,9 @@ Functions[22] = function()
     -- Game over.
     if (Mission.m_IsCooperativeMode) then
         NoteGameoverWithCustomMessage("Mission Accomplished.");
-        DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+        DoGameover(10);
     else
-        SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "scion05w1.txt");
+        SucceedMission(GetTime() + 10, "scion05w1.txt");
     end
 end
 
@@ -1132,9 +1132,9 @@ function HandleFailureConditions()
         -- Failure.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("AAN Recycler was destroyed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "scion05l1.txt");
+            FailMission(GetTime() + 10, "scion05l1.txt");
         end
     end
     
@@ -1154,9 +1154,9 @@ function HandleFailureConditions()
         -- Failure.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Your Matriarch was destroyed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "scion05l2.txt");
+            FailMission(GetTime() + 10, "scion05l2.txt");
         end
     end
 end

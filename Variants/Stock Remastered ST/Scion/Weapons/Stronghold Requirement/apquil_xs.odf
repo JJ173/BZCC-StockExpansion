@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "apquil"
+
+requireCount = 1 // 2
+requireName1 = "fbstro_xs" // fbdowe
+requireText1 = "Build Stronghold"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

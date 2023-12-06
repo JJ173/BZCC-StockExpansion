@@ -530,9 +530,9 @@ Functions[5] = function()
         -- Succeess.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Mission Accomplished.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            SucceedMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf08w1.txt");
+            SucceedMission(GetTime() + 10, "isdf08w1.txt");
         end
 
         -- Stop the mission.

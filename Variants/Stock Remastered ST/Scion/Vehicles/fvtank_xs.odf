@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "fvtank_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 2 // 1
+requireName1 = "fbkiln_xs" // fbforg
+requireText1 = "Build Kiln"
+requireName2 = "fbdowe_xs"
+requireText2 = "Build Dower"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

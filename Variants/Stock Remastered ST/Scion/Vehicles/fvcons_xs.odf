@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "fvcons_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbkiln_xs"
+buildItem2 = "fbspir_xs"
+buildItem3 = "fbantm_xs"
+buildItem4 = "fbdowe_xs"
+buildItem5 = "fbstro_xs"
+buildItem6 = "fbjamm_xs"

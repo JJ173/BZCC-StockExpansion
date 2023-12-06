@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fpbazo"
+
+requireName1 = "fbforg_xs" // fbantm
+requireText1 = "Build Forge"
+requireName2 = "fbdowe_xs" // fbover
+requireText2 = "Build Dower"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

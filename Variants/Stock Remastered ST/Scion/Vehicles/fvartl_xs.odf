@@ -1,0 +1,21 @@
+[GameObjectClass]
+classLabel = "fvartl_x"
+
+scrapCost = 60 // 65
+customCost = 65 // 70
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbforg_xs" // fbforg
+requireName2 = "fbantm_xs" // fbover
+requireText2 = "Build Antenna"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[ArtilleryClass]
+
+[DeployableClass]

@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "fbdowe_x"
+
+scrapCost = 70 // 50
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbkiln
+
+////////////////////////////////////
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[SupplyDepotClass]
+
+[Lod1]

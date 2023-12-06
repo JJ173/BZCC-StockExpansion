@@ -1057,9 +1057,9 @@ Functions[24] = function()
     -- Game over.
     if (Mission.m_IsCooperativeMode) then
         NoteGameoverWithCustomMessage("Mission Accomplished.");
-        DoGameover(Mission.m_MissionTime + SecondsToTurns(5));
+        DoGameover(5);
     else
-        SucceedMission(Mission.m_MissionTime + SecondsToTurns(5), "isdf07w1.txt");
+        SucceedMission(GetTime() + 5, "isdf07w1.txt");
     end
 end
 
@@ -1169,9 +1169,9 @@ function HandleFailureConditions()
         -- Failure.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Your Recycler was destroyed.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(5));
+            DoGameover(5);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(5), "isdf07l1.txt");
+            FailMission(GetTime() + 5, "isdf07l1.txt");
         end
     end
 
@@ -1190,9 +1190,9 @@ function HandleFailureConditions()
             -- Failure.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("Shabayev was killed.");
-                DoGameover(Mission.m_MissionTime + SecondsToTurns(5));
+                DoGameover(5);
             else
-                FailMission(Mission.m_MissionTime + SecondsToTurns(5), "isdf05l1.txt");
+                FailMission(GetTime() + 5, "isdf05l1.txt");
             end
         end
     end

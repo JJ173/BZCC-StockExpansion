@@ -1,0 +1,24 @@
+[GameObjectClass]
+classLabel = "ivcons"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+otherMsg = "ivcons08.wav"
+
+[HoverCraftClass]
+setAltitude = 0.0f
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen_x"
+buildItem2 = "ibfact_x"
+buildItem3 = "ibcbun_x"
+buildItem4 = "ibarmo_x"
+buildItem5 = "ibsbay_x"
+buildItem6 = "ibgtow_x"
+buildItem7 = "ibtrain_x"
+buildItem8 = "ibtcen_x"
+buildItem9 = "ibbomb_x"

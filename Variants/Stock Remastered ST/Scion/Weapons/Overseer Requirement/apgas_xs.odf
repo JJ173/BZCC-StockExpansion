@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "apgas"
+
+requireName1 = "fbover_xs" // fbstro
+requireText1 = "Build Overseer"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

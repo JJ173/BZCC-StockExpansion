@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "apseek"
+
+requireName1 = "fbkiln_xs" // fbdowe
+requireText1 = "Build Kiln"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

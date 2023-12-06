@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fvwalk_x"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 2 // 3
+requireName1 = "fbkiln_xs" // fbforg
+requireName2 = "fbstro_xs" // fbdowe
+requireText2 = "Build Stronghold"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[WalkerClass]

@@ -1507,9 +1507,9 @@ end
 Functions[56] = function()
     if (Mission.m_IsCooperativeMode) then
         NoteGameoverWithCustomMessage("Mission Accomplished.");
-        DoGameover(Mission.m_MissionTime + SecondsToTurns(2.1));
+        DoGameover(2.1);
     else
-        SucceedMission(Mission.m_MissionTime + SecondsToTurns(2.1), "isdf02w1.txt");
+        SucceedMission(GetTime() + 2.1, "isdf02w1.txt");
     end
 end
 
@@ -1741,9 +1741,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Service Truck!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+            DoGameover(7);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(7));
+            FailMission(GetTime() + 7);
         end
     -- Check if the Constructor is dead.
     elseif (not IsAlive(Mission.m_Cons) and not IsOdf(Mission.m_Shabayev, "ivpcon")) then
@@ -1759,9 +1759,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Constructor!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+            DoGameover(7);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(7), "isdf02l1.txt");
+            FailMission(GetTime() + 7, "isdf02l1.txt");
         end
     -- If Shabayev died...
     elseif (IsOdf(Mission.m_Shabayev, "isshab_p") and not IsAlive(Mission.m_Shabayev)) then
@@ -1777,9 +1777,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Shabayev is KIA!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+            DoGameover(7);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(7));
+            FailMission(GetTime() + 7);
         end
     -- If the player refuses to stay with Shabayev...
     elseif ((Mission.m_ServiceTruckWarning and Mission.m_PlayerTruckWarningTime < Mission.m_MissionTime) or (Mission.m_SecondWarning and Mission.m_PlayerLostTime < Mission.m_MissionTime)) then
@@ -1795,9 +1795,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You failed to follow the orders of your commanding officer!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+            DoGameover(7);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(7));
+            FailMission(GetTime() + 7);
         end
     end
 end

@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "fbantm_x"
+
+scrapCost = 70 // 60
+
+upgradeName = "fbover_xs"
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbkiln_xs" // fbkiln
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

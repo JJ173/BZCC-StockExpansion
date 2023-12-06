@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "aparcc"
+
+requireCount = 3 // 2
+requireName1 = "fbdowe_xs" // fbantm
+requireText1 = "Build Dower"
+requireName2 = "fbover_xs" // fbover
+requireName3 = "fbforg_xs"
+requireText3 = "Build Forge"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

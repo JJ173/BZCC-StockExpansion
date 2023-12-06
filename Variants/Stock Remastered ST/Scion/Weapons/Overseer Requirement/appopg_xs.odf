@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "appopg"
+
+requireCount = 1
+requireName1 = "fbover_xs" // fbantm
+requireText1 = "Build Overseer"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

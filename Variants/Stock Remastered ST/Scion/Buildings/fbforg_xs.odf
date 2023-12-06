@@ -1,0 +1,35 @@
+[GameObjectClass]
+classLabel = "fbforg_x"
+
+scrapCost = 85 // 60
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 2 // 1
+requireName1 = "fbkiln_xs" // fbkiln
+requireName2 = "fbstro_xs"
+requireText2 = "Build Stronghold"
+
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName6 = "fbkiln_xs"
+provideName7 = "fbforg_xs"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent_xs"
+buildItem2 = "fvarch_xs"
+buildItem3 = "fvtank_xs"
+buildItem4 = "fvartl_xs"
+buildItem5 = "fvwalk_xs"
+buildItem6 = "fvatank_xs"
+
+[Lod1]

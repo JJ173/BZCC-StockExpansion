@@ -1597,9 +1597,9 @@ Functions[53] = function()
     if (not Mission.m_SucceedMission) then
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Mission Accomplished.");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+            DoGameover(7);
         else
-            SucceedMission(Mission.m_MissionTime + SecondsToTurns(7), "isdf04w1.txt");
+            SucceedMission(GetTime() + 7, "isdf04w1.txt");
         end
 
         -- So we don't loop.
@@ -1802,9 +1802,9 @@ function HandleFailureConditions()
                 -- Game over.
                 if (Mission.m_IsCooperativeMode) then
                     NoteGameoverWithCustomMessage("You failed to follow General Braddock's orders!");
-                    DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+                    DoGameover(10);
                 else
-                    FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf04l3.txt");
+                    FailMission(GetTime() + 10, "isdf04l3.txt");
                 end
             end
         end 
@@ -1821,9 +1821,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Scavenger!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf04l1.txt");
+            FailMission(GetTime() + 10, "isdf04l1.txt");
         end
     end
 
@@ -1838,9 +1838,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Recycler!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf04l2.txt");
+            FailMission(GetTime() + 10, "isdf04l2.txt");
         end
     end
 end

@@ -1,0 +1,27 @@
+[GameObjectClass]
+classLabel = "fbover_x"
+
+scrapCost = 90 // 80
+
+/////// REQUIREMENTS ///////////////
+
+requireName1 = "fbantm_xs" // fbantm
+requireName2 = "fbforg_xs" // fbforg
+
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+
+provideCount = 10
+provideName9 = "fbantm_xs"
+provideName10 = "fbover_xs"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

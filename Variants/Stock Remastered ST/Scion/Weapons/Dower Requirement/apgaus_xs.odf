@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "apgaus"
+
+requireCount = 1 // 2
+requireName1 = "fbdowe_xs" // fbkiln
+requireText1 = "Build Dower"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

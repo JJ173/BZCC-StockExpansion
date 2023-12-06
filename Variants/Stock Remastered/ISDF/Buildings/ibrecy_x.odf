@@ -1,0 +1,28 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+classLabel = "ibrecy"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivscav_x"
+buildItem2 = "ivscout_x"
+buildItem3 = "ivturr_x"
+buildItem5 = "ivcons_x"
+buildItem6 = "ivserv_x"
+
+selectWaitMsg = "ivrecy04.wav"
+selectUser1Msg = "ivrecy02.wav"
+selectReadyMsg = "ivrecy04.wav"
+selectUser2Msg = "ivrecy04.wav"
+
+repairMsg = ""
+attackMsg = ""
+reloadMsg = "ivrecy12.wav"
+rescueMsg = "ivrecy13.wav"
+
+[RecyclerClass]
+
+[Lod1]

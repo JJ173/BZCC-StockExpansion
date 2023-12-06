@@ -226,7 +226,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 100);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -601,9 +601,9 @@ Functions[5] = function()
 
                     if (Mission.m_IsCooperativeMode) then
                         NoteGameoverWithCustomMessage("Mission Accomplished.");
-                        DoGameover(Mission.m_MissionTime + SecondsToTurns(7));
+                        DoGameover(7);
                     else
-                        SucceedMission(Mission.m_MissionTime + SecondsToTurns(7), "isdf12w1.txt");
+                        SucceedMission(GetTime() + 7, "isdf12w1.txt");
                     end
         
                     -- So we don't loop.
@@ -660,9 +660,9 @@ function HandleFailureConditions()
         -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Tug!");
-            DoGameover(Mission.m_MissionTime + SecondsToTurns(10));
+            DoGameover(10);
         else
-            FailMission(Mission.m_MissionTime + SecondsToTurns(10), "isdf12l1.txt");
+            FailMission(GetTime() + 10, "isdf12l1.txt");
         end
     end
 end

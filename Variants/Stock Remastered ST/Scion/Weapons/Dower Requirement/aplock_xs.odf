@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "aplock"
+
+requireName1 = "fbdowe_xs" // fbantm
+requireText1 = "Build Dower"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]

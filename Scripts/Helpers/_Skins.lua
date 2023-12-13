@@ -2,7 +2,7 @@ local _Skins = {};
 
 local skinData = {
     {
-        "76561198104781489", -- User Steam ID
+        "76561198241259700", -- User Steam ID
         {
             "ivtank", 
             "ivtank_x", 

@@ -23,14 +23,14 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = 20;
 
 -- Difficulty tables for times and spawns.
-local m_FirstScionWave1 = {"fvscout", "fvscout", "fvsent"};
-local m_FirstScionWave2 = {"fvscout", "fvsent", "fvsent"};
-local m_SecondScionWave1 = {"fvsent", "fvsent", "fvsent"};
-local m_SecondScionWave2 = {"fvscout", "fvsent", "fvsent"};
-local m_SecondScionWave3 = {"fvscout", "fvscout", "fvtank"};
-local m_ThirdScionWave1 = {"fvsent", "fvsent", "fvtank"};
-local m_ThirdScionWave2 = {"fvscout", "fvscout", "fvsent"};
-local m_ThirdScionWave3 = {"fvscout", "fvsent", "fvscout"};
+local m_FirstScionWave1 = {"fvscout_x", "fvscout_x", "fvsent_x"};
+local m_FirstScionWave2 = {"fvscout_x", "fvsent_x", "fvsent_x"};
+local m_SecondScionWave1 = {"fvsent_x", "fvsent_x", "fvsent_x"};
+local m_SecondScionWave2 = {"fvscout_x", "fvsent_x", "fvsent_x"};
+local m_SecondScionWave3 = {"fvscout_x", "fvscout_x", "fvtank_x"};
+local m_ThirdScionWave1 = {"fvsent_x", "fvsent_x", "fvtank_x"};
+local m_ThirdScionWave2 = {"fvscout_x", "fvscout_x", "fvsent_x"};
+local m_ThirdScionWave3 = {"fvscout_x", "fvsent_x", "fvscout_x"};
 
 -- Mission important variables.
 local Mission = 
@@ -290,17 +290,6 @@ function Start()
     Mission.m_LastTurret1 = GetHandle("last_turret1");
     Mission.m_LastTurret2 = GetHandle("last_turret2");
 
-    -- Remove the lights from the poles.
-    MaskEmitter(Mission.m_Pole3, 0);
-    MaskEmitter(Mission.m_Pole4, 0);
-    MaskEmitter(Mission.m_Pole5, 0);
-    MaskEmitter(Mission.m_Pole6, 0);
-    MaskEmitter(Mission.m_Pole7, 0);
-    MaskEmitter(Mission.m_Pole8, 0);
-    MaskEmitter(Mission.m_Pole9, 0);
-    MaskEmitter(Mission.m_Pole10, 0);
-    MaskEmitter(Mission.m_Pole11, 0);
-
     -- Spawn the Scion Builder at the right spot.
     Mission.m_Builder1 = BuildObject("fvpcon_x", Mission.m_EnemyTeam, "thai_spawn");
     -- Spawn the inactive Constructor for Shabayev to pilot later on.
@@ -434,6 +423,9 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Clean up any player spawns that haven't been taken by the player.
+    CleanSpawns();
+
     -- Small amount of damage for the Truck to repair.
     Damage(Mission.m_Ship4, 1000);
 

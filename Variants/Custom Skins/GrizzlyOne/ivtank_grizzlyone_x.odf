@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+geometryName = "ivtank00_grizzlyone.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ispilo"
+classLabel = "ispilo_x"
 
 weaponName1 = "igsnipx_cx"
 weaponName2 = ""

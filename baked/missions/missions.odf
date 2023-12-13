@@ -1,7 +1,39 @@
 [MissionInfo]
-countISDF = 9
+countISDF = 11
 
 [ISDF 1]
+missionTitle = "01: This is Not a Drill"
+missionInfo = "isdf01.des"
+missionFile = "isdf01_lua.bzn"
+planetName = "Pluto"
+planetInfo = "pluto.des"
+planetGeom = "pluto.fbx"
+preBriefMovie = "Flyby_1.ogv"
+
+techCount = 2
+techName1 = "ISDF Scout"
+techInfo1 = "ivscout.inf"
+techGeom1 = "ivscout00.fbx"
+techName2 = "ISDF Service Truck"
+techInfo2 = "ivserv.inf"
+techGeom2 = "ivserv00.fbx"
+
+mailCount = 2
+mailName1 = "General Braddock"
+mailInfo1 = "isdf01_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0101.wav"
+mailName2 = "Commander Shabayev"
+mailInfo2 = "isdf01_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes0102.wav"
+
+briefInfo = "isdf01.brf"
+
+launchMessage = "load01.wav"
+launchBackground = "pluto_load.tga"
+
+[ISDF 2]
 missionTitle = "02: A Simple S & R"
 missionInfo = "isdf02.des"
 missionFile = "isdf02_lua.bzn"
@@ -31,7 +63,38 @@ briefInfo = "isdf02.brf"
 launchMessage = "load02.wav"
 launchBackground = "pluto_load.tga"
 
-[ISDF 2]
+[ISDF 3]
+missionTitle = "03: We Have Hostiles"
+missionInfo = "isdf03.des"
+missionFile = "isdf03_lua.bzn"
+planetName = "Pluto"
+planetInfo = "pluto.des"
+planetGeom = "pluto.fbx"
+
+techCount = 3
+techName1 = "ISDF Tank"
+techInfo1 = "ivtank.inf"
+techGeom1 = "ivtank00.fbx"
+techName2 = "ISDF Armory"
+techInfo2 = "ibarmo.inf"
+techGeom2 = "ibarmo00.fbx"
+techView2 = 3
+techName3 = "Scion Sentry"
+techInfo3 = "fvsent.inf"
+techGeom3 = "fvsent_skel.fbx"
+
+mailCount = 1
+mailName1 = "Intercepted Transmission"
+mailInfo1 = "isdf03_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0301.wav"
+
+briefInfo = "isdf03.brf"
+
+launchMessage = "load03.wav"
+launchBackground = "pluto_load.tga"
+
+[ISDF 4]
 missionTitle = "04: Too Hot"
 missionInfo = "isdf04.des"
 missionFile = "isdf04_lua.bzn"
@@ -73,7 +136,7 @@ briefInfo = "isdf04.brf"
 launchMessage = "load04.wav"
 launchBackground = "pluto_load.tga"
 
-[ISDF 3]
+[ISDF 5]
 missionTitle = "05: The Dark Planet"
 missionInfo = "isdf05.des"
 missionFile = "isdf05_lua.bzn"
@@ -107,7 +170,7 @@ briefInfo = "isdf05.brf"
 launchMessage = "load05.wav"
 launchBackground = "dark_load.tga"
 
-[ISDF 4]
+[ISDF 6]
 missionTitle = "06: The Wormhole"
 missionInfo = "isdf06.des"
 missionFile = "isdf06_lua.bzn"
@@ -147,7 +210,7 @@ launchBackground = "dark_load.tga"
 
 successMovie = "wormhole.ogv"
 
-[ISDF 5]
+[ISDF 7]
 missionTitle = "07: Through the Looking Glass"
 missionInfo = "isdf07.des"
 missionFile = "isdf07_lua.bzn"
@@ -189,7 +252,7 @@ briefInfo = "isdf07.brf"
 launchMessage = "load07.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 6]
+[ISDF 8]
 missionTitle = "08: Get Help"
 missionInfo = "isdf08.des"
 missionFile = "isdf08_lua.bzn"
@@ -213,7 +276,7 @@ briefInfo = "isdf08.brf"
 launchMessage = "load08.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 7]
+[ISDF 9]
 missionTitle = "12: Counterattack"
 missionInfo = "isdf12.des"
 missionFile = "isdf12_lua.bzn"
@@ -243,7 +306,7 @@ briefInfo = "isdf12.brf"
 launchMessage = "load12.wav"
 launchBackground = "bane_load.tga"
 
-[ISDF 8]
+[ISDF 10]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -268,7 +331,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 9]
+[ISDF 11]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

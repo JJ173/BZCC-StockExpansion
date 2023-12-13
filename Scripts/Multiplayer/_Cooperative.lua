@@ -1,3 +1,9 @@
+-- Fix for finding files outside of this script directory.
+assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+
+-- Required Logic for Custom Skins.
+require("_Skins");
+
 local _Cooperative = 
 {
     m_TotalPlayerCount = 1,
@@ -249,17 +255,23 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
             PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
         end
 
-        -- Give them a pilot class.
-        SetPilotClass(PlayerH, MissionPilotODF);
-
-        -- Make sure the handle has a pilot so the player can hop out.
-        AddPilotByHandle(PlayerH);
-
         -- Look somewhere.
         SetRandomHeadingAngle(PlayerH);
     else
         SetTeamNum(PlayerH, Team);
     end
+
+    -- Replace the unit with a skin for any contributor.
+    if (SpawnPilotOnly == nil or SpawnPilotOnly == false) then
+        -- Replace the stock unit with the player skin.
+        PlayerH = ApplySkinToHandle(id, PlayerH);
+    end
+
+    -- Give them a pilot class.
+    SetPilotClass(PlayerH, MissionPilotODF);
+
+    -- Make sure the handle has a pilot so the player can hop out.
+    AddPilotByHandle(PlayerH);
 
     -- Return object to caller.
     return PlayerH;

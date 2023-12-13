@@ -5,12 +5,12 @@ PilotConfig = "ispilo_x"
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
-PathingType = 1
+// PathingType = 1
 AvoidType = 2
 
 selectPickupMsg = "ivscav05.wav"
 
-avoidSpeed = 16
+avoidSpeed = 32
 
 [TrackedVehicleClass]
 CENTER_SHIFT = -0.6

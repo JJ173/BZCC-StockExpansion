@@ -1,4 +1,4 @@
 Shabayev
 Now that the comm bunker is powered, you can uplink with the satellites
 in orbit. Exit your vehicle and enter this comm bunker. Once inside, I'll
-walk you through how to find those men using the satellites.
+walk you through how to find those men by using the satellites.

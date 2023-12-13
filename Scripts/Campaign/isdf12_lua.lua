@@ -1,7 +1,7 @@
 --[[ 
     BZCC ISDF12 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 23-11-2022
+    Version 1.0 23-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.

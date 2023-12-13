@@ -30,6 +30,20 @@ General:
 - Immersion improved. Logic has been added to try and combat the odds of a player seeing an enemy/ally spawn in from nowhere (common BZ2/BZCC issue in Stock).
 - Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
 
+ISDF01 (This is not a Drill):
+- Added third Dropship for extra players.
+- Added extra sound effect to the cliff when it's finished crumbling and hits the ground.
+- Fixed code where the rest of Red Squad are meant to look at your team while they wait for you to catch up.
+- Added logic to keep the enemies alive that are attacking Simms until the player is within range. 
+- Reduced intensity of sounds during the dropship cutscene. 
+- Increased intensity of the fight between the Scions and Red Squad.
+- Red Squad is no longer killed so easily by the enemy. They have a chance of surviving.
+- Surviving Red Squad Pilots or Ships will return to the outpost.
+- Reduced times for warnings if the player isn't following orders.
+- All Scion Units are classified as "Unknown" to line up with post-mission debriefings.
+
+- General QOL (Quality of Life) improvements.
+
 ISDF02 (A Simple S & R): 
 - Replaced training versions of Sentries with either normal Scion Scouts or normal Scion Sentries based on chosen difficulty.
 - Re-added missing "isdf0228.wav" after the first Jammer is destroyed.
@@ -39,13 +53,18 @@ ISDF02 (A Simple S & R):
 - Fixed first path for Shabayev so she doesn't run into the communications building when she's leaving.
 - Fixed missing construction sounds on the Scion builder.
 - During the final part of the mission, there is a Sentry that sits in the base when Shabayev is in the Constructor. That has been made smarter and will attack when Shabayev enters the base perimeter.
-- If the player strays away from Shabayev, there are some warnings. The duration between these events has been reduced.
+- Reduced times for warnings if the player isn't following orders.
+- All Scion Units are classified as "Unknown" to line up with post-mission debriefings.
 
 - General QOL (Quality of Life) improvements.
 
-ISDF03 ():
+ISDF03 (We Have Hostiles):
 - Improved Shabayev's logic so she should have no issue entering the tunnels.
 - First Hauler is unkillable until it exits the tunnels. This is to make sure there's no funky behaviour with other units if a relic is placed in the tunnel.
+- Shabayev and Red 1 will now drive off the map before disappearing from the mission.
+- Red 1 will now drive to their distress location instead of spawning there.
+- All Scion Units are classified as "Unknown" to line up with post-mission debriefings.
+- Added a couple of Scion units that chase Shabayev and Red Squad when they are returning to the base.
 
 - General QOL (Quality of Life) improvements.
 

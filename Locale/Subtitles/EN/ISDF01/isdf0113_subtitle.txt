@@ -1,0 +1,5 @@
+Shabayev
+Lieutenant Cooke, I want you to search for the communication station. Scan the 
+buildings by pointing at them and pressing your I key. The information box on
+the right side of your HUD will tell you when you've found it. I'm going to check
+the tunnels.

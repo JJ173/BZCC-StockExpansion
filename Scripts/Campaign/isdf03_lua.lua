@@ -22,6 +22,43 @@ local _Subtitles = require('_Subtitles');
 -- Game TPS.
 local m_GameTPS = 20;
 
+-- Difficulty tables for times and spawns.
+local m_ScionGuards = {
+    {
+        {"fvscout_x", "fvscout_x"},
+        {"fvscout_x", "fvscout_x"},
+        {"fvscout_x", "fvscout_x"}
+    },
+    {
+        {"fvscout_x", "fvscout_x"},
+        {"fvscout_x", "fvsent_x"},
+        {"fvsent_x", "fvsent_x"}
+    },
+    {
+        {"fvscout_x", "fvsent_x"},
+        {"fvsent_x", "fvsent_x"},
+        {"fvtank_x", "fvsent_x"}
+    }
+};
+
+local m_ScionBaseAttacks = {
+    {
+        {"fvscout_x", "fvscout_x", "fvscout_x"},
+        {"fvscout_x", "fvsent_x", "fvscout_x"},
+        {"fvsent_x", "fvsent_x", "fvscout_x"}
+    },
+    {
+        {"fvsent_x", "fvscout_x", "fvscout_x"},
+        {"fvsent_x", "fvsent_x", "fvscout_x"},
+        {"fvsent_x", "fvtank_x", "fvsent_x"}
+    },
+    {
+        {"fvsent_x", "fvsent_x", "fvscout_x"},
+        {"fvtank_x", "fvsent_x", "fvsent_x"},
+        {"fvtank_x", "fvtank_x", "fvsent_x"}
+    }
+}
+
 -- Mission important variables.
 local Mission = 
 {
@@ -59,6 +96,7 @@ local Mission =
     m_Scion4 = nil,
     m_Scion5 = nil,
     m_Scion6 = nil,
+    m_Power = nil,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,    
@@ -77,7 +115,22 @@ local Mission =
     m_RedSquadChangeLook = false,
     m_RedSquadLookAtShab = false,
     m_RedSquadRetreat = false,
-    m_ScionBrainEnabled = false;
+    m_ScionBrainEnabled = false,
+    m_HaulersDead = true,
+    m_RelicFailureActive = false,
+    m_RelicFailureCamPrep = false,
+    m_BaseFailureActive = true,
+    m_ShabFailureActive = true,
+    m_TruckHelp = false,
+
+    m_Scion3Attack = false,
+    m_Scion3Switch = false,
+
+    m_Scion4Attack = false,
+    m_Scion4Switch = false,
+
+    m_Scion5Attack = false,
+    m_Scion5Switch = false,
 
     m_Audioclip = nil,
 
@@ -85,7 +138,12 @@ local Mission =
     m_TunnelWarningTime = 0,
     m_RedSquadLookTime = 0,
     m_ScionWaveTime = 0,
-    m_ScionWaveCount = 0,
+    m_ScionWaveCount = 1,
+    m_ArmorySequence = 0,
+
+    -- This checks the state of each hauler.
+    m_Hauler1State = 0;
+    m_Hauler2State = 0;
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -118,6 +176,10 @@ function InitialSetup()
     PreloadODF("ivscout_x");
     PreloadODF("ispilo_x");
     PreloadODF("ivserv_x");
+    PreloadODF("fvtug3");
+    PreloadODF("fvsent_x");
+    PreloadODF("fvscout_x");
+    PreloadODF("fvtank_x");
 end
 
 function Save() 
@@ -139,6 +201,9 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);  
+
+        -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
+        SetObjectiveName(h, "Unknown");
 
         -- Pilots are forbidden in this mission.
         if (not IsBuilding(h)) then
@@ -208,15 +273,15 @@ function Start()
     Mission.m_CommBunker = GetHandle("endbase_cbunk");
     Mission.m_FieldBunker = GetHandle("field_cbunk");
     Mission.m_ScionDropship = GetHandle("sdrop");
+    Mission.m_Power = GetHandle("power1");
+    Mission.m_Armory = GetHandle("armory");
 
     -- Give Shab her name.
     SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
     -- Highlight Shabayev.
     SetObjectiveOn(Mission.m_Shabayev);
-    -- Give her the correct pilot.
-    SetPilotClass(Mission.m_Shabayev, "isshab_p");
-    -- So she always ejects.
-    SetEjectRatio(Mission.m_Shabayev, 1);
+    -- Can't have her eject here, as there's no Recycler to build spare units.
+    SetEjectRatio(Mission.m_Shabayev, 0);
     -- Make sure she has good skill.
     SetSkill(Mission.m_Shabayev, 3);
 
@@ -256,6 +321,19 @@ function Update()
 
             -- For failures.
             HandleFailureConditions();
+
+            -- This just tells the truck to heal the Power Plant if it gets below health.
+            if (not Mission.m_TruckHelp) then
+                if (IsAlive(Mission.m_Truck) and IsAround(Mission.m_Power)) then
+                    if (GetCurHealth(Mission.m_Power) < 2500) then
+                        -- Go heal the Power Plant.
+                        Service(Mission.m_Truck, Mission.m_Power, 0);
+
+                        -- So we don't loop.
+                        Mission.m_TruckHelp = true;
+                    end
+                end
+            end
         end
     end
 end
@@ -319,6 +397,10 @@ Functions[1] = function()
     -- This opens up the Scion dropship.
     SetAnimation(Mission.m_ScionDropship, "deploy", 1);
 
+    -- Stop the enemy from attacking the relics.
+    SetPerceivedTeam(Mission.m_Relic1, Mission.m_EnemyTeam);
+    SetPerceivedTeam(Mission.m_Relic2, Mission.m_EnemyTeam);
+
     -- Small delay.
     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
 
@@ -334,11 +416,8 @@ Functions[2] = function()
         -- Tiny delay
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
 
-        -- DEBUG
-        Mission.m_MissionState = 18;
-
         -- Advance the mission state...
-        -- Mission.m_MissionState = Mission.m_MissionState + 1;
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -654,8 +733,8 @@ Functions[18] = function()
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0319.wav");
 
                     -- Create Red Squad.
-                    Mission.m_Miller = BuildObject("ivscout_x", Mission.m_AlliedTeam, "miller_spawn1");
-                    Mission.m_Simms = BuildObject("ivscout_x", Mission.m_AlliedTeam, "simms_spawn1");
+                    Mission.m_Miller = BuildObject("ivpscou", Mission.m_AlliedTeam, "miller_spawn1");
+                    Mission.m_Simms = BuildObject("ivpscou", Mission.m_AlliedTeam, "simms_spawn1");
 
                     -- Change the name of the characters.
                     SetObjectiveName(Mission.m_Miller, "Red 1");
@@ -768,12 +847,18 @@ Functions[20] = function()
                 -- This removes the bunker warning.
                 Mission.m_BunkerWarningActive = false;
 
+                -- So we don't fail.
+                Mission.m_BaseFailureActive = false;
+
                 -- Remove the objective markers from both Shab and Red 1.
                 SetObjectiveOff(Mission.m_Shabayev);
                 SetObjectiveOff(Mission.m_Miller);
 
                 -- Shab: I'm on my way.
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0320.wav");
+
+                -- So we don't fail if Shab dies.
+                Mission.m_ShabFailureActive = false;
 
                 -- Tell her to go to the path.
                 Retreat(Mission.m_Shabayev, "leave_path");
@@ -806,6 +891,9 @@ Functions[22] = function()
         -- Braddock: We've got your situation on radar.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0310.wav");
 
+        -- Set the failure condition for this section as active.
+        Mission.m_RelicFailureActive = true;
+
         -- Change the name of each crate to "Hardware".
         SetObjectiveName(Mission.m_Relic1, "Hardware");
         SetObjectiveName(Mission.m_Relic2, "Hardware");
@@ -824,19 +912,17 @@ Functions[23] = function()
         -- New Objectives.
         AddObjectiveOverride("isdf0308a.otf", "WHITE", 10, true);
 
+        -- Enable the Scion brain. This will have them pick up the crates.
+        Mission.m_ScionBrainEnabled = true;
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[24] = function()
-    -- This function will handle the Scion waves.
-    local check1 = IsAlive(Mission.m_Hauler1);
-    local check2 = IsAlive(Mission.m_Hauler2);
-    local check3 = IsPlayerWithinDistance("base2_espawn1", 300, _Cooperative.m_TotalPlayerCount);
-
     -- Enemy units are dead, refresh.
-    if (not check1 and not check2 and not check3) then
+    if (Mission.m_HaulersDead and not IsPlayerWithinDistance("base2_espawn1", 300, _Cooperative.m_TotalPlayerCount)) then
         if (Mission.m_ScionWaveTime < Mission.m_MissionTime) then
             -- This creates the Haulers and their guards.
             Mission.m_Hauler1 = BuildObject("fvtug3", Mission.m_EnemyTeam, "base2_espawn3");
@@ -847,30 +933,395 @@ Functions[24] = function()
             SetAvoidType(Mission.m_Hauler2, 0);
 
             -- Create the guards.
-            Mission.m_Scion1 = BuildObject("fvscout_x", Mission.m_EnemyTeam, "base2_espawn1");
-            Mission.m_Scion2 = BuildObject("fvscout_x", Mission.m_EnemyTeam, "base2_espawn2");
+            Mission.m_Scion1 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1], Mission.m_EnemyTeam, "base2_espawn1");
+            Mission.m_Scion2 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2], Mission.m_EnemyTeam, "base2_espawn2");
+
+            -- Create extra attacks.
+            Mission.m_Scion3 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1], Mission.m_EnemyTeam, "simms_spawn2");
+            Mission.m_Scion4 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2], Mission.m_EnemyTeam, "miller_spawn2");
+            Mission.m_Scion5 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][3], Mission.m_EnemyTeam, "attack_1");
 
             -- Set their avoid type.
             SetAvoidType(Mission.m_Scion1, 0);
             SetAvoidType(Mission.m_Scion2, 0);
 
             -- Have them follow the Haulers.
-            Follow(Mission.m_Scion1, Mission.m_Hauler1, 1);
-            Follow(Mission.m_Scion2, Mission.m_Hauler2, 1);
+            Defend2(Mission.m_Scion1, Mission.m_Hauler1, 1);
+            Defend2(Mission.m_Scion2, Mission.m_Hauler2, 1);
 
             -- Have the Haulers go for the crates.
             Retreat(Mission.m_Hauler1, "haulerin_path1");
             Retreat(Mission.m_Hauler2, "haulerin_path2");
 
-            -- This sets the time limit.
-            Mission.m_ScionWaveTime = Mission.m_MissionTime + SecondsToTurns(180);
+            -- So we can check the reset logic in the Scion Brain function.
+            Mission.m_HaulersDead = false;
+
+            -- So the truck heals the power during each attack.
+            Mission.m_TruckHelp = false;
+
+            -- Sets the hauler states to the right state.
+            Mission.m_Hauler1State = HAULER_MOVING;
+            Mission.m_Hauler2State = HAULER_MOVING;
+
+            -- Increase the wave count.
+            Mission.m_ScionWaveCount = Mission.m_ScionWaveCount + 1;
         end
+    end
+
+    -- This is Shabayev giving helpful information about the armory.
+    if (Mission.m_HaulersDead) then
+        if (Mission.m_ScionWaveCount == 2) then
+            if (Mission.m_ArmorySequence == 0) then
+                -- Shab: "Cooke with the Armory back online...";
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0334.wav");
+
+                -- Advance the sequence.
+                Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
+            elseif (Mission.m_ArmorySequence == 1) then
+                if (IsAudioMessageDone(Mission.m_Audioclip)) then
+                    -- Shab: "Select the Armory..."
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0335.wav");
+
+                    -- Advance the sequence.
+                    Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
+                end
+            elseif (Mission.m_ArmorySequence == 2) then
+                if (IsSelected(Mission.m_Armory)) then
+                    -- Stop Shabayev from chatting.
+                    if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+                        -- Stop Shabayev from talking.
+                        StopAudioMessage(Mission.m_Audioclip);
+
+                        -- Do a tiny delay.
+                        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
+                    end
+
+                    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+                        -- Shab: Now Order The armory..
+                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0336.wav");
+
+                        -- Advance the sequence.
+                        Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
+                    end
+                end
+            end
+        elseif (Mission.m_ScionWaveCount == 4) then
+            -- Turn off the warning for the relic failure
+            Mission.m_RelicFailureActive = false;
+
+            -- Remove logic from the Scion brain.
+            Mission.m_ScionBrainEnabled = false;
+
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;      
+        end
+    end
+end
+
+Functions[25] = function()
+    -- Make sure all Scions are dead.
+    local check1 = IsAlive(Mission.m_Scion3);
+    local check2 = IsAlive(Mission.m_Scion4);
+    local check3 = IsAlive(Mission.m_Scion5)
+    
+    if (not check1 and not check2 and not check3) then
+        -- Shab: "I've got the two strays and I'm on my way back".
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0338.wav");
+        
+        -- Build Shabayev and Red Squad.
+        Mission.m_Shabayev = BuildObject("ivpscou", Mission.m_HostTeam, "shab_spawn");
+        Mission.m_Miller = BuildObject("ivpscou", Mission.m_AlliedTeam, "miller_spawn2");
+        Mission.m_Simms = BuildObject("ivpscou", Mission.m_AlliedTeam, "simms_spawn2");
+
+        -- Can't have her eject here, as there's no Recycler to build spare units.
+        SetEjectRatio(Mission.m_Shabayev, 0);
+
+        -- Rename Shabayev
+        SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
+        SetObjectiveOn(Mission.m_Shabayev);
+
+        -- Change the name of the characters.
+        SetObjectiveName(Mission.m_Miller, "Red 1");
+        SetObjectiveName(Mission.m_Simms, "Lt. Simms");
+
+        -- AI stuff.
+        SetAvoidType(Mission.m_Shabayev, 0);
+        SetAvoidType(Mission.m_Miller, 0);
+        SetAvoidType(Mission.m_Simms, 0);
+
+        -- Damage the ships.
+        Damage(Mission.m_Shabayev, 600);
+        Damage(Mission.m_Miller, 1100);
+        Damage(Mission.m_Simms, 1300);
+
+        -- Create their formation.
+        Goto(Mission.m_Shabayev, "last_path");
+        Follow(Mission.m_Miller, Mission.m_Shabayev, 1);
+        Follow(Mission.m_Simms, Mission.m_Miller, 1);
+
+        -- Activate failures.
+        Mission.m_ShabFailureActive = true;
+
+        -- Show Objectives.
+        AddObjectiveOverride("isdf0309.otf", "WHITE", 10, true);
+
+        -- Small delay.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(10);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[26] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Build the chasing Scion units.
+        Mission.m_Scion1 = BuildObject("fvsent_x", Mission.m_EnemyTeam, "miller_spawn2");
+        Mission.m_Scion2 = BuildObject("fvscout_x", Mission.m_EnemyTeam, "miller_spawn2");
+
+        -- Formation.
+        Follow(Mission.m_Scion2, Mission.m_Scion1);
+
+        -- Have them go to the base.
+        Goto(Mission.m_Scion1, "last_path", 1);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[27] = function()
+    -- Final checks.
+    if (IsAround(Mission.m_Armory)) then
+        if (GetDistance(Mission.m_Shabayev, Mission.m_Armory) < 100) then
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+    else
+        if (GetDistance(Mission.m_Shabayev, "base_center") < 100) then
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+    end
+end
+
+Functions[28] = function()
+    local check1 = IsAlive(Mission.m_Scion1);
+    local check2 = IsAlive(Mission.m_Scion2);
+
+    for i = 1, _Cooperative.m_TotalPlayerCount do
+        local p = GetPlayerHandle(i);
+        local check3 = GetDistance(p, Mission.m_Shabayev) < 60;
+
+        if (not check1 and not check2 and check3) then
+            -- Shab: "I knew you could do it".
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0321.wav");
+
+            -- Have her look at the main player.
+            LookAt(Mission.m_Shabayev, p, 1);
+
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+    end
+end
+
+Functions[29] = function()
+    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        -- Braddock "Condors are inbound"...
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0337.wav");
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[30] = function()
+    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        -- Mission failed.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.");
+            DoGameover(5);
+        else
+            SucceedMission(GetTime() + 5, "isdf03w1.txt");
+        end
+
+        -- Marks this as done so we don't loop.
+        Mission.m_MissionOver = true;
     end
 end
 
 function ScionBrain()
     -- This does a check to see when the Haulers need to pick up the crates.
-    
+    if (IsAlive(Mission.m_Hauler1)) then
+        if (Mission.m_Hauler1State == HAULER_MOVING) then
+            -- Run a check to make sure we are in range.
+            if (GetDistance(Mission.m_Hauler1, Mission.m_Relic1) < GetDistance(Mission.m_Hauler1, "hauler_check2")) then
+                -- Set the hauler to pick up the relic.
+                Pickup(Mission.m_Hauler1, Mission.m_Relic1, 1);
+
+                -- Highlight the Hauler.
+                SetObjectiveOn(Mission.m_Hauler1);
+
+                -- Set the state so they don't loop.
+                Mission.m_Hauler1State = HAULER_PICKUP;
+            end
+        elseif (Mission.m_Hauler1State == HAULER_PICKUP) then
+            -- This checks to see if the Hauler has cargo.
+            if (HasCargo(Mission.m_Hauler1)) then
+                -- Tell it to retreat.
+                if (GetDistance(Mission.m_Hauler1, "hauler_check1") > GetDistance(Mission.m_Hauler1, "hauler_check2")) then
+                    Retreat(Mission.m_Hauler1, "haulerout_path2");
+                else
+                    Retreat(Mission.m_Hauler1, "final_check");
+                end
+
+                -- Change the state.
+                Mission.m_Hauler1State = HAULER_RETREAT;
+            end
+        end
+    end
+
+    if (IsAlive(Mission.m_Hauler2)) then
+        if (Mission.m_Hauler2State == HAULER_MOVING) then
+            -- Run a check to make sure we are in range.
+            if (GetDistance(Mission.m_Hauler2, Mission.m_Relic2) < GetDistance(Mission.m_Hauler2, "hauler_check2")) then
+                -- Set the hauler to pick up the relic.
+                Pickup(Mission.m_Hauler2, Mission.m_Relic2, 1);
+
+                -- Highlight the Hauler.
+                SetObjectiveOn(Mission.m_Hauler2);
+
+                -- Set the state so they don't loop.
+                Mission.m_Hauler2State = HAULER_PICKUP;
+            end
+        elseif (Mission.m_Hauler2State == HAULER_PICKUP) then
+            -- This checks to see if the Hauler has cargo.
+            if (HasCargo(Mission.m_Hauler2)) then
+                -- Tell it to retreat.
+                if (GetDistance(Mission.m_Hauler2, "hauler_check1") > GetDistance(Mission.m_Hauler2, "hauler_check2")) then
+                    Retreat(Mission.m_Hauler2, "haulerout_path2");
+                else
+                    Retreat(Mission.m_Hauler2, "final_check");
+                end
+
+                -- Change the state.
+                Mission.m_Hauler2State = HAULER_RETREAT;
+            end
+        end
+    end
+
+    -- This is a monitor to see if the Haulers are dead.
+    if (not IsAlive(Mission.m_Hauler1) and not IsAlive(Mission.m_Hauler2) and not Mission.m_HaulersDead) then
+        -- So it doesn't loop.
+        Mission.m_HaulersDead = true;
+
+        -- This sets the time limit.
+        Mission.m_ScionWaveTime = Mission.m_MissionTime + SecondsToTurns(90);
+    end
+
+    -- This will handle the extra enemies and when they attack.
+    if (IsAlive(Mission.m_Scion3)) then
+        if (GetCurrentCommand(Mission.m_Scion3) == CMD_NONE) then
+            Goto(Mission.m_Scion3, "last_path", 1);
+        end
+
+        if (not Mission.m_Scion3Attack and GetDistance(Mission.m_Scion3, Mission.m_Power) < 100) then
+            -- Have it attack the Power Plant.
+            Attack(Mission.m_Scion3, Mission.m_Power, 1);
+
+            -- Get the guard of this unit to attack the truck.
+            if (IsAlive(Mission.m_Scion4)) then
+                if (IsAlive(Mission.m_Truck)) then
+                    Attack(Mission.m_Scion4, Mission.m_Truck, 1);
+                else
+                    Attack(Mission.m_Scion4, Mission.m_MainPlayer, 1);
+                end
+
+                -- So we don't loop.
+                Mission.m_Scion4Attack = true;
+            end
+
+            -- So we don't loop.
+            Mission.m_Scion3Attack = true;
+        end
+
+        -- This does a check on ammo. If we're running low, use it better.
+        if (not Mission.m_Scion3Switch and GetCurAmmo(Mission.m_Scion3) < 100) then
+            if (IsAlive(Mission.m_Truck)) then
+                Attack(Mission.m_Scion3, Mission.m_Truck, 1);
+            else
+                Attack(Mission.m_Scion3, Mission.m_MainPlayer, 1);
+            end
+
+            -- So we don't loop.
+            Mission.m_Scion3Switch = true;
+        end
+    else
+        -- Reset for the next unit.
+        Mission.m_Scion3Attack = false;
+        Mission.m_Scion3Switch = false;
+    end
+
+    if (IsAlive(Mission.m_Scion4)) then
+        if (GetCurrentCommand(Mission.m_Scion3) == CMD_NONE) then
+            if (IsAlive(Mission.m_Scion3)) then
+                Follow(Mission.m_Scion4, Mission.m_Scion3, 1);
+            else
+                Goto(Mission.m_Scion3, "last_path", 1);
+            end
+        end
+
+        if (not Mission.m_Scion4Attack and GetDistance(Mission.m_Scion4, Mission.m_Power) < 100) then
+            -- Have it attack the Power Plant.
+            Attack(Mission.m_Scion4, Mission.m_Truck, 1);
+
+            -- So we don't loop.
+            Mission.m_Scion4Attack = true;
+        end
+
+        -- This does a check on ammo. If we're running low, use it better.
+        if (not Mission.m_Scion4Switch and GetCurAmmo(Mission.m_Scion4) < 100) then
+            if (IsAlive(Mission.m_Truck)) then
+                Attack(Mission.m_Scion4, Mission.m_Truck, 1);
+            else
+                Attack(Mission.m_Scion4, Mission.m_MainPlayer, 1);
+            end
+
+            -- So we don't loop.
+            Mission.m_Scion4Switch = true;
+        end
+    else
+        -- Reset for the next unit.
+        Mission.m_Scion4Attack = false;
+        Mission.m_Scion4Switch = false;
+    end
+
+    if (IsAlive(Mission.m_Scion5)) then
+        if (not Mission.m_Scion5Attack) then
+            -- Have it attack the Player.
+            Attack(Mission.m_Scion5, Mission.m_MainPlayer, 1);
+
+            -- So we don't loop.
+            Mission.m_Scion5Attack = true;
+        end
+
+        -- If the player target is dead.
+        if (not Mission.m_Scion5Switch and GetCurrentCommand(Mission.m_Scion5) == CMD_NONE) then
+            if (IsAlive(Mission.m_Truck) and GetCurAmmo(Mission.m_Scion5) < 100) then
+                Attack(Mission.m_Scion5, Mission.m_Truck, 1);
+            else
+                Attack(Mission.m_Scion5, Mission.m_Power, 1);
+            end
+
+            -- So we don't loop.
+            Mission.m_Scion5Switch = true;
+        end
+    else
+        -- Reset for the next unit.
+        Mission.m_Scion5Attack = false;
+        Mission.m_Scion5Switch = false;
+    end
 end
 
 function RedSquadBrain()
@@ -927,15 +1378,9 @@ function RedSquadBrain()
 
     -- This then checks units to remove them from the game.
     if (Mission.m_RedSquadRetreat) then
-        if (IsAlive(Mission.m_Shabayev) and GetDistance(Mission.m_Shabayev, "miller_spawn1") < 25) then
+        if (IsAlive(Mission.m_Shabayev) and GetDistance(Mission.m_Shabayev, "miller_spawn1") < 15) then
             RemoveObject(Mission.m_Shabayev);
-        end
-
-        if (IsAlive(Mission.m_Miller) and GetDistance(Mission.m_Miller, "miller_spawn1") < 35) then
             RemoveObject(Mission.m_Miller);
-        end
-
-        if (IsAlive(Mission.m_Simms) and GetDistance(Mission.m_Simms, "miller_spawn1") < 45) then
             RemoveObject(Mission.m_Simms);
         end
     end
@@ -973,6 +1418,9 @@ function HandleFailureConditions()
                 -- Shab: Where are you going?!
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0328a.wav");
 
+                -- So we fail.
+                Mission.m_BaseFailureActive = true;
+
                 -- Remove the terminal player.
                 Mission.m_TerminalPlayer = nil;
 
@@ -993,5 +1441,155 @@ function HandleFailureConditions()
                 end
             end
         end
+    end
+
+    -- This checks that the cargo is near the dropship.
+    if (Mission.m_RelicFailureActive) then
+        -- Check to see if the Haulers are alive and they have the cargo.
+        if (Mission.m_Hauler1State == HAULER_RETREAT) then
+            -- Do a distance check.
+            if (GetDistance(Mission.m_Hauler1, "final_check") < 30 and HasCargo(Mission.m_Hauler1)) then
+                -- This first preps the camera.
+                if (not Mission.m_RelicFailureCamPrep) then
+                    -- Only do the cutscenes in SP mode.
+                    if (not Mission.m_IsCooperativeMode) then
+                        -- Prep the Camera.
+                        CameraReady();
+                    end
+
+                    -- Move the relevant hauler.
+                    Retreat(Mission.m_Hauler1, "drop_path", 1);
+
+                    -- Braddock: "You allowed them to capture our tech!"
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0324.wav");
+
+                    -- So we don't loop.
+                    Mission.m_RelicFailureCamPrep = true;
+                else
+                    if (not Mission.m_IsCooperativeMode) then
+                        -- Prep the Camera.
+                        CameraPath("final_check", 40, 0, Mission.m_ScionDropship);
+                    end
+
+                    -- Mission failed.
+                    if (Mission.m_IsCooperativeMode) then
+                        NoteGameoverWithCustomMessage("A relic was captured.");
+                        DoGameover(5);
+                    else
+                        FailMission(GetTime() + 5, "isdf03l1.txt");
+                    end
+
+                    -- Marks this as done so we don't loop.
+                    Mission.m_MissionOver = true;
+                end
+            end
+        end
+
+        if (Mission.m_Hauler2State == HAULER_RETREAT) then
+            -- Do a distance check.
+            if (GetDistance(Mission.m_Hauler2, "final_check") < 30 and HasCargo(Mission.m_Hauler2)) then
+                -- This first preps the camera.
+                if (not Mission.m_RelicFailureCamPrep) then
+                    -- Only do the cutscenes in SP mode.
+                    if (not Mission.m_IsCooperativeMode) then
+                        -- Prep the Camera.
+                        CameraReady();
+                    end
+
+                    -- Move the relevant hauler.
+                    Retreat(Mission.m_Hauler2, "drop_path", 1);
+
+                    -- Braddock: "You allowed them to capture our tech!"
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0324.wav");
+
+                    -- So we don't loop.
+                    Mission.m_RelicFailureCamPrep = true;
+                else
+                    if (not Mission.m_IsCooperativeMode) then
+                        -- Prep the Camera.
+                        CameraPath("final_check", 40, 0, Mission.m_ScionDropship);
+                    end
+
+                    -- Mission failed.
+                    if (Mission.m_IsCooperativeMode) then
+                        NoteGameoverWithCustomMessage("A relic was captured.");
+                        DoGameover(5);
+                    else
+                        FailMission(GetTime() + 5, "isdf03l1.txt");
+                    end
+
+                    -- Marks this as done so we don't loop.
+                    Mission.m_MissionOver = true;
+                end
+            end
+        end
+    end
+
+    -- This is if the player abandons the base to go to Red Squad.
+    if (Mission.m_BaseFailureActive) then
+        if (IsAlive(Mission.m_Miller)) then
+            if (IsPlayerWithinDistance(Mission.m_Miller, 300, _Cooperative.m_TotalPlayerCount) and not IsPlayerWithinDistance("base_center", 400, _Cooperative.m_TotalPlayerCount)) then
+                -- Halt the mission.
+                Mission.m_MissionOver = true;
+
+                -- Stop all audio.
+                StopAudioMessage(Mission.m_Audioclip);
+
+                -- Shab: "I'll carry on without you..."
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0329a.wav");
+
+                -- Game over.
+                if (Mission.m_IsCooperativeMode) then
+                    NoteGameoverWithCustomMessage("You failed to follow the orders of your commanding officer!");
+                    DoGameover(7);
+                else
+                    FailMission(GetTime() + 7);
+                end
+            end
+        end
+    end
+
+    -- This checks to see if Shabayev is dead.
+    if (Mission.m_ShabFailureActive) then
+        if (not IsAlive(Mission.m_Shabayev)) then
+            -- Stop all audio.
+            StopAudioMessage(Mission.m_Audioclip);
+
+            if (IsAlive(Mission.m_Truck)) then
+                -- Truck: "The Commander is dead!"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0322.wav");
+            else
+                -- Braddock: "The Commander is dead!"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0323.wav");
+            end
+
+            -- Game over.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("Shabayev is KIA!");
+                DoGameover(7);
+            else
+                FailMission(GetTime() + 7);
+            end
+
+            -- Halt the mission.
+            Mission.m_MissionOver = true;
+        end
+    end
+
+    -- If the power dies.
+    if (not IsAround(Mission.m_Power)) then
+        -- Show Objectives.
+        AddObjectiveOverride("isdf0308.otf", "RED", 10, true);
+
+        -- Mission failed.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("The Power Plant was destroyed.");
+            DoGameover(5);
+        else
+            FailMission(GetTime() + 5, "isdf03l2.txt");
+        end
+
+        -- Marks this as done so we don't loop.
+        Mission.m_MissionOver = true;
     end
 end

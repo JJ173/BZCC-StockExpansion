@@ -1,0 +1,3 @@
+Shabayev
+Lieutenant Cooke, look for me highlighted in your HUD, then turn towards me
+and head in my direction.

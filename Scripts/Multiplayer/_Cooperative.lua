@@ -7,6 +7,7 @@ require("_Skins");
 local _Cooperative = 
 {
     m_TotalPlayerCount = 1,
+    m_TeamIsSetUp = { false, false, false, false, false }
 };
 
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
@@ -23,8 +24,6 @@ function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPi
         -- Make sure the handle has a pilot so the player can hop out.
         AddPilotByHandle(PlayerH);
     end
-
-    print("Adding Player: " .. id);
 
     return true;
 end
@@ -230,6 +229,22 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 end
 
 function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, SteamID)
+    -- Setup the team if it's not set up.
+    if (IsTeamplayOn()) then
+        local cmdTeam = GetCommanderTeam(Team);
+
+        if (_Cooperative.m_TeamIsSetUp[cmdTeam] == false) then
+            -- Get the team race of the commander team.
+            local TeamRace = GetRaceOfTeam(cmdTeam);
+
+            -- Set the team race of the entire team.
+            SetMPTeamRace(WhichTeamGroup(cmdTeam), TeamRace);
+
+            -- So we don't loop.
+            _Cooperative.m_TeamIsSetUp[cmdTeam] = true;
+        end
+    end
+
     -- Put the player in ivtank, as that's what the original mission uses.
     local PlayerH = GetHandle("player_spawn_" .. _Cooperative.m_TotalPlayerCount);
 

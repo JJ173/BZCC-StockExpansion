@@ -12,7 +12,7 @@ local skinData = {
     }
 }
 
-function ApplySkinToHandle(steamId, playerHandle)
+function ApplySkinToHandle(userSteamId, playerHandle)
     -- Do a loop to find which table has the correct Steam ID.
     for i = 1, #skinData do
         -- Check to see if the steam ID matches.
@@ -21,26 +21,30 @@ function ApplySkinToHandle(steamId, playerHandle)
         -- Check to make sure the subset is not null.
         if (skinDataSubset ~= nil) then
             local steamID = skinDataSubset[1];
-            local units = skinDataSubset[2];
-            
-            if (units ~= nil) then
-                local skin = skinDataSubset[3];
 
-                if (skin ~= nil) then
-                    local ODF = GetCfg(playerHandle);
+            -- Checks to see if the Steam IDs match.
+            if (userSteamId == steamID) then
+                local units = skinDataSubset[2];
+                
+                if (units ~= nil) then
+                    local skin = skinDataSubset[3];
 
-                    for j = 1, #units do
-                        local unit = units[j];
+                    if (skin ~= nil) then
+                        local ODF = GetCfg(playerHandle);
 
-                        if (ODF == unit) then
-                            -- Check to see if this is the ST variant or not.
-                            local lastCharacter = string.sub(unit, string.len(unit));
+                        for j = 1, #units do
+                            local unit = units[j];
 
-                            -- Used for the ST variant as the values may be different between this and the normal units.
-                            if (lastCharacter == "s") then
-                                return ReplaceObject(playerHandle, skin .. "s");
-                            else
-                                return ReplaceObject(playerHandle, skin .. "x");
+                            if (ODF == unit) then
+                                -- Check to see if this is the ST variant or not.
+                                local lastCharacter = string.sub(unit, string.len(unit));
+
+                                -- Used for the ST variant as the values may be different between this and the normal units.
+                                if (lastCharacter == "s") then
+                                    return ReplaceObject(playerHandle, skin .. "s");
+                                else
+                                    return ReplaceObject(playerHandle, skin .. "x");
+                                end
                             end
                         end
                     end

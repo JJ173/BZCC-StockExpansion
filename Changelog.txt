@@ -18,6 +18,7 @@ Scion:
 - Increased ISDF/Scion pilot walking animation to look more realistic.
 - Updated impact sounds for Pulse Rifle and Sniper
 - Turret omegaTurret value increased to 2.0, was 1.25.
+- Warrior has had AI revisions. It's now more deadly and accurate.
 
 CAMPAIGN
 

@@ -15,7 +15,7 @@ function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPi
         _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
 
         -- Create the player for the server.
-        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset);
+        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, id);
 
         -- Make sure we give the player control of their ship.
         SetAsUser(PlayerH, Team);
@@ -23,6 +23,8 @@ function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPi
         -- Make sure the handle has a pilot so the player can hop out.
         AddPilotByHandle(PlayerH);
     end
+
+    print("Adding Player: " .. id);
 
     return true;
 end
@@ -227,7 +229,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
     end
 end
 
-function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
+function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, SteamID)
     -- Put the player in ivtank, as that's what the original mission uses.
     local PlayerH = GetHandle("player_spawn_" .. _Cooperative.m_TotalPlayerCount);
 
@@ -264,7 +266,7 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
     -- Replace the unit with a skin for any contributor.
     if (SpawnPilotOnly == nil or SpawnPilotOnly == false) then
         -- Replace the stock unit with the player skin.
-        PlayerH = ApplySkinToHandle(id, PlayerH);
+        PlayerH = ApplySkinToHandle(SteamID, PlayerH);
     end
 
     -- Give them a pilot class.

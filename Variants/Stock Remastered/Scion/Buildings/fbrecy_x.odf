@@ -13,6 +13,8 @@ buildItem5 = "fvcons_x"
 buildItem6 = "fvserv_x"
 buildItem7 = "apserv"
 
+DropoffConfig = "fpdrop_x"
+
 [RecyclerClass]
 
 [PoweredBuildingClass]

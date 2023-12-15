@@ -23,6 +23,8 @@ attackMsg = ""
 reloadMsg = "ivrecy12.wav"
 rescueMsg = "ivrecy13.wav"
 
+DropoffConfig = "ipdrop_x"
+
 [RecyclerClass]
 
 [Lod1]

@@ -378,8 +378,6 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    print("ADD PLAYER!");
-
     return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
 end
 

@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 11
+countISDF = 12
 
 [ISDF 1]
 missionTitle = "01: This is Not a Drill"
@@ -277,6 +277,30 @@ launchMessage = "load08.wav"
 launchBackground = "mire_load.tga"
 
 [ISDF 9]
+missionTitle = "09: Rumble in the Jungle"
+missionInfo = "isdf09.des"
+missionFile = "isdf09_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 1
+techName1 = "ISDF APC"
+techInfo1 = "ivapc.inf"
+techGeom1 = "ivapc00.fbx"
+
+mailCount = 1
+mailName1 = "General Braddock"
+mailInfo1 = "isdf09_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes0901.wav"
+
+briefInfo = "isdf09.brf"
+
+launchMessage = "load09.wav"
+launchBackground = "mire_load.tga"
+
+[ISDF 10]
 missionTitle = "12: Counterattack"
 missionInfo = "isdf12.des"
 missionFile = "isdf12_lua.bzn"
@@ -306,7 +330,7 @@ briefInfo = "isdf12.brf"
 launchMessage = "load12.wav"
 launchBackground = "bane_load.tga"
 
-[ISDF 10]
+[ISDF 11]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -331,7 +355,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 11]
+[ISDF 12]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

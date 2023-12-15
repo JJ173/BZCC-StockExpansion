@@ -141,6 +141,7 @@ ISDF08 (Get Help):
 
 ISDF09 (Rumble in the Jungle):
 - The base that you built in ISDF07 (Through the Looking Glass) will now appear in this mission.
+- Added Manson to the base.
 
 - General QOL (Quality of Life) improvements.
 

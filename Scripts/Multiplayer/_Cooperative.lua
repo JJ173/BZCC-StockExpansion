@@ -11,9 +11,13 @@ local _Cooperative =
 };
 
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
+    print("_Cooperative.AddPlayer: Running");
+
     if (IsNewPlayer) then
         -- Keep track of how many player are in the game.
         _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
+
+        print("ADDING PLAYER: " .. id);
 
         -- Create the player for the server.
         local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, id);
@@ -229,6 +233,9 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 end
 
 function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, SteamID)
+    -- Testing
+    print("RUNNING SETUP PLAYER IN _COOPERATIVE");
+
     -- Setup the team if it's not set up.
     if (IsTeamplayOn()) then
         local cmdTeam = GetCommanderTeam(Team);
@@ -281,7 +288,7 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
     -- Replace the unit with a skin for any contributor.
     if (SpawnPilotOnly == nil or SpawnPilotOnly == false) then
         -- Replace the stock unit with the player skin.
-        PlayerH = ApplySkinToHandle(SteamID, PlayerH);
+        -- PlayerH = ApplySkinToHandle(SteamID, PlayerH);
     end
 
     -- Give them a pilot class.
@@ -289,6 +296,11 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
 
     -- Make sure the handle has a pilot so the player can hop out.
     AddPilotByHandle(PlayerH);
+
+    -- If on team 0 (dedicated server team), make this object gone from the world
+	if (Team == 0) then
+		MakeInert(PlayerH);
+	end
 
     -- Return object to caller.
     return PlayerH;

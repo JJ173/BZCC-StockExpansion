@@ -1,0 +1,6 @@
+[GameObjectClass]
+geometryName = "ioflag01.fbx"
+classLabel = "ipdrop"
+animCount = 1
+animName1 = "wave"
+animFile1 = "ioflag01.fbx"

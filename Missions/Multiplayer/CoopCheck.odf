@@ -110,3 +110,6 @@ Check104 = "VIRTUAL_CLASS_SCAVENGER"
 
 Check105 = "ipdrop_x"
 Check106 = "fpdrop_x"
+Check107 = "ibgtow01"
+Check108 = "ibpgen01"
+Check109 = "petank"

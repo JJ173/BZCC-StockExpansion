@@ -2,6 +2,9 @@
 classLabel = "ivrecy"
 PilotConfig = "ispilo_x"
 
+// Don't give units to the commander.
+StayWithOwner = true
+
 [CraftClass]
 deployedMsg = "ivrecy08.wav"
 

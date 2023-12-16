@@ -2,6 +2,9 @@
 classLabel = "ivcons"
 PilotConfig = "ispilo_x"
 
+// Don't give units to the commander.
+StayWithOwner = true
+
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 

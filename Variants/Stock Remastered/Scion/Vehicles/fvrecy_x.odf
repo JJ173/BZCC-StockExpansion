@@ -1,6 +1,9 @@
 [GameObjectClass]
 classLabel = "fvrecy"
 
+// Don't give units to the commander.
+StayWithOwner = true
+
 [CraftClass]
 
 [TrackedVehicleClass]

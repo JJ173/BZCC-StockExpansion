@@ -165,7 +165,7 @@ function Start()
     Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -193,9 +193,6 @@ function Start()
 
     -- Set Manson's team to blue.
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
-
-    -- Place the player's old base from the previous mission.
-    PlacePlayerBase();
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -282,6 +279,9 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Place the player's old base from the previous mission.
+    PlacePlayerBase();
+
     -- Clean up any player spawns that haven't been taken by the player.
     CleanSpawns();
 

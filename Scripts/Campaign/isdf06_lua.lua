@@ -244,14 +244,8 @@ function Start()
     -- We have a Scavenger on reserve for the pool collection.
     Mission.m_ReserveScav = GetHandle("reserve_scav");
 
-    -- Don't let the AI have fun with it.
-    SetIndependence(Mission.m_ReserveScav, 0);
-
-    -- So we don't have command of it.
-    Stop(Mission.m_ReserveScav, 1);
-
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -261,7 +255,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -287,7 +281,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function PlayerEjected(DeadObjectHandle)
@@ -370,6 +364,12 @@ function HandleMissionStart()
     if (Mission.m_MissionStartStage == 0) then
         -- Manson: "Okay orange squad..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0601.wav");
+
+        -- Don't let the AI have fun with it.
+        SetIndependence(Mission.m_ReserveScav, 0);
+
+        -- So we don't have command of it.
+        Stop(Mission.m_ReserveScav, 1);
 
         -- Advance a step.
         Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;

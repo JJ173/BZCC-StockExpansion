@@ -246,7 +246,7 @@ function Start()
     Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -256,7 +256,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -279,8 +279,6 @@ function Start()
     SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
     -- Highlight Shabayev.
     SetObjectiveOn(Mission.m_Shabayev);
-    -- Can't have her eject here, as there's no Recycler to build spare units.
-    SetEjectRatio(Mission.m_Shabayev, 0);
     -- Make sure she has good skill.
     SetSkill(Mission.m_Shabayev, 3);
 
@@ -338,7 +336,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 0.2);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function PlayerEjected(DeadObjectHandle)

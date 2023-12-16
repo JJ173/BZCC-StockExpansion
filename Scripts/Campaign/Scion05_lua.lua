@@ -377,11 +377,11 @@ function Start()
     Mission.m_NRTank2 = GetHandle("nr_cintank2");
 
     -- Stop any pilots from causing problems.
-    SetEjectRatio(Mission.m_NRCinRckt1, 0);
-    SetEjectRatio(Mission.m_NRMbike1, 0);
-    SetEjectRatio(Mission.m_NRMbike2, 0);
-    SetEjectRatio(Mission.m_NRTank1, 0);
-    SetEjectRatio(Mission.m_NRTank2, 0);
+    -- SetEjectRatio(Mission.m_NRCinRckt1, 0);
+    -- SetEjectRatio(Mission.m_NRMbike1, 0);
+    -- SetEjectRatio(Mission.m_NRMbike2, 0);
+    -- SetEjectRatio(Mission.m_NRTank1, 0);
+    -- SetEjectRatio(Mission.m_NRTank2, 0);
 
     Mission.m_Look = GetHandle("look");
 
@@ -407,7 +407,7 @@ function Start()
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -417,7 +417,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -464,7 +464,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function PlayerEjected(DeadObjectHandle)

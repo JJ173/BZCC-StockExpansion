@@ -215,7 +215,7 @@ function Start()
     Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -271,16 +271,6 @@ function Start()
     SetObjectiveName(Mission.m_PoolNav1, "Biometal Pool");
     SetObjectiveName(Mission.m_PoolNav2, "Biometal Pool");
     SetObjectiveName(Mission.m_PoolNav3, "Biometal Pool");
-
-    -- Send the base scav straight to the base pool.
-    Goto(Mission.m_BaseScav, Mission.m_BasePool, 1);
-
-    -- Stop the Scavenger.
-    Defend(Mission.m_Scav1, 0);
-
-    if (Mission.m_MissionDifficulty == 1) then
-        SetGroup(BuildObject("ivcons_x", Mission.m_HostTeam, "train_point"), 4);
-    end
 
     -- Damage each base building.
     SetCurHealth(Mission.m_Armory, 1500);
@@ -392,6 +382,16 @@ end
 Functions[1] = function()
     -- Create a delay before the first dialog is played.
     Mission.m_IntroAudioDelay = Mission.m_MissionTime + SecondsToTurns(3);
+
+    -- Send the base scav straight to the base pool.
+    Goto(Mission.m_BaseScav, Mission.m_BasePool, 1);
+
+    -- Stop the Scavenger.
+    Defend(Mission.m_Scav1, 0);
+
+    if (Mission.m_MissionDifficulty == 1) then
+        SetGroup(BuildObject("ivcons_x", Mission.m_HostTeam, "train_point"), 4);
+    end
 
     -- Show objectives.
     AddObjective("isdf1201.otf", "WHITE");

@@ -230,7 +230,7 @@ function Start()
     Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -240,7 +240,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -289,9 +289,6 @@ function Start()
 
     -- This is for Red Squad.
     SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
-
-    -- Start our Earthquake.
-    StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -356,7 +353,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 100);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function PlayerEjected(DeadObjectHandle)
@@ -409,6 +406,9 @@ end
 Functions[1] = function()
     -- Clean up any player spawns that haven't been taken by the player.
     CleanSpawns();
+
+    -- Start our Earthquake.
+    StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
     -- If there's only one player, remove the third dropship.
     if (Mission.m_TotalPlayerCount == 1) then

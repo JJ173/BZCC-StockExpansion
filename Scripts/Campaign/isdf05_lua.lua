@@ -41,9 +41,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo";
+    m_PlayerPilotODF = "ispilo_x";
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank";
+    m_PlayerShipODF = "ivtank_x";
 
     m_Recycler = nil,
     m_Scavenger = nil,
@@ -161,6 +161,9 @@ end
 function Load(MissionData)
     -- Enable high TPS.
     m_GameTPS = EnableHighTPS();
+
+	-- We're a 1.3 DLL.
+	WantBotKillMessages();
 
     -- Do not auto group units.
     SetAutoGroupUnits(false);
@@ -288,24 +291,24 @@ function Start()
     -- Allied team is Squad Blue.
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
-    -- Team names for stats.
+    -- -- Team names for stats.
     SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
     SetTeamNameForStat(Mission.m_AlliedTeam, "Blue Squad");
 
     -- Ally teams to be sure.
     Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
 
-    -- There are some neutral Scavengers near the teleport.
+    -- -- There are some neutral Scavengers near the teleport.
     Mission.m_Scavenger2 = GetHandle("ivscav1");
     Mission.m_Scavenger3 = GetHandle("ivscav2");
 
-    -- Stop them from collecting any loose.
+    -- -- Stop them from collecting any loose.
     KillPilot(Mission.m_Scavenger2);
     KillPilot(Mission.m_Scavenger3);
 
-    -- Grab the "Excavator"
+    -- -- Grab the "Excavator"
     Mission.m_Teleportal = GetHandle("unnamed_ibtele");
-    -- Set it's name.
+    -- -- Set it's name.
     SetObjectiveName(Mission.m_Teleportal, TranslateString("Mission0503"));
 
     -- Create Shabayev.
@@ -318,8 +321,6 @@ function Start()
     SetObjectiveOn(Mission.m_Shabayev);
     -- Give her the correct pilot.
     SetPilotClass(Mission.m_Shabayev, "isshab_p");
-    -- So she always ejects.
-    SetEjectRatio(Mission.m_Shabayev, 1);
     -- Make sure she has good skill.
     SetSkill(Mission.m_Shabayev, 3);
 
@@ -349,7 +350,7 @@ function Start()
     SetObjectiveName(Mission.m_Blue2, "Sgt. Masiker");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle();
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);
@@ -359,7 +360,7 @@ function Start()
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
@@ -385,11 +386,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
-end
-
-function DeletePlayer(id) 
-    return _Cooperative.DeletePlayer(id);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function PlayerEjected(DeadObjectHandle)

@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Difficulty tables for times and spawns.
 local m_Breacher1Ship = {"fvscout", "fvsent", "fvarch"};
@@ -45,9 +45,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo";
+    m_PlayerPilotODF = "ispilo_x";
     -- Specific to mission.
-    m_PlayerShipODF = "ivmisl";
+    m_PlayerShipODF = "ivmisl_x";
 
     m_IsCooperativeMode = false,
     m_StartDone = false,    
@@ -62,6 +62,7 @@ local Mission =
     m_SentGreenPlatoon2 = false,
 
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_Bomber = nil,
     m_Constructor = nil,
@@ -102,23 +103,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ivturr");
-    PreloadODF("ivbomb");
-    PreloadODF("ivcon6_fix");
-    PreloadODF("fbrecy");
-    PreloadODF("fbforg");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -126,11 +115,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -186,63 +175,6 @@ function Start()
 
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
-
-    -- Allied team is Squad Green.
-    SetTeamColor(Mission.m_AlliedTeam, 127, 255, 127);
-
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "Green Squad");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
-    -- Grab the bomber.
-    Mission.m_Bomber = GetHandle("unnamed_ivbomb");
-    -- Stop it so the player doesn't have control
-    Stop(Mission.m_Bomber, 1);
-    
-    -- Grab the constructor.
-    Mission.m_Constructor = GetHandle("cons");
-    -- Stop it so the player doesn't have control
-    Stop(Mission.m_Constructor, 1);
-
-    -- Add some turrets to the base.
-    Stop(BuildObject("ivturr", Mission.m_HostTeam, "turret1"), 1);
-    Stop(BuildObject("ivturr", Mission.m_HostTeam, "turret2"), 1);
-
-    -- Spawn Scion Patrols in their base.
-    Patrol(BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-    Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-    Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-    Patrol(BuildObject("fvarch", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-
-    -- Grab Green Squad.
-    Mission.m_Green1 = GetHandle("green1");
-    Mission.m_Green2 = GetHandle("green2");
-    Mission.m_Green3 = GetHandle("green3");
-    Mission.m_Green4 = GetHandle("green4");
-    Mission.m_Green5 = GetHandle("green5");
-
-    -- Assume formation.
-    Follow(Mission.m_Green3, Mission.m_Green1);
-    Follow(Mission.m_Green4, Mission.m_Green2);
-    Follow(Mission.m_Green5, Mission.m_Green4);
-
-    -- Give them good skill.
-    SetSkill(Mission.m_Green1, 3);
-    SetSkill(Mission.m_Green2, 3);
-    SetSkill(Mission.m_Green3, 3);
-    SetSkill(Mission.m_Green4, 3);
-    SetSkill(Mission.m_Green5, 3);
-
-    -- Grab the important Scion buildings.
-    Mission.m_ScionRecy = GetHandle("frecy");
-    Mission.m_ScionForge = GetHandle("fforg");
-    Mission.m_ScionScav = GetHandle("fscav2");
-
-    -- We have a Scavenger on reserve for the pool collection.
-    Mission.m_ReserveScav = GetHandle("reserve_scav");
 
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
@@ -362,8 +294,68 @@ end
 
 function HandleMissionStart()
     if (Mission.m_MissionStartStage == 0) then
+        -- Allied team is Squad Green.
+        SetTeamColor(Mission.m_AlliedTeam, 127, 255, 127);
+
+        -- Team names for stats.
+        SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+        SetTeamNameForStat(Mission.m_AlliedTeam, "Green Squad");
+
+        -- Ally teams to be sure.
+        Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+        -- Grab the bomber.
+        Mission.m_Bomber = GetHandle("unnamed_ivbomb");
+        -- Stop it so the player doesn't have control
+        Stop(Mission.m_Bomber, 1);
+        
+        -- Grab the constructor.
+        Mission.m_Constructor = GetHandle("cons");
+        -- Stop it so the player doesn't have control
+        Stop(Mission.m_Constructor, 1);
+
+        -- Add some turrets to the base.
+        Stop(BuildObject("ivturr", Mission.m_HostTeam, "turret1"), 1);
+        Stop(BuildObject("ivturr", Mission.m_HostTeam, "turret2"), 1);
+
+        -- Spawn Scion Patrols in their base.
+        Patrol(BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvarch", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+
+        -- Grab Green Squad.
+        Mission.m_Green1 = GetHandle("green1");
+        Mission.m_Green2 = GetHandle("green2");
+        Mission.m_Green3 = GetHandle("green3");
+        Mission.m_Green4 = GetHandle("green4");
+        Mission.m_Green5 = GetHandle("green5");
+
+        -- Assume formation.
+        Follow(Mission.m_Green3, Mission.m_Green1);
+        Follow(Mission.m_Green4, Mission.m_Green2);
+        Follow(Mission.m_Green5, Mission.m_Green4);
+
+        -- Give them good skill.
+        SetSkill(Mission.m_Green1, 3);
+        SetSkill(Mission.m_Green2, 3);
+        SetSkill(Mission.m_Green3, 3);
+        SetSkill(Mission.m_Green4, 3);
+        SetSkill(Mission.m_Green5, 3);
+
+        -- Grab the important Scion buildings.
+        Mission.m_ScionRecy = GetHandle("frecy");
+        Mission.m_ScionForge = GetHandle("fforg");
+        Mission.m_ScionScav = GetHandle("fscav2");
+
+        -- We have a Scavenger on reserve for the pool collection.
+        Mission.m_ReserveScav = GetHandle("reserve_scav");
+
         -- Manson: "Okay orange squad..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0601.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(20.5);
 
         -- Don't let the AI have fun with it.
         SetIndependence(Mission.m_ReserveScav, 0);
@@ -374,7 +366,7 @@ function HandleMissionStart()
         -- Advance a step.
         Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
     elseif (Mission.m_MissionStartStage == 1) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Send green squad to their doom!
             Goto(Mission.m_Green1, "green_removal", 1);
             Goto(Mission.m_Green2, "green_removal", 1);
@@ -397,10 +389,10 @@ function HandleMissionStart()
 
             -- Build the attackers and send them on their way.
             Mission.m_Attacker1 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-            Mission.m_Attacker2 = BuildObject("fvarch", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
+            Mission.m_Attacker2 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
             Mission.m_Attacker3 = BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
             Mission.m_Attacker4 = BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
-            Mission.m_Attacker5 = BuildObject("fvarch", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
+            Mission.m_Attacker5 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
             Mission.m_Attacker6 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
 
             -- Send them to attack the player base.
@@ -498,12 +490,18 @@ function HandleScrapPoolPart()
         -- Set beacon on the Scav.
         SetObjectiveOn(Mission.m_ScionScav);
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
         -- Advance a step.
         Mission.m_ScrapPoolPartStage = Mission.m_ScrapPoolPartStage + 1;
     elseif (Mission.m_ScrapPoolPartStage == 1) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Shab: "Alright Cooke, take it out"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0604.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
             -- Show objective.
 			AddObjectiveOverride("isdf0604.otf", WHITE, 10, true);
@@ -516,6 +514,9 @@ function HandleScrapPoolPart()
         if (IsPlayerWithinDistance(Mission.m_ScionScav, 225, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: "The time looks right for an attack."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0605.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
             -- Move the constructor closer to the player to avoid delay.
             Goto(Mission.m_Constructor, "constructor_spawn", 1);
@@ -590,6 +591,9 @@ function HandleScrapPoolPart()
             -- Manson: "These Gun Tower's should lock up that area..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0608.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+
             -- Send the Reserve Scavenger to the Scrap Pool.
             Goto(Mission.m_ReserveScav, GetHandle("goal1"), 1);
 
@@ -604,17 +608,23 @@ end
 
 function HandleFinalPart()
     if (Mission.m_FinalPartStage == 0) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Manson: "It's time we finished them off."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0609.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
 
             -- Advance a step.
             Mission.m_FinalPartStage = Mission.m_FinalPartStage + 1;
         end
     elseif (Mission.m_FinalPartStage == 1) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Manson: "Cooke, take command of the Bomber Bay!"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0613.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
             -- Objectives.
             AddObjectiveOverride("isdf0608.otf", "WHITE", 10, true);

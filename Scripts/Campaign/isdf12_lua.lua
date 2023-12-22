@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Mission important variables.
 local Mission = 
@@ -82,6 +82,7 @@ local Mission =
     m_MansonExplainsObjectiveDialogPlayed = false,
     
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_IntroAudioDelay = 0,
     m_PlayerPowerCount = 0,
@@ -100,25 +101,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ivrecy_x");
-    PreloadODF("ivtank_x");
-    PreloadODF("fvsent_x");
-    PreloadODF("fvtank_x");
-    PreloadODF("fbrecy_x");
-    PreloadODF("ibfact_x");
-    PreloadODF("fvturr_x");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -126,11 +113,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -207,13 +194,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
 
@@ -229,67 +209,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Grab all of our pre-placed handles.
-    Mission.m_Manson = GetHandle("manson");
-    Mission.m_Alchemator = GetHandle("bigass_machine");
-    Mission.m_PoolNav1 = GetHandle("pool1_nav");
-    Mission.m_PoolNav2 = GetHandle("pool2_nav");
-    Mission.m_PoolNav3 = GetHandle("pool3_nav");
-    Mission.m_BaseScav = GetHandle("base_scav");
-    Mission.m_BasePool = GetHandle("base_pool");
-    Mission.m_Dead1 = GetHandle("dead1");
-    Mission.m_Dead2 = GetHandle("dead2");
-    Mission.m_Dead3 = GetHandle("dead3");
-    Mission.m_Scav1 = GetHandle("scav1");
-    Mission.m_Tank1 = GetHandle("tank1");
-    Mission.m_Tank2 = GetHandle("tank2");
-    Mission.m_ServiceBay = GetHandle("service");
-    Mission.m_Factory = GetHandle("factory");
-    Mission.m_Armory = GetHandle("armory");
-    Mission.m_Training = GetHandle("training");
-    Mission.m_CommBunker1 = GetHandle("commbunk1");
-    Mission.m_GunTower1 = GetHandle("guntower1");
-    Mission.m_GunTower2 = GetHandle("guntower2");
-    Mission.m_GunTower3 = GetHandle("guntower3");
-    Mission.m_EmptyScav1 = GetHandle("empty_scav1");
-    Mission.m_EmptyScav2 = GetHandle("empty_scav2");
-    Mission.m_KeyDevice = GetHandle("key_device");
-    Mission.m_Constructor = GetHandle("constructor");
-    Mission.m_Tug = GetHandle("tug");
-    Mission.m_Power1 = GetHandle("power1");
-    Mission.m_Power2 = GetHandle("power2");
-
-    -- Kill pilots of these ships.
-    RemovePilot(Mission.m_Dead1);
-    RemovePilot(Mission.m_Dead2);
-    RemovePilot(Mission.m_Dead3);
-    RemovePilot(Mission.m_EmptyScav1);
-    RemovePilot(Mission.m_EmptyScav2);
-
-    -- Set names where needed
-    SetObjectiveName(Mission.m_PoolNav1, "Biometal Pool");
-    SetObjectiveName(Mission.m_PoolNav2, "Biometal Pool");
-    SetObjectiveName(Mission.m_PoolNav3, "Biometal Pool");
-
-    -- Damage each base building.
-    SetCurHealth(Mission.m_Armory, 1500);
-    SetCurHealth(Mission.m_CommBunker1, 1500);
-    SetCurHealth(Mission.m_Factory, 5000);
-    SetCurHealth(Mission.m_ServiceBay, 5000);
-
-    -- Keep the Alchemator and it's power source alive.
-    SetMaxHealth(Mission.m_Alchemator, 0);
-    SetMaxHealth(Mission.m_KeyDevice, 0);
-
-    -- Manson should be kept alive.
-    SetMaxHealth(Mission.m_Manson, 0);
-
-    -- Set Manson's skill to 3.
-    SetSkill(Mission.m_Manson, 3);
-
-    -- Set Manson's team to blue.
-    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -368,10 +287,13 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
         end
     end
 end
@@ -380,6 +302,74 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
+
+    -- Ally teams to be sure.
+    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+    -- Grab all of our pre-placed handles.
+    Mission.m_Manson = GetHandle("manson");
+    Mission.m_Alchemator = GetHandle("bigass_machine");
+    Mission.m_PoolNav1 = GetHandle("pool1_nav");
+    Mission.m_PoolNav2 = GetHandle("pool2_nav");
+    Mission.m_PoolNav3 = GetHandle("pool3_nav");
+    Mission.m_BaseScav = GetHandle("base_scav");
+    Mission.m_BasePool = GetHandle("base_pool");
+    Mission.m_Dead1 = GetHandle("dead1");
+    Mission.m_Dead2 = GetHandle("dead2");
+    Mission.m_Dead3 = GetHandle("dead3");
+    Mission.m_Scav1 = GetHandle("scav1");
+    Mission.m_Tank1 = GetHandle("tank1");
+    Mission.m_Tank2 = GetHandle("tank2");
+    Mission.m_ServiceBay = GetHandle("service");
+    Mission.m_Factory = GetHandle("factory");
+    Mission.m_Armory = GetHandle("armory");
+    Mission.m_Training = GetHandle("training");
+    Mission.m_CommBunker1 = GetHandle("commbunk1");
+    Mission.m_GunTower1 = GetHandle("guntower1");
+    Mission.m_GunTower2 = GetHandle("guntower2");
+    Mission.m_GunTower3 = GetHandle("guntower3");
+    Mission.m_EmptyScav1 = GetHandle("empty_scav1");
+    Mission.m_EmptyScav2 = GetHandle("empty_scav2");
+    Mission.m_KeyDevice = GetHandle("key_device");
+    Mission.m_Constructor = GetHandle("constructor");
+    Mission.m_Tug = GetHandle("tug");
+    Mission.m_Power1 = GetHandle("power1");
+    Mission.m_Power2 = GetHandle("power2");
+
+    -- Kill pilots of these ships.
+    RemovePilot(Mission.m_Dead1);
+    RemovePilot(Mission.m_Dead2);
+    RemovePilot(Mission.m_Dead3);
+    RemovePilot(Mission.m_EmptyScav1);
+    RemovePilot(Mission.m_EmptyScav2);
+
+    -- Set names where needed
+    SetObjectiveName(Mission.m_PoolNav1, "Biometal Pool");
+    SetObjectiveName(Mission.m_PoolNav2, "Biometal Pool");
+    SetObjectiveName(Mission.m_PoolNav3, "Biometal Pool");
+
+    -- Damage each base building.
+    SetCurHealth(Mission.m_Armory, 1500);
+    SetCurHealth(Mission.m_CommBunker1, 1500);
+    SetCurHealth(Mission.m_Factory, 5000);
+    SetCurHealth(Mission.m_ServiceBay, 5000);
+
+    -- Keep the Alchemator and it's power source alive.
+    SetMaxHealth(Mission.m_Alchemator, 0);
+    SetMaxHealth(Mission.m_KeyDevice, 0);
+
+    -- Manson should be kept alive.
+    SetMaxHealth(Mission.m_Manson, 0);
+
+    -- Set Manson's skill to 3.
+    SetSkill(Mission.m_Manson, 3);
+
+    -- Set Manson's team to blue.
+    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
+
     -- Create a delay before the first dialog is played.
     Mission.m_IntroAudioDelay = Mission.m_MissionTime + SecondsToTurns(3);
 
@@ -428,6 +418,9 @@ Functions[2] = function()
             -- Pilot: Glad you could drop in sir!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1201.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
             -- Destroy the third Gun Tower.
             Damage(Mission.m_GunTower3, 5001);
 
@@ -435,7 +428,7 @@ Functions[2] = function()
             Mission.m_IntroDialogPlayed = true;
         end
     elseif (not Mission.m_IntroObjectivesDisplayed) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Show objectives.
             AddObjective("isdf1202.otf", "WHITE");
 
@@ -510,9 +503,12 @@ Functions[2] = function()
 end
 
 Functions[3] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Manson: They just keep coming!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1202.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(18.5);
 
         -- Have Manson look at the main player when he talks.
         LookAt(Mission.m_Manson, GetPlayerHandle(1), 1);
@@ -533,7 +529,7 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Name the key power source
         SetObjectiveName(Mission.m_KeyDevice, "Power Source");
 
@@ -553,7 +549,7 @@ end
 
 Functions[5] = function()
     -- Check just incase the "Power Restored" dialog is playing.
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- If the player goes near the empty Scavs, Manson will get them to tow them.
         if (not Mission.m_TrainingDialogPlayed) then
             local check1 = IsPlayerWithinDistance(Mission.m_EmptyScav1, 70, _Cooperative.m_TotalPlayerCount);
@@ -565,9 +561,15 @@ Functions[5] = function()
                 if (Mission.m_BasePoweredDialogPlayed) then
                     -- Manson: We can get pilots into those Scavs.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1207.wav");
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
                 else
                     -- Manson: We can get pilots into those Scavs when the base is powered up..
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1208.wav");
+                
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
                 end
 
                 -- Show Objectives.
@@ -583,6 +585,9 @@ Functions[5] = function()
                 -- Manson: Okay Cooke, here's what we need to do...
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1220.wav");
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(17.5);
+                
                 -- So we don't loop.
                 Mission.m_MansonExplainsObjectiveDialogPlayed = true;
             end
@@ -597,6 +602,9 @@ Functions[5] = function()
                 if (GetTeamNum(tugger) == Mission.m_HostTeam or tugger == Mission.m_Tug) then
                     -- Manson: Well done. You've successfully shut down the weapon.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1203.wav");
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
                     if (Mission.m_IsCooperativeMode) then
                         NoteGameoverWithCustomMessage("Mission Accomplished.");
@@ -629,7 +637,6 @@ function RefreshObjectives()
         AddObjective("isdf1207.otf", "GREEN");
     end
     
-
     if (Mission.m_PlayerPowerCount < 0) then
         AddObjective("isdf1202.otf", "WHITE");
     else
@@ -652,6 +659,9 @@ function HandleFailureConditions()
 
         -- Have Manson say the tug is dead.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1204.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
         -- Mission failed.
         Mission.m_MissionOver = true;

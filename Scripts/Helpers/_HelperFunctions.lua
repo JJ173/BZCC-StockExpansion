@@ -96,4 +96,16 @@ function CleanSpawns()
     end
 end
 
+function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
+    if (audioClip == nil) then
+        return true;
+    end
+
+    if (isCoop) then
+        return audioDelayTime < missionTime;
+    else
+        return IsAudioMessageDone(audioClip);
+    end
+end
+
 return _HelperFunctions;

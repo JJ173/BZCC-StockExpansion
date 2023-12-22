@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Difficulty tables for times and spawns.
 local m_ScionGuards = {
@@ -133,6 +133,7 @@ local Mission =
     m_Scion5Switch = false,
 
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_MissionDelayTime = 0,
     m_TunnelWarningTime = 0,
@@ -159,27 +160,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ivpscou");
-    PreloadODF("ivplysct");
-    PreloadODF("ivscout_x");
-    PreloadODF("ispilo_x");
-    PreloadODF("ivserv_x");
-    PreloadODF("fvtug3");
-    PreloadODF("fvsent_x");
-    PreloadODF("fvscout_x");
-    PreloadODF("fvtank_x");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -187,11 +172,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -238,13 +223,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
 
@@ -260,34 +238,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Grab all of our pre-placed handles.
-    Mission.m_Shabayev = GetHandle("shabayev");
-    Mission.m_Truck = GetHandle("truck");
-    Mission.m_Relic1 = GetHandle("ex_tank1");
-    Mission.m_Relic2 = GetHandle("ex_tank2");
-    Mission.m_Hauler1 = GetHandle("hauler1");
-    Mission.m_TechCenter = GetHandle("tech_center");
-    Mission.m_TechHanger = GetHandle("tech_hanger");
-    Mission.m_CommBunker = GetHandle("endbase_cbunk");
-    Mission.m_FieldBunker = GetHandle("field_cbunk");
-    Mission.m_ScionDropship = GetHandle("sdrop");
-    Mission.m_Power = GetHandle("power1");
-    Mission.m_Armory = GetHandle("armory");
-
-    -- Give Shab her name.
-    SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
-    -- Highlight Shabayev.
-    SetObjectiveOn(Mission.m_Shabayev);
-    -- Make sure she has good skill.
-    SetSkill(Mission.m_Shabayev, 3);
-
-    -- Make the relics unkillable.
-    SetMaxHealth(Mission.m_Relic1, 0);
-    SetMaxHealth(Mission.m_Relic2, 0);
-
-    -- This is for Red Squad.
-    SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -368,9 +318,13 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (VictimHandle == Mission.m_Shabayev) then
+            -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
         end
     end
 end
@@ -379,6 +333,46 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Ally teams to be sure.
+    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
+
+    -- Grab all of our pre-placed handles.
+    Mission.m_Shabayev = GetHandle("shabayev");
+    Mission.m_Truck = GetHandle("truck");
+    Mission.m_Relic1 = GetHandle("ex_tank1");
+    Mission.m_Relic2 = GetHandle("ex_tank2");
+    Mission.m_Hauler1 = GetHandle("hauler1");
+    Mission.m_TechCenter = GetHandle("tech_center");
+    Mission.m_TechHanger = GetHandle("tech_hanger");
+    Mission.m_CommBunker = GetHandle("endbase_cbunk");
+    Mission.m_FieldBunker = GetHandle("field_cbunk");
+    Mission.m_ScionDropship = GetHandle("sdrop");
+    Mission.m_Power = GetHandle("power1");
+    Mission.m_Armory = GetHandle("armory");
+
+    -- Give Shab her name.
+    SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
+
+    -- Highlight Shabayev.
+    SetObjectiveOn(Mission.m_Shabayev);
+
+    -- Give her the correct pilot.
+    SetPilotClass(Mission.m_Shabayev, "isshab_p");
+
+    -- Make sure she has good skill.
+    SetSkill(Mission.m_Shabayev, 3);
+
+    -- Make the relics unkillable.
+    SetMaxHealth(Mission.m_Relic1, 0);
+    SetMaxHealth(Mission.m_Relic2, 0);
+
+    -- This is for Red Squad.
+    SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
+
     -- Have the Hauler pick up the relic.
     Pickup(Mission.m_Hauler1, Mission.m_Relic1);
 
@@ -410,6 +404,9 @@ Functions[2] = function()
         -- Shab: We're not out of the woods yet..
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0301.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(12.5);
+
         -- Tiny delay
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
 
@@ -429,7 +426,7 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show the objectives.
         AddObjectiveOverride("isdf0301.otf", "WHITE", 10, true);
 
@@ -457,6 +454,9 @@ Functions[5] = function()
             -- Shab: "I've never see that building before."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0305.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
             -- So we can start the next part.
             Mission.m_MoveHauler = true;
 
@@ -467,7 +467,7 @@ Functions[5] = function()
             Mission.m_MoveHauler = true;
         end
 
-        if (IsAudioMessageDone(Mission.m_Audioclip) and Mission.m_MoveHauler) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_MoveHauler) then
             -- Force the Hauler to retreat.
             Retreat(Mission.m_Hauler1, "haulerout_path1");
 
@@ -480,6 +480,9 @@ Functions[5] = function()
 
             -- Shab: "I'm on my way!"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0304.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
             -- Send her into the tunnels.
             Follow(Mission.m_Shabayev, Mission.m_Relic1);
@@ -530,6 +533,9 @@ Functions[6] = function()
         if (not Mission.m_ShabThroughTunnel) then
             -- Shab: "Nice Job, stay there, I'm on my way.""
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0307.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
         end
 
         -- Show Objectives.
@@ -544,12 +550,15 @@ Functions[6] = function()
 end
 
 Functions[7] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip) and GetDistance(Mission.m_Shabayev, Mission.m_Relic1) < 30) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and GetDistance(Mission.m_Shabayev, Mission.m_Relic1) < 30) then
         -- Have her look at the relic.
         LookAt(Mission.m_Shabayev, Mission.m_Relic1, 1);
 
         -- Shab: It looks like these aliens are interested in us...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0308.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -557,12 +566,15 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This moves Shabayev to the tech building.
         Goto(Mission.m_Shabayev, Mission.m_TechCenter, 1);
 
         -- Shab: "What is this? I don't recognise this either".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0309a.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -584,12 +596,15 @@ Functions[9] = function()
 end
 
 Functions[10] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip) and Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Have Shabayev look at the main player.
         LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
 
         -- Play the message from Red 1.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0325b.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -597,9 +612,12 @@ Functions[10] = function()
 end
 
 Functions[11] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: "Can you trasmit your location"?
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0326.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -607,9 +625,12 @@ Functions[11] = function()
 end
 
 Functions[12] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Red1: "Negative!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0315.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -617,9 +638,12 @@ Functions[12] = function()
 end
 
 Functions[13] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: "Commander? Damn it!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0316.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -627,7 +651,7 @@ Functions[13] = function()
 end
 
 Functions[14] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show Objectives.
         AddObjectiveOverride("isdf0304.otf", "WHITE", 10, true);
 
@@ -644,6 +668,9 @@ Functions[15] = function()
     if (GetDistance(Mission.m_Shabayev, "check_start2") < 40) then
         -- Shab: I hope they haven't taken out the satellites.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0327.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -673,6 +700,9 @@ Functions[17] = function()
         -- Shab: I'm going to need you to find those men.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0317.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(12.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -690,9 +720,12 @@ Functions[18] = function()
             -- This is the message for when the player hops out of their vehicle.
             if (not Mission.m_PlayerHoppedOutMessage) then
                 -- Stop Shabayev from chatting.
-                if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+                if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                     -- Stop Shabayev from talking.
                     StopAudioMessage(Mission.m_Audioclip);
+
+                    -- Remove the timer.
+                    Mission.m_AudioTimer = 0;
 
                     -- Do a tiny delay.
                     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -705,6 +738,9 @@ Functions[18] = function()
                     -- Shab: Head into the bunker.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0318.wav");
 
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
                     -- So we don't loop.
                     Mission.m_PlayerHoppedOutMessage = true;
                 end
@@ -713,9 +749,12 @@ Functions[18] = function()
             -- This does a check to see if the player is within the bunker.
             if (Mission.m_PlayerHoppedOutMessage and not Mission.m_BuiltRedSquad and InBuilding(p)) then
                 -- Stop Shabayev from chatting.
-                if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+                if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                     -- Stop Shabayev from talking.
                     StopAudioMessage(Mission.m_Audioclip);
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = 0;
 
                     -- Do a tiny delay.
                     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -728,6 +767,9 @@ Functions[18] = function()
 
                     -- Shab: "Move to the map terminal".
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0319.wav");
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
 
                     -- Create Red Squad.
                     Mission.m_Miller = BuildObject("ivpscou", Mission.m_AlliedTeam, "miller_spawn1");
@@ -752,9 +794,12 @@ Functions[18] = function()
             -- This then checks if a player is in a terminal and in overhead view.
             if (Mission.m_PlayerHoppedOutMessage and Mission.m_BuiltRedSquad and AtTerminal(p) == Mission.m_CommBunker) then
                 -- Stop Shabayev from chatting.
-                if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+                if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                     -- Stop Shabayev from talking.
                     StopAudioMessage(Mission.m_Audioclip);
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = 0;
 
                     -- Do a tiny delay.
                     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -763,6 +808,9 @@ Functions[18] = function()
                 if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
                     -- Shab: "Locate the soliders for me".
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0328.wav");
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
 
                     -- Keep track of who is in the terminal.
                     Mission.m_TerminalPlayer = p;
@@ -786,9 +834,12 @@ end
 
 Functions[19] = function()
     -- Run a check to see if one of the players is using the relay bunker.
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: Drop a nav for me.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0330.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(13.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -797,7 +848,7 @@ end
 
 Functions[20] = function()
     -- This does a check to see if the nav is near enough to Red 1.
-    if (IsAudioMessageDone(Mission.m_Audioclip) and not Mission.m_ShowNavObjective) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and not Mission.m_ShowNavObjective) then
         -- Show objectives.
         AddObjectiveOverride("isdf0310.otf", "WHITE", 10, true);
 
@@ -809,9 +860,12 @@ Functions[20] = function()
     if (IsAround(Mission.m_RedNav)) then
         if (GetDistance(Mission.m_RedNav, Mission.m_Miller) > 200) then
             -- Stop Shabayev from chatting.
-            if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+            if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Stop Shabayev from talking.
                 StopAudioMessage(Mission.m_Audioclip);
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = 0;
 
                 -- Do a tiny delay.
                 Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -821,6 +875,9 @@ Functions[20] = function()
                 -- Start new audio.
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0331.wav");
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+
                 -- Show objectives.
                 AddObjectiveOverride("isdf0310.otf", "RED", 10, true);
 
@@ -829,9 +886,12 @@ Functions[20] = function()
             end
         else
             -- Stop Shabayev from chatting.
-            if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+            if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Stop Shabayev from talking.
                 StopAudioMessage(Mission.m_Audioclip);
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = 0;
 
                 -- Do a tiny delay.
                 Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -854,6 +914,9 @@ Functions[20] = function()
                 -- Shab: I'm on my way.
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0320.wav");
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+
                 -- So we don't fail if Shab dies.
                 Mission.m_ShabFailureActive = false;
 
@@ -871,12 +934,15 @@ Functions[20] = function()
 end
 
 Functions[21] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This sets up our delay for the next part.
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(15);
 
         -- Shab: "You're a good pilot".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0332a.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -887,6 +953,9 @@ Functions[22] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Braddock: We've got your situation on radar.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0310.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(25.5);
 
         -- Set the failure condition for this section as active.
         Mission.m_RelicFailureActive = true;
@@ -905,7 +974,7 @@ Functions[22] = function()
 end
 
 Functions[23] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- New Objectives.
         AddObjectiveOverride("isdf0308a.otf", "WHITE", 10, true);
 
@@ -972,12 +1041,18 @@ Functions[24] = function()
                 -- Shab: "Cooke with the Armory back online...";
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0334.wav");
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
+
                 -- Advance the sequence.
                 Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
             elseif (Mission.m_ArmorySequence == 1) then
-                if (IsAudioMessageDone(Mission.m_Audioclip)) then
+                if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                     -- Shab: "Select the Armory..."
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0335.wav");
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
 
                     -- Advance the sequence.
                     Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
@@ -985,9 +1060,12 @@ Functions[24] = function()
             elseif (Mission.m_ArmorySequence == 2) then
                 if (IsSelected(Mission.m_Armory)) then
                     -- Stop Shabayev from chatting.
-                    if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+                    if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                         -- Stop Shabayev from talking.
                         StopAudioMessage(Mission.m_Audioclip);
+
+                        -- Set the timer for this audio clip.
+                        Mission.m_AudioTimer = 0;
 
                         -- Do a tiny delay.
                         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -996,6 +1074,9 @@ Functions[24] = function()
                     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
                         -- Shab: Now Order The armory..
                         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0336.wav");
+
+                        -- Set the timer for this audio clip.
+                        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
 
                         -- Advance the sequence.
                         Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
@@ -1025,6 +1106,9 @@ Functions[25] = function()
         -- Shab: "I've got the two strays and I'm on my way back".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0338.wav");
         
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
         -- Build Shabayev and Red Squad.
         Mission.m_Shabayev = BuildObject("ivpscou", Mission.m_HostTeam, "shab_spawn");
         Mission.m_Miller = BuildObject("ivpscou", Mission.m_AlliedTeam, "miller_spawn2");
@@ -1114,6 +1198,9 @@ Functions[28] = function()
             -- Shab: "I knew you could do it".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0321.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
             -- Have her look at the main player.
             LookAt(Mission.m_Shabayev, p, 1);
 
@@ -1124,9 +1211,12 @@ Functions[28] = function()
 end
 
 Functions[29] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Braddock "Condors are inbound"...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0337.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(13.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1134,7 +1224,7 @@ Functions[29] = function()
 end
 
 Functions[30] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Mission failed.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Mission Accomplished.");
@@ -1390,6 +1480,9 @@ function HandleFailureConditions()
             -- Shab: Did you search those tunnels?!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0302.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
             -- Reshow the objectives.
             AddObjectiveOverride("isdf0301.otf", "WHITE", 10, true);
 
@@ -1403,9 +1496,12 @@ function HandleFailureConditions()
         -- This checks to see if the player leaves the overhead view before the nav is placed.
         if (IsAlive(Mission.m_TerminalPlayer) and AtTerminal(Mission.m_TerminalPlayer) == nil and not Mission.m_BunkerWarningPlayed) then
             -- Stop Shabayev from chatting.
-            if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+            if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Stop Shabayev from talking.
                 StopAudioMessage(Mission.m_Audioclip);
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = 0;
 
                 -- Do a tiny delay.
                 Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.2);
@@ -1414,6 +1510,9 @@ function HandleFailureConditions()
             if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
                 -- Shab: Where are you going?!
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0328a.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
                 -- So we fail.
                 Mission.m_BaseFailureActive = true;
@@ -1460,6 +1559,9 @@ function HandleFailureConditions()
                     -- Braddock: "You allowed them to capture our tech!"
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0324.wav");
 
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
                     -- So we don't loop.
                     Mission.m_RelicFailureCamPrep = true;
                 else
@@ -1499,6 +1601,9 @@ function HandleFailureConditions()
                     -- Braddock: "You allowed them to capture our tech!"
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0324.wav");
 
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
                     -- So we don't loop.
                     Mission.m_RelicFailureCamPrep = true;
                 else
@@ -1532,8 +1637,14 @@ function HandleFailureConditions()
                 -- Stop all audio.
                 StopAudioMessage(Mission.m_Audioclip);
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = 0;
+
                 -- Shab: "I'll carry on without you..."
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0329a.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
                 -- Game over.
                 if (Mission.m_IsCooperativeMode) then
@@ -1552,12 +1663,21 @@ function HandleFailureConditions()
             -- Stop all audio.
             StopAudioMessage(Mission.m_Audioclip);
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = 0;
+
             if (IsAlive(Mission.m_Truck)) then
                 -- Truck: "The Commander is dead!"
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0322.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
             else
                 -- Braddock: "The Commander is dead!"
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0323.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
             end
 
             -- Game over.

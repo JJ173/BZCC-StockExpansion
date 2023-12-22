@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
@@ -83,6 +83,7 @@ local Mission =
     m_AttackMansonUnits = false,
 
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -98,20 +99,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ivrecy_x");
-    PreloadODF("fvrecy_x");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -119,11 +111,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -157,13 +149,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
 
@@ -179,20 +164,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Grab all of our pre-placed handles.
-    Mission.m_Shabayev = GetHandle("shabayev");
-    Mission.m_Gun1 = GetHandle("gun1");
-    Mission.m_Gun2 = GetHandle("gun2");
-    Mission.m_Unit1 = GetHandle("unit1");
-    Mission.m_Unit2 = GetHandle("unit2");
-    Mission.m_Unit3 = GetHandle("unit3");
-    Mission.m_Unit4 = GetHandle("unit4");
-    Mission.m_Unit5 = GetHandle("unit5");
-    Mission.m_Manson = GetHandle("manson");
-
-    -- Set Manson's team to blue.
-    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -260,7 +231,7 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam) then
+    if (IsPlayer(ShooterHandle)) then
         if (VictimHandle == Mission.m_Start1) then
             Attack(Mission.m_Start1, ShooterHandle);
         elseif (VictimHandle == Mission.m_Start2) then
@@ -279,8 +250,31 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
+
+    -- Ally teams to be sure.
+    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+    -- Grab all of our pre-placed handles.
+    Mission.m_Shabayev = GetHandle("shabayev");
+    Mission.m_Gun1 = GetHandle("gun1");
+    Mission.m_Gun2 = GetHandle("gun2");
+    Mission.m_Unit1 = GetHandle("unit1");
+    Mission.m_Unit2 = GetHandle("unit2");
+    Mission.m_Unit3 = GetHandle("unit3");
+    Mission.m_Unit4 = GetHandle("unit4");
+    Mission.m_Unit5 = GetHandle("unit5");
+    Mission.m_Manson = GetHandle("manson");
+
     -- Place the player's old base from the previous mission.
-    PlacePlayerBase();
+    if (not Mission.m_IsCooperativeMode) then
+        PlacePlayerBase();
+    end
+
+    -- Set Manson's team to blue.
+    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Clean up any player spawns that haven't been taken by the player.
     CleanSpawns();
@@ -344,6 +338,9 @@ Functions[1] = function()
     -- Start with Shabayev's audio
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("mes0801.wav", true);
 
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(25.5);
+
     -- Have her animate.
     SetAnimation(Mission.m_Shabayev, "speak");
 
@@ -352,7 +349,7 @@ Functions[1] = function()
 end
 
 Functions[2] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Stop the animation.
         SetAnimation(Mission.m_Shabayev, "speak", 1);
 
@@ -403,7 +400,10 @@ Functions[3] = function()
 
         if (not Mission.m_TriggerAttack and (GetDistance(p, "exit_ruins_1") < 200 or GetDistance(p, "exit_ruins_2") < 200)) then
             -- Shab: "Three Scion Vehicles are coming...".
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0808.wav");     
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0808.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
             -- Send units to attack.
             Attack(Mission.m_Start1, p);
@@ -419,17 +419,23 @@ Functions[3] = function()
                 -- Shab: "They're 300 meters from you!"
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0809.wav");
 
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
+
                 -- So we don't loop.
                 Mission.m_Played0809 = true;
             end
         end
     end
 
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This will be mostly distance checks.
         if (not Mission.m_Played0804 and IsPlayerWithinDistance("play_0804", 80, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: "The patrols won't be searching for you".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0804.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
 
             -- So we don't loop.
             Mission.m_Played0804 = true;
@@ -439,6 +445,9 @@ Functions[3] = function()
             -- Shab: "Use the swamp to your advantage...".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0805.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
             -- So we don't loop.
             Mission.m_Played0805 = true;
         end
@@ -447,6 +456,9 @@ Functions[3] = function()
             -- Shab: "Use the swamp to your advantage...".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0807.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(13.5);
+
             -- So we don't loop.
             Mission.m_Played0805 = true;
         end
@@ -454,6 +466,9 @@ Functions[3] = function()
         if (not Mission.m_Played0806 and IsPlayerWithinDistance("turret_1", 150, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: "What are you doing? Head West".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0806.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
             -- So we don't loop.
             Mission.m_Played0806 = true;

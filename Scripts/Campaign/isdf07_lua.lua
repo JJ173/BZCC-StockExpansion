@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
@@ -105,6 +105,7 @@ local Mission =
     m_BuildRescueNav = false,
 
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_PlayerBuildings = {},
     m_ShabayevInvestigationObjects = {
@@ -135,20 +136,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ivrecy_x");
-    PreloadODF("fvrecy_x");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -156,11 +148,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -212,6 +204,18 @@ function AddObject(h)
     end
 end
 
+function DeleteObject(h)
+    -- Check the team of the handle.
+    local teamNum = GetTeamNum(h);
+
+    if (teamNum == Mission.m_HostTeam) then
+        -- For the SavePlayerBaseToFile() function.
+        if ((class == "CLASS_TURRET" or IsBuilding(h)) and class ~= "CLASS_BUILDING" and class ~= "CLASS_EXTRACTOR") then
+            TableRemoveByHandle(Mission.m_PlayerBuildings, h);
+        end
+    end
+end
+
 function Start()
     -- Set difficulty based on whether it's coop or not.
     if (Mission.m_IsCooperativeMode) then
@@ -233,19 +237,12 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -256,75 +253,7 @@ function Start()
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
 
-    -- Grab all of our pre-placed handles.
-    Mission.m_Recycler = GetHandle("recycler");
-    Mission.m_Manson = GetHandle("manson");
-    Mission.m_Shabayev = GetHandle("shabayev");
-    Mission.m_Recycler = GetHandle("recycler");
-    Mission.m_Dropship = GetHandle("dropship");
-    Mission.m_Hunter1 = GetHandle("hunter1");
-    Mission.m_Hunter2 = GetHandle("hunter2");
-    Mission.m_Hunter3 = GetHandle("hunter3");
-    Mission.m_ShabTankLook = GetHandle("shab_tank_look");
-    Mission.m_Ruins = GetHandle("ruins");
-    
-    -- First set of attackers on standby.
-    Mission.m_Scion1 = BuildObject(attack1[Mission.m_MissionDifficulty][1], Mission.m_EnemyTeam, "lz_attack_1");
-    Mission.m_Scion2 = BuildObject(attack1[Mission.m_MissionDifficulty][2], Mission.m_EnemyTeam, "lz_attack_2");
-
-    Follow(Mission.m_Scion2, Mission.m_Scion1);
-
-    -- Stop the player from having control of the Recycler for now.
-    Stop(Mission.m_Recycler, 1);
-
-    -- Give Shab her name.
-    SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
-    -- Highlight Shabayev.
-    SetObjectiveOn(Mission.m_Shabayev);
-    -- Give her the correct pilot.
-    SetPilotClass(Mission.m_Shabayev, "isshab_p");
-    -- Make sure she has good skill.
-    SetSkill(Mission.m_Shabayev, 3);
-    -- Shabayev gets maximum health for this mission.
-    SetMaxHealth(Mission.m_Shabayev, 0);
-    -- Just to see if she avoids stuff.
-    SetAvoidType(Mission.m_Recycler, 1);
-
-    -- Set Manson's team to blue.
-    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
-
-    -- Set custom names for our characters.
-    SetObjectiveName(Mission.m_Manson, "Maj. Manson");
-
-    -- Manson begins work on building his base.
-    SetAIP("isdf0701_x.aip", Mission.m_AlliedTeam);
-
-    -- Mask the dropship emmitters.
-    MaskEmitter(Mission.m_Dropship, 0);
-
-    -- Give the main team some scrap.
-    SetScrap(Mission.m_HostTeam, 40);
-
-    -- We need a file for this base persistance.
-    WriteToFile(fileName, "", false);
-
-    -- Spawn Creatures around the map...
-    Mission.m_Creature1 = BuildObject("mcjak01", 0, "creature1");
-    Mission.m_Creature2 = BuildObject("mcjak01", 0, "creature2");
-    Mission.m_Creature3 = BuildObject("mcjak01", 0, "creature3");
-    Mission.m_Creature4 = BuildObject("mcjak01", 0, "creature4");
-
-    SpawnBirds(1, 5, "mcwing01", 0, "birds1");
-    SpawnBirds(2, 4, "mcwing01", 0, "birds2");
-    SpawnBirds(3, 6, "mcwing01", 0, "birds3");
-
-    -- Get Manson to patrol his base perimeter.
-    Patrol(Mission.m_Manson, "manson_patrol", 1);
-
-    -- Start with a small delay.
-    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
-
-    -- Mark the set up as done so we can proceed with mission logic.
+    -- To start the mission.
     Mission.m_StartDone = true;
 end
 
@@ -405,15 +334,19 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
-        if (IsAlive(Mission.m_Shabayev) and VictimHandle == Mission.m_Shabayev) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        if (VictimHandle == Mission.m_Shabayev) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("ff01.wav");
-        end
 
-        if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+        elseif (VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
         end
     end
 end
@@ -423,6 +356,82 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Ally teams to be sure.
+        Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+        -- Team names for stats.
+        SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+        SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
+
+        -- Grab all of our pre-placed handles.
+        Mission.m_Recycler = GetHandle("recycler");
+        Mission.m_Manson = GetHandle("manson");
+        Mission.m_Shabayev = GetHandle("shabayev");
+        Mission.m_Dropship = GetHandle("dropship");
+        Mission.m_Hunter1 = GetHandle("hunter1");
+        Mission.m_Hunter2 = GetHandle("hunter2");
+        Mission.m_Hunter3 = GetHandle("hunter3");
+        Mission.m_ShabTankLook = GetHandle("shab_tank_look");
+        Mission.m_Ruins = GetHandle("ruins");
+        
+        -- First set of attackers on standby.
+        Mission.m_Scion1 = BuildObject(attack1[Mission.m_MissionDifficulty][1], Mission.m_EnemyTeam, "lz_attack_1");
+        Mission.m_Scion2 = BuildObject(attack1[Mission.m_MissionDifficulty][2], Mission.m_EnemyTeam, "lz_attack_2");
+
+        Follow(Mission.m_Scion2, Mission.m_Scion1);
+
+        -- Stop the player from having control of the Recycler for now.
+        Stop(Mission.m_Recycler, 1);
+
+        -- Give Shab her name.
+        SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
+
+        -- Highlight Shabayev.
+        SetObjectiveOn(Mission.m_Shabayev);
+
+        -- Give her the correct pilot.
+        SetPilotClass(Mission.m_Shabayev, "isshab_p");
+
+        -- Make sure she has good skill.
+        SetSkill(Mission.m_Shabayev, 3);
+        
+        -- Shabayev gets maximum health for this mission.
+        SetMaxHealth(Mission.m_Shabayev, 0);
+        
+        -- Just to see if she avoids stuff.
+        SetAvoidType(Mission.m_Recycler, 1);
+
+        -- Set Manson's team to blue.
+        SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
+
+        -- Set custom names for our characters.
+        SetObjectiveName(Mission.m_Manson, "Maj. Manson");
+
+        -- Manson begins work on building his base.
+        SetAIP("isdf0701_x.aip", Mission.m_AlliedTeam);
+
+        -- Mask the dropship emmitters.
+        MaskEmitter(Mission.m_Dropship, 0);
+
+        -- Give the main team some scrap.
+        SetScrap(Mission.m_HostTeam, 40);
+
+        -- We need a file for this base persistance.
+        WriteToFile(fileName, "", false);
+
+        -- Spawn Creatures around the map...
+        Mission.m_Creature1 = BuildObject("mcjak01", 0, "creature1");
+        Mission.m_Creature2 = BuildObject("mcjak01", 0, "creature2");
+        Mission.m_Creature3 = BuildObject("mcjak01", 0, "creature3");
+        Mission.m_Creature4 = BuildObject("mcjak01", 0, "creature4");
+
+        SpawnBirds(1, 5, "mcwing01", 0, "birds1");
+        SpawnBirds(2, 4, "mcwing01", 0, "birds2");
+        SpawnBirds(3, 6, "mcwing01", 0, "birds3");
+
+        -- Get Manson to patrol his base perimeter.
+        Patrol(Mission.m_Manson, "manson_patrol", 1);
+
         -- Have Shabayev look at the Recycler at the start.
         LookAt(Mission.m_Shabayev, Mission.m_Recycler, 1);
 
@@ -467,6 +476,9 @@ Functions[4] = function()
     -- Manson: The Landing Zone should be safe...
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0701.wav");
 
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(16.5);
+
     -- Send in initial attackers.
     if (IsAlive(Mission.m_Scion1)) then
         Attack(Mission.m_Scion1, Mission.m_Recycler, 1);
@@ -481,30 +493,34 @@ Functions[4] = function()
 end
 
 Functions[5] = function()
-    if (Mission.m_PlayerDropshipCheckTime < Mission.m_MissionTime) then
-        if (IsAudioMessageDone(Mission.m_Audioclip)) then
-            if (IsPlayerWithinDistance(Mission.m_Dropship, 30, _Cooperative.m_TotalPlayerCount)) then
-                -- Pilot: "Please clear the dropship".
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");
+    if (Mission.m_PlayerDropshipCheckTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        if (IsPlayerWithinDistance(Mission.m_Dropship, 30, _Cooperative.m_TotalPlayerCount)) then
+            -- Pilot: "Please clear the dropship".
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");
 
-                -- Wait 10 seconds before running again.
-                Mission.m_PlayerDropshipCheckTime = Mission.m_MissionTime + SecondsToTurns(10);
-            elseif (IsAudioMessageDone(Mission.m_Audioclip)) then
-                -- Braddock: Major, I need the Commander to conduct a search...
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0740.wav");
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
-                -- Set the dropship to take off.
-                SetAnimation(Mission.m_Dropship, "takeoff", 1);
+            -- Wait 10 seconds before running again.
+            Mission.m_PlayerDropshipCheckTime = Mission.m_MissionTime + SecondsToTurns(10);
+        else
+            -- Braddock: Major, I need the Commander to conduct a search...
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0740.wav");
 
-                -- Sound effects.
-                StartSoundEffect("dropdoor.wav", Mission.m_Dropship);
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(12.5);
 
-                -- Small delay for the dropship takeoff.
-                Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
+            -- Set the dropship to take off.
+            SetAnimation(Mission.m_Dropship, "takeoff", 1);
 
-                -- Advance the mission state...
-                Mission.m_MissionState = Mission.m_MissionState + 1;
-            end
+            -- Sound effects.
+            StartSoundEffect("dropdoor.wav", Mission.m_Dropship);
+
+            -- Small delay for the dropship takeoff.
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
+
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
         end
     end
 end
@@ -522,9 +538,12 @@ Functions[6] = function()
         Mission.m_DropshipTakeOff = true;
     end
 
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Braddock: Roger that General.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0702.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -532,10 +551,13 @@ Functions[6] = function()
 end
 
 Functions[7] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: This area is hot, can you provide support Major?
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0703.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+    
         -- Safely kill the Dropship.
         RemoveObject(Mission.m_Dropship);
 
@@ -554,10 +576,13 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Okay cooke, start by setting up the Recycler".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0704.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0701.otf", "WHITE", 10, true);
@@ -583,10 +608,13 @@ Functions[8] = function()
 end
 
 Functions[9] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Build a Scavenger and deploy it"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0708.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0702.otf", "WHITE", 10, true);
@@ -609,10 +637,13 @@ Functions[9] = function()
 end
 
 Functions[10] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Deploy that Scavenger"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0707.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
             -- This sets a reminder for when the player is taking too long.
             Mission.m_PlayerHasOrderResetTime = Mission.m_MissionTime + SecondsToTurns(30);
@@ -641,10 +672,13 @@ Functions[10] = function()
 end
 
 Functions[11] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Now build a Construction rig..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0710.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0703.otf", "WHITE", 10, true);
@@ -667,10 +701,13 @@ Functions[11] = function()
 end
 
 Functions[12] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Now build your power plant..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0714.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0704.otf", "WHITE", 10, true);
@@ -696,10 +733,13 @@ Functions[12] = function()
 end
 
 Functions[13] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Now build your relay bunker..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0716.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0705.otf", "WHITE", 10, true);
@@ -728,11 +768,14 @@ Functions[13] = function()
         end
     end
 
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- First check to see if we need to scold the player for not deploying enough Extractors.
         if (not Mission.m_BraddockScoldsPlayer and Mission.m_PlayerExtractorCount < 2) then
             -- Braddock: "Pull it together Cooke..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0709.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
 
             -- Show Objective
             AddObjective("isdf0709.otf", "WHITE");
@@ -744,10 +787,13 @@ Functions[13] = function()
 end
 
 Functions[14] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (not Mission.m_PlayerHasOrder) then
             -- Braddock: "Now build your Gun Tower..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0719.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
             -- Show our objectives.
             AddObjectiveOverride("isdf0706.otf", "WHITE", 10, true);
@@ -785,7 +831,7 @@ Functions[14] = function()
 end
 
 Functions[15] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Braddock: "Good job Cooke.."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0723.wav");
 
@@ -798,7 +844,7 @@ Functions[15] = function()
 end
 
 Functions[16] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Shab: "What the... is this a city?"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0728.wav");
 
@@ -885,7 +931,7 @@ Functions[20] = function()
         Mission.m_ShabayevCallForHelpDelay = Mission.m_MissionTime + SecondsToTurns(60);
 
         -- Small delay
-        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
         
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1043,7 +1089,7 @@ Functions[23] = function()
                 SavePlayerBaseToFile();
 
                 -- Shab: "It looks like we're trapped".
-                Mission.m_Audioclip =_Subtitles.AudioWithSubtitles("isdf0731.wav");
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0731.wav");
 
                 -- Advance the mission state...
                 Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1060,6 +1106,9 @@ Functions[24] = function()
     else
         SucceedMission(GetTime() + 5, "isdf07w1.txt");
     end
+
+    -- So we don't loop.
+    Mission.m_MissionOver = true;
 end
 
 function SavePlayerBaseToFile()
@@ -1075,14 +1124,16 @@ function SavePlayerBaseToFile()
         -- Get the building from the table.
         local building = Mission.m_PlayerBuildings[i];
 
-        -- Grab the ODF name of the building.
-        local odfName = GetCfg(building);
+        if (building ~= nil) then
+            -- Grab the ODF name of the building.
+            local odfName = GetCfg(building);
 
-        -- Get the position of the building.
-        local pos = tostring(GetPosition(building));
+            -- Get the position of the building.
+            local pos = tostring(GetPosition(building));
 
-        -- Append both to the body of the file.
-        body = body .. odfName .. " - " .. pos;
+            -- Append both to the body of the file.
+            body = body .. odfName .. " - " .. pos;
+        end
     end
 
     -- Write to our file.
@@ -1181,7 +1232,7 @@ function HandleFailureConditions()
             Mission.m_MissionOver = true;
 
             -- Shab: They're all over me!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0732.wav");
+            _Subtitles.AudioWithSubtitles("isdf0732.wav");
 
             -- Show objectives.
             AddObjectiveOverride("isdf05l1.otf", "RED", 10, true);

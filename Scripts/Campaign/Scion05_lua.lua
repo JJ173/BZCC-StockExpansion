@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Groups of New Regime attackers to hit the player.
 local delay1 = {105, 90, 75};
@@ -161,6 +161,7 @@ local Mission =
     m_PlayerAtAANBase = false,
     
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_RocketAttackTime = 0,
     m_FirstCutsceneDialogTime = 0,
@@ -195,24 +196,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ibrecy_x");
-    PreloadODF("fvrecy_x");
-    PreloadODF("ivcons_x");
-    PreloadODF("fvcons_x");
-    PreloadODF("ivmisl_x");
-    PreloadODF("fvturr_x");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -220,11 +208,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -328,84 +316,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_AlliedTeam, "AAN");
-    SetTeamNameForStat(Mission.m_EnemyTeam, "New Regime");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
-    -- Grab any important pre-placed objects.
-    Mission.m_Rhino1 = GetHandle("rhino1");
-    Mission.m_Rhino2 = GetHandle("rhino2");
-    Mission.m_Rhino3 = GetHandle("rhino3");
-
-    Mission.m_Bridge1 = GetHandle("bseg1");
-    Mission.m_Bridge2 = GetHandle("bseg2");
-    Mission.m_Bridge3 = GetHandle("bseg3");
-    Mission.m_BridgeStr1 = GetHandle("bstr1");
-    Mission.m_BridgeStr2 = GetHandle("bstr2");
-
-    Mission.m_BridgeScout = GetHandle("bridgescout");
-    Mission.m_BridgeTank = GetHandle("bridgetank");
-
-    Mission.m_PlayerRecy = GetHandle("playersrecy");
-
-    Mission.m_AANRecy = GetHandle("aanrecy");
-    Mission.m_AANFact = GetHandle("aan_fact");
-    Mission.m_AANPGen1 = GetHandle("aanpgen1");
-    Mission.m_AANPGen2 = GetHandle("aanpgen2");
-    Mission.m_AANSBay = GetHandle("aansbay");
-    Mission.m_AANCbun = GetHandle("aan_cbunk");
-    Mission.m_AANCons = GetHandle("aan_cons");
-    Mission.m_Manson = GetHandle("manson");
-
-    -- Rename Manson
-    SetObjectiveName(Mission.m_Manson, "Maj. Manson");
-
-    Mission.m_AANCinTank1 = GetHandle("aan_cintank1");
-    Mission.m_AANCinTank2 = GetHandle("aan_cintank2");
-    Mission.m_AANCinScout1 = GetHandle("aan_cinscout1");
-    Mission.m_AANCinTurr1 = GetHandle("aan_cinturr1");
-    Mission.m_AANCinTurr2 = GetHandle("aan_cinturr2");
-    Mission.m_AANCinGTow1 = GetHandle("aan_cingtow1");
-
-    Mission.m_NRCinRckt1 = GetHandle("nr_cinrckt1");
-    Mission.m_NRMbike1 = GetHandle("nr_cinmbike1");
-    Mission.m_NRMbike2 = GetHandle("nr_cinmbike2");
-    Mission.m_NRTank1 = GetHandle("nr_cintank1");
-    Mission.m_NRTank2 = GetHandle("nr_cintank2");
-
-    -- Stop any pilots from causing problems.
-    -- SetEjectRatio(Mission.m_NRCinRckt1, 0);
-    -- SetEjectRatio(Mission.m_NRMbike1, 0);
-    -- SetEjectRatio(Mission.m_NRMbike2, 0);
-    -- SetEjectRatio(Mission.m_NRTank1, 0);
-    -- SetEjectRatio(Mission.m_NRTank2, 0);
-
-    Mission.m_Look = GetHandle("look");
-
-    -- Set the Rhinos to do stuff.
-    SetMaxHealth(Mission.m_Rhino1, 1000);
-    SetCurHealth(Mission.m_Rhino1, 1000);
-    SetMaxHealth(Mission.m_Rhino2, 1000);
-    SetCurHealth(Mission.m_Rhino2, 1000);
-    SetMaxHealth(Mission.m_Rhino3, 1000);
-    SetCurHealth(Mission.m_Rhino3, 1000);
-
-    Patrol(Mission.m_Rhino1, "rhino1path");
-    Patrol(Mission.m_Rhino2, "rhino2path");
-    Patrol(Mission.m_Rhino3, "rhino3path");
-
-    -- Adjust the health for each bridge.
-    SetMaxHealth(Mission.m_BridgeStr1, 5000);
-    SetCurHealth(Mission.m_BridgeStr1, 5000);
-    SetMaxHealth(Mission.m_BridgeStr2, 5000);
-    SetCurHealth(Mission.m_BridgeStr2, 5000); 
-
-    -- Set the team colour for Braddock.
-    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle();
 
@@ -421,12 +331,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Give the player some scrap.
-    SetScrap(Mission.m_HostTeam, 40);
-
-    -- Give the AAN some scrap.
-    SetScrap(Mission.m_AlliedTeam, 40);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -496,10 +400,13 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
         end
     end
 end
@@ -508,6 +415,83 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_AlliedTeam, "AAN");
+    SetTeamNameForStat(Mission.m_EnemyTeam, "New Regime");
+
+    -- Ally teams to be sure.
+    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+    -- Grab any important pre-placed objects.
+    Mission.m_Rhino1 = GetHandle("rhino1");
+    Mission.m_Rhino2 = GetHandle("rhino2");
+    Mission.m_Rhino3 = GetHandle("rhino3");
+
+    Mission.m_Bridge1 = GetHandle("bseg1");
+    Mission.m_Bridge2 = GetHandle("bseg2");
+    Mission.m_Bridge3 = GetHandle("bseg3");
+    Mission.m_BridgeStr1 = GetHandle("bstr1");
+    Mission.m_BridgeStr2 = GetHandle("bstr2");
+
+    Mission.m_BridgeScout = GetHandle("bridgescout");
+    Mission.m_BridgeTank = GetHandle("bridgetank");
+
+    Mission.m_PlayerRecy = GetHandle("playersrecy");
+
+    Mission.m_AANRecy = GetHandle("aanrecy");
+    Mission.m_AANFact = GetHandle("aan_fact");
+    Mission.m_AANPGen1 = GetHandle("aanpgen1");
+    Mission.m_AANPGen2 = GetHandle("aanpgen2");
+    Mission.m_AANSBay = GetHandle("aansbay");
+    Mission.m_AANCbun = GetHandle("aan_cbunk");
+    Mission.m_AANCons = GetHandle("aan_cons");
+    Mission.m_Manson = GetHandle("manson");
+
+    -- Rename Manson
+    SetObjectiveName(Mission.m_Manson, "Maj. Manson");
+
+    Mission.m_AANCinTank1 = GetHandle("aan_cintank1");
+    Mission.m_AANCinTank2 = GetHandle("aan_cintank2");
+    Mission.m_AANCinScout1 = GetHandle("aan_cinscout1");
+    Mission.m_AANCinTurr1 = GetHandle("aan_cinturr1");
+    Mission.m_AANCinTurr2 = GetHandle("aan_cinturr2");
+    Mission.m_AANCinGTow1 = GetHandle("aan_cingtow1");
+
+    Mission.m_NRCinRckt1 = GetHandle("nr_cinrckt1");
+    Mission.m_NRMbike1 = GetHandle("nr_cinmbike1");
+    Mission.m_NRMbike2 = GetHandle("nr_cinmbike2");
+    Mission.m_NRTank1 = GetHandle("nr_cintank1");
+    Mission.m_NRTank2 = GetHandle("nr_cintank2");
+
+    Mission.m_Look = GetHandle("look");
+
+    -- Set the Rhinos to do stuff.
+    SetMaxHealth(Mission.m_Rhino1, 1000);
+    SetCurHealth(Mission.m_Rhino1, 1000);
+    SetMaxHealth(Mission.m_Rhino2, 1000);
+    SetCurHealth(Mission.m_Rhino2, 1000);
+    SetMaxHealth(Mission.m_Rhino3, 1000);
+    SetCurHealth(Mission.m_Rhino3, 1000);
+
+    Patrol(Mission.m_Rhino1, "rhino1path");
+    Patrol(Mission.m_Rhino2, "rhino2path");
+    Patrol(Mission.m_Rhino3, "rhino3path");
+
+    -- Adjust the health for each bridge.
+    SetMaxHealth(Mission.m_BridgeStr1, 5000);
+    SetCurHealth(Mission.m_BridgeStr1, 5000);
+    SetMaxHealth(Mission.m_BridgeStr2, 5000);
+    SetCurHealth(Mission.m_BridgeStr2, 5000); 
+
+    -- Set the team colour for Braddock.
+    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
+
+    -- Give the player some scrap.
+    SetScrap(Mission.m_HostTeam, 40);
+
+    -- Give the AAN some scrap.
+    SetScrap(Mission.m_AlliedTeam, 40);
+
     -- First intro cinematic about the AAN.
     if (not Mission.m_IsCooperativeMode) then
         -- Prepare the camera.
@@ -567,6 +551,9 @@ Functions[2] = function()
         -- Burns: Since Braddock made a grab for power...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0501.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(17.5);
+
         -- Don't loop...
         Mission.m_CutsceneDialogPlayed = true;
     end
@@ -614,8 +601,12 @@ Functions[3] = function()
     RemoveObject(Mission.m_NRTank2);
 
     -- If the audio message from the first cutscene is playing, stop it.
-    if (not IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Stop the message from Burns early.
         StopAudioMessage(Mission.m_Audioclip);
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = 0;
     end
 
     -- Give Manson some stuff.
@@ -632,17 +623,20 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip) and Mission.m_FirstYelenaDialogTime < Mission.m_MissionTime) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_FirstYelenaDialogTime < Mission.m_MissionTime) then
         -- Yelena: We have no time to waste...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0501.wav");
         
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(14.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[5] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show objectives.
         AddObjectiveOverride("scion0501.otf", "WHITE", 10, true);
     
@@ -656,6 +650,9 @@ Functions[6] = function()
     if (Mission.m_MansonCryForHelpDelay < Mission.m_MissionTime) then
         -- Manson: This is Manson at the AAN base!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0503.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -680,13 +677,16 @@ Functions[8] = function()
         -- Shab: There is a bridge that Braddock is using...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0502.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(16.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[9] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show the objectives.
         AddObjectiveOverride("scion0502.otf", "WHITE", 10, true);
 
@@ -789,13 +789,16 @@ Functions[12] = function()
         -- Shab: Good Job Cooke...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0505.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;     
     end 
 end
 
 Functions[13] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show Objectives
         AddObjectiveOverride("scion0503.otf", "WHITE", 10, true);
 
@@ -816,6 +819,9 @@ Functions[14] = function()
     if (IsPlayerWithinDistance(Mission.m_AANBaseNav, 200, _Cooperative.m_TotalPlayerCount)) then
         -- Manson: Cooke? Thank god!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0506.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
 
         -- For the next set of dispatched units.
         Mission.m_PlayerAtAANBase = true;
@@ -838,7 +844,7 @@ Functions[14] = function()
 end
 
 Functions[15] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Add a small audio delay.
         Mission.m_AudioDelay = Mission.m_MissionTime + SecondsToTurns(5);
 
@@ -852,13 +858,16 @@ Functions[16] = function()
         -- Shab: John, I need you to bring in a builder...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0507.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[17] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Build a nav.
         Mission.m_AANBaseSpireNav = BuildObject("ibnav", Mission.m_HostTeam, "spire1site");
 
@@ -879,6 +888,9 @@ Functions[18] = function()
     if (Mission.m_AANGunSpireBuilt) then
         -- Good job.. Now try to hold off.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0508.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
         -- Set Manson's AIP back to the first one.
         SetAIP("scion0501_x.aip", Mission.m_AlliedTeam);
@@ -917,13 +929,16 @@ Functions[20] = function()
         -- Shab: Excellent work John. Braddock is retreating.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0510.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[21] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Mission Accomplished.
         AddObjectiveOverride("scion0506.otf", "WHITE", 10, true);
 
@@ -1122,8 +1137,14 @@ function HandleFailureConditions()
         -- If anything is playing.
         StopAudioMessage(Mission.m_Audioclip);
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = 0;
+
         -- Shab: "The AAN Recycler has been destroyed...".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0509.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
         -- Show failure objective.
         AddObjectiveOverride("scion05l1.txt", "RED", 10, true);
@@ -1144,8 +1165,14 @@ function HandleFailureConditions()
         -- If anything is playing.
         StopAudioMessage(Mission.m_Audioclip);
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = 0;
+
         -- Shab: "The enemy has taken out our Recycler".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0599.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
         -- Show failure objective.
         AddObjectiveOverride("scion05l2.txt", "RED", 10, true);

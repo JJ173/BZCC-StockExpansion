@@ -20,7 +20,7 @@ local _Cooperative = require("_Cooperative");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Difficulty tables
 local m_ScoutCooldownTimeTable = {60, 45, 30};
@@ -72,6 +72,7 @@ local Mission =
     m_PlayerHasArcher = false,
     
     m_Audioclip = nil,
+    m_AudioTimer = 0,
 
     m_TurretDistpacherTimer = 0,
     m_ScoutDispatchCooldown = 0,
@@ -90,30 +91,11 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
-
-    -- Preload to save load times.
-    PreloadODF("ibrecy_x");
-    PreloadODF("fvrecy_x");
-    PreloadODF("ivcons_x");
-    PreloadODF("fvcons_x");
-    PreloadODF("ivserv_x");
-    PreloadODF("ivtas2_x");
-    PreloadODF("ivscos2_x");
-    PreloadODF("ivmisl_x");
-    PreloadODF("fvturr_x");
-    PreloadODF("fvscav_x");
-    PreloadODF("fvtank_x");
-    PreloadODF("ibnav");
+    WantBotKillMessages();
 end
 
 function Save() 
@@ -121,11 +103,11 @@ function Save()
 end
 
 function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
 
     -- Load mission data.
 	Mission = MissionData;
@@ -257,32 +239,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_AlliedTeam, "Scion");
-    SetTeamNameForStat(Mission.m_EnemyTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
-    -- Grab any important pre-placed objects.
-    Mission.m_EnemyPower1 = GetHandle("power1");
-    Mission.m_EnemyPower2 = GetHandle("power2");
-    Mission.m_EnemyRecycler = GetHandle("EnemyRecycler");
-    Mission.m_PlayerRecycler = GetHandle("unnamed_fvrecy_x");
-    Mission.m_EnemyCons = GetHandle("unnamed_ivcons_x");
-
-    -- Prep the base defenders.
-    Mission.m_EnemyBaseUnit1 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "defend1");
-    Mission.m_EnemyBaseUnit2 = BuildObject("ivmisl_x", Mission.m_EnemyTeam, "defend1");
-    Mission.m_EnemyBaseUnit3 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "defend1");
-    Mission.m_EnemyBaseUnit4 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "defend1");
-
-    -- Prep the patrols
-    Mission.m_EnemyPatrol1 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "patrol_1_spawn");
-    Mission.m_EnemyPatrol2 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "patrol_2_spawn");
-    Mission.m_EnemyPatrol3 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "patrol_3_spawn");
-    Mission.m_EnemyPatrol4 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "patrol_4_spawn");
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
@@ -298,31 +254,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Give the player some scrap.
-    SetScrap(Mission.m_HostTeam, 40);
-
-    -- Give the enemy some scrap.
-    SetScrap(Mission.m_EnemyTeam, 40);
-
-    -- Spawn starting units for the player. 
-    if (Mission.m_MissionDifficulty <= 3) then
-        -- Give 1 Scavenger and 1 turret
-        SetBestGroup(BuildObject("fvscav_x", Mission.m_HostTeam, "scav_1"));
-        SetBestGroup(BuildObject("fvturr_x", Mission.m_HostTeam, "turret_1"));
-
-        -- For medium, give another turret and a warrior.
-        if (Mission.m_MissionDifficulty <= 2) then
-            SetBestGroup(BuildObject("fvturr_x", Mission.m_HostTeam, "turret_2"));
-            SetBestGroup(BuildObject("fvtank_x", Mission.m_HostTeam, "tank_1"));
-
-            -- For easy, give the rest of the expected units.
-            if (Mission.m_MissionDifficulty <= 1) then
-                SetBestGroup(BuildObject("fvscav_x", Mission.m_HostTeam, "scav_2"));
-                SetBestGroup(BuildObject("fvtank_x", Mission.m_HostTeam, "tank_2"));
-            end
-        end
-    end
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -403,6 +334,57 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_AlliedTeam, "Scion");
+    SetTeamNameForStat(Mission.m_EnemyTeam, "ISDF");
+
+    -- Ally teams to be sure.
+    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+
+    -- Grab any important pre-placed objects.
+    Mission.m_EnemyPower1 = GetHandle("power1");
+    Mission.m_EnemyPower2 = GetHandle("power2");
+    Mission.m_EnemyRecycler = GetHandle("EnemyRecycler");
+    Mission.m_PlayerRecycler = GetHandle("unnamed_fvrecy_x");
+    Mission.m_EnemyCons = GetHandle("unnamed_ivcons_x");
+
+    -- Prep the base defenders.
+    Mission.m_EnemyBaseUnit1 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "defend1");
+    Mission.m_EnemyBaseUnit2 = BuildObject("ivmisl_x", Mission.m_EnemyTeam, "defend1");
+    Mission.m_EnemyBaseUnit3 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "defend1");
+    Mission.m_EnemyBaseUnit4 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "defend1");
+
+    -- Prep the patrols
+    Mission.m_EnemyPatrol1 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "patrol_1_spawn");
+    Mission.m_EnemyPatrol2 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "patrol_2_spawn");
+    Mission.m_EnemyPatrol3 = BuildObject("ivtas2_x", Mission.m_EnemyTeam, "patrol_3_spawn");
+    Mission.m_EnemyPatrol4 = BuildObject("ivscos2_x", Mission.m_EnemyTeam, "patrol_4_spawn");
+
+    -- Give the player some scrap.
+    SetScrap(Mission.m_HostTeam, 40);
+
+    -- Give the enemy some scrap.
+    SetScrap(Mission.m_EnemyTeam, 40);
+
+    -- Spawn starting units for the player. 
+    if (Mission.m_MissionDifficulty <= 3) then
+        -- Give 1 Scavenger and 1 turret
+        SetBestGroup(BuildObject("fvscav_x", Mission.m_HostTeam, "scav_1"));
+        SetBestGroup(BuildObject("fvturr_x", Mission.m_HostTeam, "turret_1"));
+
+        -- For medium, give another turret and a warrior.
+        if (Mission.m_MissionDifficulty <= 2) then
+            SetBestGroup(BuildObject("fvturr_x", Mission.m_HostTeam, "turret_2"));
+            SetBestGroup(BuildObject("fvtank_x", Mission.m_HostTeam, "tank_1"));
+
+            -- For easy, give the rest of the expected units.
+            if (Mission.m_MissionDifficulty <= 1) then
+                SetBestGroup(BuildObject("fvscav_x", Mission.m_HostTeam, "scav_2"));
+                SetBestGroup(BuildObject("fvtank_x", Mission.m_HostTeam, "tank_2"));
+            end
+        end
+    end
+
     -- Set the enemy AIP plan.
     SetAIP("scion0201.aip", Mission.m_EnemyTeam);
 
@@ -426,14 +408,20 @@ Functions[1] = function()
     -- Shab: "The ISDF have built a base..."
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0201.wav");
 
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(18.5);
+
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[2] = function()
-    if (IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: "The ISDF have built a base..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0202.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
         -- Objectives.
         AddObjectiveOverride("scion0201.otf", "WHITE", 10, true);
@@ -447,9 +435,12 @@ Functions[2] = function()
 end
 
 Functions[3] = function()
-    if (IsPlayerWithinDistance("Ambush", 75, _Cooperative.m_TotalPlayerCount) and IsAudioMessageDone(Mission.m_Audioclip)) then
+    if (IsPlayerWithinDistance("Ambush", 75, _Cooperative.m_TotalPlayerCount) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: This is the ambush site.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0203.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
         -- Objectives.
         AddObjectiveOverride("scion0202.otf", "WHITE", 10, true);
@@ -470,6 +461,9 @@ Functions[4] = function()
             -- Shab: Good job. Now build the Jammer.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0204.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(12.5);
+
             -- Show objectives.
             AddObjectiveOverride("scion0202.otf", "GREEN", 5, true);
             AddObjective("scion0203.otf", "WHITE");
@@ -484,6 +478,9 @@ Functions[5] = function()
     if (IsAlive(Mission.m_AmbushJammer)) then
         -- Shab: Now comes the tricky part...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0205.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
         -- Show objectives.
         AddObjectiveOverride("scion0204.otf", "WHITE", 5, true);
@@ -507,6 +504,9 @@ Functions[6] = function()
         -- Shab: They have you in pursuit.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0206.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
         -- Send all units to attack.
         Goto(Mission.m_EnemyBaseUnit1, "Ambush", 1);
         Goto(Mission.m_EnemyBaseUnit2, "Ambush", 1);
@@ -528,6 +528,9 @@ Functions[7] = function()
     if (not IsAlive(Mission.m_EnemyBaseUnit1) and not IsAlive(Mission.m_EnemyBaseUnit2) and not IsAlive(Mission.m_EnemyBaseUnit3) and not IsAlive(Mission.m_EnemyBaseUnit4)) then
         -- Shab: Now we are going to use artillery.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0207.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
 
         -- Remove the highlight from the Ambush nav.
         SetObjectiveOff(Mission.m_AmbushNav);
@@ -552,6 +555,9 @@ Functions[8] = function()
         -- Shab: Now that you have your Artillery...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0208.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
         -- Mark the last objective as done.
         AddObjectiveOverride("scion0205.otf", "GREEN", 10, true);
         AddObjective("scion0209.otf", "WHITE");
@@ -570,6 +576,9 @@ Functions[9] = function()
 
             -- Shab: Attack the enemy power, be prepared to defend.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0209.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
             -- Mark the enemy Power Supply.
             SetObjectiveOn(Mission.m_EnemyPower1);
@@ -590,6 +599,9 @@ Functions[10] = function()
         -- Shab: Gun Towers are down.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0210.wav");
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;    
     end
@@ -600,6 +612,9 @@ Functions[11] = function()
     if (IsPlayerWithinDistance(Mission.m_EnemyRecycler, 75, _Cooperative.m_TotalPlayerCount)) then
         -- Shab: The base is ours!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0211.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;    
@@ -662,6 +677,9 @@ function ISDFScoutDistpatcher()
                     -- Shab: An ISDF scout has found our base.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0212.wav");
 
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
                     -- Set it to retreat to the base
                     Mission.m_ScoutRetreating = true;
                 else
@@ -678,6 +696,9 @@ end
 function PlayerDetected()
     -- Mission failed.
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0220.wav");
+
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
     -- Stop the mission.
     Mission.m_MissionOver = true;

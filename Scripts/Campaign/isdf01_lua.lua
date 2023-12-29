@@ -212,7 +212,7 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
     if (PlayerEntryH ~= nil) then
         RemoveObject(PlayerEntryH);
@@ -228,7 +228,7 @@ function Start()
     SetAsUser(PlayerH, LocalTeamNum);
 
     -- Mark the set up as done so we can proceed with mission logic.
-    Mission.m_StartDone = true;
+    -- Mission.m_StartDone = true;
 end
 
 function Update()
@@ -1418,7 +1418,7 @@ Functions[47] = function()
             end
         end
     end
-    
+
     -- TODO: IsInfo is not MP friendly, so need to find an alternative method for coop.
     if (check1 or check2) then
         -- Show objectives.
@@ -1960,9 +1960,9 @@ end
 Functions[62] = function()
     if (IsAlive(Mission.m_Scion1) or IsAlive(Mission.m_Scion2)) then
         local check1 = GetDistance(Mission.m_Shabayev, "base_center") < 60 and
-        IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.m_TotalPlayerCount);
         local check2 = IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.m_TotalPlayerCount) or
-        IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.m_TotalPlayerCount);
 
         -- This checks to see if the player has ignored the order to attack.
         if (check1 or check2) then
@@ -2418,9 +2418,9 @@ Functions[81] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- This checks to see if the Scion attackers are near, dispatch Shabayev.
         local check1 = IsAlive(Mission.m_Scion1) and
-        IsPlayerWithinDistance(Mission.m_Scion1, 450, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Scion1, 450, _Cooperative.m_TotalPlayerCount);
         local check2 = IsAlive(Mission.m_Scion2) and
-        IsPlayerWithinDistance(Mission.m_Scion2, 450, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Scion2, 450, _Cooperative.m_TotalPlayerCount);
         local check3 = not IsAlive(Mission.m_Scion1) and not IsAlive(Mission.m_Scion2);
 
         -- This will dispatch Shabayev.
@@ -2919,7 +2919,7 @@ function HandleFailureConditions()
             if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 if (not Mission.m_PlayerLostFirstDialog) then
                     local check1 = not Mission.m_ShabMoveToBaseCentre or
-                    (Mission.m_ShabMoveToBaseCentre and Mission.m_ShabLeftBase);
+                        (Mission.m_ShabMoveToBaseCentre and Mission.m_ShabLeftBase);
                     local check2 = Mission.m_ShabMoveToBaseCentre and not Mission.m_ShabLeftBase;
 
                     -- Have Shabayev look at the lost player.

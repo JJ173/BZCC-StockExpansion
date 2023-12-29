@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF04 Lua Mission Script
     Written by AI_Unit
     Version 1.0 23-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -24,28 +24,28 @@ local m_GameTPS = GetTPS();
 
 -- Attacks based on difficulty
 local attack1 = {
-    {"fvscout_x", "fvscout_x"},
-    {"fvscout_x", "fvsent_x"},
-    {"fvsent_x", "fvsent_x"}
+    { "fvscout_x", "fvscout_x" },
+    { "fvscout_x", "fvsent_x" },
+    { "fvsent_x",  "fvsent_x" }
 }
 
 local attack2 = {
-    {"fvscout_x", "fvscout_x", "fvscout_x"},
-    {"fvsent_x", "fvscout_x", "fvscout_x"},
-    {"fvsent_x", "fvsent_x", "fvscout_x"}
+    { "fvscout_x", "fvscout_x", "fvscout_x" },
+    { "fvsent_x",  "fvscout_x", "fvscout_x" },
+    { "fvsent_x",  "fvsent_x",  "fvscout_x" }
 }
 
 local attackWaves = {
-    {{"fvscout_x", "fvscout_x", "fvsent_x"}, {"fvsent_x", "fvsent_x", "fvscout_x"}, {"fvscout_x", "fvtank_x", "fvsent_x"}}, -- Wave 1
-    {{"fvsent_x", "fvsent_x", "fvscout_x"}, {"fvsent_x", "fvsent_x", "fvsent_x", "fvscout_x"}, {"fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x"}}, -- Wave 2
-    {{"fvsent_x", "fvsent_x", "fvscout_x", "fvscout_x"}, {"fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x"}, {"fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x"}}, -- Wave 3
-    {{"fvsent_x", "fvsent_x", "fvsent_x", "fvsent_x"}, {"fvsent_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x"}, {"fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x", "fvsent_x"}} -- Wave 4
+    { { "fvscout_x", "fvscout_x", "fvsent_x" },           { "fvsent_x", "fvsent_x", "fvscout_x" },                      { "fvscout_x", "fvtank_x", "fvsent_x" } },                             -- Wave 1
+    { { "fvsent_x", "fvsent_x", "fvscout_x" },            { "fvsent_x", "fvsent_x", "fvsent_x", "fvscout_x" },          { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" } },                  -- Wave 2
+    { { "fvsent_x", "fvsent_x", "fvscout_x", "fvscout_x" }, { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" },         { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x" } },                  -- Wave 3
+    { { "fvsent_x", "fvsent_x", "fvsent_x", "fvsent_x" }, { "fvsent_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x" }, { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x", "fvsent_x" } } -- Wave 4
 }
 
-local attackWaveCooldown = {"105", "90", "75"};
+local attackWaveCooldown = { "105", "90", "75" };
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -55,12 +55,12 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "isuser_mx";
+    m_PlayerPilotODF = "isuser_mx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionStartDone = false,
     m_MissionOver = false,
     m_TugPickup = false,
@@ -119,10 +119,10 @@ local Mission =
 
     m_PlayerUnits = {},
     m_ScionFinalWaveUnits = {},
-    
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
-    
+
     m_TugCheckTime = 0,
     m_MessageDeployTime = 0,
     m_RecyclerMoveTime = 0,
@@ -154,7 +154,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -166,7 +166,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -223,7 +223,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF04 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -234,11 +234,11 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -248,7 +248,7 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-    
+
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
 end
@@ -319,7 +319,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -367,62 +367,62 @@ Functions[1] = function()
         Ally(15, i);
     end
 
-   -- Grab all of our pre-placed handles.
-   Mission.m_Recycler = GetHandle("recycler");
-   Mission.m_Manson = GetHandle("manson");
-   Mission.m_Blue1 = GetHandle("wing1");
-   Mission.m_Blue2 = GetHandle("wing2");
-   Mission.m_Shabayev = GetHandle("shabayev");
-   Mission.m_Recycler = GetHandle("recycler");
-   Mission.m_Tug1 = GetHandle("tug1");
-   Mission.m_Tug2 = GetHandle("tug2");
-   Mission.m_Relic1 = GetHandle("relic1");
-   Mission.m_Relic2 = GetHandle("relic2");
-   Mission.m_TugDropship = GetHandle("tug_drop");
-   Mission.m_RecyDropship = GetHandle("recy_drop");
-   Mission.m_Wing1 = GetHandle("wing1");
-   Mission.m_Wing2 = GetHandle("wing2");
-   Mission.m_Nav1 = GetHandle("nav1");
-   Mission.m_Pool = GetHandle("pool");
-   Mission.m_FieldBunker = GetHandle("field_cbunk");
-   Mission.m_ScionDropship = GetHandle("scion_drop");
-   Mission.m_Cliff = GetHandle("crumble_cliff");
-   Mission.m_ScionDropshipGuard = GetHandle("stode_sent");
+    -- Grab all of our pre-placed handles.
+    Mission.m_Recycler = GetHandle("recycler");
+    Mission.m_Manson = GetHandle("manson");
+    Mission.m_Blue1 = GetHandle("wing1");
+    Mission.m_Blue2 = GetHandle("wing2");
+    Mission.m_Shabayev = GetHandle("shabayev");
+    Mission.m_Recycler = GetHandle("recycler");
+    Mission.m_Tug1 = GetHandle("tug1");
+    Mission.m_Tug2 = GetHandle("tug2");
+    Mission.m_Relic1 = GetHandle("relic1");
+    Mission.m_Relic2 = GetHandle("relic2");
+    Mission.m_TugDropship = GetHandle("tug_drop");
+    Mission.m_RecyDropship = GetHandle("recy_drop");
+    Mission.m_Wing1 = GetHandle("wing1");
+    Mission.m_Wing2 = GetHandle("wing2");
+    Mission.m_Nav1 = GetHandle("nav1");
+    Mission.m_Pool = GetHandle("pool");
+    Mission.m_FieldBunker = GetHandle("field_cbunk");
+    Mission.m_ScionDropship = GetHandle("scion_drop");
+    Mission.m_Cliff = GetHandle("crumble_cliff");
+    Mission.m_ScionDropshipGuard = GetHandle("stode_sent");
 
-   -- FIX: Change pre-placed dropship on the correct team.
-   SetTeamNum(Mission.m_ScionDropship, Mission.m_EnemyTeam);
-   
-   -- So the nav isn't blank when we start the mission.
-   SetObjectiveName(Mission.m_Nav1, "Scrap Pool");
+    -- FIX: Change pre-placed dropship on the correct team.
+    SetTeamNum(Mission.m_ScionDropship, Mission.m_EnemyTeam);
 
-   -- Give Shab her name.
-   SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
+    -- So the nav isn't blank when we start the mission.
+    SetObjectiveName(Mission.m_Nav1, "Scrap Pool");
 
-   -- Do not allow control of Shabayev.
-   Stop(Mission.m_Shabayev, 1);
+    -- Give Shab her name.
+    SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
 
-   -- Highlight Shabayev.
-   SetObjectiveOn(Mission.m_Shabayev);
+    -- Do not allow control of Shabayev.
+    Stop(Mission.m_Shabayev, 1);
 
-   -- Give her the correct pilot.
-   SetPilotClass(Mission.m_Shabayev, "isshab_p");
+    -- Highlight Shabayev.
+    SetObjectiveOn(Mission.m_Shabayev);
 
-   -- Make sure she has good skill.
-   SetSkill(Mission.m_Shabayev, 3);
+    -- Give her the correct pilot.
+    SetPilotClass(Mission.m_Shabayev, "isshab_p");
 
-   -- Set Manson's team to blue.
-   SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
+    -- Make sure she has good skill.
+    SetSkill(Mission.m_Shabayev, 3);
 
-   -- Set Green team to green
-   SetTeamColor(15, 127, 255, 127);
+    -- Set Manson's team to blue.
+    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
-   -- Set custom names for our characters.
-   SetObjectiveName(Mission.m_Manson, "Maj. Manson");
-   SetObjectiveName(Mission.m_Blue1, "Sgt. Zdarko");
-   SetObjectiveName(Mission.m_Blue2, "Sgt. Masiker");
+    -- Set Green team to green
+    SetTeamColor(15, 127, 255, 127);
 
-   -- Highlight Manson.
-   SetObjectiveOn(Mission.m_Manson);
+    -- Set custom names for our characters.
+    SetObjectiveName(Mission.m_Manson, "Maj. Manson");
+    SetObjectiveName(Mission.m_Blue1, "Sgt. Zdarko");
+    SetObjectiveName(Mission.m_Blue2, "Sgt. Masiker");
+
+    -- Highlight Manson.
+    SetObjectiveOn(Mission.m_Manson);
 
     -- Some AI stuff.
     SetAvoidType(Mission.m_Manson, 0);
@@ -766,7 +766,7 @@ Functions[15] = function()
     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
 
     -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;  
+    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[16] = function()
@@ -785,7 +785,7 @@ Functions[17] = function()
         LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;  
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -813,7 +813,7 @@ Functions[18] = function()
 
         -- Loop through difficulty table.
         for i = 1, #chosenAttack do
-            local unit = BuildObject(chosenAttack[i], Mission.m_EnemyTeam, "path_"..i)
+            local unit = BuildObject(chosenAttack[i], Mission.m_EnemyTeam, "path_" .. i)
 
             if (i == 1) then
                 Mission.m_Scion1 = unit;
@@ -824,7 +824,7 @@ Functions[18] = function()
 
         -- Advance the mission state...
         if (not Mission.m_IsCooperativeMode) then
-            Mission.m_MissionState = Mission.m_MissionState + 1; 
+            Mission.m_MissionState = Mission.m_MissionState + 1;
         else
             Mission.m_MissionState = 20;
         end
@@ -851,17 +851,17 @@ Functions[19] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
-    elseif (IsOdf(Mission.m_Scavenger, "ibscav_x")) then 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    elseif (IsOdf(Mission.m_Scavenger, "ibscav_x")) then
         -- This is if they player instantly deploys the Scavenger before this step.
-        Mission.m_MissionState = 21;  
+        Mission.m_MissionState = 21;
     end
 end
 
 Functions[20] = function()
     if (IsOdf(Mission.m_Scavenger, "ibscav_x")) then
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -885,7 +885,7 @@ Functions[21] = function()
         AddObjective("isdf0405.otf", "WHITE");
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;  
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -894,7 +894,7 @@ Functions[22] = function()
         if (GetDistance(Mission.m_Scion1, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: More of them again!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0411.wav");
-            
+
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
@@ -908,7 +908,7 @@ Functions[22] = function()
         if (GetDistance(Mission.m_Scion2, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: More of them again!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0411.wav");
-            
+
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
@@ -976,7 +976,7 @@ Functions[25] = function()
 
         -- Loop through difficulty table.
         for i = 1, #chosenAttack do
-            local unit = BuildObject(chosenAttack[i], Mission.m_EnemyTeam, "path_"..i)
+            local unit = BuildObject(chosenAttack[i], Mission.m_EnemyTeam, "path_" .. i)
 
             if (i == 1) then
                 Mission.m_Scion1 = unit;
@@ -1139,7 +1139,8 @@ Functions[35] = function()
         Attack(Mission.m_Scion2, Mission.m_Recycler, 1);
 
         -- Set a delay based on time.
-        Mission.m_ScionWaveCooldown = Mission.m_MissionTime + SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
+        Mission.m_ScionWaveCooldown = Mission.m_MissionTime +
+        SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1155,16 +1156,16 @@ Functions[36] = function()
 
         for i = 1, #attacks do
             -- Just so we don't use spawns that don't exist.
-            local spawn = GetPositionNear("path_"..i, 15, 15);
+            local spawn = GetPositionNear("path_" .. i, 15, 15);
 
             -- Anything over 4, use spawn one.
             if (i > 3) then
-                spawn = GetPositionNear("enemy"..(i - 2), 15, 15);
+                spawn = GetPositionNear("enemy" .. (i - 2), 15, 15);
             end
 
             -- Spawn each unit at a safe path.
-            local unit =  BuildObject(attacks[i], Mission.m_EnemyTeam, spawn);
-            
+            local unit = BuildObject(attacks[i], Mission.m_EnemyTeam, spawn);
+
             -- Some special logic when the 4th wave is spawned.
             if (Mission.m_ScionWaveCount == 4) then
                 Mission.m_ScionFinalWaveUnits[#Mission.m_ScionFinalWaveUnits + 1] = unit;
@@ -1178,7 +1179,8 @@ Functions[36] = function()
         end
 
         -- Set a delay based on time.
-        Mission.m_ScionWaveCooldown = Mission.m_MissionTime + SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
+        Mission.m_ScionWaveCooldown = Mission.m_MissionTime +
+        SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
 
         -- Advance the attacks.
         Mission.m_ScionWaveCount = Mission.m_ScionWaveCount + 1;
@@ -1314,7 +1316,7 @@ Functions[42] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1357,7 +1359,7 @@ Functions[43] = function()
         Mission.m_BunkerWarningActive = false;
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1404,7 +1406,7 @@ Functions[46] = function()
 
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
-        
+
         -- So we don't loop.
         Mission.m_MansonSentryWarningPlayed = true;
     elseif (not Mission.m_ConvoyHalted and GetDistance(Mission.m_SnipeScion1, "hold_point") < 20) then
@@ -1631,13 +1633,13 @@ Functions[51] = function()
 
     -- Add a beefier impact sound to the cliff when it crumbles.
     if (Mission.m_CliffCrumble and not Mission.m_CliffCrumbleImpact) then
-       if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
             -- Added extra sound to make the impact more beefy.
             StartSoundEffect("xcollapse.wav", Mission.m_Cliff);
 
             -- So we don't loop.
             Mission.m_CliffCrumbleImpact = true;
-       end
+        end
     end
 
     -- This triggers the final cutscene.
@@ -1745,7 +1747,7 @@ function UpdateTaggedScionShip(h)
     if (not Mission.m_ShipSniped) then
         -- First ship that is sniped needs to be tracked.
         Mission.m_SnipedShip = h;
-        
+
         -- Don't do this again.
         Mission.m_ShipSniped = true;
     end
@@ -1801,7 +1803,7 @@ function TugBrain()
     -- Run a check to make sure the player is not near a tug.
     if (not Mission.m_CloseTugDropshipDoors and Mission.m_Tug1Board and Mission.m_Tug2Board and Mission.m_TugCheckTime < Mission.m_MissionTime) then
         if (IsPlayerWithinDistance(Mission.m_Tug1, 40, _Cooperative.m_TotalPlayerCount)) then
-            if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then 
+            if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Pilot: "Please clear the dropship".
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");
 
@@ -1919,7 +1921,7 @@ function HandleFailureConditions()
             else
                 -- Braddock: Cooke, you are relieved!
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0426.wav");
-                
+
                 -- Set the timer for this audio clip.
                 Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
@@ -1934,7 +1936,7 @@ function HandleFailureConditions()
                     FailMission(GetTime() + 10, "isdf04l3.txt");
                 end
             end
-        end 
+        end
     end
 
     -- Scavenger died, mission failed.

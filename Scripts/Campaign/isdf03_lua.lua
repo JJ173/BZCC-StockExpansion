@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF03 Lua Mission Script
     Written by AI_Unit
     Version 1.0 30-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -19,48 +19,45 @@ local _Cooperative = require("_Cooperative");
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
 
--- Game TPS.
-local m_GameTPS = GetTPS();
-
 -- Difficulty tables for times and spawns.
 local m_ScionGuards = {
     {
-        {"fvscout_x", "fvscout_x"},
-        {"fvscout_x", "fvscout_x"},
-        {"fvscout_x", "fvscout_x"}
+        { "fvscout_x", "fvscout_x" },
+        { "fvscout_x", "fvscout_x" },
+        { "fvscout_x", "fvscout_x" }
     },
     {
-        {"fvscout_x", "fvscout_x"},
-        {"fvscout_x", "fvsent_x"},
-        {"fvsent_x", "fvsent_x"}
+        { "fvscout_x", "fvscout_x" },
+        { "fvscout_x", "fvsent_x" },
+        { "fvsent_x",  "fvsent_x" }
     },
     {
-        {"fvscout_x", "fvsent_x"},
-        {"fvsent_x", "fvsent_x"},
-        {"fvtank_x", "fvsent_x"}
+        { "fvscout_x", "fvsent_x" },
+        { "fvsent_x",  "fvsent_x" },
+        { "fvtank_x",  "fvsent_x" }
     }
 };
 
 local m_ScionBaseAttacks = {
     {
-        {"fvscout_x", "fvscout_x", "fvscout_x"},
-        {"fvscout_x", "fvsent_x", "fvscout_x"},
-        {"fvsent_x", "fvsent_x", "fvscout_x"}
+        { "fvscout_x", "fvscout_x", "fvscout_x" },
+        { "fvscout_x", "fvsent_x",  "fvscout_x" },
+        { "fvsent_x",  "fvsent_x",  "fvscout_x" }
     },
     {
-        {"fvsent_x", "fvscout_x", "fvscout_x"},
-        {"fvsent_x", "fvsent_x", "fvscout_x"},
-        {"fvsent_x", "fvtank_x", "fvsent_x"}
+        { "fvsent_x", "fvscout_x", "fvscout_x" },
+        { "fvsent_x", "fvsent_x",  "fvscout_x" },
+        { "fvsent_x", "fvtank_x",  "fvsent_x" }
     },
     {
-        {"fvsent_x", "fvsent_x", "fvscout_x"},
-        {"fvtank_x", "fvsent_x", "fvsent_x"},
-        {"fvtank_x", "fvtank_x", "fvsent_x"}
+        { "fvsent_x", "fvsent_x", "fvscout_x" },
+        { "fvtank_x", "fvsent_x", "fvsent_x" },
+        { "fvtank_x", "fvtank_x", "fvsent_x" }
     }
 }
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -70,9 +67,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "isuser_mx";
+    m_PlayerPilotODF = "isuser_mx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivscout_x";
+    m_PlayerShipODF = "ivscout_x",
 
     m_MainPlayer = nil,
     m_TerminalPlayer = nil,
@@ -99,7 +96,7 @@ local Mission =
     m_Power = nil,
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
     m_TunnelWarningActive = false,
     m_BunkerWarningActive = false,
@@ -143,8 +140,8 @@ local Mission =
     m_ArmorySequence = 0,
 
     -- This checks the state of each hauler.
-    m_Hauler1State = 0;
-    m_Hauler2State = 0;
+    m_Hauler1State = 0,
+    m_Hauler2State = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -167,7 +164,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -179,13 +176,13 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);  
+        SetSkill(h, Mission.m_MissionDifficulty);
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
         SetObjectiveName(h, "Unknown");
@@ -211,9 +208,9 @@ function Start()
     end
 
     -- Few prints to console.
-    print("Welcome to ISDF08 (Lua)");
+    print("Welcome to ISDF03 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -224,11 +221,11 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -306,7 +303,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -855,7 +852,7 @@ Functions[20] = function()
         -- So we don't loop.
         Mission.m_ShowNavObjective = true;
     end
-    
+
     -- This does a check to see if the nav is within a good distance of Red 1.
     if (IsAround(Mission.m_RedNav)) then
         if (GetDistance(Mission.m_RedNav, Mission.m_Miller) > 200) then
@@ -999,13 +996,18 @@ Functions[24] = function()
             SetAvoidType(Mission.m_Hauler2, 0);
 
             -- Create the guards.
-            Mission.m_Scion1 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1], Mission.m_EnemyTeam, "base2_espawn1");
-            Mission.m_Scion2 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2], Mission.m_EnemyTeam, "base2_espawn2");
+            Mission.m_Scion1 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1],
+                Mission.m_EnemyTeam, "base2_espawn1");
+            Mission.m_Scion2 = BuildObject(m_ScionGuards[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2],
+                Mission.m_EnemyTeam, "base2_espawn2");
 
             -- Create extra attacks.
-            Mission.m_Scion3 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1], Mission.m_EnemyTeam, "simms_spawn2");
-            Mission.m_Scion4 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2], Mission.m_EnemyTeam, "miller_spawn2");
-            Mission.m_Scion5 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][3], Mission.m_EnemyTeam, "attack_1");
+            Mission.m_Scion3 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][1],
+                Mission.m_EnemyTeam, "simms_spawn2");
+            Mission.m_Scion4 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][2],
+                Mission.m_EnemyTeam, "miller_spawn2");
+            Mission.m_Scion5 = BuildObject(m_ScionBaseAttacks[Mission.m_MissionDifficulty][Mission.m_ScionWaveCount][3],
+                Mission.m_EnemyTeam, "attack_1");
 
             -- Set their avoid type.
             SetAvoidType(Mission.m_Scion1, 0);
@@ -1091,7 +1093,7 @@ Functions[24] = function()
             Mission.m_ScionBrainEnabled = false;
 
             -- Advance the mission state...
-            Mission.m_MissionState = Mission.m_MissionState + 1;      
+            Mission.m_MissionState = Mission.m_MissionState + 1;
         end
     end
 end
@@ -1101,11 +1103,11 @@ Functions[25] = function()
     local check1 = IsAlive(Mission.m_Scion3);
     local check2 = IsAlive(Mission.m_Scion4);
     local check3 = IsAlive(Mission.m_Scion5)
-    
+
     if (not check1 and not check2 and not check3) then
         -- Shab: "I've got the two strays and I'm on my way back".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0338.wav");
-        
+
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
@@ -1488,7 +1490,7 @@ function HandleFailureConditions()
 
             -- Set up a warning.
             Mission.m_TunnelWarningTime = Mission.m_MissionTime + SecondsToTurns(60);
-        end 
+        end
     end
 
     -- If the player exits the comm bunker before doing the nav.

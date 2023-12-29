@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF02 Lua Mission Script
     Written by AI_Unit
     Version 1.0 29-10-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,17 +23,17 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Difficulty tables for times and spawns.
-local m_FirstScionWave1 = {"fvscout_x", "fvscout_x", "fvsent_x"};
-local m_FirstScionWave2 = {"fvscout_x", "fvsent_x", "fvsent_x"};
-local m_SecondScionWave1 = {"fvsent_x", "fvsent_x", "fvsent_x"};
-local m_SecondScionWave2 = {"fvscout_x", "fvsent_x", "fvsent_x"};
-local m_SecondScionWave3 = {"fvscout_x", "fvscout_x", "fvtank_x"};
-local m_ThirdScionWave1 = {"fvsent_x", "fvsent_x", "fvtank_x"};
-local m_ThirdScionWave2 = {"fvscout_x", "fvscout_x", "fvsent_x"};
-local m_ThirdScionWave3 = {"fvscout_x", "fvsent_x", "fvscout_x"};
+local m_FirstScionWave1 = { "fvscout_x", "fvscout_x", "fvsent_x" };
+local m_FirstScionWave2 = { "fvscout_x", "fvsent_x", "fvsent_x" };
+local m_SecondScionWave1 = { "fvsent_x", "fvsent_x", "fvsent_x" };
+local m_SecondScionWave2 = { "fvscout_x", "fvsent_x", "fvsent_x" };
+local m_SecondScionWave3 = { "fvscout_x", "fvscout_x", "fvtank_x" };
+local m_ThirdScionWave1 = { "fvsent_x", "fvsent_x", "fvtank_x" };
+local m_ThirdScionWave2 = { "fvscout_x", "fvscout_x", "fvsent_x" };
+local m_ThirdScionWave3 = { "fvscout_x", "fvsent_x", "fvscout_x" };
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -43,13 +43,13 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "isuser_mx";
+    m_PlayerPilotODF = "isuser_mx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivscout_x";
+    m_PlayerShipODF = "ivscout_x",
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
-    m_MissionFailed = false,
+    m_StartDone = false,
+    m_MissionOver = false,
     m_ShabInShip = false,
     m_LookAtPlayer = false,
     m_FirstAttackWaveSent = false,
@@ -159,7 +159,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -171,7 +171,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -179,7 +179,7 @@ function AddObject(h)
 
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty); 
+        SetSkill(h, Mission.m_MissionDifficulty);
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
         SetObjectiveName(h, "Unknown");
@@ -217,7 +217,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF02 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -228,7 +228,7 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN. For this mission, only do this for coop.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
     if (PlayerEntryH ~= nil) then
         RemoveObject(PlayerEntryH);
@@ -244,7 +244,7 @@ function Start()
     SetAsUser(PlayerH, LocalTeamNum);
 
     -- Mark the set up as done so we can proceed with mission logic.
-    Mission.m_StartDone = true;
+    -- Mission.m_StartDone = true;
 end
 
 function Update()
@@ -258,7 +258,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionFailed) then
+    if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -337,7 +337,7 @@ function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
         Mission.m_ShabInShip = true;
     end
 
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -527,7 +527,7 @@ Functions[4] = function()
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
         end
-    else 
+    else
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -582,7 +582,7 @@ Functions[7] = function()
         if (GetDistance(Mission.m_Shabayev, "truckwait_point") < 20) then
             -- Look at the Player.
             LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
-    
+
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
         end
@@ -706,13 +706,15 @@ Functions[14] = function()
     -- Once the Jammer is built, queue attacks and make the builder run away.
     if (IsAlive(Mission.m_Jammer)) then
         -- Spawn our first attack wave.
-        Mission.m_Scion1 = BuildObjectAtSafePath(m_FirstScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "espawn1_jammer", "espawn3_jammer", _Cooperative.m_TotalPlayerCount);
-        Mission.m_Scion2 = BuildObjectAtSafePath(m_FirstScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "espawn2_jammer", "espawn4_jammer", _Cooperative.m_TotalPlayerCount);
+        Mission.m_Scion1 = BuildObjectAtSafePath(m_FirstScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            "espawn1_jammer", "espawn3_jammer", _Cooperative.m_TotalPlayerCount);
+        Mission.m_Scion2 = BuildObjectAtSafePath(m_FirstScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            "espawn2_jammer", "espawn4_jammer", _Cooperative.m_TotalPlayerCount);
 
         -- Set skill based on difficulty.
         SetSkill(Mission.m_Scion1, Mission.m_MissionDifficulty);
         SetSkill(Mission.m_Scion2, Mission.m_MissionDifficulty);
-        
+
         -- Small delay before the builder runs away.
         Mission.m_BuilderRunTime = Mission.m_MissionTime + SecondsToTurns(0.2);
 
@@ -728,7 +730,7 @@ Functions[15] = function()
     if (Mission.m_JammerMessageTime < Mission.m_MissionTime) then
         -- Have Shabyev attack the Jammer.
         Attack(Mission.m_Shabayev, Mission.m_Jammer, 1);
-        
+
         -- Highlight the Jammer.
         SetObjectiveOn(Mission.m_Jammer);
 
@@ -763,9 +765,9 @@ Functions[16] = function()
 end
 
 Functions[17] = function()
-    if (Mission.m_DeadJammerMessageTime < Mission.m_MissionTime) then            
+    if (Mission.m_DeadJammerMessageTime < Mission.m_MissionTime) then
         if (IsAlive(Mission.m_Scion1) or IsAlive(Mission.m_Scion2)) then
-           -- Set "defend truck" objective.
+            -- Set "defend truck" objective.
             AddObjectiveOverride("defend_truck.otf", "WHITE", 10, true);
 
             -- Send Scions and Shabayev to attack things.
@@ -783,7 +785,7 @@ Functions[17] = function()
 
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
-        else 
+        else
             -- Shab: "That's what was jamming our comms"!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0214.wav");
 
@@ -876,7 +878,7 @@ Functions[20] = function()
             if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.m_TotalPlayerCount)) then
                 -- So she starts yelling at the player.
                 Mission.m_PlayerLost = true;
-            end     
+            end
         elseif (GetCurHealth(Mission.m_Shabayev) < 1700) then
             -- Have the truck repair Shabayev.
             Service(Mission.m_Truck, Mission.m_Shabayev, 1);
@@ -926,7 +928,7 @@ Functions[22] = function()
         end
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -973,7 +975,7 @@ Functions[24] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1005,7 +1007,7 @@ Functions[26] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1032,7 +1034,7 @@ Functions[27] = function()
         Defend2(Mission.m_Scion3, Mission.m_Jammer2, 1);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1072,7 +1074,7 @@ Functions[28] = function()
         Mission.m_AudioTimer = 0;
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1324,7 +1326,7 @@ Functions[40] = function()
         Mission.m_OnToBaseTime = Mission.m_MissionTime + SecondsToTurns(3);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1340,7 +1342,7 @@ Functions[41] = function()
         end
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -1611,10 +1613,13 @@ Functions[56] = function()
     else
         SucceedMission(GetTime() + 2.1, "isdf02w1.txt");
     end
+
+    -- Halt the mission.
+    Mission.m_MissionOver = true;
 end
 
 -- This function handles dispatching all spawned Scion attackers during the mission runtime.
-function HandleScionAttackWaves() 
+function HandleScionAttackWaves()
     -- For the first attack, we need to send the enemy attackers if the Jammer is built, or the build is under 50% health.
     if (not Mission.m_FirstAttackWaveSent and (IsAlive(Mission.m_Jammer) or (IsAlive(Mission.m_Builder1) and GetHealth(Mission.m_Builder1) < 0.5) or (not IsAlive(Mission.m_Builder1)))) then
         -- Check if the wave attackers are alive and move them to the right position.
@@ -1630,9 +1635,12 @@ function HandleScionAttackWaves()
         Mission.m_FirstAttackWaveSent = true;
     elseif (Mission.m_FirstAttackWaveSent and Mission.m_CheckpointDone and not Mission.m_SecondAttackWaveSpawned) then
         -- Spawn the second Scion units.
-        Mission.m_Scion1 = BuildObject(m_SecondScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "morph2_point1");
-        Mission.m_Scion2 = BuildObject(m_SecondScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "morph2_point2");
-        Mission.m_Scion3 = BuildObject(m_SecondScionWave3[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "morph2_point3");
+        Mission.m_Scion1 = BuildObject(m_SecondScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            "morph2_point1");
+        Mission.m_Scion2 = BuildObject(m_SecondScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            "morph2_point2");
+        Mission.m_Scion3 = BuildObject(m_SecondScionWave3[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            "morph2_point3");
 
         -- Set their skills.
         SetSkill(Mission.m_Scion1, Mission.m_MissionDifficulty);
@@ -1657,9 +1665,12 @@ function HandleScionAttackWaves()
             -- Run checks
             if (not IsPlayerWithinDistance("base_epsawn2", 200, _Cooperative.m_TotalPlayerCount)) then
                 -- Build and send enemy units.
-                Mission.m_Scion1 = BuildObject(m_ThirdScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "base_espawn1");
-                Mission.m_Scion2 = BuildObject(m_ThirdScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "base_espawn2");
-                Mission.m_Scion3 = BuildObject(m_ThirdScionWave3[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "base_espawn3");
+                Mission.m_Scion1 = BuildObject(m_ThirdScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    "base_espawn1");
+                Mission.m_Scion2 = BuildObject(m_ThirdScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    "base_espawn2");
+                Mission.m_Scion3 = BuildObject(m_ThirdScionWave3[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    "base_espawn3");
 
                 -- Have them attack.
                 Attack(Mission.m_Scion1, Mission.m_Shabayev, 1);
@@ -1673,10 +1684,10 @@ function HandleScionAttackWaves()
             end
         end
     elseif (Mission.m_ThirdAttackWaveSent and not Mission.m_CompanyMessagePlayed) then
-        if ((GetDistance(Mission.m_Scion1, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion1, 70, _Cooperative.m_TotalPlayerCount)) or 
-            (GetDistance(Mission.m_Scion2, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion2, 70, _Cooperative.m_TotalPlayerCount))) then
+        if ((GetDistance(Mission.m_Scion1, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion1, 70, _Cooperative.m_TotalPlayerCount)) or
+                (GetDistance(Mission.m_Scion2, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion2, 70, _Cooperative.m_TotalPlayerCount))) then
             -- Shab: We've got company!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0259.wav");  
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0259.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
@@ -1733,7 +1744,7 @@ function HandleScionBuilder()
 
         -- Mark this portion as done.
         Mission.m_BuilderRun = true;
-    -- STEP 2: This part pauses the Builder so the player and Shabayev can catch up and chase it. 
+        -- STEP 2: This part pauses the Builder so the player and Shabayev can catch up and chase it.
     elseif (Mission.m_BuilderRun and Mission.m_BuilderRunCheck < Mission.m_MissionTime and not Mission.m_BuilderSecondRetreatDone) then
         -- Keep looping and adding to the time we check until we stop.
         Mission.m_BuilderRunCheck = Mission.m_MissionTime + SecondsToTurns(2);
@@ -1751,7 +1762,7 @@ function HandleScionBuilder()
     end
 end
 
--- TODO: Add function to handle Service Truck responsibilities. 
+-- TODO: Add function to handle Service Truck responsibilities.
 -- Yell at the player if they take too long ordering the truck.
 function HandlePlayerDisobeyingOrders()
     if (Mission.m_PlayerLost) then
@@ -1793,7 +1804,7 @@ function HandlePlayerDisobeyingOrders()
         end
 
         -- Reset if the player is within Distance.
-        if (not Mission.m_MissionFailed and Mission.m_PlayerCheckTime < Mission.m_MissionTime) then
+        if (not Mission.m_MissionOver and Mission.m_PlayerCheckTime < Mission.m_MissionTime) then
             -- Set a delay between loops.
             Mission.m_PlayerCheckTime = Mission.m_MissionTime + SecondsToTurns(1.5);
 
@@ -1819,7 +1830,7 @@ function HandlePlayerDisobeyingOrders()
             if (Mission.m_TruckFollowing) then
                 Mission.m_TruckMessage = false;
             end
-        else 
+        else
             -- Truck is not following.
             Mission.m_TruckFollowing = false;
 
@@ -1848,7 +1859,7 @@ function HandleFailureConditions()
     -- If the truck died...
     if (not IsAlive(Mission.m_Truck)) then
         -- Halt the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Stop all audio.
         StopAudioMessage(Mission.m_Audioclip);
@@ -1869,10 +1880,10 @@ function HandleFailureConditions()
         else
             FailMission(GetTime() + 7);
         end
-    -- Check if the Constructor is dead.
+        -- Check if the Constructor is dead.
     elseif (not IsAlive(Mission.m_Cons) and not IsOdf(Mission.m_Shabayev, "ivpcon")) then
         -- Halt the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Stop all audio.
         StopAudioMessage(Mission.m_Audioclip);
@@ -1893,10 +1904,10 @@ function HandleFailureConditions()
         else
             FailMission(GetTime() + 7, "isdf02l1.txt");
         end
-    -- If Shabayev died...
+        -- If Shabayev died...
     elseif (IsOdf(Mission.m_Shabayev, "isshab_p") and not IsAlive(Mission.m_Shabayev)) then
         -- Halt the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Stop all audio.
         StopAudioMessage(Mission.m_Audioclip);
@@ -1917,10 +1928,10 @@ function HandleFailureConditions()
         else
             FailMission(GetTime() + 7);
         end
-    -- If the player refuses to stay with Shabayev...
+        -- If the player refuses to stay with Shabayev...
     elseif ((Mission.m_ServiceTruckWarning and Mission.m_PlayerTruckWarningTime < Mission.m_MissionTime) or (Mission.m_SecondWarning and Mission.m_PlayerLostTime < Mission.m_MissionTime)) then
         -- Halt the mission.
-        Mission.m_MissionFailed = true;
+        Mission.m_MissionOver = true;
 
         -- Stop all audio.
         StopAudioMessage(Mission.m_Audioclip);

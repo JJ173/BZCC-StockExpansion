@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF06 Lua Mission Script
     Written by AI_Unit
     Version 1.0 21-10-2022
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,19 +23,19 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Difficulty tables for times and spawns.
-local m_Breacher1Ship = {"fvscout", "fvsent", "fvarch"};
-local m_Breacher2Ship = {"fvsent", "fvtank", "fvtank"};
-local m_Breacher3Ship = {"fvscout", "fvsent", "fvarch"};
-local m_Breacher4Ship = {"fvsent", "fvarch", "fvtank"};
+local m_Breacher1Ship = { "fvscout", "fvsent", "fvarch" };
+local m_Breacher2Ship = { "fvsent", "fvtank", "fvtank" };
+local m_Breacher3Ship = { "fvscout", "fvsent", "fvarch" };
+local m_Breacher4Ship = { "fvsent", "fvarch", "fvtank" };
 
-local m_PoolAttack1Ship = {"fvscout", "fvsent", "fvarch"};
-local m_PoolAttack2Ship = {"fvsent", "fvsent", "fvtank"};
-local m_PoolAttack3Ship = {"fvscout", "fvtank", "fvtank"};
+local m_PoolAttack1Ship = { "fvscout", "fvsent", "fvarch" };
+local m_PoolAttack2Ship = { "fvsent", "fvsent", "fvtank" };
+local m_PoolAttack3Ship = { "fvscout", "fvtank", "fvtank" };
 
-local m_ScionPlayerAttackCooldown = {45, 35, 25};
+local m_ScionPlayerAttackCooldown = { 45, 35, 25 };
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -45,12 +45,12 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "ivmisl_x";
+    m_PlayerShipODF = "ivmisl_x",
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionStartDone = false,
     m_MissionOver = false,
     m_GreenSquadRemoved = false,
@@ -110,7 +110,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -122,7 +122,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -131,7 +131,7 @@ function AddObject(h)
 
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);       
+        SetSkill(h, Mission.m_MissionDifficulty);
     end
 
     -- Give ivmisl the shadower.
@@ -166,7 +166,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF06 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -177,11 +177,11 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -194,9 +194,6 @@ function Start()
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
-
-    -- Start the first stage.
-    Mission.m_FirstStageActive = true;
 end
 
 function Update()
@@ -233,7 +230,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -282,7 +279,7 @@ function HandleFailureConditions()
         -- Mission failed.
         Mission.m_MissionOver = true;
 
-         -- Game over.
+        -- Game over.
         if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("Because you lost the Constructor, the mission could not be completed.");
             DoGameover(10);
@@ -308,7 +305,7 @@ function HandleMissionStart()
         Mission.m_Bomber = GetHandle("unnamed_ivbomb");
         -- Stop it so the player doesn't have control
         Stop(Mission.m_Bomber, 1);
-        
+
         -- Grab the constructor.
         Mission.m_Constructor = GetHandle("cons");
         -- Stop it so the player doesn't have control
@@ -372,21 +369,20 @@ function HandleMissionStart()
             Goto(Mission.m_Green2, "green_removal", 1);
 
             -- Show objective.
-			AddObjectiveOverride("isdf0604.otf", "WHITE", 10, true);
+            AddObjectiveOverride("isdf0604.otf", "WHITE", 10, true);
             AddObjectiveOverride("isdf0601.otf", "WHITE", 10);
 
             -- Advance a step.
             Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
         end
     elseif (Mission.m_MissionStartStage == 2) then
-        if (Mission.m_ScionAttackCooldown < Mission.m_MissionTime 
-            and not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker4, Mission.m_EnemyTeam)
-            and not IsAliveAndEnemy(Mission.m_Attacker5, Mission.m_EnemyTeam)
-            and not IsAliveAndEnemy(Mission.m_Attacker6, Mission.m_EnemyTeam)) then
-
+        if (Mission.m_ScionAttackCooldown < Mission.m_MissionTime
+                and not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker4, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker5, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker6, Mission.m_EnemyTeam)) then
             -- Build the attackers and send them on their way.
             Mission.m_Attacker1 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
             Mission.m_Attacker2 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
@@ -416,13 +412,12 @@ function HandleMissionStart()
         end
     elseif (Mission.m_MissionStartStage == 3) then
         -- Check if the enemy attackers have been killed.
-        if (not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam) 
-            and not IsAliveAndEnemy(Mission.m_Attacker4, Mission.m_EnemyTeam)
-            and not IsAliveAndEnemy(Mission.m_Attacker5, Mission.m_EnemyTeam)
-            and not IsAliveAndEnemy(Mission.m_Attacker6, Mission.m_EnemyTeam)) then
-
+        if (not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker4, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker5, Mission.m_EnemyTeam)
+                and not IsAliveAndEnemy(Mission.m_Attacker6, Mission.m_EnemyTeam)) then
             -- They have been killed. Set a cooldown.
             Mission.m_ScionAttackCooldown = Mission.m_MissionTime + SecondsToTurns(20);
 
@@ -447,11 +442,15 @@ function HandleMissionStart()
                 _Subtitles.AudioWithSubtitles("isdf0614.wav");
 
                 -- Spawn attackers.
-                Mission.m_Breacher1 = BuildObject(m_Breacher1Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("back1", 20, 20));
-                Mission.m_Breacher2 = BuildObject(m_Breacher2Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("back2", 20, 20));
-                Mission.m_Breacher3 = BuildObject(m_Breacher3Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("back3", 20, 20));
-                Mission.m_Breacher4 = BuildObject(m_Breacher4Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("back3", 20, 20));
-                
+                Mission.m_Breacher1 = BuildObject(m_Breacher1Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    GetPositionNear("back1", 20, 20));
+                Mission.m_Breacher2 = BuildObject(m_Breacher2Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    GetPositionNear("back2", 20, 20));
+                Mission.m_Breacher3 = BuildObject(m_Breacher3Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    GetPositionNear("back3", 20, 20));
+                Mission.m_Breacher4 = BuildObject(m_Breacher4Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+                    GetPositionNear("back3", 20, 20));
+
                 -- Send them to attack the base.
                 Goto(Mission.m_Breacher1, "back_door", 1);
                 Goto(Mission.m_Breacher2, "back_door", 1);
@@ -468,12 +467,12 @@ function HandleMissionStart()
                 Mission.m_MissionStartStage = 2;
             elseif (Mission.m_ScionAttackCount == 3) then
                 if (not IsAliveAndEnemy(Mission.m_Breacher1, Mission.m_EnemyTeam)
-                    and not IsAliveAndEnemy(Mission.m_Breacher2, Mission.m_EnemyTeam)
-                    and not IsAliveAndEnemy(Mission.m_Breacher3, Mission.m_EnemyTeam)
-                    and not IsAliveAndEnemy(Mission.m_Breacher4, Mission.m_EnemyTeam)) then
+                        and not IsAliveAndEnemy(Mission.m_Breacher2, Mission.m_EnemyTeam)
+                        and not IsAliveAndEnemy(Mission.m_Breacher3, Mission.m_EnemyTeam)
+                        and not IsAliveAndEnemy(Mission.m_Breacher4, Mission.m_EnemyTeam)) then
                     -- Kill this state as it's no longer needed.
                     Mission.m_MissionStartDone = true;
-        
+
                     -- Make the Scion Scavenger State active.
                     Mission.m_ScrapPoolPartActive = true;
                 end
@@ -504,7 +503,7 @@ function HandleScrapPoolPart()
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
             -- Show objective.
-			AddObjectiveOverride("isdf0604.otf", WHITE, 10, true);
+            AddObjectiveOverride("isdf0604.otf", WHITE, 10, true);
             AddObjectiveOverride("isdf0602.otf", WHITE, 10);
 
             -- Advance a step.
@@ -555,7 +554,7 @@ function HandleScrapPoolPart()
             Damage(Mission.m_Green3, GetMaxHealth(Mission.m_Green3) - 950);
             Damage(Mission.m_Green4, GetMaxHealth(Mission.m_Green4) - 500);
             Damage(Mission.m_Green5, GetMaxHealth(Mission.m_Green5) - 800);
- 
+
             -- Assume formation.
             Defend2(Mission.m_Green2, Mission.m_Green1, 1);
             Defend2(Mission.m_Green3, Mission.m_Green1, 1);
@@ -577,7 +576,7 @@ function HandleScrapPoolPart()
             AddObjectiveOverride("isdf0604.otf", "WHITE", 10, true);
             AddObjectiveOverride("isdf0605.otf", "WHITE", 10);
             AddObjectiveOverride("isdf0606.otf", "WHITE", 10);
-            
+
             -- Advance a step.
             Mission.m_ScrapPoolPartStage = Mission.m_ScrapPoolPartStage + 1;
         end
@@ -684,12 +683,16 @@ function SpawnAndSendScionPoolAttacks()
     -- Send attacks while things are progressing.
     if (Mission.m_ScionAttackCooldown < Mission.m_MissionTime and not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam) and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam) and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam)) then
         -- Wait a period of time before attacking again.
-        Mission.m_ScionAttackCooldown = Mission.m_MissionTime + SecondsToTurns(m_ScionPlayerAttackCooldown[Mission.m_MissionDifficulty]); 
-        
+        Mission.m_ScionAttackCooldown = Mission.m_MissionTime +
+        SecondsToTurns(m_ScionPlayerAttackCooldown[Mission.m_MissionDifficulty]);
+
         -- Send enemies to attack.
-        Mission.m_Attacker1 = BuildObject(m_PoolAttack1Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-        Mission.m_Attacker2 = BuildObject(m_PoolAttack2Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-        Mission.m_Attacker3 = BuildObject(m_PoolAttack3Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
+        Mission.m_Attacker1 = BuildObject(m_PoolAttack1Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            GetPositionNear("attack_start1", 20, 20));
+        Mission.m_Attacker2 = BuildObject(m_PoolAttack2Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            GetPositionNear("attack_start1", 20, 20));
+        Mission.m_Attacker3 = BuildObject(m_PoolAttack3Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
+            GetPositionNear("attack_start1", 20, 20));
 
         -- Send two to attack the player, and the other one to the constructor.
         Goto(Mission.m_Attacker1, "pool", 1);
@@ -713,7 +716,7 @@ function RemoveGreenSquad()
             RemoveObject(Mission.m_Green5);
         end
     end
-    
+
     if (not IsAlive(Mission.m_Green1) and not IsAlive(Mission.m_Green2) and not IsAlive(Mission.m_Green3) and not IsAlive(Mission.m_Green4) and not IsAlive(Mission.m_Green5)) then
         Mission.m_GreenSquadRemoved = true;
     end

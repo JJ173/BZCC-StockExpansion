@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC Scion02 Lua Mission Script
     Written by AI_Unit
     Version 1.0 05-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,10 +23,10 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Difficulty tables
-local m_ScoutCooldownTimeTable = {60, 45, 30};
+local m_ScoutCooldownTimeTable = { 60, 45, 30 };
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -36,9 +36,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "fspilo_x";
+    m_PlayerPilotODF = "fspilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "fvtank_x";
+    m_PlayerShipODF = "fvtank_x",
 
     m_MainPlayer = nil,
     m_PlayerRecycler = nil,
@@ -66,11 +66,11 @@ local Mission =
     m_ArcherNav = nil,
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
     m_ScoutRetreating = false,
     m_PlayerHasArcher = false,
-    
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
@@ -78,7 +78,7 @@ local Mission =
     m_ScoutDispatchCooldown = 0,
 
     -- Steps for each section.
-    m_MissionState = 1;
+    m_MissionState = 1,
 }
 
 -- Functions Table
@@ -98,7 +98,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -110,7 +110,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -118,9 +118,9 @@ function AddObject(h)
     local class = GetClassLabel(h);
 
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then 
+    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-        
+
         -- Set all units to non eject.
         SetEjectRatio(h, 0);
 
@@ -142,12 +142,13 @@ function AddObject(h)
 
             -- So we can send it down a patrol path.
             Mission.m_EnemyScout1 = h;
-            
+
             -- Repeat the retreat process.
             Mission.m_ScoutRetreating = false;
 
             -- Set a timer for dispatch.
-            Mission.m_ScoutDispatchCooldown = Mission.m_MissionTime + SecondsToTurns(m_ScoutCooldownTimeTable[Mission.m_MissionDifficulty]);
+            Mission.m_ScoutDispatchCooldown = Mission.m_MissionTime +
+            SecondsToTurns(m_ScoutCooldownTimeTable[Mission.m_MissionDifficulty]);
         elseif (ODFName == "ibpgen_x" and Mission.m_MissionState > 9) then
             if (not IsAlive(Mission.m_EnemyPower1)) then
                 -- Reassign the power variables for the last objective.
@@ -229,7 +230,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to Scion02 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -242,9 +243,9 @@ function Start()
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -274,7 +275,7 @@ function Update()
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
-            
+
             -- Check failure conditions...
             HandleFailureConditions();
 
@@ -309,14 +310,14 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
     return _Cooperative.RespawnPilot(DeadObjectHandle, Team, Mission.m_PlayerPilotODF);
 end
 
-function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)    
+function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
     return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF);
 end
 
@@ -366,7 +367,7 @@ Functions[1] = function()
     -- Give the enemy some scrap.
     SetScrap(Mission.m_EnemyTeam, 40);
 
-    -- Spawn starting units for the player. 
+    -- Spawn starting units for the player.
     if (Mission.m_MissionDifficulty <= 3) then
         -- Give 1 Scavenger and 1 turret
         SetBestGroup(BuildObject("fvscav_x", Mission.m_HostTeam, "scav_1"));
@@ -569,7 +570,7 @@ end
 
 Functions[9] = function()
     -- If at least 1 Archer has been moved to the nav, mark this function as done.
-    for i = 1, #Mission.m_PlayerArchers do 
+    for i = 1, #Mission.m_PlayerArchers do
         if (GetDistance(Mission.m_PlayerArchers[i], Mission.m_ArcherNav) < 50) then
             -- Mark the last objective as done.
             AddObjectiveOverride("scion0206.otf", "WHITE", 10, true);
@@ -594,7 +595,7 @@ Functions[9] = function()
 end
 
 Functions[10] = function()
-    -- Player has destroyed the power generators. 
+    -- Player has destroyed the power generators.
     if (not IsAlive(Mission.m_EnemyPower1) and not IsAlive(Mission.m_EnemyPower2) and not IsAlive(Mission.m_EnemyCons)) then
         -- Shab: Gun Towers are down.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0210.wav");
@@ -603,7 +604,7 @@ Functions[10] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;    
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -617,7 +618,7 @@ Functions[11] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;    
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -631,7 +632,7 @@ Functions[12] = function()
     end
 end
 
--- This function will dispatch enemy turrets around the map. If a turret 
+-- This function will dispatch enemy turrets around the map. If a turret
 -- is destroyed, we will replenish it with another.
 function ISDFTurretDispatcher()
     if (Mission.m_TurretDistpacherTimer < Mission.m_MissionTime) then
@@ -662,7 +663,7 @@ function ISDFScoutDistpatcher()
             if (GetCurrentCommand(Mission.m_EnemyScout1) == CMD_NONE) then
                 -- Send the scout out to do it's job.
                 local rand = math.ceil(GetRandomFloat(0, 2));
-                local chosenPath = "route"..rand;
+                local chosenPath = "route" .. rand;
 
                 -- Send the Scout down one of the 2 paths.
                 Goto(Mission.m_EnemyScout1, chosenPath, 1);
@@ -755,7 +756,7 @@ function HandleFailureConditions()
             FailMission(GetTime() + 10, "scion02l2.txt");
         end
     end
-    
+
     if (not IsAlive(Mission.m_PlayerRecycler)) then
         -- Stop the mission.
         Mission.m_MissionOver = true;

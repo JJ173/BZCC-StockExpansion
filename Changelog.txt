@@ -159,6 +159,15 @@ ISDF12 (Counter Attack):
 
 - General QOL (Quality of Life) improvements.
 
+ISDF20 (A Traitor's Fate):
+- Added Squad Two AI squadron. This was removed from the original mission.
+- Added second Service Truck for balance due to the player being in a Walker.
+- Removed health debuff from enemy Gun Towers.
+- Named Manson's Assault Tank "Manson" to make him stand out.
+- Removed "Rebel" highlighting as it seemed to only happen for a handful of units, making it redundant.
+
+- General QOL (Quality of Life) improvements.
+
 Scion02 (Ambush):
 - Added music
 - Mission has been given a complete overhaul.

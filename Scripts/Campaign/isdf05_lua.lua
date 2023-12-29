@@ -273,7 +273,7 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
 	if (PlayerEntryH ~= nil) then
 		RemoveObject(PlayerEntryH);

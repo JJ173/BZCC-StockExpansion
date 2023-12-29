@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF12 Lua Mission Script
     Written by AI_Unit
     Version 1.0 23-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,7 +23,7 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -33,9 +33,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_Manson = nil,
     m_PoolNav1 = nil,
@@ -72,7 +72,7 @@ local Mission =
     m_StartingWave = {},
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionStartDone = false,
     m_MissionOver = false,
     m_IntroDialogPlayed = false,
@@ -80,7 +80,7 @@ local Mission =
     m_BasePoweredDialogPlayed = false,
     m_TrainingDialogPlayed = false,
     m_MansonExplainsObjectiveDialogPlayed = false,
-    
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
@@ -108,7 +108,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -120,7 +120,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -129,7 +129,7 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-        
+
         -- Pilots are forbidden in this mission.
         if (not IsBuilding(h)) then
             SetEjectRatio(h, 0);
@@ -184,7 +184,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF12 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -195,11 +195,11 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -275,7 +275,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -517,7 +517,7 @@ Functions[3] = function()
         SetObjectiveOn(Mission.m_Manson);
 
         -- Show Objectives.
-        AddObjectiveOverride("isdf1201.otf", "GREEN", 10, true); 
+        AddObjectiveOverride("isdf1201.otf", "GREEN", 10, true);
         AddObjective("isdf1202.otf", "WHITE");
 
         -- Set up the AIP here.
@@ -567,7 +567,7 @@ Functions[5] = function()
                 else
                     -- Manson: We can get pilots into those Scavs when the base is powered up..
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1208.wav");
-                
+
                     -- Set the timer for this audio clip.
                     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
                 end
@@ -587,7 +587,7 @@ Functions[5] = function()
 
                 -- Set the timer for this audio clip.
                 Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(17.5);
-                
+
                 -- So we don't loop.
                 Mission.m_MansonExplainsObjectiveDialogPlayed = true;
             end
@@ -612,9 +612,9 @@ Functions[5] = function()
                     else
                         SucceedMission(GetTime() + 7, "isdf12w1.txt");
                     end
-        
+
                     -- So we don't loop.
-                    Mission.m_MissionOver = true; 
+                    Mission.m_MissionOver = true;
                 end
             end
         end
@@ -625,7 +625,7 @@ function RefreshObjectives()
     local maxScrap = GetMaxScrap(Mission.m_HostTeam);
 
     -- Clear the panel to start again.
-    ClearObjectives(); 
+    ClearObjectives();
 
     AddObjective("isdf1203.otf", "WHITE");
     AddObjective("isdf1204.otf", "WHITE");
@@ -636,7 +636,7 @@ function RefreshObjectives()
     else
         AddObjective("isdf1207.otf", "GREEN");
     end
-    
+
     if (Mission.m_PlayerPowerCount < 0) then
         AddObjective("isdf1202.otf", "WHITE");
     else

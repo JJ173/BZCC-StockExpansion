@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC Scion05 Lua Mission Script
     Written by AI_Unit
     Version 1.0 08-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,62 +23,62 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Groups of New Regime attackers to hit the player.
-local delay1 = {105, 90, 75};
-local delay2 = {160, 140, 120};
+local delay1 = { 105, 90, 75 };
+local delay2 = { 160, 140, 120 };
 
 -- Each attack group for the player.
-local playerAttacks = 
+local playerAttacks =
 {
-    {{"ivscout_x", "ivscout_x"}, {"ivscout_x", "ivmisl_x"}, {"ivscout_x", "ivtank_x"}}, -- Attack 1
-    {{"ivmisl_x", "ivscout_x"}, {"ivmisl_x", "ivmisl_x"}, {"ivtank_x", "ivmisl_x"}}, -- Attack 2
-    {{"ivmisl_x", "ivscout_x"}, {"ivmisl_x", "ivmisl_x"}, {"ivtank_x","ivmbike_x", "ivmbike_x"}}, -- Attack 3
-    {{"ivscout_x", "ivmisl_x"}, {"ivmisl_x", "ivmbike_x", "ivmbike_x"}, {"ivtank_x", "ivtank_x"}}, -- Attack 4
-    {{"ivmisl_x", "ivmisl_x"}, {"ivtank_x", "ivmbike_x", "ivmbike_x"}, {"ivtank_x", "ivmbike_x", "ivmbike_x"}}, -- Attack 5
-    {{"ivmbike_x", "ivmbike_x"}, {"ivmisl_x", "ivmbike_x", "ivmbike_x"},{"ivtank_x","ivtank_x","ivmbike_x"}}, -- Attack 6
-    {{"ivtank_x", "ivscout_x", "ivscout_x"}, {"ivmbike_x", "ivmbike_x", "ivtank_x"}, {"ivtank_x", "ivtank_x", "ivscout_x"}}, -- Attack 7
-    {{"ivtank_x", "ivmbike_x", "ivscout_x"}, {"ivtank_x", "ivmisl_x", "ivmbike_x"}, {"ivrckt_x", "ivtank_x","ivscout_x"}}, -- Attack 8
-    {{"ivtank_x", "ivtank_x", "ivscout_x"}, {"ivtank_x", "ivmbike_x", "ivrckt_x"}, {"ivtank_x", "ivrckt_x", "ivatank_x"}}, -- Attack 9
-    {{"ivrckt_x", "ivtank_x", "ivscout_x"}, {"ivatank_x", "ivtank_x", "ivmbike_x"}, {"ivatank_x", "ivatank_x", "ivtank_x"}}, -- Attack 10
-    {{"ivrckt_x", "ivatank_x", "ivscout_x"}, {"ivatank_x", "ivatank_x", "ivrckt_x"}, {"ivatank_x", "ivwalk_x", "ivatank_x"}}, -- Attack 11
-    {{"ivatank_x", "ivrckt_x", "ivrckt_x"}, {"ivatank_x", "ivatank_x", "ivwalk_x"}, {"ivwalk_x", "ivwalk_x", "ivatank_x"}} -- Attack 12
+    { { "ivscout_x", "ivscout_x" },           { "ivscout_x", "ivmisl_x" },            { "ivscout_x", "ivtank_x" } },          -- Attack 1
+    { { "ivmisl_x", "ivscout_x" },            { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmisl_x" } },           -- Attack 2
+    { { "ivmisl_x", "ivscout_x" },            { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 3
+    { { "ivscout_x", "ivmisl_x" },            { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x" } },         -- Attack 4
+    { { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 5
+    { { "ivmbike_x", "ivmbike_x" },           { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x", "ivmbike_x" } }, -- Attack 6
+    { { "ivtank_x", "ivscout_x", "ivscout_x" }, { "ivmbike_x", "ivmbike_x", "ivtank_x" }, { "ivtank_x", "ivtank_x", "ivscout_x" } }, -- Attack 7
+    { { "ivtank_x", "ivmbike_x", "ivscout_x" }, { "ivtank_x", "ivmisl_x", "ivmbike_x" }, { "ivrckt_x", "ivtank_x", "ivscout_x" } }, -- Attack 8
+    { { "ivtank_x", "ivtank_x", "ivscout_x" }, { "ivtank_x", "ivmbike_x", "ivrckt_x" }, { "ivtank_x", "ivrckt_x", "ivatank_x" } }, -- Attack 9
+    { { "ivrckt_x", "ivtank_x", "ivscout_x" }, { "ivatank_x", "ivtank_x", "ivmbike_x" }, { "ivatank_x", "ivatank_x", "ivtank_x" } }, -- Attack 10
+    { { "ivrckt_x", "ivatank_x", "ivscout_x" }, { "ivatank_x", "ivatank_x", "ivrckt_x" }, { "ivatank_x", "ivwalk_x", "ivatank_x" } }, -- Attack 11
+    { { "ivatank_x", "ivrckt_x", "ivrckt_x" }, { "ivatank_x", "ivatank_x", "ivwalk_x" }, { "ivwalk_x", "ivwalk_x", "ivatank_x" } } -- Attack 12
 }
 
--- This is when the player takes too long to destroy the bridge. 
--- Rather than an instant "Game Over", we just increase each attack 
+-- This is when the player takes too long to destroy the bridge.
+-- Rather than an instant "Game Over", we just increase each attack
 -- from braddock
-m_BraddockBridgeAttacks = 
+m_BraddockBridgeAttacks =
 {
-    {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x"},
-    {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivmisl_x", "ivmisl_x"},
-    {"ivtank_x", "ivrckt_x", "ivtank_x", "ivrckt_x", "ivmbike_x", "ivmbike_x", "ivmisl_x", "ivmisl_x"},
-    {"ivrckt_x", "ivrckt_x", "ivrckt_x", "ivrckt_x", "ivtank_x", "ivtank_x", "ivtank_x"},
-    {"ivrckt_x", "ivrckt_x", "ivrckt_x", "ivrckt_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x", "ivtank_x"},
-    {"ivrckt_x", "ivrckt_x", "ivrckt_x", "ivrckt_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x", "ivtank_x"},
-    {"ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x", "ivtank_x"},
-    {"ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivrckt_x", "ivrckt_x", "ivrckt_x"},
-    {"ivwalk_x", "ivwalk_x", "ivwalk_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivrckt_x", "ivrckt_x", "ivrckt_x", "ivrckt_x"},
-    {"ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x"},
-    {"ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x", "ivwalk_x"}
+    { "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivmbike_x", "ivmbike_x" },
+    { "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivmbike_x", "ivmbike_x", "ivmisl_x",  "ivmisl_x" },
+    { "ivtank_x",  "ivrckt_x",  "ivtank_x",  "ivrckt_x",  "ivmbike_x", "ivmbike_x", "ivmisl_x",  "ivmisl_x" },
+    { "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivtank_x",  "ivtank_x",  "ivtank_x" },
+    { "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x",  "ivtank_x" },
+    { "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x",  "ivtank_x" },
+    { "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivtank_x",  "ivtank_x" },
+    { "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivrckt_x",  "ivrckt_x",  "ivrckt_x" },
+    { "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivatank_x", "ivatank_x", "ivatank_x", "ivrckt_x",  "ivrckt_x",  "ivrckt_x",  "ivrckt_x" },
+    { "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x", "ivatank_x" },
+    { "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x",  "ivwalk_x" }
 }
 
--- This is when Braddock sends his last attacks to the AAN base. 
+-- This is when Braddock sends his last attacks to the AAN base.
 -- The final stand for the player.
-m_BraddockAANAttacks = 
+m_BraddockAANAttacks =
 {
-    {{"ivscout_x", "ivscout_x", "ivtank_x"}, {"ivmisl_x", "ivmisl_x", "ivtank_x"}, {"ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x"}}, -- Attack 1
-    {{"ivmisl_x", "ivscout_x", "ivmisl_x", "ivscout_x"}, {"ivmisl_x", "ivtank_x", "ivmisl_x", "ivtank_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}}, -- Attack 2
-    {{"ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x"}, {"ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivmbike_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}}, -- Attack 3
-    {{"ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivscout_x", "ivscout_x"}, {"ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x"}}, -- Attack 4
-    {{"ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}, {"ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivapc_x", "ivapc_x"}}, -- Attack 5
-    {{"ivmisl_x", "ivmisl_x", "ivtank_x", "ivtank_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x"}, {"ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}}, -- Attack 6
-    {{"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x"}, {"ivapc_x", "ivapc_x", "ivapc_x"}}, -- Attack 7
-    {{"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x"}, {"ivapc_x", "ivapc_x", "ivapc_x"}, {"ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivtank_x", "ivtank_x", "ivapc_x"}}, -- Attack 8
-    {{"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivapc_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x"}, {"ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x"}}, -- Attack 9
-    {{"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x"}, {"ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x", "ivapc_x"}, {"ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x"}} -- Attack 10
+    { { "ivscout_x", "ivscout_x", "ivtank_x" },                                              { "ivmisl_x", "ivmisl_x", "ivtank_x" },                                             { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" } },                      -- Attack 1
+    { { "ivmisl_x", "ivscout_x", "ivmisl_x", "ivscout_x" },                                  { "ivmisl_x", "ivtank_x", "ivmisl_x", "ivtank_x" },                                 { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                        -- Attack 2
+    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x" },                                    { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },                  { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } }, -- Attack 3
+    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivscout_x", "ivscout_x" },          { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },   { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" } },             -- Attack 4
+    { { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },      { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                 { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivapc_x", "ivapc_x" } }, -- Attack 5
+    { { "ivmisl_x", "ivmisl_x", "ivtank_x", "ivtank_x" },                                    { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" },                      { "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },  -- Attack 6
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                    { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },           { "ivapc_x", "ivapc_x", "ivapc_x" } },                                       -- Attack 7
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" },          { "ivapc_x", "ivapc_x", "ivapc_x" },                                                { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivtank_x", "ivtank_x", "ivapc_x" } }, -- Attack 8
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivapc_x" }, { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" }, { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x" } },                        -- Attack 9
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },              { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x", "ivapc_x" }, { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } } -- Attack 10
 }
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -88,9 +88,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "fspilo_x";
+    m_PlayerPilotODF = "fspilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "fvtank_x";
+    m_PlayerShipODF = "fvtank_x",
 
     m_PlayerRecy = nil,
     m_AANRecy = nil,
@@ -143,7 +143,7 @@ local Mission =
     m_BraddockFinalAttackUnits = {},
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
     m_CutsceneDialogPlayed = false,
     m_CutsceneRocketAttacking = false,
@@ -159,7 +159,7 @@ local Mission =
     m_MansonFactoryAudioPlayed = false,
     m_AANGunSpireBuilt = false,
     m_PlayerAtAANBase = false,
-    
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
@@ -183,7 +183,7 @@ local Mission =
     m_AudioDelay = 0,
 
     -- Steps for each section.
-    m_MissionState = 1;
+    m_MissionState = 1,
 }
 
 -- Functions Table
@@ -203,7 +203,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -215,12 +215,12 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then 
+    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
     elseif (GetTeamNum(h) == Mission.m_AlliedTeam) then
         SetSkill(h, 3); -- Manson and his army are well trained!
@@ -306,7 +306,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to Scion05 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -317,11 +317,11 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -388,14 +388,14 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
     return _Cooperative.RespawnPilot(DeadObjectHandle, Team, Mission.m_PlayerPilotODF);
 end
 
-function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)    
+function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
     return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF);
 end
 
@@ -481,7 +481,7 @@ Functions[1] = function()
     SetMaxHealth(Mission.m_BridgeStr1, 5000);
     SetCurHealth(Mission.m_BridgeStr1, 5000);
     SetMaxHealth(Mission.m_BridgeStr2, 5000);
-    SetCurHealth(Mission.m_BridgeStr2, 5000); 
+    SetCurHealth(Mission.m_BridgeStr2, 5000);
 
     -- Set the team colour for Braddock.
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
@@ -626,7 +626,7 @@ Functions[4] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_FirstYelenaDialogTime < Mission.m_MissionTime) then
         -- Yelena: We have no time to waste...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0501.wav");
-        
+
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(14.5);
 
@@ -639,9 +639,9 @@ Functions[5] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show objectives.
         AddObjectiveOverride("scion0501.otf", "WHITE", 10, true);
-    
+
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;       
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -793,8 +793,8 @@ Functions[12] = function()
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;     
-    end 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
 end
 
 Functions[13] = function()
@@ -1048,17 +1048,19 @@ function DispatchBraddockUnits()
 
             for i = 1, #attacks do
                 -- Spawn each unit at a safe path.
-                local unit =  BuildObjectAtSafePath(attacks[i], Mission.m_EnemyTeam, "pk"..i, "spawn"..i, _Cooperative.m_TotalPlayerCount);
+                local unit = BuildObjectAtSafePath(attacks[i], Mission.m_EnemyTeam, "pk" .. i, "spawn" .. i,
+                    _Cooperative.m_TotalPlayerCount);
 
                 -- Send the unit to attack the player.
                 Goto(unit, "playerbase", 1);
             end
-            
+
             -- So we loop through the table of attacks.
             Mission.m_BraddockPlayerAttackCount = Mission.m_BraddockPlayerAttackCount + 1;
 
             -- Set the loop timer so we delay.
-            Mission.m_BraddockAttackPlayerDelay = Mission.m_MissionTime + SecondsToTurns(delay1[Mission.m_MissionDifficulty]);
+            Mission.m_BraddockAttackPlayerDelay = Mission.m_MissionTime +
+            SecondsToTurns(delay1[Mission.m_MissionDifficulty]);
         end
     elseif (Mission.m_BridgeAlive) then
         if (Mission.m_BraddockDispatchCooldown < Mission.m_MissionTime) then
@@ -1067,7 +1069,7 @@ function DispatchBraddockUnits()
 
             for i = 1, #attackTable do
                 -- Just so we don't use spawns that don't exist.
-                local spawn = GetPositionNear("spawn"..i, 15, 15);
+                local spawn = GetPositionNear("spawn" .. i, 15, 15);
 
                 -- Anything over 4, use spawn one.
                 if (i > 4) then
@@ -1075,19 +1077,20 @@ function DispatchBraddockUnits()
                 end
 
                 -- Spawn each unit at a safe path.
-                local unit =  BuildObject(attackTable[i], Mission.m_EnemyTeam, spawn);
+                local unit = BuildObject(attackTable[i], Mission.m_EnemyTeam, spawn);
 
                 -- Send the unit to attack the player.
                 Goto(unit, "Bridge_Attackers", 1);
             end
-            
+
             -- So we loop through the table of attacks.
             if (Mission.m_BraddockAANAttackCount < 11) then
                 Mission.m_BraddockAANAttackCount = Mission.m_BraddockAANAttackCount + 1;
             end
 
             -- Set the loop timer so we delay.
-            Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime + SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
+            Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime +
+            SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
         end
     elseif (Mission.m_PlayerAtAANBase) then
         if (Mission.m_BraddockDispatchCooldown < Mission.m_MissionTime) then
@@ -1097,7 +1100,7 @@ function DispatchBraddockUnits()
 
             for i = 1, #attacks do
                 -- Just so we don't use spawns that don't exist.
-                local spawn = GetPositionNear("spawn"..i, 15, 15);
+                local spawn = GetPositionNear("spawn" .. i, 15, 15);
 
                 -- Anything over 4, use spawn one.
                 if (i > 4) then
@@ -1105,8 +1108,8 @@ function DispatchBraddockUnits()
                 end
 
                 -- Spawn each unit at a safe path.
-                local unit =  BuildObject(attacks[i], Mission.m_EnemyTeam, spawn);
-                
+                local unit = BuildObject(attacks[i], Mission.m_EnemyTeam, spawn);
+
                 -- Some special logic when the 10th wave is spawned.
                 if (Mission.m_BraddockAANAttackCount == 10) then
                     Mission.m_BraddockFinalAttackUnits[#Mission.m_BraddockFinalAttackUnits + 1] = unit;
@@ -1122,9 +1125,10 @@ function DispatchBraddockUnits()
 
             -- So we loop through the table of attacks.
             Mission.m_BraddockAANAttackCount = Mission.m_BraddockAANAttackCount + 1;
-            
+
             -- Set the loop timer so we delay.
-            Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime + SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
+            Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime +
+            SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
         end
     end
 end
@@ -1157,7 +1161,7 @@ function HandleFailureConditions()
             FailMission(GetTime() + 10, "scion05l1.txt");
         end
     end
-    
+
     if (not IsAlive(Mission.m_PlayerRecy)) then
         -- Stop the mission.
         Mission.m_MissionOver = true;

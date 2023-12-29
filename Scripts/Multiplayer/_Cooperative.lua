@@ -1,4 +1,4 @@
-local _Cooperative = 
+local _Cooperative =
 {
     m_TotalPlayerCount = 1,
     m_TeamIsSetUp = { false, false, false, false, false }
@@ -7,7 +7,7 @@ local _Cooperative =
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     if (IsNewPlayer) then
         -- Create the player for the server.
-        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, id);
+        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset);
 
         -- Make sure we give the player control of their ship.
         SetAsUser(PlayerH, Team);
@@ -210,7 +210,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
     if (isDeadAI) then
         if (isDeadPerson) then
             return DLLHandled;
-        else 
+        else
             return DoEjectPilot;
         end
     else
@@ -222,7 +222,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
     end
 end
 
-function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset, SteamID)
+function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     -- Setup the team if it's not set up.
     if (IsTeamplayOn()) then
         local cmdTeam = GetCommanderTeam(Team);
@@ -265,11 +265,6 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
         else
             PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
         end
-
-        -- Look somewhere.
-        SetRandomHeadingAngle(PlayerH);
-    else
-        SetTeamNum(PlayerH, Team);
     end
 
     -- Give them a pilot class.

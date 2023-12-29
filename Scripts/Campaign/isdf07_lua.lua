@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF07 Lua Mission Script
     Written by AI_Unit
     Version 1.0 25-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -27,31 +27,31 @@ local fileName = "BZX_BASE_SAVE.txt";
 
 -- Each attack group for the player.
 local attack1 = {
-    {"fvscout_x", "fvsent_x"},
-    {"fvsent_x", "fvsent_x"},
-    {"fvtank_x", "fvtank_x"}
+    { "fvscout_x", "fvsent_x" },
+    { "fvsent_x",  "fvsent_x" },
+    { "fvtank_x",  "fvtank_x" }
 }
 
 local attack2 = {
-    {"fvsent_x", "fvsent_x"},
-    {"fvscout_x", "fvsent_x", "fvsent_x"},
-    {"fvtank_x", "fvsent_x", "fvscout_x"}
+    { "fvsent_x",  "fvsent_x" },
+    { "fvscout_x", "fvsent_x", "fvsent_x" },
+    { "fvtank_x",  "fvsent_x", "fvscout_x" }
 }
 
 local attack3 = {
-    {"fvsent_x", "fvtank_x"},
-    {"fvsent_x", "fvtank_x", "fvsent_x"},
-    {"fvtank_x", "fvsent_x", "fvsent_x"}
+    { "fvsent_x", "fvtank_x" },
+    { "fvsent_x", "fvtank_x", "fvsent_x" },
+    { "fvtank_x", "fvsent_x", "fvsent_x" }
 }
 
 local attack4 = {
-    {"fvartl_x", "fvsent_x", "fvscout_x"},
-    {"fvartl_x", "fvsent_x", "fvtank_x"},
-    {"fvartl_x", "fvarch_x", "fvtank_x"}
+    { "fvartl_x", "fvsent_x", "fvscout_x" },
+    { "fvartl_x", "fvsent_x", "fvtank_x" },
+    { "fvartl_x", "fvarch_x", "fvtank_x" }
 }
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -61,9 +61,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_Recycler = nil,
     m_Shabayev = nil,
@@ -86,7 +86,7 @@ local Mission =
     m_Nav = nil,
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
     m_DropshipTakeOff = false,
     m_ShabFollowRecycler = false,
@@ -109,9 +109,9 @@ local Mission =
 
     m_PlayerBuildings = {},
     m_ShabayevInvestigationObjects = {
-        {"inv1", GetHandle("shab_look_1")},
-        {"inv2", GetHandle("shab_look_2")},
-        {"inv3", GetHandle("shab_look_3")},
+        { "inv1", GetHandle("shab_look_1") },
+        { "inv2", GetHandle("shab_look_2") },
+        { "inv3", GetHandle("shab_look_3") },
     },
 
     m_MissionDelayTime = 0,
@@ -143,7 +143,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -155,7 +155,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -164,7 +164,7 @@ function AddObject(h)
 
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);       
+        SetSkill(h, Mission.m_MissionDifficulty);
     elseif (teamNum == Mission.m_HostTeam) then
         -- Check the class.
         local class = GetClassLabel(h);
@@ -227,7 +227,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF07 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -238,7 +238,7 @@ function Start()
     print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
+    local PlayerEntryH = GetPlayerHandle(1);
 
     if (PlayerEntryH ~= nil) then
         RemoveObject(PlayerEntryH);
@@ -322,7 +322,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -373,7 +373,7 @@ Functions[1] = function()
         Mission.m_Hunter3 = GetHandle("hunter3");
         Mission.m_ShabTankLook = GetHandle("shab_tank_look");
         Mission.m_Ruins = GetHandle("ruins");
-        
+
         -- First set of attackers on standby.
         Mission.m_Scion1 = BuildObject(attack1[Mission.m_MissionDifficulty][1], Mission.m_EnemyTeam, "lz_attack_1");
         Mission.m_Scion2 = BuildObject(attack1[Mission.m_MissionDifficulty][2], Mission.m_EnemyTeam, "lz_attack_2");
@@ -394,10 +394,10 @@ Functions[1] = function()
 
         -- Make sure she has good skill.
         SetSkill(Mission.m_Shabayev, 3);
-        
+
         -- Shabayev gets maximum health for this mission.
         SetMaxHealth(Mission.m_Shabayev, 0);
-        
+
         -- Just to see if she avoids stuff.
         SetAvoidType(Mission.m_Recycler, 1);
 
@@ -557,7 +557,7 @@ Functions[7] = function()
 
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
-    
+
         -- Safely kill the Dropship.
         RemoveObject(Mission.m_Dropship);
 
@@ -599,7 +599,9 @@ Functions[8] = function()
             Mission.m_PlayerHasOrder = false;
 
             -- Probe
-            Goto(BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+            Goto(
+            BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount),
+                Mission.m_Recycler, 1);
 
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -662,7 +664,9 @@ Functions[10] = function()
 
             for i = 1, #attackWave do
                 -- Use a Goto instead of a Attack so they can attack random things.
-                Goto(BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn"..i, "safe"..i, _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                Goto(
+                BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
+                    _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...
@@ -724,7 +728,9 @@ Functions[12] = function()
             Mission.m_PlayerHasOrder = false;
 
             -- Probe
-            Goto(BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+            Goto(
+            BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount),
+                Mission.m_Recycler, 1);
 
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -760,7 +766,9 @@ Functions[13] = function()
 
             for i = 1, #attackWave do
                 -- Use a Goto instead of a Attack so they can attack random things.
-                Goto(BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn"..i, "safe"..i, _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                Goto(
+                BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
+                    _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...
@@ -814,7 +822,8 @@ Functions[14] = function()
 
             for i = 1, #attackWave do
                 local unit = attackWave[i];
-                local builtUnit = BuildObjectAtSafePath(unit, Mission.m_EnemyTeam, "spawn"..i, "safe"..i, _Cooperative.m_TotalPlayerCount);
+                local builtUnit = BuildObjectAtSafePath(unit, Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
+                    _Cooperative.m_TotalPlayerCount);
 
                 if (IsOdf(builtUnit, "fvartl_x")) then
                     Attack(builtUnit, Mission.m_Recycler, 1);
@@ -839,7 +848,7 @@ Functions[15] = function()
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(6);
 
         -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1; 
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
@@ -888,7 +897,7 @@ end
 Functions[18] = function()
     -- Check Shabayev's health. If she's low, have her retreat. If the hunters are also dead, have her retreat.
     if (GetCurHealth(Mission.m_Shabayev) < 900 or (not IsAlive(Mission.m_Hunter1) and not IsAlive(Mission.m_Hunter2) and not IsAlive(Mission.m_Hunter3))) then
-        -- Have Shabayev retreat. 
+        -- Have Shabayev retreat.
         Retreat(Mission.m_Shabayev, "kill_shab_ship", 1);
 
         -- Have the hunter units ready to attack the player.
@@ -932,7 +941,7 @@ Functions[20] = function()
 
         -- Small delay
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
-        
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -1003,7 +1012,7 @@ Functions[22] = function()
         if (IsPlayerWithinDistance("spawn_killers", 150, _Cooperative.m_TotalPlayerCount)) then
             for i = 1, 5 do
                 -- Build units.
-                local unit = BuildObject("fvtank_x", Mission.m_EnemyTeam, "killer"..i);
+                local unit = BuildObject("fvtank_x", Mission.m_EnemyTeam, "killer" .. i);
 
                 -- Send them to patrol.
                 Patrol(unit, "ruin_patrol", 1);
@@ -1112,15 +1121,16 @@ Functions[24] = function()
 end
 
 function SavePlayerBaseToFile()
-    -- This function will save the position of each building from the player. 
-    -- The file will be loaded up in ISDF08 and ISDF09 as a ruined base. 
-    local body = "PLEASE DO NOT MODIFY! THIS FILE IS AUTO-GENERATED. CHANGING THE VALUES MAY AFFECT YOUR GAMEPLAY EXPERIENCE.";
+    -- This function will save the position of each building from the player.
+    -- The file will be loaded up in ISDF08 and ISDF09 as a ruined base.
+    local body =
+    "PLEASE DO NOT MODIFY! THIS FILE IS AUTO-GENERATED. CHANGING THE VALUES MAY AFFECT YOUR GAMEPLAY EXPERIENCE.";
 
     -- When a player has built stuff, loop through the table and note it's position.
     for i = 1, #Mission.m_PlayerBuildings do
         -- Start on a new line for each building.
         body = body .. "\n";
-        
+
         -- Get the building from the table.
         local building = Mission.m_PlayerBuildings[i];
 
@@ -1154,7 +1164,7 @@ function ShabayevBrain()
     if (not Mission.m_ShabFollowRecycler) then
         if (GetDistance(Mission.m_Recycler, "recycler_stop") < 30) then
             -- Tell her to follow.
-            Follow(Mission.m_Shabayev, Mission.m_Recycler, 1); 
+            Follow(Mission.m_Shabayev, Mission.m_Recycler, 1);
 
             -- So we don't loop.
             Mission.m_ShabFollowRecycler = true;
@@ -1208,7 +1218,7 @@ function ShabayevBrain()
     end
 end
 
-function HandleFailureConditions()   
+function HandleFailureConditions()
     if (not IsAlive(Mission.m_Recycler)) then
         -- Stop the mission.
         Mission.m_MissionOver = true;

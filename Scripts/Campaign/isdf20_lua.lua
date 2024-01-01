@@ -45,8 +45,10 @@ local Mission =
     m_Gun1 = nil,
     m_Gun2 = nil,
     m_Gun3 = nil,
+    m_Recycler = nil,
     m_Factory = nil,
     m_Bunker = nil,
+    m_Armory = nil,
     m_Unit1 = nil,
     m_Unit2 = nil,
     m_Unit3 = nil,
@@ -82,6 +84,8 @@ local Mission =
     m_Power1Dead = false,
     m_Power2Dead = false,
     m_BunkerDead = false,
+    m_ArmoryDead = false,
+    m_RecyclerDead = false,
     m_SeenManson = false,
     m_BaseGuardsAttack = false,
 
@@ -240,7 +244,14 @@ end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (OrdnanceTeam < 6 and Mission.m_BaseGuardsAttack == false) then
-        if (VictimHandle == Mission.m_Factory or VictimHandle == Mission.m_PGen1 or VictimHandle == Mission.m_PGen2 or VictimHandle == Mission.m_Gun2 or VictimHandle == Mission.m_Gun3 or VictimHandle == Mission.m_Bunker) then
+        if (VictimHandle == Mission.m_Factory
+         or VictimHandle == Mission.m_PGen1
+         or VictimHandle == Mission.m_PGen2
+         or VictimHandle == Mission.m_Gun2
+         or VictimHandle == Mission.m_Gun3
+         or VictimHandle == Mission.m_Bunker
+         or VictimHandle == Mission.m_Recycler
+         or VictimHandle == Mission.m_Armory) then
             -- Have the base guards attack.
             Attack(Mission.m_RebelBaseGuard1, ShooterHandle, 1);
             Attack(Mission.m_RebelBaseGuard2, ShooterHandle, 1);
@@ -273,6 +284,8 @@ Functions[1] = function()
     Mission.m_Gun1 = GetHandle("gun1");
     Mission.m_Gun2 = GetHandle("gun2");
     Mission.m_Gun3 = GetHandle("gun3");
+    Mission.m_Recycler = GetHandle("recycler");
+    Mission.m_Armory = GetHandle("armory");
 
     -- Make the Gun Towers do something.
     Stop(Mission.m_Gun1, 0);
@@ -313,6 +326,10 @@ Functions[1] = function()
     Mission.m_RebelBaseGuard1 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "esent3");
     Mission.m_RebelBaseGuard2 = BuildObject("ivscout_x", Mission.m_EnemyTeam, "esent4");
 
+    -- Set the defenders to hold position so the AIP doesn't nab them.
+    Defend(Mission.m_RebelBaseGuard1, 1);
+    Defend(Mission.m_RebelBaseGuard2, 1);
+
     -- Place our nav in the enemy base.
     Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "lung2");
 
@@ -351,6 +368,12 @@ Functions[2] = function()
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf2022.wav");
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
+        -- Give Manson some Scrap.
+        SetScrap(Mission.m_EnemyTeam, 40);
+
+        -- Give Manson his AIP.
+        SetAIP("isdf2001_x.aip", Mission.m_EnemyTeam);
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -358,7 +381,7 @@ end
 
 Functions[3] = function()
     if (Mission.m_IsCooperativeMode == false) then
-        CameraPath("camera2", 200, 200, Mission.m_Gun2);
+        CameraPath("camera2", 200, 200, Mission.m_Recycler);
     end
 
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
@@ -501,7 +524,7 @@ end
 
 Functions[9] = function()
     -- This checks that the enemy Gun Tower is dead before moving on.
-    if (IsAlive(Mission.m_Gun2) == false) then
+    if (IsAlive(Mission.m_Gun2) == false and IsAlive(Mission.m_Gun3) == false) then
         -- Have Squad 2 attack.
         Attack(Mission.m_MBike1, Mission.m_Factory);
         Attack(Mission.m_MBike2, Mission.m_Factory);
@@ -532,6 +555,14 @@ Functions[10] = function()
             Attack(Mission.m_MBike1, Mission.m_Bunker);
             Attack(Mission.m_MBike2, Mission.m_Bunker);
             Attack(Mission.m_MBike3, Mission.m_Bunker);
+        elseif (IsAlive(Mission.m_Recycler)) then
+            Attack(Mission.m_MBike1, Mission.m_Recycler);
+            Attack(Mission.m_MBike2, Mission.m_Recycler);
+            Attack(Mission.m_MBike3, Mission.m_Recycler);
+        elseif (IsAlive(Mission.m_Armory)) then
+            Attack(Mission.m_MBike1, Mission.m_Armory);
+            Attack(Mission.m_MBike2, Mission.m_Armory);
+            Attack(Mission.m_MBike3, Mission.m_Armory);
         end
 
         -- So we don't loop.
@@ -552,6 +583,14 @@ Functions[10] = function()
             Attack(Mission.m_MBike1, Mission.m_Bunker);
             Attack(Mission.m_MBike2, Mission.m_Bunker);
             Attack(Mission.m_MBike3, Mission.m_Bunker);
+        elseif (IsAlive(Mission.m_Recycler)) then
+            Attack(Mission.m_MBike1, Mission.m_Recycler);
+            Attack(Mission.m_MBike2, Mission.m_Recycler);
+            Attack(Mission.m_MBike3, Mission.m_Recycler);
+        elseif (IsAlive(Mission.m_Armory)) then
+            Attack(Mission.m_MBike1, Mission.m_Armory);
+            Attack(Mission.m_MBike2, Mission.m_Armory);
+            Attack(Mission.m_MBike3, Mission.m_Armory);
         end
 
         -- So we don't loop.
@@ -572,6 +611,14 @@ Functions[10] = function()
             Attack(Mission.m_MBike1, Mission.m_Bunker);
             Attack(Mission.m_MBike2, Mission.m_Bunker);
             Attack(Mission.m_MBike3, Mission.m_Bunker);
+        elseif (IsAlive(Mission.m_Recycler)) then
+            Attack(Mission.m_MBike1, Mission.m_Recycler);
+            Attack(Mission.m_MBike2, Mission.m_Recycler);
+            Attack(Mission.m_MBike3, Mission.m_Recycler);
+        elseif (IsAlive(Mission.m_Armory)) then
+            Attack(Mission.m_MBike1, Mission.m_Armory);
+            Attack(Mission.m_MBike2, Mission.m_Armory);
+            Attack(Mission.m_MBike3, Mission.m_Armory);
         end
 
         -- So we don't loop.
@@ -592,13 +639,77 @@ Functions[10] = function()
             Attack(Mission.m_MBike1, Mission.m_PGen2);
             Attack(Mission.m_MBike2, Mission.m_PGen2);
             Attack(Mission.m_MBike3, Mission.m_PGen2);
+        elseif (IsAlive(Mission.m_Recycler)) then
+            Attack(Mission.m_MBike1, Mission.m_Recycler);
+            Attack(Mission.m_MBike2, Mission.m_Recycler);
+            Attack(Mission.m_MBike3, Mission.m_Recycler);
+        elseif (IsAlive(Mission.m_Armory)) then
+            Attack(Mission.m_MBike1, Mission.m_Armory);
+            Attack(Mission.m_MBike2, Mission.m_Armory);
+            Attack(Mission.m_MBike3, Mission.m_Armory);
         end
 
         -- So we don't loop.
         Mission.m_BunkerDead = true;
     end
 
-    if (Mission.m_FactoryDead and Mission.m_Power1Dead and Mission.m_Power2Dead and Mission.m_BunkerDead and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+    if (IsAlive(Mission.m_Recycler) == false and Mission.m_RecyclerDead == false) then
+        -- Have the AI attack the next structure.
+        if (IsAlive(Mission.m_Factory)) then
+            Attack(Mission.m_MBike1, Mission.m_Factory);
+            Attack(Mission.m_MBike2, Mission.m_Factory);
+            Attack(Mission.m_MBike3, Mission.m_Factory);
+        elseif (IsAlive(Mission.m_PGen1)) then
+            Attack(Mission.m_MBike1, Mission.m_PGen1);
+            Attack(Mission.m_MBike2, Mission.m_PGen1);
+            Attack(Mission.m_MBike3, Mission.m_PGen1);
+        elseif (IsAlive(Mission.m_PGen2)) then
+            Attack(Mission.m_MBike1, Mission.m_PGen2);
+            Attack(Mission.m_MBike2, Mission.m_PGen2);
+            Attack(Mission.m_MBike3, Mission.m_PGen2);
+        elseif (IsAlive(Mission.m_Bunker)) then
+            Attack(Mission.m_MBike1, Mission.m_Bunker);
+            Attack(Mission.m_MBike2, Mission.m_Bunker);
+            Attack(Mission.m_MBike3, Mission.m_Bunker);
+        elseif (IsAlive(Mission.m_Armory)) then
+            Attack(Mission.m_MBike1, Mission.m_Armory);
+            Attack(Mission.m_MBike2, Mission.m_Armory);
+            Attack(Mission.m_MBike3, Mission.m_Armory);
+        end
+
+        -- So we don't loop.
+        Mission.m_RecyclerDead = true;
+    end
+
+    if (IsAlive(Mission.m_Armory) == false and Mission.m_ArmoryDead == false) then
+        -- Have the AI attack the next structure.
+        if (IsAlive(Mission.m_Factory)) then
+            Attack(Mission.m_MBike1, Mission.m_Factory);
+            Attack(Mission.m_MBike2, Mission.m_Factory);
+            Attack(Mission.m_MBike3, Mission.m_Factory);
+        elseif (IsAlive(Mission.m_PGen1)) then
+            Attack(Mission.m_MBike1, Mission.m_PGen1);
+            Attack(Mission.m_MBike2, Mission.m_PGen1);
+            Attack(Mission.m_MBike3, Mission.m_PGen1);
+        elseif (IsAlive(Mission.m_PGen2)) then
+            Attack(Mission.m_MBike1, Mission.m_PGen2);
+            Attack(Mission.m_MBike2, Mission.m_PGen2);
+            Attack(Mission.m_MBike3, Mission.m_PGen2);
+        elseif (IsAlive(Mission.m_Bunker)) then
+            Attack(Mission.m_MBike1, Mission.m_Bunker);
+            Attack(Mission.m_MBike2, Mission.m_Bunker);
+            Attack(Mission.m_MBike3, Mission.m_Bunker);
+        elseif (IsAlive(Mission.m_Recycler)) then
+            Attack(Mission.m_MBike1, Mission.m_Recycler);
+            Attack(Mission.m_MBike2, Mission.m_Recycler);
+            Attack(Mission.m_MBike3, Mission.m_Recycler);
+        end
+
+        -- So we don't loop.
+        Mission.m_ArmoryDead = true;
+    end
+
+    if (Mission.m_FactoryDead and Mission.m_Power1Dead and Mission.m_Power2Dead and Mission.m_BunkerDead and Mission.m_RecyclerDead and Mission.m_ArmoryDead and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Move the AI squad.
         Goto(Mission.m_MBike1, "homebase", 1);
         Goto(Mission.m_MBike2, "homebase", 1);

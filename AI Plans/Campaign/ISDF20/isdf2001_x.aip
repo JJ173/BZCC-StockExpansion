@@ -1,0 +1,76 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+CheckProvides = true
+idleAllCraft = false
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = true
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Cheat]
+moneyAmount = 3
+moneyDelay = 2
+
+[Plan1]
+planType = "BuildMinimums"
+planPriority = 100
+buildType1 = "ivcons_x"
+buildCount1 = 1
+planCondition = "Lua"
+LuaFunction = "ConstructorCondition"
+
+[Plan2] // If we have 3 pools, we can send 2 Tanks to attack the player.
+planType = "Attacker"
+planPrioirty = 95
+targetType1 = "ivwalk_x"
+targetType2 = "ivatank_x"
+targetType3 = "ivrckt_x"
+attackType1 = "ivtank_x"
+attackType2 = "ivtank_x"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "Attack1Condition"
+ContinueEvenIfFail = true
+
+[Plan3] // If we have 2 pools, we can send 1 Tank and 1 Mortar Bike to attack the player.
+planType = "Attacker"
+planPrioirty = 90
+targetType1 = "ivwalk_x"
+targetType2 = "ivatank_x"
+targetType3 = "ivrckt_x"
+attackType1 = "ivtank_x"
+attackType2 = "ivmbike_x"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "Attack2Condition"
+ContinueEvenIfFail = true
+
+[Plan4] // If we have 1 pool, we can send 2 Scouts to attack the player.
+planType = "Attacker"
+planPrioirty = 85
+targetType1 = "ivwalk_x"
+targetType2 = "ivatank_x"
+targetType3 = "ivrckt_x"
+attackType1 = "ivscout_x"
+attackType2 = "ivscout_x"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "Attack3Condition"
+ContinueEvenIfFail = true
+
+[Plan5] // If we only have 1 pool, build a turret as well.
+planType = "BuildMinimums"
+planPriority = 80
+buildType1 = "ivturr_x"
+buildCount1 = 1
+planCondition = "Lua"
+LuaFunction = "TurretCondition"

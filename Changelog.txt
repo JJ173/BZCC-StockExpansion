@@ -165,6 +165,11 @@ ISDF20 (A Traitor's Fate):
 - Removed health debuff from enemy Gun Towers.
 - Named Manson's Assault Tank "Manson" to make him stand out.
 - Removed "Rebel" highlighting as it seemed to only happen for a handful of units, making it redundant.
+- Rebels are now smarter. They won't just sit when they have killed you. 
+- Allied pilots will retreat to the dust-off site if their ships are killed.
+- Base guards from the Rebels will now attack units that are attacking their base.
+- Manson's outpost has been reworked.
+- Small map changes to improve gameplay experience.
 
 - General QOL (Quality of Life) improvements.
 

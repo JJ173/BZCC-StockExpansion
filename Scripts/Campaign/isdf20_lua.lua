@@ -859,7 +859,7 @@ Functions[14] = function()
 end
 
 Functions[15] = function()
-    if (Mission.m_SeenManson == false and GetDistance(Mission.m_Manson, GetPlayerHandle(1)) < 200) then
+    if (Mission.m_SeenManson == false and IsPlayerWithinDistance(Mission.m_Manson, 200, _Cooperative.m_TotalPlayerCount)) then
         -- Highlight Manson when he's near.
         SetObjectiveOn(Mission.m_Manson);
 

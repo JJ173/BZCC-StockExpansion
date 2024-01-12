@@ -176,11 +176,6 @@ end
 function AddObject(h)
     local teamNum = GetTeamNum(h);
 
-    -- Pilots are forbidden in this mission.
-    if (not IsBuilding(h) and not IsPlayer(h)) then
-        SetEjectRatio(h, 0);
-    end
-
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
@@ -402,7 +397,7 @@ Functions[1] = function()
     SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns();
+    CleanSpawns(Mission.m_IsCooperativeMode);
 
     -- Start our Earthquake.
     StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.

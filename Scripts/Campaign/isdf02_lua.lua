@@ -188,11 +188,6 @@ function AddObject(h)
         if (Mission.m_Jammer == nil and ODFName == "fbpjam") then
             Mission.m_Jammer = h;
         end
-
-        -- Pilots are forbidden in this mission.
-        if (not IsBuilding(h)) then
-            SetEjectRatio(h, 0);
-        end
     elseif (GetTeamNum(h) == Mission.m_HostTeam) then
         -- We need to grab Shabayev when she jumps out of the Scout.
         if (Mission.m_MissionState >= 44) then
@@ -418,7 +413,7 @@ Functions[1] = function()
     end
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns();
+    CleanSpawns(Mission.m_IsCooperativeMode);
 
     -- Small amount of damage for the Truck to repair.
     Damage(Mission.m_Ship4, 1000);

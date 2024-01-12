@@ -181,11 +181,6 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-
-        -- Pilots are forbidden in this mission.
-        if (not IsBuilding(h)) then
-            SetEjectRatio(h, 0);
-        end
     elseif (teamNum == Mission.m_HostTeam) then
         -- Check the class.
         local class = GetClassLabel(h);

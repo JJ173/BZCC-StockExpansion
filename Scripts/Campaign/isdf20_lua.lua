@@ -360,7 +360,7 @@ end
 
 Functions[2] = function()
     if (Mission.m_IsCooperativeMode == false) then
-        CameraPath("camera1", 200, 200, GetPlayerHandle(1));
+        CameraPath("camera1", 800, 200, GetPlayerHandle(1));
     end
 
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
@@ -381,7 +381,7 @@ end
 
 Functions[3] = function()
     if (Mission.m_IsCooperativeMode == false) then
-        CameraPath("camera2", 200, 200, Mission.m_Recycler);
+        CameraPath("camera2", 800, 200, Mission.m_Recycler);
     end
 
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then

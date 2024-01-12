@@ -86,6 +86,7 @@ local Mission =
 
     m_IntroAudioDelay = 0,
     m_PlayerPowerCount = 0,
+    m_WaterCheckCounter = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -129,11 +130,6 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-
-        -- Pilots are forbidden in this mission.
-        if (not IsBuilding(h)) then
-            SetEjectRatio(h, 0);
-        end
     elseif (teamNum == Mission.m_HostTeam) then
         if (Mission.m_IntroObjectivesDisplayed) then
             -- If we have enough scrap when an Extractor is deployed, show objectives.
@@ -224,6 +220,39 @@ function Update()
     -- Start mission logic.
     if (not Mission.m_MissionOver) then
         if (Mission.m_StartDone) then
+            -- BZCC introduced a hypothermia mechanic here. Replicate it.
+            Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
+
+            -- For each player in the mission, check their location and if they are under water.
+            for i = 1, _Cooperative.m_TotalPlayerCount do
+                -- Grab the player handle.
+                local p = GetPlayerHandle(i);
+
+                -- Check the timer.
+                if (Mission.m_WaterCheckCounter % SecondsToTurns(0.5) == 0 and IsPerson(p)) then
+                    -- Grab the position of the player.
+                    local pos = GetPosition(p);
+
+                    -- Check if the terrain is water.
+                    if (TerrainIsWater(pos)) then
+                        -- Testing, not sure if Lua will like this.
+                        local waterHeight = 0;
+
+                        -- Check to see if this assigns the right variables.
+                        waterHeight = GetTerrainHeightAndNormal(pos, true);
+
+                        -- Grab the height of the terrain.
+                        local terrainHeight = TerrainFindFloor(pos.x, pos.z);
+
+                        -- Check if the player is under water.
+                        if (waterHeight > terrainHeight and pos.y < (waterHeight - 15)) then
+                            -- Kill the player.
+                            SelfDamage(p, 20);
+                        end
+                    end
+                end
+            end
+
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
 

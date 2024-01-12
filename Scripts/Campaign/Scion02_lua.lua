@@ -121,9 +121,6 @@ function AddObject(h)
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
 
-        -- Set all units to non eject.
-        SetEjectRatio(h, 0);
-
         if (ODFName == "ivturr_x") then
             -- Try and prevent the AIP from using it.
             SetIndependence(h, 1);

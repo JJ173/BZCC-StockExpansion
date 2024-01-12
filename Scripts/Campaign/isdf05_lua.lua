@@ -41,7 +41,7 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_sx";
     -- Specific to mission.
     m_PlayerShipODF = "ivtank_x";
 
@@ -163,8 +163,6 @@ function AddObject(h)
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);       
     end
-
-    print(ODFName);
 
     -- Pre-placed Scion objects are set on Team 2. We should move them to Team 6.
     if (ODFName == "fvturr" or ODFName == "fbspir" or ODFName == "fblung") then
@@ -413,13 +411,6 @@ function HandleMissionLogic()
         HandleFailureConditions();
         -- Fix bug where aborting constructor build will break mission.
         MonitorRecyclerConstructorProduction();
-
-        -- Need to keep checking if the player is out of their ship and give them the satchel.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
-            if (IsPerson(GetPlayerHandle(i))) then
-                GiveWeapon(GetPlayerHandle(i), "igsatc");
-            end
-        end
     end
 end
 

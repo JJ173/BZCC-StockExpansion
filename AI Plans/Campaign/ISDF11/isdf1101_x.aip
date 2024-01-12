@@ -1,0 +1,61 @@
+[Start]
+scrapCount = 100
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
+IdleAllCraft = false // Prevent Interrupting AI.
+
+[IdleDispatcher]
+UnitIdleSeconds = 999999 
+
+[Match]
+targetType1 = "ivturr_x"
+attackType1_1 = "fvsent_x"
+attackType1_2 = "fvsent_x"
+
+targetType2 = "ivturr_x"
+attackType2_1 = "fvarch_x"
+
+targetType3 = "ivscout_x"
+attackType3_1 = "fvscout_x"
+attackType3_2 = "fvscout_x"
+
+targetType4 = "ivmisl_x"
+attackType4_1 = "fvsent_x"
+attackType4_2 = "fvscout_x"
+
+targetType5 = "ivmbike_x"
+attackType5_1 = "fvscout_x"
+attackType5_2 = "fvscout_x"
+
+targetType6 = "ivtank_x"
+attackType6_1 = "fvsent_x"
+attackType6_2 = "fvsent_x"
+
+targetType7 = "ivtank_x"
+attackType7_1 = "fvscout_x"
+attackType7_2 = "fvscout_x"
+
+targetType8 = "ivtank_x"
+attackType8_1 = "fvtank_x"
+attackType8_2 = "fvsent_x"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan1]
+planType = "BuildMinimums"
+planPriority = 100
+buildType1 = "fvturr_x"
+buildCount1 = 7
+
+[Plan2]
+planType = "BuildMinimums"
+planPriority = 90
+buildType1 = "fvsent_x"
+buildCount1 = 3
+buildType2 = "fvtank_x"
+buildCount2 = 2
+buildType3 = "fvscout_x"
+buildCount3 = 2
+buildType4 = "fvarch_x"
+buildCount4 = 1

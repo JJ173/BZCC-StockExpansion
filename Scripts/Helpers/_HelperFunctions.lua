@@ -73,12 +73,13 @@ function TableRemoveByHandle(table, handle)
 	end
 end
 
-function CleanSpawns()
+function CleanSpawns(isCoop)
     local s1 = GetHandle("player_spawn_1");
     local s2 = GetHandle("player_spawn_2");
     local s3 = GetHandle("player_spawn_3");
     local s4 = GetHandle("player_spawn_4");
 
+    -- This needs to only occur for non-coop.
     if (not IsPlayer(s1)) then
         RemoveObject(s1);
     end

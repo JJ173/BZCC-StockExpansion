@@ -36,7 +36,7 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_sx";
     -- Specific to mission.
     m_PlayerShipODF = "ivtank_x";
 
@@ -187,15 +187,6 @@ function Update()
             JakBrain();
         end
     end
-
-    -- Need to keep checking if the player is out of their ship and give them the satchel.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
-        local p = GetPlayerHandle(i);
-
-        if (IsPerson(p) and GetWeaponODF(p, 2) ~= "igsatc.odf") then
-            GiveWeapon(p, "igsatc");
-        end
-    end
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
@@ -277,7 +268,7 @@ Functions[1] = function()
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns();
+    CleanSpawns(Mission.m_IsCooperativeMode);
 
     -- Create our first nav.
     Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "manson_base");

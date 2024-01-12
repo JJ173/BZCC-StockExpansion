@@ -5,6 +5,10 @@ ISDF 02:
 ISDF 08:
 - Add campfire sound effect to mire ruin.
 
+ISDF 11:
+- Redesign AIPs
+- Add Stage Path for Archers so they don't fire underwater.
+
 Scion 02: 
 - Add alarm sound mine to ISDF base
 

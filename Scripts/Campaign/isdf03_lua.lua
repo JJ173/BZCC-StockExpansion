@@ -186,11 +186,6 @@ function AddObject(h)
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
         SetObjectiveName(h, "Unknown");
-
-        -- Pilots are forbidden in this mission.
-        if (not IsBuilding(h)) then
-            SetEjectRatio(h, 0);
-        end
     elseif (GetTeamNum(h) < 5 and GetTeamNum(h) > 0) then
         if (IsOdf(h, "ibnav")) then
             -- Used for the Red 1 objective.

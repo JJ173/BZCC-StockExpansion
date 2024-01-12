@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivpdrop"
+canDetect = 1
+canInteract = 1
+
+[BuildingClass]
+
+[trail]
+
+[posroll]

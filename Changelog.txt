@@ -145,6 +145,24 @@ ISDF09 (Rumble in the Jungle):
 
 - General QOL (Quality of Life) improvements.
 
+ISDF11 (On Thin Ice):
+- Friendly ISDF turret has been placed on the map in editor. This is so the player doesn't visibly see the turret spawn when they reach the Recycler.
+- Re-added some cut content from the original mission. 
+- Increased the distance check between the friendly scout and the player when they leave the ship so the player can't avoid the wingman.
+- Frequency of enemy attacks when the player is guiding the Recycler through the ice has been increased.
+- Friendly wingman will now help you destroy the downed condor.
+- Updated Rhino logic so they will attack anyone who shoots them. 
+- Updated Rhino logic so each Rhino will attack the Recycler at certain checkpoints during the ice maze.
+- Wingman will now comment on the first Rhino kill committed by the player.
+- Adjusted layout of the Scion base.
+- AIPs will now build turrets instead of them being spawned by DLL.
+- Turrets will now be sent back to the drop site when they are destroyed.
+- Dropships will take off if attacked by Scion turrets.
+- Crashed Dropships can now be destroyed by your Satchel Charge.
+- AIPs have been buffed slightly to increase Scion attacks on your base.
+
+- General QOL (Quality of Life) improvements.
+
 ISDF12 (Counter Attack):
 - Added Manson to the base.
 - Rotated ISDF Factory to stop units from moving to the back of the base when they are built.
@@ -156,6 +174,7 @@ ISDF12 (Counter Attack):
 - On higher difficulties, the AI will collect the open pools on the map to give the player an extra task.
 - On higher difficulties, the AI will use a wider range of units to attack.
 - Added staging paths so the AI will attack from multiple directions.
+- Added hypothermia logic from ISDF11.
 
 - General QOL (Quality of Life) improvements.
 

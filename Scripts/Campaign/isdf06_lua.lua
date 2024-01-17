@@ -299,7 +299,9 @@ function HandleMissionStart()
         SetTeamNameForStat(Mission.m_AlliedTeam, "Green Squad");
 
         -- Ally teams to be sure.
-        Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+        for i = 2, 5 do
+            Ally(Mission.m_HostTeam, i);
+        end
 
         -- Grab the bomber.
         Mission.m_Bomber = GetHandle("unnamed_ivbomb");
@@ -684,7 +686,7 @@ function SpawnAndSendScionPoolAttacks()
     if (Mission.m_ScionAttackCooldown < Mission.m_MissionTime and not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam) and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam) and not IsAliveAndEnemy(Mission.m_Attacker3, Mission.m_EnemyTeam)) then
         -- Wait a period of time before attacking again.
         Mission.m_ScionAttackCooldown = Mission.m_MissionTime +
-        SecondsToTurns(m_ScionPlayerAttackCooldown[Mission.m_MissionDifficulty]);
+            SecondsToTurns(m_ScionPlayerAttackCooldown[Mission.m_MissionDifficulty]);
 
         -- Send enemies to attack.
         Mission.m_Attacker1 = BuildObject(m_PoolAttack1Ship[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,

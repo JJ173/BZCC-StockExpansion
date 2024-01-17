@@ -326,7 +326,9 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- Team names for stats.
     SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");

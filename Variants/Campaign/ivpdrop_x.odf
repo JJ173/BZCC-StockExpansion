@@ -2,6 +2,7 @@
 classLabel = "ivpdrop"
 canDetect = 1
 canInteract = 1
+ignoreMissingInf = 1
 
 [BuildingClass]
 

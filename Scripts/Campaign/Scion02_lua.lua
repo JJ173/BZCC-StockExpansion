@@ -337,7 +337,9 @@ Functions[1] = function()
     SetTeamNameForStat(Mission.m_EnemyTeam, "ISDF");
 
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- Grab any important pre-placed objects.
     Mission.m_EnemyPower1 = GetHandle("power1");
@@ -633,15 +635,15 @@ end
 -- is destroyed, we will replenish it with another.
 function ISDFTurretDispatcher()
     if (Mission.m_TurretDistpacherTimer < Mission.m_MissionTime) then
-        if (IsAlive(Mission.m_EnemyTurret1) and GetDistance(Mission.m_EnemyTurret1, "TurretEnemy1") > 30 and GetCurrentCommand(Mission.m_EnemyTurret1) ~= CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret1, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret1, "TurretEnemy1") > 30 and GetCurrentCommand(Mission.m_EnemyTurret1) ~= CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret1, "TurretEnemy1", 1);
         end
 
-        if (IsAlive(Mission.m_EnemyTurret2) and GetDistance(Mission.m_EnemyTurret2, "TurretEnemy2") > 30 and GetCurrentCommand(Mission.m_EnemyTurret2) ~= CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret2, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret2, "TurretEnemy2") > 30 and GetCurrentCommand(Mission.m_EnemyTurret2) ~= CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret2, "TurretEnemy2", 1);
         end
 
-        if (IsAlive(Mission.m_EnemyTurret3) and GetDistance(Mission.m_EnemyTurret3, "TurretEnemy3") > 30 and GetCurrentCommand(Mission.m_EnemyTurret3) ~= CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret3, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret3, "TurretEnemy3") > 30 and GetCurrentCommand(Mission.m_EnemyTurret3) ~= CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret3, "TurretEnemy3", 1);
         end
 

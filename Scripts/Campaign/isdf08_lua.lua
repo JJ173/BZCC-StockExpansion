@@ -246,7 +246,9 @@ Functions[1] = function()
     SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
 
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- Grab all of our pre-placed handles.
     Mission.m_Shabayev = GetHandle("shabayev");

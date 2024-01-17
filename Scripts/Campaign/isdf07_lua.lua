@@ -357,7 +357,9 @@ end
 Functions[1] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Ally teams to be sure.
-        Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+        for i = 2, 5 do
+            Ally(Mission.m_HostTeam, i);
+        end
 
         -- Team names for stats.
         SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
@@ -439,7 +441,7 @@ Functions[1] = function()
         SetAnimation(Mission.m_Dropship, "deploy", 1);
 
         -- Small delay before our dropship sound.
-        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -600,7 +602,8 @@ Functions[8] = function()
 
             -- Probe
             Goto(
-            BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount),
+                BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1",
+                    _Cooperative.m_TotalPlayerCount),
                 Mission.m_Recycler, 1);
 
             -- Advance the mission state...
@@ -665,8 +668,8 @@ Functions[10] = function()
             for i = 1, #attackWave do
                 -- Use a Goto instead of a Attack so they can attack random things.
                 Goto(
-                BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
-                    _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                    BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
+                        _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...
@@ -729,7 +732,8 @@ Functions[12] = function()
 
             -- Probe
             Goto(
-            BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1", _Cooperative.m_TotalPlayerCount),
+                BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1",
+                    _Cooperative.m_TotalPlayerCount),
                 Mission.m_Recycler, 1);
 
             -- Advance the mission state...
@@ -767,8 +771,8 @@ Functions[13] = function()
             for i = 1, #attackWave do
                 -- Use a Goto instead of a Attack so they can attack random things.
                 Goto(
-                BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
-                    _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                    BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
+                        _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...

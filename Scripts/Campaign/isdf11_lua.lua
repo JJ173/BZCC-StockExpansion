@@ -387,13 +387,6 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
@@ -622,6 +615,18 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
+
+    -- Ally teams to be sure.
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
+
+    -- Clean up any player spawns that haven't been taken by the player.
+    CleanSpawns(Mission.m_IsCooperativeMode);
+
     -- Grab our pre-placed handles.
     Mission.m_Recycler = GetHandle("recycler");
     Mission.m_SRecycler = GetHandle("srecycler");
@@ -705,10 +710,7 @@ Functions[1] = function()
     CleanSpawns(Mission.m_IsCooperativeMode);
 
     -- Advance the mission state...
-    -- Mission.m_MissionState = Mission.m_MissionState + 1;
-
-    -- Debug
-    Mission.m_MissionState = 16;
+    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[2] = function()
@@ -1123,7 +1125,7 @@ Functions[14] = function()
             local vectorDir = SetVector(1, 0, 0);
 
             -- Build the Dropship.
-            Mission.m_Dropship = BuildObject("ivdrop_fly", 0, BuildDirectionalMatrix(vectorPos, vectorDir));
+            Mission.m_Dropship = BuildObject("ivdrop_fly_x", 0, BuildDirectionalMatrix(vectorPos, vectorDir));
 
             -- Set the emitters to burn.
             StartEmitter(Mission.m_Dropship, 1);
@@ -2223,8 +2225,8 @@ function DropshipBrain()
                     -- This will spawn the dropships and make them land.
                     if (Mission.m_DropshipsLanding == false) then
                         -- Create the dropships, and have them land.
-                        Mission.m_DropshipA = BuildObject("ivdrop_land", Mission.m_HostTeam, "drop_point1");
-                        Mission.m_DropshipB = BuildObject("ivdrop_land", Mission.m_HostTeam, "drop_point2");
+                        Mission.m_DropshipA = BuildObject("ivdrop_land_x", Mission.m_HostTeam, "drop_point1");
+                        Mission.m_DropshipB = BuildObject("ivdrop_land_x", Mission.m_HostTeam, "drop_point2");
 
                         -- Make sure the engines are going.
                         StartEmitter(Mission.m_DropshipA, 1);
@@ -2295,7 +2297,7 @@ function DropshipBrain()
                             SetAnimation(Mission.m_DropshipB, "deploy", 1);
 
                             -- Sound time.
-                            Mission.m_DropshipSoundTimer = Mission.m_MissionTime + SecondsToTurns(3);
+                            Mission.m_DropshipSoundTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
 
                             -- Remove the engine sounds.
                             MaskEmitter(Mission.m_DropshipA, 0);

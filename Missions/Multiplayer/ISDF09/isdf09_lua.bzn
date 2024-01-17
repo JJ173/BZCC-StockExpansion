@@ -23,23 +23,23 @@ true
 objAddr = 00000001
 transform [1] =
   right.x [1] =
--5.25802970e-01
+-5.25802314e-01
   right.y [1] =
--7.39691453e-03
+-7.39688426e-03
   right.z [1] =
--8.50573778e-01
+-8.50569665e-01
   up.x [1] =
--7.25892372e-03
+-7.25889066e-03
   up.y [1] =
-9.99965012e-01
+9.99960482e-01
   up.z [1] =
--4.20878688e-03
+-4.20876779e-03
   front.x [1] =
-8.50574613e-01
+8.50567162e-01
   front.y [1] =
-3.96123854e-03
+3.96121247e-03
   front.z [1] =
--5.25839806e-01
+-5.25835216e-01
   posit.x [1] =
 -9.59591064e+01
   posit.y [1] =
@@ -79,11 +79,11 @@ euler =
 -5.00444788e-03
  omega [1] =
   x [1] =
-1.75014650e-03
+0.00000000e+00
   y [1] =
-5.31334244e-03
+0.00000000e+00
   z [1] =
-5.31614060e-04
+0.00000000e+00
  Accel [1] =
   x [1] =
 -1.75237656e-05
@@ -302,7 +302,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -397,7 +397,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -492,7 +492,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -587,7 +587,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -682,7 +682,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -777,7 +777,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -872,7 +872,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -967,7 +967,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1062,7 +1062,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1157,7 +1157,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1252,7 +1252,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1347,7 +1347,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1442,7 +1442,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1537,7 +1537,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1632,7 +1632,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1727,7 +1727,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1822,7 +1822,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -1917,7 +1917,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2012,7 +2012,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2107,7 +2107,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2202,7 +2202,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2297,7 +2297,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2392,7 +2392,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2487,7 +2487,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2582,7 +2582,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2677,7 +2677,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2772,7 +2772,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2867,7 +2867,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -2962,7 +2962,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3057,7 +3057,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3152,7 +3152,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3181,9 +3181,9 @@ transform [1] =
   right.x [1] =
 9.97462034e-01
   right.y [1] =
--5.86693026e-02
+-5.86692989e-02
   right.z [1] =
--4.02321555e-02
+-4.02321294e-02
   up.x [1] =
 5.12073636e-02
   up.y [1] =
@@ -3191,9 +3191,9 @@ transform [1] =
   up.z [1] =
 -1.66420177e-01
   front.x [1] =
-4.93811667e-02
+4.93811406e-02
   front.y [1] =
-1.63937613e-01
+1.63937628e-01
   front.z [1] =
 9.85225201e-01
   posit.x [1] =
@@ -3247,7 +3247,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3342,7 +3342,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3437,7 +3437,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3532,7 +3532,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3627,7 +3627,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3722,7 +3722,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3753,7 +3753,7 @@ transform [1] =
   right.y [1] =
 -2.54980586e-02
   right.z [1] =
--4.65281308e-03
+-4.65281168e-03
   up.x [1] =
 2.54889913e-02
   up.y [1] =
@@ -3761,9 +3761,9 @@ transform [1] =
   up.z [1] =
 -1.99823920e-03
   front.x [1] =
-4.70222300e-03
+4.70222160e-03
   front.y [1] =
-1.87896355e-03
+1.87896367e-03
   front.z [1] =
 9.99978483e-01
   posit.x [1] =
@@ -3817,7 +3817,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -3912,7 +3912,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4007,7 +4007,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4102,7 +4102,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4197,7 +4197,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4292,7 +4292,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4323,7 +4323,7 @@ transform [1] =
   right.y [1] =
 -9.39150602e-02
   right.z [1] =
--4.17223014e-03
+-4.17223759e-03
   up.x [1] =
 9.32895988e-02
   up.y [1] =
@@ -4331,7 +4331,7 @@ transform [1] =
   up.z [1] =
 -7.93951526e-02
   front.x [1] =
-1.15971891e-02
+1.15971956e-02
   front.y [1] =
 7.86539763e-02
   front.z [1] =
@@ -4387,7 +4387,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4482,7 +4482,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4577,7 +4577,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4672,7 +4672,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4767,7 +4767,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4862,7 +4862,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -4957,7 +4957,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5052,7 +5052,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5147,7 +5147,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5178,7 +5178,7 @@ transform [1] =
   right.y [1] =
 5.08052073e-02
   right.z [1] =
-1.90032925e-03
+1.90032995e-03
   up.x [1] =
 -5.08155674e-02
   up.y [1] =
@@ -5186,7 +5186,7 @@ transform [1] =
   up.z [1] =
 6.87473342e-02
   front.x [1] =
-1.59935851e-03
+1.59935781e-03
   front.y [1] =
 -6.87547028e-02
   front.z [1] =
@@ -5242,7 +5242,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5337,7 +5337,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5368,7 +5368,7 @@ transform [1] =
   right.y [1] =
 7.87528828e-02
   right.z [1] =
--1.06590778e-06
+-1.06625703e-06
   up.x [1] =
 -7.87434652e-02
   up.y [1] =
@@ -5376,7 +5376,7 @@ transform [1] =
   up.z [1] =
 1.54490657e-02
   front.x [1] =
-1.21772103e-03
+1.21772138e-03
   front.y [1] =
 -1.54009340e-02
   front.z [1] =
@@ -5432,7 +5432,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5527,7 +5527,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5622,7 +5622,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5717,7 +5717,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5812,7 +5812,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -5907,7 +5907,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6002,7 +6002,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6097,7 +6097,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6192,7 +6192,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6287,7 +6287,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6318,7 +6318,7 @@ transform [1] =
   right.y [1] =
 1.27326280e-01
   right.z [1] =
--5.92378376e-04
+-5.92389551e-04
   up.x [1] =
 -1.24574587e-01
   up.y [1] =
@@ -6326,7 +6326,7 @@ transform [1] =
   up.z [1] =
 -2.11335987e-01
   front.x [1] =
--2.63343509e-02
+-2.63343398e-02
   front.y [1] =
 2.09688753e-01
   front.z [1] =
@@ -6382,7 +6382,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6477,7 +6477,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6572,7 +6572,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6667,7 +6667,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6762,7 +6762,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6857,7 +6857,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -6952,7 +6952,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7047,7 +7047,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7142,7 +7142,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7237,7 +7237,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7332,7 +7332,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7427,7 +7427,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7522,7 +7522,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7617,7 +7617,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7712,7 +7712,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7807,7 +7807,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7902,7 +7902,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -7997,7 +7997,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8028,7 +8028,7 @@ transform [1] =
   right.y [1] =
 -5.19322790e-02
   right.z [1] =
--9.59661047e-05
+-9.59659301e-05
   up.x [1] =
 5.19301072e-02
   up.y [1] =
@@ -8036,7 +8036,7 @@ transform [1] =
   up.z [1] =
 -7.49314250e-03
   front.x [1] =
-4.84969467e-04
+4.84969292e-04
   front.y [1] =
 7.47801550e-03
   front.z [1] =
@@ -8092,7 +8092,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8187,7 +8187,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8282,7 +8282,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8377,7 +8377,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8472,7 +8472,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8567,7 +8567,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8662,7 +8662,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8757,7 +8757,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8852,7 +8852,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -8947,7 +8947,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9042,7 +9042,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9137,7 +9137,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9232,7 +9232,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9327,7 +9327,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9422,7 +9422,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9517,7 +9517,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9612,7 +9612,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9707,7 +9707,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9802,7 +9802,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9897,7 +9897,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -9992,7 +9992,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10087,7 +10087,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10182,7 +10182,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10277,7 +10277,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10372,7 +10372,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10467,7 +10467,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10562,7 +10562,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10657,7 +10657,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10752,7 +10752,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10847,7 +10847,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -10942,7 +10942,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11037,7 +11037,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11132,7 +11132,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11227,7 +11227,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11322,7 +11322,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11417,7 +11417,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11512,7 +11512,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11607,7 +11607,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11702,7 +11702,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11797,7 +11797,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11892,7 +11892,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -11987,7 +11987,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12082,7 +12082,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12177,7 +12177,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12272,7 +12272,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12367,7 +12367,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12462,7 +12462,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12557,7 +12557,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12652,7 +12652,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12747,7 +12747,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12842,7 +12842,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -12937,7 +12937,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13032,7 +13032,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13127,7 +13127,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13222,7 +13222,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13317,7 +13317,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13412,7 +13412,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13507,7 +13507,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13602,7 +13602,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13697,7 +13697,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13792,7 +13792,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13887,7 +13887,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -13982,7 +13982,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14077,7 +14077,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14172,7 +14172,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14267,7 +14267,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14362,7 +14362,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14457,7 +14457,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14552,7 +14552,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14647,7 +14647,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -14854,11 +14854,11 @@ false
 objAddr = 000000A2
 transform [1] =
   right.x [1] =
-9.39465880e-01
+9.39465761e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-3.42630178e-01
+3.42630237e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -14866,11 +14866,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--3.42628688e-01
+-3.42628747e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-9.39461768e-01
+9.39461648e-01
   posit.x [1] =
 6.18302979e+02
   posit.y [1] =
@@ -14922,7 +14922,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15017,7 +15017,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -15054,7 +15054,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--4.02149826e-01
+-4.02149707e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -15062,7 +15062,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-4.02148068e-01
+4.02147949e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
@@ -15118,7 +15118,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15145,7 +15145,7 @@ false
 objAddr = 000000A5
 transform [1] =
   right.x [1] =
-3.78951311e-01
+3.78951550e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
@@ -15161,7 +15161,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-3.78949672e-01
+3.78949910e-01
   posit.x [1] =
 6.77375000e+02
   posit.y [1] =
@@ -15213,7 +15213,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15240,11 +15240,11 @@ false
 objAddr = 000000A6
 transform [1] =
   right.x [1] =
--7.87890732e-01
+-7.87890613e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--6.15808129e-01
+-6.15808249e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -15252,11 +15252,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-6.15805447e-01
+6.15805566e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--7.87887275e-01
+-7.87887156e-01
   posit.x [1] =
 6.81752991e+02
   posit.y [1] =
@@ -15308,7 +15308,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15339,7 +15339,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--2.31255606e-01
+-2.31255516e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -15347,7 +15347,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-2.31254593e-01
+2.31254503e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -15403,7 +15403,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15498,7 +15498,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15525,11 +15525,11 @@ false
 objAddr = 000000A9
 transform [1] =
   right.x [1] =
-1.91336542e-01
+1.91336557e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--9.81520176e-01
+-9.81520057e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -15537,11 +15537,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-9.81515884e-01
+9.81515765e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-1.91335708e-01
+1.91335723e-01
   posit.x [1] =
 5.87375000e+02
   posit.y [1] =
@@ -15593,7 +15593,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15688,7 +15688,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15783,7 +15783,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15878,7 +15878,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -15973,7 +15973,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16068,7 +16068,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16163,7 +16163,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16258,7 +16258,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16353,7 +16353,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16448,7 +16448,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16475,11 +16475,11 @@ false
 objAddr = 000000B3
 transform [1] =
   right.x [1] =
--9.90963399e-01
+-9.90963519e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--1.34099841e-01
+-1.34099811e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -16487,11 +16487,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-1.34099260e-01
+1.34099230e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.90959108e-01
+-9.90959227e-01
   posit.x [1] =
 9.56716980e+02
   posit.y [1] =
@@ -16543,7 +16543,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16638,7 +16638,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16733,7 +16733,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16828,7 +16828,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -16923,7 +16923,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17018,7 +17018,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17113,7 +17113,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17208,7 +17208,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17303,7 +17303,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17398,7 +17398,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17493,7 +17493,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17588,7 +17588,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17683,7 +17683,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17778,7 +17778,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17873,7 +17873,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -17968,7 +17968,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18063,7 +18063,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18158,7 +18158,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18253,7 +18253,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -18354,7 +18354,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18449,7 +18449,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18544,7 +18544,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18639,7 +18639,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18734,7 +18734,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -18829,7 +18829,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -18930,7 +18930,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19025,7 +19025,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -19126,7 +19126,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19221,7 +19221,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19316,7 +19316,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19411,7 +19411,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19506,7 +19506,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19601,7 +19601,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19696,7 +19696,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19791,7 +19791,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -19886,7 +19886,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+65
 groupNumber [1] =
 0
 undefaicmd =
@@ -19917,7 +19917,7 @@ transform [1] =
   right.y [1] =
 1.89211359e-03
   right.z [1] =
--1.47170853e-02
+-1.47170909e-02
   up.x [1] =
 -2.00264715e-03
   up.y [1] =
@@ -19925,7 +19925,7 @@ transform [1] =
   up.z [1] =
 -7.49943638e-03
   front.x [1] =
-1.47023890e-02
+1.47023946e-02
   front.y [1] =
 7.52805220e-03
   front.z [1] =
@@ -19981,7 +19981,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20076,7 +20076,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20171,7 +20171,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20202,7 +20202,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-5.76140642e-01
+5.76140821e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -20210,7 +20210,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--5.76138139e-01
+-5.76138318e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -20266,7 +20266,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20361,7 +20361,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20456,7 +20456,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20551,7 +20551,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20646,7 +20646,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20741,7 +20741,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20836,7 +20836,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20863,11 +20863,11 @@ false
 objAddr = 000000E1
 transform [1] =
   right.x [1] =
-8.28552246e-01
+8.28552365e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-5.59904158e-01
+5.59904039e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -20875,11 +20875,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--5.59901714e-01
+-5.59901595e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-8.28548670e-01
+8.28548789e-01
   posit.x [1] =
 -3.11910248e+01
   posit.y [1] =
@@ -20931,7 +20931,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -20958,11 +20958,11 @@ false
 objAddr = 000000E2
 transform [1] =
   right.x [1] =
-8.19412291e-01
+8.19412172e-01
   right.y [1] =
--5.72881952e-04
+-5.72882127e-04
   right.z [1] =
-5.73196888e-01
+5.73197067e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -20970,11 +20970,11 @@ transform [1] =
   up.z [1] =
 9.99445911e-04
   front.x [1] =
--5.73194742e-01
+-5.73194921e-01
   front.y [1] =
--8.18958273e-04
+-8.18958157e-04
   front.z [1] =
-8.19408357e-01
+8.19408238e-01
   posit.x [1] =
 -2.35949993e+01
   posit.y [1] =
@@ -21026,7 +21026,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21053,11 +21053,11 @@ false
 objAddr = 000000E3
 transform [1] =
   right.x [1] =
-4.02783692e-01
+4.02783811e-01
   right.y [1] =
--1.54628679e-02
+-1.54628661e-02
   right.z [1] =
--9.15159941e-01
+-9.15159822e-01
   up.x [1] =
 -2.50201765e-03
   up.y [1] =
@@ -21065,11 +21065,11 @@ transform [1] =
   up.z [1] =
 -1.79946925e-02
   front.x [1] =
-9.15283144e-01
+9.15283024e-01
   front.y [1] =
-9.53771546e-03
+9.53771733e-03
   front.z [1] =
-4.02676791e-01
+4.02676910e-01
   posit.x [1] =
 -2.35161255e+02
   posit.y [1] =
@@ -21121,7 +21121,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21222,7 +21222,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21323,7 +21323,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21424,7 +21424,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21519,7 +21519,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21614,7 +21614,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21709,7 +21709,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21736,11 +21736,11 @@ false
 objAddr = 000000EA
 transform [1] =
   right.x [1] =
--3.64350140e-01
+-3.64349991e-01
   right.y [1] =
--3.64150037e-04
+-3.64149862e-04
   right.z [1] =
-9.31257248e-01
+9.31257367e-01
   up.x [1] =
 -9.99445911e-04
   up.y [1] =
@@ -21748,11 +21748,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--9.31252778e-01
+-9.31252897e-01
   front.y [1] =
--9.30741255e-04
+-9.30741371e-04
   front.z [1] =
--3.64348739e-01
+-3.64348590e-01
   posit.x [1] =
 -2.11487000e+02
   posit.y [1] =
@@ -21804,7 +21804,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21899,7 +21899,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -21926,9 +21926,9 @@ false
 objAddr = 000000EC
 transform [1] =
   right.x [1] =
--3.80609393e-01
+-3.80609274e-01
   right.y [1] =
--6.52311777e-04
+-6.52311719e-04
   right.z [1] =
 9.24731076e-01
   up.x [1] =
@@ -21940,9 +21940,9 @@ transform [1] =
   front.x [1] =
 -9.24727142e-01
   front.y [1] =
--2.71910161e-04
+-2.71910219e-04
   front.z [1] =
--3.80607963e-01
+-3.80607843e-01
   posit.x [1] =
 -1.03302002e+02
   posit.y [1] =
@@ -21994,7 +21994,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22021,11 +22021,11 @@ false
 objAddr = 000000ED
 transform [1] =
   right.x [1] =
--4.02229518e-01
+-4.02229488e-01
   right.y [1] =
--8.18535611e-02
+-8.18535686e-02
   right.z [1] =
-9.11867619e-01
+9.11867738e-01
   up.x [1] =
 -3.78738008e-02
   up.y [1] =
@@ -22033,11 +22033,11 @@ transform [1] =
   up.z [1] =
 7.27555603e-02
   front.x [1] =
--9.14746344e-01
+-9.14746463e-01
   front.y [1] =
--5.27145900e-03
+-5.27146459e-03
   front.z [1] =
--4.03972536e-01
+-4.03972507e-01
   posit.x [1] =
 -1.07654999e+02
   posit.y [1] =
@@ -22089,7 +22089,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22184,7 +22184,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22279,7 +22279,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22374,7 +22374,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22401,11 +22401,11 @@ false
 objAddr = 000000F1
 transform [1] =
   right.x [1] =
-4.48557168e-01
+4.48557466e-01
   right.y [1] =
-2.24765856e-02
+2.24765651e-02
   right.z [1] =
--8.93466651e-01
+-8.93466532e-01
   up.x [1] =
 4.54023145e-02
   up.y [1] =
@@ -22413,11 +22413,11 @@ transform [1] =
   up.z [1] =
 4.78954837e-02
   front.x [1] =
-8.92591476e-01
+8.92591357e-01
   front.y [1] =
--6.20493144e-02
+-6.20493293e-02
   front.z [1] =
-4.46556866e-01
+4.46557164e-01
   posit.x [1] =
 7.50674011e+02
   posit.y [1] =
@@ -22469,7 +22469,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22564,7 +22564,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22659,7 +22659,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22754,7 +22754,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22783,9 +22783,9 @@ transform [1] =
   right.x [1] =
 -9.59954202e-01
   right.y [1] =
-1.11994206e-03
+1.11994240e-03
   right.z [1] =
--2.80139387e-01
+-2.80139476e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -22793,7 +22793,7 @@ transform [1] =
   up.z [1] =
 3.99775337e-03
   front.x [1] =
-2.80140400e-01
+2.80140489e-01
   front.y [1] =
 3.83766019e-03
   front.z [1] =
@@ -22849,7 +22849,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22944,7 +22944,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -22971,11 +22971,11 @@ false
 objAddr = 000000F7
 transform [1] =
   right.x [1] =
--6.51605010e-01
+-6.51604652e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-7.58552790e-01
+7.58553088e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -22983,11 +22983,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--7.58549511e-01
+-7.58549809e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--6.51602149e-01
+-6.51601791e-01
   posit.x [1] =
 1.03312000e+03
   posit.y [1] =
@@ -23039,7 +23039,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23066,11 +23066,11 @@ false
 objAddr = 000000F8
 transform [1] =
   right.x [1] =
--6.55120134e-01
+-6.55119658e-01
   right.y [1] =
--9.57027543e-03
+-9.57027171e-03
   right.z [1] =
-7.55458534e-01
+7.55458832e-01
   up.x [1] =
 -9.99769848e-03
   up.y [1] =
@@ -23078,11 +23078,11 @@ transform [1] =
   up.z [1] =
 3.99755361e-03
   front.x [1] =
--7.55449772e-01
+-7.55450070e-01
   front.y [1] =
--4.93396912e-03
+-4.93397377e-03
   front.z [1] =
--6.55174971e-01
+-6.55174494e-01
   posit.x [1] =
 1.07277002e+03
   posit.y [1] =
@@ -23134,7 +23134,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23229,7 +23229,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23324,7 +23324,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23351,11 +23351,11 @@ false
 objAddr = 000000FB
 transform [1] =
   right.x [1] =
--6.38341904e-01
+-6.38342083e-01
   right.y [1] =
--2.83812974e-02
+-2.83812936e-02
   right.z [1] =
-7.69224048e-01
+7.69223869e-01
   up.x [1] =
 -6.49685599e-03
   up.y [1] =
@@ -23363,11 +23363,11 @@ transform [1] =
   up.z [1] =
 3.14853489e-02
   front.x [1] =
--7.69716680e-01
+-7.69716501e-01
   front.y [1] =
-1.51008796e-02
+1.51008870e-02
   front.z [1] =
--6.38193607e-01
+-6.38193786e-01
   posit.x [1] =
 1.04193994e+03
   posit.y [1] =
@@ -23419,7 +23419,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23514,7 +23514,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23541,11 +23541,11 @@ false
 objAddr = 000000FD
 transform [1] =
   right.x [1] =
--6.51601315e-01
+-6.51601255e-01
   right.y [1] =
-7.48458784e-03
+7.48458877e-03
   right.z [1] =
-7.58518994e-01
+7.58519173e-01
   up.x [1] =
 4.50119656e-03
   up.y [1] =
@@ -23553,11 +23553,11 @@ transform [1] =
   up.z [1] =
 -6.00032369e-03
   front.x [1] =
--7.58539259e-01
+-7.58539438e-01
   front.y [1] =
--4.95575834e-04
+-4.95574437e-04
   front.z [1] =
--6.51613832e-01
+-6.51613772e-01
   posit.x [1] =
 8.84643005e+02
   posit.y [1] =
@@ -23609,7 +23609,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23636,11 +23636,11 @@ false
 objAddr = 000000FE
 transform [1] =
   right.x [1] =
-9.95689571e-01
+9.95689452e-01
   right.y [1] =
--1.63166912e-03
+-1.63166900e-03
   right.z [1] =
--9.26875770e-02
+-9.26876515e-02
   up.x [1] =
 1.49916613e-03
   up.y [1] =
@@ -23648,11 +23648,11 @@ transform [1] =
   up.z [1] =
 -1.49916613e-03
   front.x [1] =
-9.26894099e-02
+9.26894844e-02
   front.y [1] =
-1.35375001e-03
+1.35374977e-03
   front.z [1] =
-9.95685399e-01
+9.95685279e-01
   posit.x [1] =
 8.77369995e+02
   posit.y [1] =
@@ -23704,7 +23704,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23731,7 +23731,7 @@ false
 objAddr = 000000FF
 transform [1] =
   right.x [1] =
-1.24002537e-02
+1.24002565e-02
   right.y [1] =
 6.53056102e-03
   right.z [1] =
@@ -23747,7 +23747,7 @@ transform [1] =
   front.y [1] =
 2.41769641e-03
   front.z [1] =
-1.24162156e-02
+1.24162184e-02
   posit.x [1] =
 8.26047974e+02
   posit.y [1] =
@@ -23799,7 +23799,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23830,7 +23830,7 @@ transform [1] =
   right.y [1] =
 7.87528753e-02
   right.z [1] =
-4.86329128e-08
+4.87202243e-08
   up.x [1] =
 -7.87523985e-02
   up.y [1] =
@@ -23838,7 +23838,7 @@ transform [1] =
   up.z [1] =
 3.48717696e-03
   front.x [1] =
-2.74576712e-04
+2.74576625e-04
   front.y [1] =
 -3.47633520e-03
   front.z [1] =
@@ -23894,7 +23894,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -23989,7 +23989,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24084,7 +24084,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24111,11 +24111,11 @@ false
 objAddr = 00000103
 transform [1] =
   right.x [1] =
-8.82296324e-01
+8.82296562e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-4.70685005e-01
+4.70684826e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -24123,11 +24123,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--4.70682949e-01
+-4.70682770e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-8.82292509e-01
+8.82292747e-01
   posit.x [1] =
 1.09407996e+03
   posit.y [1] =
@@ -24179,7 +24179,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24206,11 +24206,11 @@ false
 objAddr = 00000104
 transform [1] =
   right.x [1] =
-8.82296324e-01
+8.82296562e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-4.70685005e-01
+4.70684826e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -24218,11 +24218,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--4.70682949e-01
+-4.70682770e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-8.82292509e-01
+8.82292747e-01
   posit.x [1] =
 1.09834998e+03
   posit.y [1] =
@@ -24274,7 +24274,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24301,11 +24301,11 @@ false
 objAddr = 00000105
 transform [1] =
   right.x [1] =
-8.80731583e-01
+8.80731463e-01
   right.y [1] =
-5.94821014e-02
+5.94820939e-02
   right.z [1] =
-4.69856709e-01
+4.69856650e-01
   up.x [1] =
 -4.69103716e-02
   up.y [1] =
@@ -24313,11 +24313,11 @@ transform [1] =
   up.z [1] =
 -3.84307131e-02
   front.x [1] =
--4.71275896e-01
+-4.71275836e-01
   front.y [1] =
 1.18059888e-02
   front.z [1] =
-8.81897211e-01
+8.81897092e-01
   posit.x [1] =
 1.10885999e+03
   posit.y [1] =
@@ -24369,7 +24369,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24464,7 +24464,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24559,7 +24559,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24654,7 +24654,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24685,7 +24685,7 @@ transform [1] =
   right.y [1] =
 5.99484006e-03
   right.z [1] =
-7.20675962e-05
+7.20676180e-05
   up.x [1] =
 -5.99484425e-03
   up.y [1] =
@@ -24693,7 +24693,7 @@ transform [1] =
   up.z [1] =
 2.39908174e-02
   front.x [1] =
-7.17758739e-05
+7.17758521e-05
   front.y [1] =
 -2.39907131e-02
   front.z [1] =
@@ -24749,7 +24749,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24780,7 +24780,7 @@ transform [1] =
   right.y [1] =
 4.49605752e-03
   right.z [1] =
-5.62016103e-05
+5.62016758e-05
   up.x [1] =
 -4.49605845e-03
   up.y [1] =
@@ -24788,7 +24788,7 @@ transform [1] =
   up.z [1] =
 2.49895435e-02
   front.x [1] =
-5.61711822e-05
+5.61711167e-05
   front.y [1] =
 -2.49894354e-02
   front.z [1] =
@@ -24844,7 +24844,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -24939,7 +24939,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25034,7 +25034,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25065,7 +25065,7 @@ transform [1] =
   right.y [1] =
 -6.50015334e-03
   right.z [1] =
--7.52437700e-05
+-7.52437263e-05
   up.x [1] =
 6.50007511e-03
   up.y [1] =
@@ -25073,7 +25073,7 @@ transform [1] =
   up.z [1] =
 -9.99424723e-04
   front.x [1] =
-8.17382243e-05
+8.17381806e-05
   front.y [1] =
 9.98910284e-04
   front.z [1] =
@@ -25129,7 +25129,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25158,9 +25158,9 @@ transform [1] =
   right.x [1] =
 9.99995768e-01
   right.y [1] =
-5.35477618e-09
+5.35477263e-09
   right.z [1] =
--5.63743924e-07
+-5.63743583e-07
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -25168,7 +25168,7 @@ transform [1] =
   up.z [1] =
 9.49812587e-03
   front.x [1] =
-5.63766889e-07
+5.63766548e-07
   front.y [1] =
 -9.49808583e-03
   front.z [1] =
@@ -25224,7 +25224,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25319,7 +25319,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25414,7 +25414,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25509,7 +25509,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25604,7 +25604,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25631,7 +25631,7 @@ false
 objAddr = 00000113
 transform [1] =
   right.x [1] =
-1.04702068e-02
+1.04702096e-02
   right.y [1] =
 -4.98497393e-03
   right.z [1] =
@@ -25647,7 +25647,7 @@ transform [1] =
   front.y [1] =
 -1.55521743e-03
   front.z [1] =
-1.04625262e-02
+1.04625290e-02
   posit.x [1] =
 -2.40000000e+02
   posit.y [1] =
@@ -25699,7 +25699,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25794,7 +25794,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25889,7 +25889,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -25916,7 +25916,7 @@ false
 objAddr = 00000116
 transform [1] =
   right.x [1] =
--1.24978321e-03
+-1.24978251e-03
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -25932,7 +25932,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--1.24977774e-03
+-1.24977704e-03
   posit.x [1] =
 -3.06774368e+01
   posit.y [1] =
@@ -25984,7 +25984,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26079,7 +26079,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26174,7 +26174,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26269,7 +26269,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26364,7 +26364,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26459,7 +26459,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26554,7 +26554,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26649,7 +26649,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26744,7 +26744,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26839,7 +26839,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -26934,7 +26934,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27029,7 +27029,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27124,7 +27124,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27219,7 +27219,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27314,7 +27314,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27409,7 +27409,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27504,7 +27504,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27599,7 +27599,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27694,7 +27694,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27789,7 +27789,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27884,7 +27884,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -27979,7 +27979,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28074,7 +28074,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28169,7 +28169,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28264,7 +28264,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28359,7 +28359,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28454,7 +28454,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28549,7 +28549,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28644,7 +28644,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28739,7 +28739,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28834,7 +28834,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -28929,7 +28929,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29024,7 +29024,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29119,7 +29119,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29214,7 +29214,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29309,7 +29309,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29404,7 +29404,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29499,7 +29499,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29594,7 +29594,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29689,7 +29689,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29784,7 +29784,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29879,7 +29879,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -29974,7 +29974,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30069,7 +30069,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30164,7 +30164,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30259,7 +30259,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30354,7 +30354,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30449,7 +30449,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30544,7 +30544,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30639,7 +30639,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30734,7 +30734,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30829,7 +30829,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -30924,7 +30924,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31019,7 +31019,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31114,7 +31114,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31209,7 +31209,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31304,7 +31304,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31399,7 +31399,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31430,7 +31430,7 @@ transform [1] =
   right.y [1] =
 -1.34989303e-02
   right.z [1] =
--1.25414226e-06
+-1.25410952e-06
   up.x [1] =
 1.34988176e-02
   up.y [1] =
@@ -31438,7 +31438,7 @@ transform [1] =
   up.z [1] =
 -3.99738923e-03
   front.x [1] =
-5.52144884e-05
+5.52144556e-05
   front.y [1] =
 3.99699109e-03
   front.z [1] =
@@ -31494,7 +31494,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31525,7 +31525,7 @@ transform [1] =
   right.y [1] =
 -5.78970909e-02
   right.z [1] =
-2.95598962e-04
+2.95599661e-04
   up.x [1] =
 5.78846484e-02
   up.y [1] =
@@ -31533,7 +31533,7 @@ transform [1] =
   up.z [1] =
 -2.64468696e-02
   front.x [1] =
-1.23619824e-03
+1.23619754e-03
   front.y [1] =
 2.64195036e-02
   front.z [1] =
@@ -31589,7 +31589,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31620,7 +31620,7 @@ transform [1] =
   right.y [1] =
 -1.24997301e-02
   right.z [1] =
-1.53698664e-07
+1.53655009e-07
   up.x [1] =
 1.24985930e-02
   up.y [1] =
@@ -31628,7 +31628,7 @@ transform [1] =
   up.z [1] =
 -1.34978704e-02
   front.x [1] =
-1.68566068e-04
+1.68566112e-04
   front.y [1] =
 1.34967584e-02
   front.z [1] =
@@ -31684,7 +31684,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31779,7 +31779,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31874,7 +31874,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -31969,7 +31969,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32064,7 +32064,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32093,9 +32093,9 @@ transform [1] =
   right.x [1] =
 9.99995708e-01
   right.y [1] =
-7.54458301e-11
+7.54458579e-11
   right.z [1] =
-7.18404314e-09
+7.18404580e-09
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -32103,7 +32103,7 @@ transform [1] =
   up.z [1] =
 -1.05012376e-02
   front.x [1] =
--7.18440818e-09
+-7.18441084e-09
   front.y [1] =
 1.05011929e-02
   front.z [1] =
@@ -32159,7 +32159,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32190,7 +32190,7 @@ transform [1] =
   right.y [1] =
 -6.91668019e-02
   right.z [1] =
--1.27440058e-02
+-1.27440002e-02
   up.x [1] =
 6.88122287e-02
   up.y [1] =
@@ -32198,7 +32198,7 @@ transform [1] =
   up.z [1] =
 -2.64284927e-02
   front.x [1] =
-1.45372543e-02
+1.45372488e-02
   front.y [1] =
 2.54859887e-02
   front.z [1] =
@@ -32254,7 +32254,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32285,7 +32285,7 @@ transform [1] =
   right.y [1] =
 -4.99722955e-04
   right.z [1] =
--5.01114279e-08
+-5.01110868e-08
   up.x [1] =
 4.99720045e-04
   up.y [1] =
@@ -32293,7 +32293,7 @@ transform [1] =
   up.z [1] =
 3.49804037e-03
   front.x [1] =
--1.69794021e-06
+-1.69794055e-06
   front.y [1] =
 -3.49802501e-03
   front.z [1] =
@@ -32349,7 +32349,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32380,7 +32380,7 @@ transform [1] =
   right.y [1] =
 1.29991407e-02
   right.z [1] =
-3.52473739e-06
+3.52456277e-06
   up.x [1] =
 -1.29800737e-02
   up.y [1] =
@@ -32388,7 +32388,7 @@ transform [1] =
   up.z [1] =
 5.44149987e-02
   front.x [1] =
-7.03829050e-04
+7.03829224e-04
   front.y [1] =
 -5.44102117e-02
   front.z [1] =
@@ -32444,7 +32444,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32539,7 +32539,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32634,7 +32634,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32729,7 +32729,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32824,7 +32824,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -32919,7 +32919,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33014,7 +33014,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33109,7 +33109,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33204,7 +33204,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33299,7 +33299,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33394,7 +33394,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33489,7 +33489,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33584,7 +33584,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33679,7 +33679,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33774,7 +33774,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33869,7 +33869,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -33964,7 +33964,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34059,7 +34059,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34154,7 +34154,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34249,7 +34249,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -34350,7 +34350,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34445,7 +34445,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34540,7 +34540,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34635,7 +34635,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34730,7 +34730,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34825,7 +34825,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -34920,7 +34920,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35015,7 +35015,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35110,7 +35110,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35205,7 +35205,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35300,7 +35300,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35395,7 +35395,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35490,7 +35490,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35585,7 +35585,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35680,7 +35680,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35775,7 +35775,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35870,7 +35870,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -35965,7 +35965,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36060,7 +36060,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36155,7 +36155,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36250,7 +36250,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36345,7 +36345,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36440,7 +36440,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36535,7 +36535,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36630,7 +36630,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36725,7 +36725,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36820,7 +36820,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -36915,7 +36915,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37010,7 +37010,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37105,7 +37105,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37200,7 +37200,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37295,7 +37295,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37390,7 +37390,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37485,7 +37485,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37512,11 +37512,11 @@ false
 objAddr = 00000190
 transform [1] =
   right.x [1] =
-2.91115284e-01
+2.91115135e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--9.56683397e-01
+-9.56683517e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -37524,11 +37524,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-9.56679225e-01
+9.56679344e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-2.91114002e-01
+2.91113853e-01
   posit.x [1] =
 1.04076001e+03
   posit.y [1] =
@@ -37580,7 +37580,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37607,11 +37607,11 @@ false
 objAddr = 00000191
 transform [1] =
   right.x [1] =
-2.91115284e-01
+2.91115135e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--9.56683397e-01
+-9.56683517e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -37619,11 +37619,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-9.56679225e-01
+9.56679344e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-2.91114002e-01
+2.91113853e-01
   posit.x [1] =
 8.74539001e+02
   posit.y [1] =
@@ -37675,7 +37675,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37770,7 +37770,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37865,7 +37865,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -37960,7 +37960,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38055,7 +38055,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38150,7 +38150,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38245,7 +38245,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38340,7 +38340,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38435,7 +38435,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38530,7 +38530,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38625,7 +38625,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38720,7 +38720,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38751,7 +38751,7 @@ transform [1] =
   right.y [1] =
 9.99445911e-04
   right.z [1] =
-1.60798077e-08
+1.60798024e-08
   up.x [1] =
 -9.99445911e-04
   up.y [1] =
@@ -38759,9 +38759,9 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.60797295e-08
+-1.60797242e-08
   front.y [1] =
--1.60708981e-11
+-1.60708929e-11
   front.z [1] =
 9.99991298e-01
   posit.x [1] =
@@ -38815,7 +38815,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -38910,7 +38910,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39005,7 +39005,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -39106,7 +39106,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39201,7 +39201,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39296,7 +39296,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39391,7 +39391,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39486,7 +39486,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39513,7 +39513,7 @@ false
 objAddr = 000001A5
 transform [1] =
   right.x [1] =
-3.65014642e-01
+3.65014762e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -39529,7 +39529,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-3.65013063e-01
+3.65013182e-01
   posit.x [1] =
 2.05834000e+02
   posit.y [1] =
@@ -39581,7 +39581,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39608,7 +39608,7 @@ false
 objAddr = 000001A6
 transform [1] =
   right.x [1] =
-3.65014642e-01
+3.65014762e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -39624,7 +39624,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-3.65013063e-01
+3.65013182e-01
   posit.x [1] =
 2.04682999e+02
   posit.y [1] =
@@ -39676,7 +39676,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39703,7 +39703,7 @@ false
 objAddr = 000001A7
 transform [1] =
   right.x [1] =
-3.65014642e-01
+3.65014762e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -39719,7 +39719,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-3.65013063e-01
+3.65013182e-01
   posit.x [1] =
 2.36529007e+02
   posit.y [1] =
@@ -39771,7 +39771,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39866,7 +39866,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39961,7 +39961,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -39988,11 +39988,11 @@ false
 objAddr = 000001AA
 transform [1] =
   right.x [1] =
-8.40612769e-01
+8.40613008e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--5.41628718e-01
+-5.41628301e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40000,11 +40000,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-5.41626334e-01
+5.41625917e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-8.40609133e-01
+8.40609372e-01
   posit.x [1] =
 4.48473999e+02
   posit.y [1] =
@@ -40056,7 +40056,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40087,7 +40087,7 @@ transform [1] =
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-1.62956133e-01
+1.62956044e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40095,7 +40095,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.62955418e-01
+-1.62955329e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -40151,7 +40151,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40178,11 +40178,11 @@ false
 objAddr = 000001AC
 transform [1] =
   right.x [1] =
--9.58237410e-01
+-9.58237529e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.85958916e-01
+2.85958797e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40190,11 +40190,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.85957664e-01
+-2.85957545e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.58233237e-01
+-9.58233356e-01
   posit.x [1] =
 6.58814026e+02
   posit.y [1] =
@@ -40246,7 +40246,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40273,11 +40273,11 @@ false
 objAddr = 000001AD
 transform [1] =
   right.x [1] =
--9.58237410e-01
+-9.58237529e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.85958916e-01
+2.85958797e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40285,11 +40285,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.85957664e-01
+-2.85957545e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.58233237e-01
+-9.58233356e-01
   posit.x [1] =
 6.72333008e+02
   posit.y [1] =
@@ -40341,7 +40341,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40436,7 +40436,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40531,7 +40531,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40558,11 +40558,11 @@ false
 objAddr = 000001B0
 transform [1] =
   right.x [1] =
--9.80430067e-01
+-9.80429947e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--1.96845740e-01
+-1.96845889e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40570,11 +40570,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-1.96844891e-01
+1.96845040e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.80425775e-01
+-9.80425656e-01
   posit.x [1] =
 8.99963013e+02
   posit.y [1] =
@@ -40626,7 +40626,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40657,7 +40657,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--3.82231653e-01
+-3.82231444e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -40665,7 +40665,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-3.82229984e-01
+3.82229775e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -40721,7 +40721,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40816,7 +40816,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40911,7 +40911,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -40938,7 +40938,7 @@ false
 objAddr = 000001B4
 transform [1] =
   right.x [1] =
-4.75576185e-02
+4.75575961e-02
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
@@ -40954,7 +40954,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-4.75574099e-02
+4.75573875e-02
   posit.x [1] =
 3.02915009e+02
   posit.y [1] =
@@ -41006,7 +41006,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41101,7 +41101,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41132,7 +41132,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--8.73105546e-11
+-8.73105130e-11
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -41140,7 +41140,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-8.73101730e-11
+8.73101313e-11
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
@@ -41196,7 +41196,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41291,7 +41291,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41322,7 +41322,7 @@ transform [1] =
   right.y [1] =
 1.80161279e-02
   right.z [1] =
--3.47981870e-04
+-3.47981171e-04
   up.x [1] =
 -1.79756638e-02
   up.y [1] =
@@ -41330,7 +41330,7 @@ transform [1] =
   up.z [1] =
 5.04263267e-02
   front.x [1] =
-1.25596847e-03
+1.25596777e-03
   front.y [1] =
 -5.04116714e-02
   front.z [1] =
@@ -41386,7 +41386,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41481,7 +41481,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41512,7 +41512,7 @@ transform [1] =
   right.y [1] =
 -1.49887789e-03
   right.z [1] =
-1.87132337e-05
+1.87132446e-05
   up.x [1] =
 1.49898778e-03
   up.y [1] =
@@ -41520,7 +41520,7 @@ transform [1] =
   up.z [1] =
 -1.54971695e-02
   front.x [1] =
-4.51747837e-06
+4.51746746e-06
   front.y [1] =
 1.54971136e-02
   front.z [1] =
@@ -41576,7 +41576,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41671,7 +41671,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41702,7 +41702,7 @@ transform [1] =
   right.y [1] =
 1.24997310e-02
   right.z [1] =
--2.01941845e-07
+-2.01939116e-07
   up.x [1] =
 -1.24997310e-02
   up.y [1] =
@@ -41710,7 +41710,7 @@ transform [1] =
   up.z [1] =
 -4.99684073e-04
   front.x [1] =
--6.04399156e-06
+-6.04399429e-06
   front.y [1] =
 4.99645364e-04
   front.z [1] =
@@ -41766,7 +41766,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41797,7 +41797,7 @@ transform [1] =
   right.y [1] =
 1.10017704e-02
   right.z [1] =
-3.74188239e-05
+3.74186493e-05
   up.x [1] =
 -1.09977080e-02
   up.y [1] =
@@ -41805,7 +41805,7 @@ transform [1] =
   up.z [1] =
 -2.39897985e-02
   front.x [1] =
--3.01335880e-04
+-3.01335705e-04
   front.y [1] =
 2.39878297e-02
   front.z [1] =
@@ -41861,7 +41861,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -41956,7 +41956,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42051,7 +42051,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42146,7 +42146,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42177,7 +42177,7 @@ transform [1] =
   right.y [1] =
 -1.49976369e-02
   right.z [1] =
--2.98411408e-07
+-2.98400494e-07
   up.x [1] =
 1.49975903e-02
   up.y [1] =
@@ -42185,7 +42185,7 @@ transform [1] =
   up.z [1] =
 2.49832706e-03
   front.x [1] =
--3.71706265e-05
+-3.71706374e-05
   front.y [1] =
 -2.49803974e-03
   front.z [1] =
@@ -42241,7 +42241,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42336,7 +42336,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42431,7 +42431,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42526,7 +42526,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42621,7 +42621,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42716,7 +42716,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42811,7 +42811,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -42906,7 +42906,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43001,7 +43001,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43096,7 +43096,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43191,7 +43191,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43222,7 +43222,7 @@ transform [1] =
   right.y [1] =
 -1.15005299e-02
   right.z [1] =
--2.87325702e-06
+-2.87321336e-06
   up.x [1] =
 1.14999274e-02
   up.y [1] =
@@ -43230,7 +43230,7 @@ transform [1] =
   up.z [1] =
 -9.99711733e-03
   front.x [1] =
-1.17845062e-04
+1.17845018e-04
   front.y [1] =
 9.99637973e-03
   front.z [1] =
@@ -43286,7 +43286,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43317,7 +43317,7 @@ transform [1] =
   right.y [1] =
 2.34857798e-02
   right.z [1] =
--5.87362971e-04
+-5.87363320e-04
   up.x [1] =
 -2.34906543e-02
   up.y [1] =
@@ -43325,7 +43325,7 @@ transform [1] =
   up.z [1] =
 -1.04945255e-02
   front.x [1] =
-3.40693892e-04
+3.40694241e-04
   front.y [1] =
 1.05053810e-02
   front.z [1] =
@@ -43381,7 +43381,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43476,7 +43476,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43571,7 +43571,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43666,7 +43666,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43761,7 +43761,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43856,7 +43856,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -43951,7 +43951,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44046,7 +44046,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44141,7 +44141,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44172,7 +44172,7 @@ transform [1] =
   right.y [1] =
 -2.27844983e-01
   right.z [1] =
--9.17322395e-05
+-9.17318321e-05
   up.x [1] =
 2.27843925e-01
   up.y [1] =
@@ -44180,9 +44180,9 @@ transform [1] =
   up.z [1] =
 3.40603315e-03
   front.x [1] =
--6.86729094e-04
+-6.86729443e-04
   front.y [1] =
--3.33733158e-03
+-3.33733135e-03
   front.z [1] =
 9.99985576e-01
   posit.x [1] =
@@ -44236,7 +44236,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44331,7 +44331,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44426,7 +44426,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44457,7 +44457,7 @@ transform [1] =
   right.y [1] =
 1.15010366e-02
   right.z [1] =
-2.61470650e-05
+2.61468904e-05
   up.x [1] =
 -1.14980862e-02
   up.y [1] =
@@ -44465,7 +44465,7 @@ transform [1] =
   up.z [1] =
 -2.04944331e-02
   front.x [1] =
--2.61846959e-04
+-2.61846784e-04
   front.y [1] =
 2.04926878e-02
   front.z [1] =
@@ -44521,7 +44521,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44552,7 +44552,7 @@ transform [1] =
   right.y [1] =
 4.00104420e-03
   right.z [1] =
-4.98795816e-05
+4.98795598e-05
   up.x [1] =
 -4.00134735e-03
   up.y [1] =
@@ -44560,7 +44560,7 @@ transform [1] =
   up.z [1] =
 1.05011538e-02
   front.x [1] =
--7.86063538e-06
+-7.86061355e-06
   front.y [1] =
 -1.05012227e-02
   front.z [1] =
@@ -44616,7 +44616,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44647,7 +44647,7 @@ transform [1] =
   right.y [1] =
 -1.51726723e-01
   right.z [1] =
-1.16785144e-04
+1.16786541e-04
   up.x [1] =
 1.51591316e-01
   up.y [1] =
@@ -44655,7 +44655,7 @@ transform [1] =
   up.z [1] =
 4.14814465e-02
   front.x [1] =
--6.40917709e-03
+-6.40917849e-03
   front.y [1] =
 -4.09833118e-02
   front.z [1] =
@@ -44711,7 +44711,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44806,7 +44806,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44901,7 +44901,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -44996,7 +44996,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45091,7 +45091,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45186,7 +45186,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45281,7 +45281,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45376,7 +45376,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45471,7 +45471,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45566,7 +45566,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45661,7 +45661,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45756,7 +45756,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45851,7 +45851,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -45946,7 +45946,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -46047,7 +46047,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -46148,7 +46148,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46243,7 +46243,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46338,7 +46338,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46433,7 +46433,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 curHealth [1] =
@@ -46534,7 +46534,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46629,7 +46629,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46656,7 +46656,7 @@ false
 objAddr = 000001F0
 transform [1] =
   right.x [1] =
--2.04174984e-02
+-2.04174872e-02
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -46672,7 +46672,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--2.04174090e-02
+-2.04173978e-02
   posit.x [1] =
 5.75359009e+02
   posit.y [1] =
@@ -46724,7 +46724,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46819,7 +46819,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -46914,7 +46914,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47009,7 +47009,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47104,7 +47104,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47199,7 +47199,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47294,7 +47294,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47389,7 +47389,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47484,7 +47484,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47579,7 +47579,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47674,7 +47674,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47769,7 +47769,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47864,7 +47864,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -47959,7 +47959,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -48054,7 +48054,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -48149,7 +48149,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -48225,7 +48225,7 @@ euler =
 1.16470484e-21
  omega [1] =
   x [1] =
--2.52435466e-28
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
@@ -48245,7 +48245,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+65
 groupNumber [1] =
 0
 undefaicmd =
@@ -48275,7 +48275,7 @@ transform [1] =
   right.x [1] =
 8.38483334e-01
   right.y [1] =
--6.29349709e-38
+-3.44804972e-20
   right.z [1] =
 5.44919193e-01
   up.x [1] =
@@ -48287,7 +48287,7 @@ transform [1] =
   front.x [1] =
 -5.44916809e-01
   front.y [1] =
-2.49731852e-36
+-7.24385058e-18
   front.z [1] =
 8.38479698e-01
   posit.x [1] =
@@ -48329,11 +48329,11 @@ euler =
 1.30554858e-38
  omega [1] =
   x [1] =
--1.03611440e-35
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
--2.23471613e-37
+0.00000000e+00
  Accel [1] =
   x [1] =
 0.00000000e+00
@@ -48403,7 +48403,7 @@ transform [1] =
 scrapTimer [1] =
 9.99958217e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -48480,7 +48480,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -48534,7 +48534,7 @@ transform [1] =
 scrapTimer [1] =
 9.99953389e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -48611,7 +48611,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -48638,23 +48638,23 @@ false
 objAddr = 00000204
 transform [1] =
   right.x [1] =
-9.95630980e-01
+9.95626688e-01
   right.y [1] =
--9.31003839e-02
+-9.30999890e-02
   right.z [1] =
--7.15932017e-03
+-7.15929037e-03
   up.x [1] =
-9.32092667e-02
+9.32088643e-02
   up.y [1] =
-9.86365914e-01
+9.86361623e-01
   up.z [1] =
-1.35625750e-01
+1.35625154e-01
   front.x [1] =
--5.56510082e-03
+-5.56505099e-03
   front.y [1] =
--1.35700524e-01
+-1.35699332e-01
   front.z [1] =
-9.90734279e-01
+9.90725696e-01
   posit.x [1] =
 8.93011841e+02
   posit.y [1] =
@@ -48719,7 +48719,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 3
 undefaicmd =
@@ -48746,23 +48746,23 @@ false
 objAddr = 00000205
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995768e-01
   right.y [1] =
-3.08687547e-08
+3.08686232e-08
   right.z [1] =
--4.00095781e-17
+-4.00094094e-17
   up.x [1] =
--3.08687547e-08
+-3.08686197e-08
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
--2.30508701e-09
+-2.30507702e-09
   front.x [1] =
--3.11455835e-17
+-3.11453188e-17
   front.y [1] =
-2.30508701e-09
+2.30506725e-09
   front.z [1] =
-1.00000000e+00
+9.99991417e-01
   posit.x [1] =
 9.31209167e+02
   posit.y [1] =
@@ -48827,7 +48827,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 3
 undefaicmd =
@@ -48854,23 +48854,23 @@ false
 objAddr = 00000206
 transform [1] =
   right.x [1] =
-9.99908924e-01
+9.99904692e-01
   right.y [1] =
-1.34932389e-02
+1.34931803e-02
   right.z [1] =
-2.08961457e-04
+2.08960584e-04
   up.x [1] =
--1.34938834e-02
+-1.34938248e-02
   up.y [1] =
-9.99531090e-01
+9.99526739e-01
   up.z [1] =
-2.74872016e-02
+2.74870824e-02
   front.x [1] =
-1.62027864e-04
+1.62026467e-04
   front.y [1] =
--2.74875183e-02
+-2.74872836e-02
   front.z [1] =
-9.99622107e-01
+9.99613583e-01
   posit.x [1] =
 8.28638306e+02
   posit.y [1] =
@@ -48935,7 +48935,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 3
 undefaicmd =
@@ -48962,23 +48962,23 @@ false
 objAddr = 00000207
 transform [1] =
   right.x [1] =
-9.99995470e-01
+9.99991119e-01
   right.y [1] =
--3.00169410e-03
+-3.00168106e-03
   right.z [1] =
--2.78670523e-05
+-2.78669304e-05
   up.x [1] =
-3.00174532e-03
+3.00173252e-03
   up.y [1] =
-9.99859393e-01
+9.99855101e-01
   up.z [1] =
-1.64962113e-02
+1.64961405e-02
   front.x [1] =
--2.16534427e-05
+-2.16532590e-05
   front.y [1] =
--1.64962225e-02
+-1.64960772e-02
   front.z [1] =
-9.99863923e-01
+9.99855220e-01
   posit.x [1] =
 7.69531677e+02
   posit.y [1] =
@@ -49043,7 +49043,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 3
 undefaicmd =
@@ -49097,7 +49097,7 @@ transform [1] =
 scrapTimer [1] =
 9.99942660e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -49174,7 +49174,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -49239,17 +49239,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-1.22849640e+07
+9.15769800e+06
  mass_inv [1] =
-8.14003229e-08
+1.09197750e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-1.11689431e+10
+7.95974707e+09
  k_i [1] =
-8.95339844e-11
+1.25632130e-10
  v [1] =
   x [1] =
 0.00000000e+00
@@ -49279,7 +49279,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -49327,7 +49327,7 @@ transform [1] =
   posit.x [1] =
 8.64000000e+02
   posit.y [1] =
-1.11500008e+02
+1.11500000e+02
   posit.z [1] =
 3.20000000e+01
 name = Matriarch Drop Off
@@ -49377,7 +49377,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -49483,7 +49483,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -49578,7 +49578,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -49673,7 +49673,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -49771,7 +49771,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -49798,11 +49798,11 @@ false
 objAddr = 0000020F
 transform [1] =
   right.x [1] =
-7.88233042e-01
+7.88233101e-01
   right.y [1] =
-6.24713604e-04
+6.24712149e-04
   right.z [1] =
-6.15369499e-01
+6.15369439e-01
   up.x [1] =
 3.50180315e-03
   up.y [1] =
@@ -49810,11 +49810,11 @@ transform [1] =
   up.z [1] =
 -5.50065190e-03
   front.x [1] =
--6.15357161e-01
+-6.15357101e-01
   front.y [1] =
-6.49069808e-03
+6.49069855e-03
   front.z [1] =
-7.88210630e-01
+7.88210690e-01
   posit.x [1] =
 8.37852966e+02
   posit.y [1] =
@@ -49895,7 +49895,7 @@ euler =
   y [1] =
 0.00000000e+00
   z [1] =
-3.92452693e-38
+0.00000000e+00
  Accel [1] =
   x [1] =
 -3.76254320e-07
@@ -49911,7 +49911,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 2
 undefaicmd =
@@ -50012,13 +50012,13 @@ euler =
 0.00000000e+00
 name = Gun Spire
 saveFlags [1] =
-76
+12
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -50113,7 +50113,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -50263,7 +50263,7 @@ transform [1] =
   front.x [1] =
 7.14851499e-01
   front.y [1] =
-0.00000000e+00
+-0.00000000e+00
   front.z [1] =
 6.99263930e-01
   posit.x [1] =
@@ -50328,7 +50328,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 0
 undefaicmd =
@@ -50358,9 +50358,9 @@ transform [1] =
   right.x [1] =
 6.95476055e-01
   right.y [1] =
-0.00000000e+00
+-0.00000000e+00
   right.z [1] =
-7.18543231e-01
+7.18543410e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -50368,7 +50368,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--7.18540132e-01
+-7.18540311e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -50435,7 +50435,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -50463,11 +50463,11 @@ false
 objAddr = 00000217
 transform [1] =
   right.x [1] =
--8.92863750e-01
+-8.92863631e-01
   right.y [1] =
 -1.31901335e-02
   right.z [1] =
-4.50124264e-01
+4.50124294e-01
   up.x [1] =
 -1.14963241e-02
   up.y [1] =
@@ -50475,11 +50475,11 @@ transform [1] =
   up.z [1] =
 6.49659801e-03
   front.x [1] =
--4.50168759e-01
+-4.50168788e-01
   front.y [1] =
-6.25800807e-04
+6.25801273e-04
   front.z [1] =
--8.92933667e-01
+-8.92933547e-01
   posit.x [1] =
 8.89924377e+02
   posit.y [1] =
@@ -50522,11 +50522,11 @@ euler =
 8.11894890e-03
  omega [1] =
   x [1] =
--2.27058892e-38
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
--5.35510525e-09
+0.00000000e+00
  Accel [1] =
   x [1] =
 2.08616257e-07
@@ -50542,7 +50542,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -50642,13 +50642,13 @@ euler =
 0.00000000e+00
 name = Gun Spire
 saveFlags [1] =
-76
+12
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 1
 undefaicmd =
@@ -50743,7 +50743,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 4
 undefaicmd =
@@ -50875,7 +50875,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+0
 groupNumber [1] =
 0
 undefaicmd =
@@ -50940,17 +50940,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-6.24676100e+06
+6.24676050e+06
  mass_inv [1] =
-1.60082962e-07
+1.60082976e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.26264064e+09
+5.26264013e+09
  k_i [1] =
-1.90018681e-10
+1.90018695e-10
  v [1] =
   x [1] =
 0.00000000e+00
@@ -51078,7 +51078,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+2
 groupNumber [1] =
 2
 undefaicmd =
@@ -51132,7 +51132,7 @@ transform [1] =
 scrapTimer [1] =
 9.99968946e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -51209,7 +51209,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+2
 groupNumber [1] =
 2
 undefaicmd =
@@ -51263,7 +51263,7 @@ transform [1] =
 scrapTimer [1] =
 1.49966463e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -51340,7 +51340,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+2
 groupNumber [1] =
 2
 undefaicmd =
@@ -51541,7 +51541,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-35
+2
 groupNumber [1] =
 2
 undefaicmd =
@@ -51596,17 +51596,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.05311988e+06
+2.05312013e+06
  mass_inv [1] =
-4.87063630e-07
+4.87063573e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.03014848e+08
+5.03014912e+08
  k_i [1] =
-1.98801287e-09
+1.98801264e-09
  v [1] =
   x [1] =
 0.00000000e+00
@@ -51691,17 +51691,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.05311988e+06
+2.05312013e+06
  mass_inv [1] =
-4.87063630e-07
+4.87063573e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.03014848e+08
+5.03014912e+08
  k_i [1] =
-1.98801287e-09
+1.98801264e-09
  v [1] =
   x [1] =
 0.00000000e+00
@@ -51786,17 +51786,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.05311988e+06
+2.05312013e+06
  mass_inv [1] =
-4.87063630e-07
+4.87063573e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.03014848e+08
+5.03014912e+08
  k_i [1] =
-1.98801287e-09
+1.98801264e-09
  v [1] =
   x [1] =
 0.00000000e+00
@@ -52019,7 +52019,7 @@ euler =
 0.00000000e+00
 name = Gun Tower
 saveFlags [1] =
-76
+12
 isVisible [1] =
 65535
 EffectsMask [1] =
@@ -52123,7 +52123,7 @@ euler =
 0.00000000e+00
 name = Gun Tower
 saveFlags [1] =
-76
+12
 isVisible [1] =
 65535
 EffectsMask [1] =
@@ -52184,15 +52184,15 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-1.02160819e+06
+1.02160831e+06
  mass_inv [1] =
-9.78848902e-07
+9.78848675e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-2.19393792e+08
+2.19393808e+08
  k_i [1] =
 4.55801397e-09
  v [1] =
@@ -52279,15 +52279,15 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-1.02160819e+06
+1.02160831e+06
  mass_inv [1] =
-9.78848902e-07
+9.78848675e-07
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-2.19393792e+08
+2.19393808e+08
  k_i [1] =
 4.55801397e-09
  v [1] =
@@ -52419,17 +52419,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.31968438e+04
+2.31968516e+04
  mass_inv [1] =
-4.31093140e-05
+4.31092994e-05
  v_mag [1] =
 5.38212271e-06
  v_mag_inv [1] =
 1.85800297e+05
  I [1] =
-3.45330344e+05
+3.45330563e+05
  k_i [1] =
-2.89577793e-06
+2.89577611e-06
  v [1] =
   x [1] =
 0.00000000e+00
@@ -52488,9 +52488,9 @@ transform [1] =
   right.x [1] =
 9.62464452e-01
   right.y [1] =
--4.06863837e-04
+-4.06865234e-04
   right.z [1] =
--2.71391630e-01
+-2.71391600e-01
   up.x [1] =
 1.51505120e-09
   up.y [1] =
@@ -52498,9 +52498,9 @@ transform [1] =
   up.z [1] =
 -1.49916776e-03
   front.x [1] =
-2.71390736e-01
+2.71390706e-01
   front.y [1] =
-1.44289574e-03
+1.44289515e-03
   front.z [1] =
 9.62459147e-01
   posit.x [1] =
@@ -52559,17 +52559,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.31968438e+04
+2.31968516e+04
  mass_inv [1] =
-4.31093140e-05
+4.31092994e-05
  v_mag [1] =
 5.21910260e-06
  v_mag_inv [1] =
 1.91603828e+05
  I [1] =
-3.45330344e+05
+3.45330563e+05
  k_i [1] =
-2.89577793e-06
+2.89577611e-06
  v [1] =
   x [1] =
 1.48246020e-08
@@ -52579,11 +52579,11 @@ euler =
 6.04332229e-08
  omega [1] =
   x [1] =
--4.65661232e-10
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
-1.93004716e-37
+0.00000000e+00
  Accel [1] =
   x [1] =
 0.00000000e+00
@@ -52626,11 +52626,11 @@ false
 objAddr = 0000022C
 transform [1] =
   right.x [1] =
-6.83205962e-01
+6.83205843e-01
   right.y [1] =
--3.64457853e-10
+-3.64457742e-10
   right.z [1] =
--7.30219901e-01
+-7.30219960e-01
   up.x [1] =
 8.11145595e-10
   up.y [1] =
@@ -52638,11 +52638,11 @@ transform [1] =
   up.z [1] =
 2.59816585e-10
   front.x [1] =
-7.30216742e-01
+7.30216801e-01
   front.y [1] =
 -7.69822872e-10
   front.z [1] =
-6.83202982e-01
+6.83202863e-01
   posit.x [1] =
 -1.43314667e+02
   posit.y [1] =
@@ -52662,17 +52662,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-4.54054932e+03
+4.51652686e+03
  mass_inv [1] =
-2.20237664e-04
+2.21409064e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-1.84509570e+04
+1.82583984e+04
  k_i [1] =
-5.41977315e-05
+5.47693162e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -52729,11 +52729,11 @@ false
 objAddr = 0000022D
 transform [1] =
   right.x [1] =
-8.00647378e-01
+8.00647497e-01
   right.y [1] =
-1.34265938e-05
+1.34265911e-05
   right.z [1] =
-5.99128783e-01
+5.99128664e-01
   up.x [1] =
 1.76744425e-06
   up.y [1] =
@@ -52741,11 +52741,11 @@ transform [1] =
   up.z [1] =
 -2.47720291e-05
   front.x [1] =
--5.99126160e-01
+-5.99126041e-01
   front.y [1] =
-2.08925867e-05
+2.08925903e-05
   front.z [1] =
-8.00643921e-01
+8.00644040e-01
   posit.x [1] =
 -1.24612183e+02
   posit.y [1] =
@@ -52765,17 +52765,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-4.54054932e+03
+4.51652686e+03
  mass_inv [1] =
-2.20237664e-04
+2.21409064e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-1.84509570e+04
+1.82583984e+04
  k_i [1] =
-5.41977315e-05
+5.47693162e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -52832,11 +52832,11 @@ false
 objAddr = 0000022E
 transform [1] =
   right.x [1] =
-7.64475942e-01
+7.64475882e-01
   right.y [1] =
-1.61072589e-04
+1.61072152e-04
   right.z [1] =
-6.44645751e-01
+6.44645810e-01
   up.x [1] =
 6.27037755e-10
   up.y [1] =
@@ -52844,11 +52844,11 @@ transform [1] =
   up.z [1] =
 -2.49861128e-04
   front.x [1] =
--6.44643009e-01
+-6.44643068e-01
   front.y [1] =
-1.91012732e-04
+1.91013212e-04
   front.z [1] =
-7.64472604e-01
+7.64472544e-01
   posit.x [1] =
 -2.96300049e+01
   posit.y [1] =
@@ -52888,11 +52888,11 @@ euler =
 -3.12325108e-04
  omega [1] =
   x [1] =
--1.98710736e-38
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
-7.63975480e-11
+0.00000000e+00
  Accel [1] =
   x [1] =
 2.32830644e-10
@@ -52935,11 +52935,11 @@ false
 objAddr = 0000022F
 transform [1] =
   right.x [1] =
--9.11681116e-01
+-9.11681235e-01
   right.y [1] =
-1.95135782e-03
+1.95137283e-03
   right.z [1] =
--4.10883099e-01
+-4.10883248e-01
   up.x [1] =
 1.56126401e-08
   up.y [1] =
@@ -52947,11 +52947,11 @@ transform [1] =
   up.z [1] =
 4.74910624e-03
   front.x [1] =
-4.10885960e-01
+4.10886109e-01
   front.y [1] =
-4.32967115e-03
+4.32966463e-03
   front.z [1] =
--9.11666870e-01
+-9.11666989e-01
   posit.x [1] =
 -1.63530182e+02
   posit.y [1] =
@@ -52991,11 +52991,11 @@ euler =
 5.93630597e-03
  omega [1] =
   x [1] =
--1.22236077e-09
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
--9.16770604e-10
+0.00000000e+00
  Accel [1] =
   x [1] =
 3.72529030e-09
@@ -53038,11 +53038,11 @@ false
 objAddr = 00000230
 transform [1] =
   right.x [1] =
-8.88038099e-01
+8.88038158e-01
   right.y [1] =
-1.50041759e-03
+1.50041725e-03
   right.z [1] =
--4.59758222e-01
+-4.59758162e-01
   up.x [1] =
 2.51763093e-04
   up.y [1] =
@@ -53050,11 +53050,11 @@ transform [1] =
   up.z [1] =
 3.74974380e-03
   front.x [1] =
-4.59758610e-01
+4.59758550e-01
   front.y [1] =
--3.44566558e-03
+-3.44566582e-03
   front.z [1] =
-8.88027608e-01
+8.88027668e-01
   posit.x [1] =
 -2.06932632e+02
   posit.y [1] =
@@ -53094,11 +53094,11 @@ euler =
 4.68707969e-03
  omega [1] =
   x [1] =
-6.11180384e-10
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
-3.05590192e-10
+0.00000000e+00
  Accel [1] =
   x [1] =
 8.84756446e-09
@@ -53141,11 +53141,11 @@ false
 objAddr = 00000231
 transform [1] =
   right.x [1] =
-8.52581620e-01
+8.52581680e-01
   right.y [1] =
-3.10266012e-04
+3.10266041e-04
   right.z [1] =
--5.22585690e-01
+-5.22585511e-01
   up.x [1] =
 2.49860837e-04
   up.y [1] =
@@ -53153,11 +53153,11 @@ transform [1] =
   up.z [1] =
 1.00135047e-03
   front.x [1] =
-5.22583425e-01
+5.22583246e-01
   front.y [1] =
--9.84306214e-04
+-9.84306680e-04
   front.z [1] =
-8.52577388e-01
+8.52577448e-01
   posit.x [1] =
 -1.12662659e+02
   posit.y [1] =
@@ -53177,17 +53177,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-5.72595117e+03
+5.72449658e+03
  mass_inv [1] =
-1.74643472e-04
+1.74687855e-04
  v_mag [1] =
 1.29019935e-03
  v_mag_inv [1] =
 7.75074036e+02
  I [1] =
-3.92654805e+04
+3.92424258e+04
  k_i [1] =
-2.54676615e-05
+2.54826246e-05
  v [1] =
   x [1] =
 3.12331977e-04
@@ -53197,11 +53197,11 @@ euler =
 1.25169870e-03
  omega [1] =
   x [1] =
--2.61254162e-38
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
--1.52795096e-10
+0.00000000e+00
  Accel [1] =
   x [1] =
 1.39698386e-09
@@ -53244,11 +53244,11 @@ false
 objAddr = 00000232
 transform [1] =
   right.x [1] =
-9.93006229e-01
+9.93006170e-01
   right.y [1] =
--1.12715199e-07
+-1.12715192e-07
   right.z [1] =
-1.18026070e-01
+1.18026040e-01
   up.x [1] =
 9.93397506e-08
   up.y [1] =
@@ -53256,11 +53256,11 @@ transform [1] =
   up.z [1] =
 1.19208650e-07
   front.x [1] =
--1.18025556e-01
+-1.18025526e-01
   front.y [1] =
--1.06650262e-07
+-1.06650248e-07
   front.z [1] =
-9.93001938e-01
+9.93001878e-01
   posit.x [1] =
 -6.35572357e+01
   posit.y [1] =
@@ -53280,17 +53280,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-5.72595117e+03
+5.72449658e+03
  mass_inv [1] =
-1.74643472e-04
+1.74687855e-04
  v_mag [1] =
 8.02921750e-06
  v_mag_inv [1] =
 1.24545141e+05
  I [1] =
-3.92654805e+04
+3.92424258e+04
  k_i [1] =
-2.54676615e-05
+2.54826246e-05
  v [1] =
   x [1] =
 1.24175344e-07
@@ -53300,11 +53300,11 @@ euler =
 1.49012934e-07
  omega [1] =
   x [1] =
--2.74332985e-38
+0.00000000e+00
   y [1] =
 0.00000000e+00
   z [1] =
-2.56461536e-14
+0.00000000e+00
  Accel [1] =
   x [1] =
 0.00000000e+00
@@ -53341,7 +53341,7 @@ objClass = ivapc_x
 seqno [1] =
 153f
 team [1] =
-17
+21
 label = apc1
 isUser [1] =
 false
@@ -53431,7 +53431,7 @@ EffectsMask [1] =
 isSeen [1] =
 35
 groupNumber [1] =
-5
+-1
 undefaicmd =
 priority [1] =
 0
@@ -53450,7 +53450,7 @@ objClass = ivapc_x
 seqno [1] =
 1540
 team [1] =
-17
+21
 label = apc2
 isUser [1] =
 false
@@ -53540,7 +53540,7 @@ EffectsMask [1] =
 isSeen [1] =
 35
 groupNumber [1] =
-5
+-1
 undefaicmd =
 priority [1] =
 0
@@ -53592,7 +53592,7 @@ transform [1] =
 scrapTimer [1] =
 1.20000000e+01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -53669,7 +53669,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 4
 undefaicmd =
@@ -53723,7 +53723,7 @@ transform [1] =
 scrapTimer [1] =
 1.49972185e-01
 animStart [1] =
-true
+false
 saveClass = nepool01
 saveMatrix [1] =
   right.x [1] =
@@ -53800,7 +53800,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+64
 groupNumber [1] =
 4
 undefaicmd =
@@ -53827,23 +53827,23 @@ false
 objAddr = 00000237
 transform [1] =
   right.x [1] =
-9.96614277e-01
+9.96609986e-01
   right.y [1] =
-8.22191983e-02
+8.22188407e-02
   right.z [1] =
-1.48876599e-04
+1.48875930e-04
   up.x [1] =
--8.22142214e-02
+-8.22138637e-02
   up.y [1] =
-9.96530473e-01
+9.96526182e-01
   up.z [1] =
-1.29553545e-02
+1.29552986e-02
   front.x [1] =
-9.16818739e-04
+9.16810939e-04
   front.y [1] =
--1.29237305e-02
+-1.29236197e-02
   front.z [1] =
-9.99916077e-01
+9.99907494e-01
   posit.x [1] =
 6.16718712e+01
   posit.y [1] =
@@ -53902,7 +53902,7 @@ euler =
 0.00000000e+00
 name = Guardian
 saveFlags [1] =
-109
+108
 isVisible [1] =
 65535
 EffectsMask [1] =
@@ -53935,23 +53935,23 @@ false
 objAddr = 00000238
 transform [1] =
   right.x [1] =
-9.96933639e-01
+9.96929467e-01
   right.y [1] =
-7.82494992e-02
+7.82491639e-02
   right.z [1] =
--6.16074074e-04
+-6.16071338e-04
   up.x [1] =
--7.82504678e-02
+-7.82501251e-02
   up.y [1] =
-9.96836007e-01
+9.96831715e-01
   up.z [1] =
--1.39594134e-02
+-1.39593538e-02
   front.x [1] =
--4.78192465e-04
+-4.78188274e-04
   front.y [1] =
-1.39648169e-02
+1.39646996e-02
   front.z [1] =
-9.99902368e-01
+9.99893904e-01
   posit.x [1] =
 6.11737518e+01
   posit.y [1] =
@@ -54016,7 +54016,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-66
+67
 groupNumber [1] =
 0
 undefaicmd =
@@ -54114,7 +54114,7 @@ euler =
 0.00000000e+00
 name = Gun Tower
 saveFlags [1] =
-76
+12
 isVisible [1] =
 65535
 EffectsMask [1] =
@@ -54144,7 +54144,7 @@ size [1] =
 0
 [AiPaths]
 count [1] =
-20
+19
 name = AiPath
 sObject = 0000023A
 size [1] =
@@ -54154,25 +54154,12 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
-1.12753406e+03
+1.12648145e+03
   z [1] =
-3.18177856e+02
+3.15936829e+02
 pathType = 00000000
 name = AiPath
 sObject = 0000023B
-size [1] =
-9
-label = creature4
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.03055634e+02
-  z [1] =
-1.14922791e+01
-pathType = 00000000
-name = AiPath
-sObject = 0000023C
 size [1] =
 9
 label = edge_path
@@ -54205,7 +54192,7 @@ points [6] =
 3.35218140e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000023D
+sObject = 0000023C
 size [1] =
 9
 label = creature1
@@ -54213,12 +54200,12 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
-3.70949585e+02
+3.70580505e+02
   z [1] =
-3.59453430e+01
+3.62811966e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000023E
+sObject = 0000023D
 size [1] =
 14
 label = shab_def_spawn
@@ -54226,38 +54213,45 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
--2.41511475e+02
+1.48984888e+03
   z [1] =
--2.11664612e+02
+7.15224365e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000023F
-size [1] =
-7
-label = animal1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
-1.32139807e+03
-  z [1] =
-2.58652344e+01
-pathType = 00000000
-name = AiPath
-sObject = 00000240
+sObject = 0000023E
 size [1] =
 9
 label = shab_stay
 pointCount [1] =
-1
-points [1] =
+6
+points [6] =
   x [1] =
--2.48544571e+02
+1.50161035e+03
   z [1] =
--1.76664276e+02
+7.19662659e+02
+  x [1] =
+1.50518005e+03
+  z [1] =
+7.14242004e+02
+  x [1] =
+1.50940002e+03
+  z [1] =
+7.20335999e+02
+  x [1] =
+1.50612000e+03
+  z [1] =
+7.27367004e+02
+  x [1] =
+1.49768005e+03
+  z [1] =
+7.24554993e+02
+  x [1] =
+1.49783789e+03
+  z [1] =
+7.21881836e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000241
+sObject = 0000023F
 size [1] =
 6
 label = birds3
@@ -54265,25 +54259,12 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
-3.47188995e+02
+3.51198425e+02
   z [1] =
-2.22730026e+02
+2.24564194e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000242
-size [1] =
-9
-label = shab_stay
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--2.30258499e+02
-  z [1] =
--1.88689789e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000243
+sObject = 00000240
 size [1] =
 6
 label = birds2
@@ -54291,25 +54272,12 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
-1.30288550e+03
+1.30645776e+03
   z [1] =
-1.62858765e+02
+1.60176834e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000244
-size [1] =
-7
-label = path_10
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--2.21818771e+02
-  z [1] =
--2.45119843e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000245
+sObject = 00000241
 size [1] =
 12
 label = player_start
@@ -54317,25 +54285,65 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
--8.14427948e+01
+-8.25016632e+01
   z [1] =
--3.11117554e+01
+-3.16718102e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000246
+sObject = 00000242
 size [1] =
 13
 label = defend_patrol
 pointCount [1] =
-1
-points [1] =
+11
+points [11] =
   x [1] =
--2.49013443e+02
+8.88489990e+02
   z [1] =
--1.94316284e+02
+9.78750000e+01
+  x [1] =
+8.30666992e+02
+  z [1] =
+1.43005005e+02
+  x [1] =
+7.87549011e+02
+  z [1] =
+1.40022003e+02
+  x [1] =
+8.35473022e+02
+  z [1] =
+6.08428001e+01
+  x [1] =
+8.52143005e+02
+  z [1] =
+6.66768980e+00
+  x [1] =
+8.79229980e+02
+  z [1] =
+-3.50055008e+01
+  x [1] =
+9.33405029e+02
+  z [1] =
+-1.20852003e+01
+  x [1] =
+9.43823975e+02
+  z [1] =
+2.95879002e+01
+  x [1] =
+9.23747009e+02
+  z [1] =
+5.97967987e+01
+  x [1] =
+9.01182007e+02
+  z [1] =
+1.09156998e+02
+  x [1] =
+8.50411011e+02
+  z [1] =
+1.33132996e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000247
+sObject = 00000243
 size [1] =
 6
 label = birds1
@@ -54343,51 +54351,115 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
-1.56576489e+03
+1.56853662e+03
   z [1] =
--6.70210083e+02
+-6.67764099e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000248
+sObject = 00000244
 size [1] =
 9
-label = creature2
+label = creature5
 pointCount [1] =
 1
 points [1] =
   x [1] =
-8.98374146e+02
+8.99434265e+02
   z [1] =
--1.82291916e+02
+-1.82459366e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000249
+sObject = 00000245
 size [1] =
 12
 label = fury_patrol1
 pointCount [1] =
-1
-points [1] =
+9
+points [9] =
   x [1] =
--2.22287643e+02
+8.52117004e+02
   z [1] =
--2.13705307e+02
+-2.59537994e+02
+  x [1] =
+7.35041016e+02
+  z [1] =
+-2.68375000e+02
+  x [1] =
+6.65427002e+02
+  z [1] =
+-3.36049011e+02
+  x [1] =
+5.73961975e+02
+  z [1] =
+-3.67744995e+02
+  x [1] =
+6.33731018e+02
+  z [1] =
+-4.13929993e+02
+  x [1] =
+7.29888977e+02
+  z [1] =
+-3.71184998e+02
+  x [1] =
+8.57590027e+02
+  z [1] =
+-3.74834015e+02
+  x [1] =
+8.77656982e+02
+  z [1] =
+-3.14631989e+02
+  x [1] =
+8.52117004e+02
+  z [1] =
+-2.59537994e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000024A
+sObject = 00000246
 size [1] =
 12
 label = fury_patrol2
 pointCount [1] =
-1
-points [1] =
+9
+points [9] =
   x [1] =
--2.57922058e+02
+4.11799988e+02
   z [1] =
--2.30115891e+02
+1.76501999e+02
+  x [1] =
+3.04140991e+02
+  z [1] =
+1.40022003e+02
+  x [1] =
+3.02355988e+02
+  z [1] =
+6.89290009e+01
+  x [1] =
+4.01510986e+02
+  z [1] =
+5.67685013e+01
+  x [1] =
+4.78214996e+02
+  z [1] =
+1.09152000e+02
+  x [1] =
+5.28728027e+02
+  z [1] =
+1.24119003e+02
+  x [1] =
+5.29663025e+02
+  z [1] =
+1.89598007e+02
+  x [1] =
+4.80085999e+02
+  z [1] =
+2.14854996e+02
+  x [1] =
+4.11799988e+02
+  z [1] =
+1.76501999e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000024B
+sObject = 00000247
 size [1] =
 7
 label = defend1
@@ -54395,25 +54467,117 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
--2.64486298e+02
+8.97645020e+02
   z [1] =
--2.09016571e+02
+6.53930969e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000024C
+sObject = 00000248
 size [1] =
 7
 label = strike2
 pointCount [1] =
-1
-points [1] =
+24
+points [24] =
   x [1] =
--2.36353851e+02
+9.05672974e+02
   z [1] =
--2.38555618e+02
+-1.28448999e+00
+  x [1] =
+9.19023010e+02
+  z [1] =
+-5.70415001e+01
+  x [1] =
+9.23734985e+02
+  z [1] =
+-9.86629028e+01
+  x [1] =
+9.10383972e+02
+  z [1] =
+-1.64628998e+02
+  x [1] =
+8.79757019e+02
+  z [1] =
+-2.05779007e+02
+  x [1] =
+8.23215027e+02
+  z [1] =
+-2.53054993e+02
+  x [1] =
+7.01492004e+02
+  z [1] =
+-2.78970001e+02
+  x [1] =
+6.63012024e+02
+  z [1] =
+-3.13681000e+02
+  x [1] =
+5.88093018e+02
+  z [1] =
+-3.37868011e+02
+  x [1] =
+5.48041992e+02
+  z [1] =
+-3.41009003e+02
+  x [1] =
+5.26054016e+02
+  z [1] =
+-3.12738007e+02
+  x [1] =
+4.76421997e+02
+  z [1] =
+-2.62479004e+02
+  x [1] =
+4.37627991e+02
+  z [1] =
+-2.80540985e+02
+  x [1] =
+3.80299988e+02
+  z [1] =
+-3.70066010e+02
+  x [1] =
+3.40248993e+02
+  z [1] =
+-3.96924011e+02
+  x [1] =
+2.78367004e+02
+  z [1] =
+-4.10117004e+02
+  x [1] =
+2.43656006e+02
+  z [1] =
+-4.46869995e+02
+  x [1] =
+1.88526993e+02
+  z [1] =
+-4.16398987e+02
+  x [1] =
+7.52856979e+01
+  z [1] =
+-3.96766998e+02
+  x [1] =
+9.63385010e+00
+  z [1] =
+-4.03834015e+02
+  x [1] =
+-6.02587013e+01
+  z [1] =
+-3.99907990e+02
+  x [1] =
+-1.18528999e+02
+  z [1] =
+-3.62213013e+02
+  x [1] =
+-1.51354996e+02
+  z [1] =
+-3.02528992e+02
+  x [1] =
+-1.24653999e+02
+  z [1] =
+-2.08134995e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000024D
+sObject = 00000249
 size [1] =
 11
 label = shab_attack
@@ -54421,9 +54585,48 @@ pointCount [1] =
 1
 points [1] =
   x [1] =
--2.65424042e+02
+1.36246997e+03
   z [1] =
--1.88854996e+02
+-3.55524994e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000024A
+size [1] =
+9
+label = creature2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+1.33691528e+03
+  z [1] =
+1.96679878e+01
+pathType = 00000000
+name = AiPath
+sObject = 0000024B
+size [1] =
+9
+label = creature4
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+1.31773083e+03
+  z [1] =
+-1.09670361e+03
+pathType = 00000000
+name = AiPath
+sObject = 0000024C
+size [1] =
+11
+label = shab_attack
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+1.40790686e+03
+  z [1] =
+-9.71302551e+02
 pathType = 00000000
 hasEntered [1] =
 false
@@ -54433,5 +54636,5 @@ ownerObj [1] =
 0
 ownerObj [1] =
 0
-PadData = 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+PadData = 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 PadData2 = 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

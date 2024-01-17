@@ -16,7 +16,6 @@ RetargetOnStrafe = true
 
 attackTask = "MortarBikeAttack"
 subAttackTask = "MortarBikeSubAttack"
-waitTask = "SitSpinTask"
 subAttackClass = "ANN"
 
 brAccelFactor = 0.5f;

@@ -6,7 +6,7 @@ IdleAllCraft = false // Prevent Interrupting AI.
 CheckProvides = true
 
 [Cheat]
-moneyAmount = 4
+moneyAmount = 8
 moneyDelay = 2
 
 [IdleDispatcher]

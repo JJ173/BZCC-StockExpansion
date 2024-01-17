@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF09 Lua Mission Script
     Written by AI_Unit
     Version 1.0 15-12-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -25,8 +25,13 @@ local m_GameTPS = 20;
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
 
+-- This will handle the Shabayev sequence based on difficulty.
+local m_Shab1Timer = { 240, 180, 120 };
+local m_Shab2Timer = { 180, 120, 60 };
+local m_Shab3Timer = { 120, 105, 90 };
+
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -36,18 +41,40 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_x";
+    m_PlayerPilotODF = "ispilo_x",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_Shabayev = nil,
     m_Manson = nil,
+    m_Nav = nil,
+    m_Machine = nil,
+    m_Crystal = nil,
+    m_MainAPC = nil,
+    m_Objective = nil,
+    m_Ruin = nil,
+    m_APCs = {},
+    m_ShabAttacker1 = nil,
+    m_ShabAttacker2 = nil,
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
-   
+    m_BaseFound = false,
+    m_MansonNag = false,
+    m_APCPilotMsgPlayed = false,
+    m_ShabRescued = false,
+    m_BotchedRescue = false,
+
     m_Audioclip = nil,
+    m_AudioTimer = 0,
+
+    m_MissionDelayTime = 0,
+    m_MansonIntroSequenceStage = 0,
+    m_MansonNagTimer = 0,
+    m_ShabTimer = 0,
+    m_ShabState = 0,
+    m_RuinCam = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -79,7 +106,7 @@ function InitialSetup()
     PreloadODF("fvrecy_x");
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -91,13 +118,30 @@ function Load(MissionData)
     SetAutoGroupUnits(false);
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
+    local team = GetTeamNum(h);
+
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);       
+    if (team == Mission.m_EnemyTeam) then
+        SetSkill(h, Mission.m_MissionDifficulty);
+    elseif (team == Mission.m_HostTeam) then
+        SetSkill(h, 3);
+
+        -- If they are the APC, give them to manson.
+        if (Mission.m_BaseFound == false and GetClassLabel(h) == "CLASS_APC") then
+            if (IsAlive(Mission.m_MainAPC) == false) then
+                Mission.m_MainAPC = h;
+            end
+
+            -- Put them in a table.
+            Mission.m_APCs[#Mission.m_APCs + 1] = h;
+
+            -- Put them on Manson's team for now.
+            SetTeamNum(h, Mission.m_AlliedTeam);
+        end
     end
 end
 
@@ -112,7 +156,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF09 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -122,19 +166,12 @@ function Start()
     print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
-    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
-
-    -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -144,15 +181,6 @@ function Start()
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);
-
-    -- Grab all of our pre-placed handles.
-    Mission.m_Manson = GetHandle("manson");
-
-    -- Set Manson's team to blue.
-    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
-
-    -- Place the player's old base from the previous mission.
-    PlacePlayerBase();
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -170,6 +198,11 @@ function Update()
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
+
+            -- For the rescue sequence.
+            if (Mission.m_ShabRescued == false) then
+                ShabayevBrain();
+            end
         end
     end
 end
@@ -195,7 +228,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -219,7 +252,500 @@ end
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 Functions[1] = function()
+    -- Team names for stats.
+    SetTeamNameForStat(Mission.m_EnemyTeam, "Scion");
+    SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
 
+    -- Ally teams to be sure.
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
+
+    -- Grab all of our pre-placed handles.
+    Mission.m_Manson = GetHandle("manson");
+    Mission.m_Machine = GetHandle("unnamed_mbdata00");
+    Mission.m_Crystal = GetHandle("power_crystal");
+    Mission.m_Objective = GetHandle("unnamed_fbrecy_x");
+    Mission.m_Ruin = GetHandle("ruins");
+
+    -- Build the Nav for Shabayev
+    Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "shab_def_spawn");
+
+    -- Rename the nav to "Shabayev"
+    SetObjectiveName(Mission.m_Nav, "Shabayev");
+
+    -- Build Shabayev's pilot.
+    Mission.m_Shabayev = BuildObject("isshab_p", Mission.m_HostTeam, "shab_stay");
+
+    -- Highlight Manson.
+    SetObjectiveOn(Mission.m_Manson);
+
+    -- This will hold her.
+    Patrol(Mission.m_Shabayev, "shab_stay");
+
+    -- Set Manson's team to blue.
+    SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
+
+    -- Show objectives.
+    AddObjectiveOverride("isdf0901.otf", "WHITE", 10, true);
+    AddObjective("isdf0902.otf", "WHITE");
+    AddObjective("isdf0903.otf", "WHITE");
+
+    -- Place the player's old base from the previous mission.
+    if (not Mission.m_IsCooperativeMode) then
+        PlacePlayerBase();
+    end
+
+    -- Give the player some scrap.
+    SetScrap(Mission.m_HostTeam, 60);
+
+    -- Defense units.
+    BuildObject("fvtank_x", Mission.m_EnemyTeam, "defend1");
+
+    -- Build some patrols.
+    Patrol(BuildObject("fvsent_x", Mission.m_EnemyTeam, "defend1"), "defend_patrol");
+
+    Patrol(BuildObject("fvsent_x", Mission.m_EnemyTeam, "fury_patrol1"), "fury_patrol1");
+    Patrol(BuildObject("fvsent_x", Mission.m_EnemyTeam, "fury_patrol2"), "fury_patrol2");
+
+    -- Move units to the right position.
+    Goto(BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("defend1", 25, 25)), "strike2");
+    Goto(BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("defend1", 25, 25)), "strike2");
+
+    -- Inhabit the swamp with Jaks
+    BuildObject("mcjak01", 0, "creature1");
+    BuildObject("mcjak01", 0, "creature2");
+    BuildObject("mcjak01", 0, "creature3");
+    BuildObject("mcjak01", 0, "creature4");
+    BuildObject("mcjak01", 0, "creature5");
+
+    SpawnBirds(1, 5, "mcwing01", 0, "birds1");
+    SpawnBirds(2, 4, "mcwing01", 0, "birds2");
+    SpawnBirds(3, 6, "mcwing01", 0, "birds3");
+
+    -- Have Manson look at the main player.
+    LookAt(Mission.m_Manson, GetPlayerHandle(1));
+
+    -- If the player takes 3 minutes, have Manson nag.
+    Mission.m_MansonNagTimer = Mission.m_MissionTime + SecondsToTurns(180);
+
+    -- Timer for the Shabayev Sequence.
+    Mission.m_ShabTimer = Mission.m_MissionTime + SecondsToTurns(95);
+
+    -- Set a plan here for the enemy.
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[2] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Do each of Manson's intro dialogues here.
+        if (Mission.m_MansonIntroSequenceStage == 0) then
+            -- Manson: "That was very impressive Cooke..."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0904.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+            -- Advance the sequence.
+            Mission.m_MansonIntroSequenceStage = Mission.m_MansonIntroSequenceStage + 1;
+        elseif (Mission.m_MansonIntroSequenceStage == 1) then
+            -- Manson: "Cooke has found the base."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0905.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(15.5);
+
+            -- Advance the sequence.
+            Mission.m_MansonIntroSequenceStage = Mission.m_MansonIntroSequenceStage + 1;
+        elseif (Mission.m_MansonIntroSequenceStage == 2) then
+            -- Manson: "Cooke, take a small force..."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0906.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(15.5);
+
+            -- Advance the sequence.
+            Mission.m_MansonIntroSequenceStage = Mission.m_MansonIntroSequenceStage + 1;
+        else
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+    end
+end
+
+Functions[3] = function()
+    -- This will check if the player is taking too long.
+    if (Mission.m_MansonNag == false and Mission.m_MansonNagTimer < Mission.m_MissionTime) then
+        -- Manson: "I thought you knew the position of this base..."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0907.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+        -- So we don't loop.
+        Mission.m_MansonNag = true;
+    end
+
+    -- This will advance the mission state.
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_Objective, 250, _Cooperative.m_TotalPlayerCount)) then
+        -- Manson: "That's our objective, send in the APCs."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0908.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+        -- Grab the first empty group of the player.
+        local grp = GetFirstEmptyGroup(Mission.m_HostTeam);
+        local team = Mission.m_HostTeam;
+
+        if (grp == nil) then
+            -- Check to see if any of the players have a spare group to use instead.
+            if (Mission.m_IsCooperativeMode and _Cooperative.m_TotalPlayerCount > 1) then
+                -- Run a check on each player to see if they have a free group.
+                for i = 2, _Cooperative.m_TotalPlayerCount do
+                    grp = GetFirstEmptyGroup(i);
+
+                    if (grp > 0) then
+                        -- Debug.
+                        print("Found group, breaking loop...");
+
+                        -- Set the team for the APCs.
+                        team = i;
+
+                        -- Dead.
+                        break;
+                    end
+                end
+            end
+
+            -- Give the APCs to the team.
+            for i = 1, #Mission.m_APCs do
+                -- Grab the APC.
+                local apc = Mission.m_APCs[i];
+
+                -- Safely check if this is populated.
+                if (apc ~= nil) then
+                    -- Set the APC to the right team.
+                    SetTeamNum(apc, team);
+
+                    -- Set the APC to the right group.
+                    SetGroup(apc, grp);
+                end
+            end
+        else
+            -- Set the APC to the right team.
+            SetTeamNum(apc, team);
+
+            -- Set the APC to the right group.
+            SetGroup(apc, grp);
+        end
+
+        -- So we don't loop.
+        Mission.m_BaseFound = true;
+
+        -- Show objectives.
+        AddObjectiveOverride("isdf0901.otf", "WHITE", 10, true);
+        AddObjective("isdf0902.otf", "GREEN");
+        AddObjective("isdf0903.otf", "WHITE");
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[4] = function()
+    -- This will check if the main APC is near the base.
+    if (Mission.m_APCPilotMsgPlayed == false and GetDistance(Mission.m_MainAPC, Mission.m_Objective) < 250) then
+        -- "Pilot": Cue the band.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0911.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+        -- So we don't loop.
+        Mission.m_APCPilotMsgPlayed = true;
+    end
+
+    if (IsAround(Mission.m_Objective) == false) then
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[5] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Manson: "Good work Cooke, clean up that base..."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0914.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+        -- Show objectives.
+        AddObjectiveOverride("isdf0901.otf", "WHITE", 10, true);
+        AddObjective("isdf0902.otf", "GREEN");
+        AddObjective("isdf0903.otf", "GREEN");
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[6] = function()
+    if (Mission.m_ShabRescued and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- This is Braddock's big speech.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cin0601.wav", true);
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(45.5);
+
+        -- Prep the camera if we are not coop.
+        if (Mission.m_IsCooperativeMode == false) then
+            CameraReady();
+        end
+
+        -- Timer.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(20);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[7] = function()
+    if (Mission.m_MissionTime < Mission.m_MissionDelayTime) then
+        -- So we run the camera.
+        if (Mission.m_IsCooperativeMode == false) then
+            CameraPath("end_camera_path", 10, 250, Mission.m_Machine);
+        end
+    else
+        -- Timer.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(12);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[8] = function()
+    if (Mission.m_MissionTime < Mission.m_MissionDelayTime) then
+        -- So we run the camera.
+        if (Mission.m_IsCooperativeMode == false) then
+            CameraPath("crystal_camera", 60, 0, Mission.m_Crystal);
+        end
+    else
+        -- Give the Camera back.
+        if (Mission.m_IsCooperativeMode == false) then
+            CameraFinish();
+        end
+
+        -- Succeess.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.");
+            DoGameover(20);
+        else
+            SucceedMission(GetTime() + 20, "isdf09w1.txt");
+        end
+
+        -- Stop the mission.
+        Mission.m_MissionOver = true;
+    end
+end
+
+function ShabayevBrain()
+    -- This checks if a player reaches Shabayev in time.
+    if (Mission.m_ShabState < 6 and Mission.m_BotchedRescue == false) then
+        -- Run a distance check on each player, see if they are a pilot.
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local p = GetPlayerHandle(i);
+
+            if (GetDistance(p, Mission.m_Ruin) < 200) then
+                -- Check if they are a person.
+                if (IsPerson(p)) then
+                    -- Messed up rescue.
+                    Mission.m_ShabAttacker1 = BuildObject("fvsent_x", Mission.m_EnemyTeam, "shab_attack");
+
+                    -- Have the enemy attack.
+                    Attack(Mission.m_ShabAttacker1, Mission.m_Shabayev, 1);
+
+                    -- Set the state.
+                    Mission.m_ShabState = 4;
+
+                    -- So we don't loop.
+                    Mission.m_BotchedRescue = true;
+                else
+                    -- Shab: "Cooke, is that you?"
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0909.wav");
+
+                    -- Timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+                    -- For the rescue part.
+                    Mission.m_ShabState = 6;
+                end
+            end
+        end
+    end
+
+    if (Mission.m_ShabState == 0) then
+        -- For the main player, check if they are clear of enemy forces.
+        local temp = GetNearestEnemy(GetPlayerHandle(1), true, true, 100);
+
+        if (temp == nil and Mission.m_ShabTimer < Mission.m_MissionTime) then
+            -- "Shab: I need rescuing".
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0730.wav");
+
+            -- Put the nav on.
+            SetObjectiveOn(Mission.m_Nav);
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+            -- Set the timer for the next part.
+            Mission.m_ShabTimer = Mission.m_MissionTime + SecondsToTurns(m_Shab1Timer[Mission.m_MissionDifficulty]);
+
+            -- Get the camera ready.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraReady();
+            end
+
+            -- Advance the mission state.
+            Mission.m_ShabState = Mission.m_ShabState + 1;
+        end
+    elseif (Mission.m_ShabState == 1) then
+        -- Do the camera if we are not in coop.
+        if (Mission.m_IsCooperativeMode == false) then
+            if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+                CameraFinish();
+            else
+                CameraObject(Mission.m_Shabayev, 25, 2, 8, Mission.m_Shabayev);
+            end
+        end
+
+        -- Do the next part.
+        if (Mission.m_ShabTimer < Mission.m_MissionTime) then
+            -- "Shab: Cooke, where are you?".
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0903.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+
+            -- Set the timer for the next part.
+            Mission.m_ShabTimer = Mission.m_MissionTime + SecondsToTurns(m_Shab2Timer[Mission.m_MissionDifficulty]);
+
+            -- Advance the mission state.
+            Mission.m_ShabState = Mission.m_ShabState + 1;
+        end
+    elseif (Mission.m_ShabState == 2) then
+        if (Mission.m_ShabTimer < Mission.m_MissionTime) then
+            -- "Shab: All units! Please assist!".
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0733a.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(2.5);
+
+            -- Set the timer for the next part.
+            Mission.m_ShabTimer = Mission.m_MissionTime + SecondsToTurns(m_Shab3Timer[Mission.m_MissionDifficulty]);
+
+            -- Advance the mission state.
+            Mission.m_ShabState = Mission.m_ShabState + 1;
+        end
+    elseif (Mission.m_ShabState == 3) then
+        if (Mission.m_ShabTimer < Mission.m_MissionTime) then
+            -- Desperate.
+            SetTeamNum(Mission.m_Ruin, Mission.m_HostTeam);
+
+            -- Set health.
+            SetCurHealth(Mission.m_Ruin, (0.1 * GetMaxHealth(Mission.m_Ruin)));
+
+            -- Build a couple of sentries to attack her.
+            Mission.m_ShabAttacker1 = BuildObject("fvsent_x", Mission.m_EnemyTeam, GetPositionNear("shab_attack", 25, 25));
+            Mission.m_ShabAttacker2 = BuildObject("fvsent_x", Mission.m_EnemyTeam, GetPositionNear("shab_attack", 25, 25));
+
+            -- Have them attack Shabayev.
+            Attack(Mission.m_ShabAttacker1, Mission.m_Shabayev, 1);
+            Attack(Mission.m_ShabAttacker2, Mission.m_Shabayev, 1);
+
+            -- Advance the mission state.
+            Mission.m_ShabState = Mission.m_ShabState + 1;
+        end
+    elseif (Mission.m_ShabState == 4) then
+        -- Check to see if the enemy is within distance of shabayev.
+        if (Mission.m_RuinCam == 0 and GetDistance(Mission.m_ShabAttacker1, Mission.m_Shabayev) < 75 or GetDistance(Mission.m_ShabAttacker2, Mission.m_Shabayev) < 75) then
+            -- Shab: "I've been found!"
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0912.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+
+            -- Prep the camera if we are not in coop mode.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraReady();
+            end
+
+            -- Start the Camera timer.
+            Mission.m_RuinCam = 1;
+        end
+
+        -- Play the camera.
+        if (Mission.m_RuinCam > 0) then
+            -- Make sure we are not in coop mode.
+            if (Mission.m_IsCooperativeMode == false) then
+                -- Show Shabayev.
+                CameraObject(Mission.m_Shabayev, 20, 6, 12, Mission.m_Shabayev);
+            end
+
+            -- Advance the camera.
+            Mission.m_RuinCam = Mission.m_RuinCam + 1;
+
+            -- If we reach 75, advance the mission state.
+            if (Mission.m_RuinCam == 75) then
+                -- Give the camera back if we are not in coop mode.
+                if (Mission.m_IsCooperativeMode == false) then
+                    CameraFinish();
+                end
+
+                -- Advance the mission state.
+                Mission.m_ShabState = Mission.m_ShabState + 1;
+            end
+        end
+    elseif (Mission.m_ShabState == 5) then
+        -- If Shabayev died.
+        if (IsAlive(Mission.m_Shabayev) == false) then
+            -- Shab: "They are all over me!"
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0913.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+            -- Fail the mission.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("Shabayev was killed.");
+                DoGameover(5);
+            else
+                FailMission(GetTime() + 5, "isdf09l1.txt");
+            end
+
+            -- Just so we don't loop.
+            Mission.m_MissionOver = true;
+        end
+    elseif (Mission.m_ShabState == 6) then
+        if (IsPlayerWithinDistance(Mission.m_Ruin, 75, _Cooperative.m_TotalPlayerCount)) then
+            -- Shab: "We've got to stop meeting like this..."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0915.wav");
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+            -- Remove her and the rescue nav.
+            RemoveObject(Mission.m_Shabayev);
+            RemoveObject(Mission.m_Nav);
+
+            -- She's rescued.
+            Mission.m_ShabRescued = true;
+        end
+    end
 end
 
 function PlacePlayerBase()
@@ -252,7 +778,8 @@ function PlacePlayerBase()
                 end
 
                 local cleanODF = odf:gsub("%s+", "");
-                local vector = SetVector(vectorValues[1], TerrainFindFloor(vectorValues[1], vectorValues[3]), vectorValues[3]);
+                local vector = SetVector(vectorValues[1], TerrainFindFloor(vectorValues[1], vectorValues[3]),
+                    vectorValues[3]);
                 local obj = BuildObject(cleanODF, 0, vector);
 
                 -- If we are a Power Generator, or a Gun Tower, we should replace it with the destroyed version.s
@@ -270,7 +797,7 @@ function PlacePlayerBase()
                     if (cleanODF == "ibrecy_x") then
                         -- Spawn some lurkers around the ruins.
                         local lurker1 = BuildObject("fvwalk_x", Mission.m_EnemyTeam, GetPositionNear(obj, 20, 20));
-    
+
                         -- So they look randomly
                         SetRandomHeadingAngle(lurker1);
                     elseif (cleanODF == "ibcbun_x") then

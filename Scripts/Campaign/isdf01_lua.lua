@@ -349,7 +349,9 @@ Functions[1] = function()
     SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
 
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- Grab all of our pre-placed handles.
     Mission.m_Shabayev = GetHandle("shabayev");
@@ -578,7 +580,7 @@ Functions[8] = function()
         end
 
         -- Small delay.
-        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2.5);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;

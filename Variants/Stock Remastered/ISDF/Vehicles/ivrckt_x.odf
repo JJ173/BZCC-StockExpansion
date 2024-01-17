@@ -2,12 +2,18 @@
 classLabel = "ivrckt"
 PilotConfig = "ispilo_x"
 
-aiName = "AssaultTankProcess"
-aiName2 = "AssaultTankProcess"
+aiName = "GechProcess"
+aiName2 = "GechProcess"
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+
+LookAtPitchFactor = 1.0
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
 
 [TrackedVehicleClass]
 

@@ -6,6 +6,8 @@ PilotConfig = "ispilo_x"
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
+followMsg = "ivturr02.wav"
+
 [HoverCraftClass]
 
 [DeployableClass]

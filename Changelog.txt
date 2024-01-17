@@ -12,6 +12,7 @@ ISDF:
 - Turret omegaTurret value increased to 2.0, was 1.25.
 - Updated impact sounds for Pulse Rifle and Sniper
 - Rocket Tanks have been given Assault Tank AI.
+- Fixed missing engine FX on flying/landing Condor Dropships.
 
 Scion:
 - Added step sound to Scion builder.
@@ -19,6 +20,7 @@ Scion:
 - Updated impact sounds for Pulse Rifle and Sniper
 - Turret omegaTurret value increased to 2.0, was 1.25.
 - Warrior has had AI revisions. It's now more deadly and accurate.
+- Scion Recycler has been revised to match the movement style of the ISDF Recycler
 
 CAMPAIGN
 
@@ -142,6 +144,30 @@ ISDF08 (Get Help):
 ISDF09 (Rumble in the Jungle):
 - The base that you built in ISDF07 (Through the Looking Glass) will now appear in this mission.
 - Added Manson to the base.
+- Added some wild life.
+- APCs will be held by Manson until they are all assigned to you.
+- Scion base now occupies most map pools.
+- Scion base will now dispatch turrets to keep map control.
+- Redesigned Manson's base to match what he builds in ISDF07.
+- The time for rescuing Shabayev is now based on difficulty.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF10 (Snow Blind):
+- Mission objectives have been revised. You now have to build the Bomber that Braddock uses to bomb the transmitter.
+- Two Scion Recyclers have been added to the map. One of them is for the pre-built base, the other is for the convoy coming to your area.
+- Convoy will now move based on a difficulty timer:
+	- Easy: 3 minutes
+	- Medium: 2 minutes
+	- Hard: 1 minute
+- Scion bases will now dispatch turrets to keep map control.
+- Added a mission failure condition if your Recycler is destroyed.
+- Added hypothermia logic from ISDF11.
+- Fixed an issue where Braddock's warning would play twice if you enter the cave too early.
+- Friendly turrets will disembark from the dropship and move to a key point to defend your base.
+- Removed EarthQuake that's triggered each time the player goes near the cave. This has been saved for the final sequence.
+- Added crash sound effect for the cave collapse animation.
+- The dropship that rescues you will now play a landing sequence.
 
 - General QOL (Quality of Life) improvements.
 
@@ -204,7 +230,8 @@ Scion02 (Ambush):
 - Added a new failure: if a Scout finds your base and your base Jammer is dead, the mission will fail. (This has been done to line up with the idea that enemy units can just radio back to base if their communications aren't being jammed). Make sure to keep your base Jammer alive!
 - ISDF base will sound an alarm if you are spotted or it has been alerted.
 - ISDF base will send attacks after being alerted during the second phase of the mission.
-- ISDF base will rebuild destroyed power. Destroy the constructor in the base to stop this.
+- ISDF base will rebuild destroyed power.
+- ISDF base will now dispatch turrets to keep map control.
 
 - General QOL (Quality of Life) improvements.
 

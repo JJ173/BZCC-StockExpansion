@@ -1,0 +1,28 @@
+[GameObjectClass]
+classLabel = "ivdrop_land"
+
+/////////LIGHTS and EFFECTS/////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotred"
+lightHard2 = "hp_light_2"
+lightName2 = "spotred"
+lightHard3 = "hp_light_3"
+lightName3 = "spotred"
+lightHard4 = "hp_light_4"
+lightName4 = "spotred"
+lightHard5 = "hp_light_5"
+lightName5 = "spotred"
+lightHard6 = "hp_light_6"
+lightName6 = "spotred"
+lightHard7 = "dropcenter__h"
+lightName7 = "o_red_nf"
+
+effectHard1 = "hp_trail_1"
+effectName1 = "ivpdrop.trail"
+effectHard2 = "hp_trail_2"
+effectName2 = "ivpdrop.trail"
+
+effectHard3 = "hp_emit_1"
+effectName3 = "ivpdrop.posroll"
+
+[BuildingClass]

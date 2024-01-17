@@ -1,4 +1,4 @@
---[[ 
+--[[
 	BZCC Subtitles
 	Written by AI_Unit
 	Version 1.0 14/09/2022
@@ -41,7 +41,7 @@ function _Subtitles.AudioWithSubtitles(clip, useLargePanel)
 end
 
 -- Run every tick to maintain behaviour.
-function _Subtitles.Run() 
+function _Subtitles.Run()
 	if (startSubtitles) then
 		-- If we haven't loaded the module, load it up.
 		if (not subtitlesLoaded) then
@@ -55,7 +55,9 @@ function _Subtitles.Run()
 			IFace_Activate("SubtitlesPanel_Large");
 		else
 			IFace_FillListBoxFromText("SubtitlesPanel", subtitleToUse);
+			-- IFace_FillListBoxFromText("SubtitlesPanel_Detailed.SubtitlesPanel_Detailed_Text_Background.SubtitlesPanel_Detailed_Text", subtitleToUse);
 			IFace_Activate("SubtitlesPanel");
+			-- IFace_Activate("SubtitlesPanel_Detailed");
 		end
 
 		-- So we only run once.
@@ -66,6 +68,7 @@ function _Subtitles.Run()
 		if (IsAudioMessageDone(audioClip)) then
 			IFace_Deactivate("SubtitlesPanel_Large");
 			IFace_Deactivate("SubtitlesPanel");
+			-- IFace_Deactivate("SubtitlesPanel_Detailed");
 		end
 	end
 end
@@ -74,7 +77,7 @@ function RemoveWavExtension(string)
 	return string:gsub("%.wav", "");
 end
 
-function IFace_FillListBoxFromText(listBox, file) 
+function IFace_FillListBoxFromText(listBox, file)
 	-- Clean up the subtitle box for use of the next title.
 	IFace_ClearListBox(listBox);
 

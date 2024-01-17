@@ -1,0 +1,221 @@
+[Start]
+scrapCount = 40
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
+IdleAllCraft = false // Prevent Interrupting AI.
+CheckProvides = true
+
+[IdleDispatcher]
+UnitIdleSeconds = 999999
+
+[Cheat]
+moneyAmount = 8
+moneyDelay = 2
+
+[Match]
+targetType1 = "ivturr_x"
+attackType1_1 = "fvsent_x"
+attackType1_2 = "fvsent_x"
+
+targetType2 = "ivturr_x"
+attackType2_1 = "fvarch_x"
+
+targetType3 = "ivscout_x"
+attackType3_1 = "fvscout_x"
+attackType3_2 = "fvscout_x"
+
+targetType4 = "ivmisl_x"
+attackType4_1 = "fvsent_x"
+attackType4_2 = "fvsent_x"
+
+targetType5 = "ivmbike_x"
+attackType5_1 = "fvscout_x"
+attackType5_2 = "fvscout_x"
+
+targetType6 = "ivtank_x"
+attackType6_1 = "fvsent_x"
+attackType6_2 = "fvsent_x"
+
+targetType7 = "ivtank_x"
+attackType7_1 = "fvscout_x"
+attackType7_2 = "fvscout_x"
+attackType7_3 = "fvscout_x"
+
+targetType8 = "ivtank_x"
+attackType8_1 = "fvtank_x"
+attackType8_2 = "fvtank_x"
+
+[Plan1]
+planType = "Attacker"
+planPriority = 90
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_EXTRACTOR"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
+attackType1 = "fvscout_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan2]
+planType = "Attacker"
+planPriority = 85
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_RECYCLERBUILDING"
+attackType1 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan3]
+planType = "Attacker"
+planPriority = 80
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_TURRET"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_TURRET"
+attackType1 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan4]
+planType = "Attacker"
+planPriority = 75
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_EXTRACTOR"
+planConditionCount1 = 2
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_EXTRACTOR"
+attackType1 = "fvtank_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan5]
+planType = "Attacker"
+planPriority = 70
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_TURRET"
+planConditionCount1 = 2
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_TURRET"
+attackType1 = "fvarch_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan6]
+planType = "Attacker"
+planPriority = 65
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_POWERPLANT"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_POWERPLANT"
+attackType1 = "fvsent_x"
+attackType2 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan7]
+planType = "Attacker"
+planPriority = 60
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_FACTORY"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_FACTORY"
+attackType1 = "fvtank_x"
+attackType2 = "fvsent_x"
+attackType3 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan8]
+planType = "Attacker"
+planPriority = 55
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_GUNTOWER"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "fvartl_x"
+attackType2 = "fvartl_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan9]
+planType = "Attacker"
+planPriority = 50
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_GUNTOWER"
+planConditionCount1 = 2
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "fvarch_x"
+attackType2 = "fvarch_x"
+attackType3 = "fvwalk_x"
+attackType4 = "fvwalk_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan10]
+planType = "Attacker"
+planPriority = 45
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_SUPPLYDEPOT"
+attackType1 = "fvtank_x"
+attackType2 = "fvtank_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true

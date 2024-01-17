@@ -5,6 +5,11 @@ PilotConfig = "ispilo_x"
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
+goMsg = "isdf0137.wav"
+selectAttackMsg = "ivserv01.wav"
+selectUser1Msg = "ivserv01.wav"
+selectUser2Msg = "ivserv01.wav"
+
 [TrackedVehicleClass]
 
 [ServiceTruck]

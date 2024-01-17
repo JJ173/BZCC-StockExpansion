@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF05 Lua Mission Script
     Written by AI_Unit
     Version 1.0 16-10-2022
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -23,15 +23,15 @@ local _Subtitles = require('_Subtitles');
 local m_GameTPS = GetTPS();
 
 -- Difficulty tables for times and spawns.
-local m_ConstructorBuildDelay = {15, 20, 30};
-local m_ScionAttackCount = {2, 3, 4};
-local m_ScionPlayerAttacker = {"fvscout_x", "fvsent_x", "fvtank_x"};
-local m_ScionFirstPoolGuard = {"fvsent_x", "fvtank_x", "fvarch_x"};
-local m_ScionFirstLurker = {"fvscout_x", "fvsent_x", "fvtank_x"};
-local m_ScionSecondLurker = {"fvsent_x", "fvtank_x", "fvarch_x"};
+local m_ConstructorBuildDelay = { 15, 20, 30 };
+local m_ScionAttackCount = { 2, 3, 4 };
+local m_ScionPlayerAttacker = { "fvscout_x", "fvsent_x", "fvtank_x" };
+local m_ScionFirstPoolGuard = { "fvsent_x", "fvtank_x", "fvarch_x" };
+local m_ScionFirstLurker = { "fvscout_x", "fvsent_x", "fvtank_x" };
+local m_ScionSecondLurker = { "fvsent_x", "fvtank_x", "fvarch_x" };
 
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -41,9 +41,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_sx";
+    m_PlayerPilotODF = "ispilo_sx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_Recycler = nil,
     m_Scavenger = nil,
@@ -139,7 +139,7 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
+function Save()
     return Mission;
 end
 
@@ -151,7 +151,7 @@ function Load(MissionData)
     WantBotKillMessages();
 
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
@@ -161,7 +161,7 @@ function AddObject(h)
 
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);       
+        SetSkill(h, Mission.m_MissionDifficulty);
     end
 
     -- Pre-placed Scion objects are set on Team 2. We should move them to Team 6.
@@ -180,7 +180,8 @@ function AddObject(h)
         end
 
         -- A bit of time between buildings.
-        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime + SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
+        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime +
+        SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
 
         Mission.m_ConstructorBuildOrderGiven = false;
         Mission.m_ConstructorDropoffGiven = false;
@@ -188,18 +189,20 @@ function AddObject(h)
         if (not IsAround(Mission.m_Power1)) then
             Mission.m_FirstPowerAttackTime = Mission.m_MissionTime + SecondsToTurns(20);
             Mission.m_Power1 = h;
-        else 
+        else
             Mission.m_Power2 = h;
         end
 
         -- A bit of time between buildings.
-        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime + SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
+        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime +
+        SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
 
         Mission.m_ConstructorBuildOrderGiven = false;
         Mission.m_ConstructorDropoffGiven = false;
     elseif (ODFName == "ibcbu5") then
         -- A bit of time between buildings.
-        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime + SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
+        Mission.m_ConstructorCommandDelay = Mission.m_MissionTime +
+        SecondsToTurns(m_ConstructorBuildDelay[Mission.m_MissionDifficulty]);
 
         Mission.m_Bunker = h;
         Mission.m_ConstructorBuildOrderGiven = false;
@@ -260,7 +263,7 @@ function Start()
     -- Few prints to console.
     print("Welcome to ISDF05 (Lua)");
     print("Written by AI_Unit");
-    
+
     if (Mission.m_IsCooperativeMode) then
         print("Cooperative mode enabled: Yes");
     else
@@ -273,9 +276,9 @@ function Start()
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH);
+    end
 
     -- Get Team Number.
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -349,7 +352,7 @@ function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
         end
     end
 
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -424,7 +427,7 @@ function HandleFailureConditions()
         Mission.m_MissionOver = true;
 
         -- Game over.
-         if (Mission.m_IsCooperativeMode) then
+        if (Mission.m_IsCooperativeMode) then
             NoteGameoverWithCustomMessage("You lost the Recycler!");
             DoGameover(10);
         else
@@ -443,7 +446,9 @@ function HandleMissionStart()
         SetTeamNameForStat(Mission.m_AlliedTeam, "Blue Squad");
 
         -- Ally teams to be sure.
-        Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+        for i = 2, 5 do
+            Ally(Mission.m_HostTeam, i);
+        end
 
         -- There are some neutral Scavengers near the teleport.
         Mission.m_Scavenger2 = GetHandle("ivscav1");
@@ -523,7 +528,7 @@ function HandleMissionStart()
         -- Have the Dropship leave.
         SetAnimation(Mission.m_Dropship, "takeoff", 1);
         StartEmitter(Mission.m_Dropship, 1);
-		StartEmitter(Mission.m_Dropship, 2);
+        StartEmitter(Mission.m_Dropship, 2);
 
         -- Dropship sound.
         StartSoundEffect("dropleav.wav", Mission.m_Dropship);
@@ -556,7 +561,7 @@ function HandleMissionStart()
     elseif (Mission.m_MissionStartStage == 3) then
         if (GetDistance(Mission.m_Recycler, "recy_deploy") <= 25) then
             -- Show objective.
-			AddObjectiveOverride("isdf0501.otf", WHITE, 10, true);
+            AddObjectiveOverride("isdf0501.otf", WHITE, 10, true);
 
             -- If we are a coop game, don't run the cutscene.
             if (Mission.m_IsCooperativeMode) then
@@ -587,8 +592,10 @@ function HandleMissionStart()
     elseif (Mission.m_MissionStartStage == 5) then
         if (IsBuilding(Mission.m_Recycler)) then
             -- Send a couple of enemies to attack.
-            Mission.m_Enemy1 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid1", "raid3", _Cooperative.m_TotalPlayerCount);
-            Mission.m_Enemy2 = BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid2", "raid4", _Cooperative.m_TotalPlayerCount);
+            Mission.m_Enemy1 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid1", "raid3",
+                _Cooperative.m_TotalPlayerCount);
+            Mission.m_Enemy2 = BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid2", "raid4",
+                _Cooperative.m_TotalPlayerCount);
 
             -- Send enemies to attack.
             Goto(Mission.m_Enemy1, "recy_deploy", 1);
@@ -607,7 +614,7 @@ function HandleMissionStart()
     end
 end
 
-function HandleBaseBuildingState() 
+function HandleBaseBuildingState()
     -- Shouldn't need to worry about stages for this as she should attack right away.
     if (GetDistance(Mission.m_Enemy1, Mission.m_Recycler) < 300 and not Mission.m_ShabAttacking) then
         -- Send Shab to attack.
@@ -652,60 +659,60 @@ function HandleBaseBuildingState()
                 if (not Mission.m_ConstructorBuildOrderGiven) then
                     -- Give orders to construct the first Power.
                     Build(Mission.m_Constructor, "ibpge5_fix", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
-                    Dropoff(Mission.m_Constructor, "pgen1", 1);              
-                    -- So we don't loop. 
+                    Dropoff(Mission.m_Constructor, "pgen1", 1);
+                    -- So we don't loop.
                     Mission.m_ConstructorDropoffGiven = true;
                 end
             elseif (IsAlive(Mission.m_Power1) and not IsAlive(Mission.m_Power2) and GetScrap(Mission.m_HostTeam) >= 30) then
                 if (not Mission.m_ConstructorBuildOrderGiven) then
                     -- Give orders to construct the first Power.
                     Build(Mission.m_Constructor, "ibpge5_fix", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "pgen2", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorDropoffGiven = true;
                 end
             elseif (IsAlive(Mission.m_Power2) and not IsAlive(Mission.m_Bunker) and GetScrap(Mission.m_HostTeam) >= 50) then
                 if (not Mission.m_ConstructorBuildOrderGiven) then
                     -- Give orders to construct the first Power.
                     Build(Mission.m_Constructor, "ibcbu5", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "rbunker1", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorDropoffGiven = true;
                 end
             elseif (IsAlive(Mission.m_Bunker) and not IsAlive(Mission.m_GunTower) and GetScrap(Mission.m_HostTeam) >= 50) then
                 if (not Mission.m_ConstructorBuildOrderGiven) then
                     -- Give orders to construct the first Power.
                     Build(Mission.m_Constructor, "ibgtow", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "gtow1", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorDropoffGiven = true;
                 end
             elseif (IsAlive(Mission.m_GunTower) and not IsAlive(Mission.m_GunTower2) and GetScrap(Mission.m_HostTeam) >= 50) then
                 if (not Mission.m_ConstructorBuildOrderGiven) then
                     -- Give orders to construct the first Power.
                     Build(Mission.m_Constructor, "ibgtow", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorBuildOrderGiven = true;
                 elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                     -- Do the dropoff
                     Dropoff(Mission.m_Constructor, "gtow2", 1);
-                    -- So we don't loop. 
+                    -- So we don't loop.
                     Mission.m_ConstructorDropoffGiven = true;
                 end
             end
@@ -715,12 +722,12 @@ function HandleBaseBuildingState()
             if (not Mission.m_ConstructorBuildOrderGiven) then
                 -- Give orders to construct the first Power.
                 Build(Mission.m_Constructor, "ibfact5", 1);
-                -- So we don't loop. 
+                -- So we don't loop.
                 Mission.m_ConstructorBuildOrderGiven = true;
             elseif (Mission.m_ConstructorBuildOrderGiven and not Mission.m_ConstructorDropoffGiven) then
                 -- Do the dropoff
                 Dropoff(Mission.m_Constructor, "fact", 1);
-                -- So we don't loop. 
+                -- So we don't loop.
                 Mission.m_ConstructorDropoffGiven = true;
                 -- Deactivate the Constructor.
                 Mission.m_MissionConstructionStateActive = false;
@@ -729,29 +736,34 @@ function HandleBaseBuildingState()
     end
 end
 
-function HandleScionAttackState() 
+function HandleScionAttackState()
     if (Mission.m_ScionAttackDelay < Mission.m_MissionTime) then
         if (Mission.m_MissionScionAttackStage == 0) then
             if (IsAlive(Mission.m_Power1) and Mission.m_FirstPowerAttackTime < Mission.m_MissionTime) then
                 -- Spawn enemies.
-                Mission.m_Enemy1 = BuildObjectAtSafePath("fvtank_x", Mission.m_EnemyTeam, "raid1", "raid3", _Cooperative.m_TotalPlayerCount);
-                Mission.m_Enemy2 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid4", "raid2", _Cooperative.m_TotalPlayerCount);
+                Mission.m_Enemy1 = BuildObjectAtSafePath("fvtank_x", Mission.m_EnemyTeam, "raid1", "raid3",
+                    _Cooperative.m_TotalPlayerCount);
+                Mission.m_Enemy2 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid4", "raid2",
+                    _Cooperative.m_TotalPlayerCount);
 
                 -- Send the enemies to the perimeter.
                 Goto(Mission.m_Enemy1, "recy_deploy", 1);
                 Goto(Mission.m_Enemy2, "recy_deploy", 1);
 
                 if (Mission.m_MissionDifficulty > 1) then
-                    Mission.m_Enemy3 = BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid1", "raid3", _Cooperative.m_TotalPlayerCount), Mission.m_Constructor, 1;
+                    Mission.m_Enemy3 =
+                    BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid1", "raid3",
+                        _Cooperative.m_TotalPlayerCount), Mission.m_Constructor, 1;
                     Goto(Mission.m_Enemy3, "recy_deploy", 1);
 
                     if (Mission.m_MissionDifficulty > 2) then
-                        Mission.m_Enemy4 = BuildObjectAtSafePath("fvarch_x", Mission.m_EnemyTeam, "raid4", "raid2", _Cooperative.m_TotalPlayerCount);
-                        Goto(Mission.m_Enemy4,"recy_deploy", 1)
+                        Mission.m_Enemy4 = BuildObjectAtSafePath("fvarch_x", Mission.m_EnemyTeam, "raid4", "raid2",
+                            _Cooperative.m_TotalPlayerCount);
+                        Goto(Mission.m_Enemy4, "recy_deploy", 1)
                     end
                 end
 
-                -- Advance the mission step. 
+                -- Advance the mission step.
                 Mission.m_MissionScionAttackStage = Mission.m_MissionScionAttackStage + 1;
             end
         elseif (Mission.m_MissionScionAttackStage == 1) then
@@ -796,7 +808,9 @@ function HandleScavengerState()
                 Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(11.5);
 
                 -- Let's send a Sentry to the Scrap Pool that has been marked.
-                Goto(BuildObjectAtSafePath(m_ScionFirstPoolGuard[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "lurker1", "lurker2", _Cooperative.m_TotalPlayerCount), "scrap_field1", 1);
+                Goto(
+                BuildObjectAtSafePath(m_ScionFirstPoolGuard[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "lurker1",
+                    "lurker2", _Cooperative.m_TotalPlayerCount), "scrap_field1", 1);
 
                 -- Don't loop.
                 Mission.m_PlayCanopyMessage = false;
@@ -826,7 +840,9 @@ function HandleScavengerState()
         SetObjectiveOff(Mission.m_Shabayev);
 
         -- Send some spice attack.
-        Attack(BuildObjectAtSafePath(m_ScionPlayerAttacker[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "spawn1", "raid3", _Cooperative.m_TotalPlayerCount), GetPlayerHandle(1), 1);
+        Attack(
+        BuildObjectAtSafePath(m_ScionPlayerAttacker[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "spawn1", "raid3",
+            _Cooperative.m_TotalPlayerCount), GetPlayerHandle(1), 1);
 
         -- Tell player about the pool.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0507.wav");
@@ -870,7 +886,7 @@ function HandleScavengerState()
                 -- Allow the canopy message to be played.
                 Mission.m_PlayCanopyMessage = true;
             end
-            
+
             -- Build a nav.
             Mission.m_Nav2 = BuildObject("ibnav", 1, "scrap_field3");
 
@@ -915,7 +931,7 @@ function HandleScavengerState()
                     break;
                 end
             end
-            
+
             -- No turrets found, have Shab build the Factory without waiting.
             if (not IsAlive(checker)) then
                 -- Use path is no turrets are found.
@@ -1233,7 +1249,7 @@ function HandleShabayevLogic()
             if (not Mission.m_RecyclerBuildingRescueScout) then
                 -- Recycler will now build the Scout.
                 Build(Mission.m_Recycler, "ivscout", 1);
-                
+
                 -- So we don't loop.
                 Mission.m_RecyclerBuildingRescueScout = true;
             else
@@ -1254,7 +1270,7 @@ function HandleShabayevLogic()
 end
 
 function MonitorRecyclerConstructorProduction()
-    --[[ 
+    --[[
         It's possible to abort the Recycler's construction queue when it's building
         a constructor. To fix mission stall, we'll need a constant check to make sure
         that the constructor is alive, and the Recycler is not building. If the constructor
@@ -1274,7 +1290,7 @@ function MonitorRecyclerConstructorProduction()
 
             -- Grab the time it takes to build this object from the ODF.
             local buildTime = GetODFDouble(consOdf .. ".odf", "GameObjectClass", "buildTime", 10);
-            
+
             -- See if we can grab the time it takes to build this.
             Mission.m_ConstructorBuildTime = Mission.m_MissionTime + SecondsToTurns(buildTime + 1);
 

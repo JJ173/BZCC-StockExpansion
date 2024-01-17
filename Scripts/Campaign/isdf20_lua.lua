@@ -245,13 +245,13 @@ end
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (OrdnanceTeam < 6 and Mission.m_BaseGuardsAttack == false) then
         if (VictimHandle == Mission.m_Factory
-         or VictimHandle == Mission.m_PGen1
-         or VictimHandle == Mission.m_PGen2
-         or VictimHandle == Mission.m_Gun2
-         or VictimHandle == Mission.m_Gun3
-         or VictimHandle == Mission.m_Bunker
-         or VictimHandle == Mission.m_Recycler
-         or VictimHandle == Mission.m_Armory) then
+                or VictimHandle == Mission.m_PGen1
+                or VictimHandle == Mission.m_PGen2
+                or VictimHandle == Mission.m_Gun2
+                or VictimHandle == Mission.m_Gun3
+                or VictimHandle == Mission.m_Bunker
+                or VictimHandle == Mission.m_Recycler
+                or VictimHandle == Mission.m_Armory) then
             -- Have the base guards attack.
             Attack(Mission.m_RebelBaseGuard1, ShooterHandle, 1);
             Attack(Mission.m_RebelBaseGuard2, ShooterHandle, 1);
@@ -271,7 +271,9 @@ Functions[1] = function()
     SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
 
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- Set Manson's team to blue.
     SetTeamColor(Mission.m_EnemyTeam, 0, 127, 255);

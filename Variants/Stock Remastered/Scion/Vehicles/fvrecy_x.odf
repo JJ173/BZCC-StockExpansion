@@ -4,9 +4,24 @@ classLabel = "fvrecy"
 // Don't give units to the commander.
 StayWithOwner = true
 
-[CraftClass]
+// Not included in Stock, but should match the ISDF Recycler.
+mass = 500000
 
+// Not included in Stock, but should match the ISDF Recycler.
+[CraftClass]
+braccelFactor = 0.1
+velFactor = 0.3
+steerFactor = 1.5
+omegaFactor = 0.3
+strafeFactor = 0.0
+
+// Not included in Stock, but should match the ISDF Recycler.
 [TrackedVehicleClass]
+velocReverse = 5.0
+accelThrust = 3.0
+omegaSpin = 0.5
+omegaTurn = 0.5
+alphaSteer = 0.5
 
 [TrackedDeployableClass]
 

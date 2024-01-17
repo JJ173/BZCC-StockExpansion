@@ -36,10 +36,10 @@ local attack2 = {
 }
 
 local attackWaves = {
-    { { "fvscout_x", "fvscout_x", "fvsent_x" },           { "fvsent_x", "fvsent_x", "fvscout_x" },                      { "fvscout_x", "fvtank_x", "fvsent_x" } },                             -- Wave 1
-    { { "fvsent_x", "fvsent_x", "fvscout_x" },            { "fvsent_x", "fvsent_x", "fvsent_x", "fvscout_x" },          { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" } },                  -- Wave 2
-    { { "fvsent_x", "fvsent_x", "fvscout_x", "fvscout_x" }, { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" },         { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x" } },                  -- Wave 3
-    { { "fvsent_x", "fvsent_x", "fvsent_x", "fvsent_x" }, { "fvsent_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x" }, { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x", "fvsent_x" } } -- Wave 4
+    { { "fvscout_x", "fvscout_x", "fvsent_x" },             { "fvsent_x", "fvsent_x", "fvscout_x" },                        { "fvscout_x", "fvtank_x", "fvsent_x" } },                                 -- Wave 1
+    { { "fvsent_x", "fvsent_x", "fvscout_x" },              { "fvsent_x", "fvsent_x", "fvsent_x", "fvscout_x" },            { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" } },                      -- Wave 2
+    { { "fvsent_x", "fvsent_x", "fvscout_x", "fvscout_x" }, { "fvsent_x", "fvsent_x", "fvtank_x", "fvtank_x" },             { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x" } },                      -- Wave 3
+    { { "fvsent_x", "fvsent_x", "fvsent_x", "fvsent_x" },   { "fvsent_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x" }, { "fvtank_x", "fvtank_x", "fvtank_x", "fvtank_x", "fvsent_x", "fvsent_x" } } -- Wave 4
 }
 
 local attackWaveCooldown = { "105", "90", "75" };
@@ -354,7 +354,9 @@ Functions[1] = function()
     SetTeamNameForStat(Mission.m_AlliedTeam, "ISDF");
 
     -- Ally teams to be sure.
-    Ally(Mission.m_HostTeam, Mission.m_AlliedTeam);
+    for i = 2, 5 do
+        Ally(Mission.m_HostTeam, i);
+    end
 
     -- We're going to hijack Team 15 for Green Squad here, so we need to ally all teams.
     for i = 1, 5 do
@@ -583,7 +585,7 @@ Functions[8] = function()
                 SetAnimation(Mission.m_RecyDropship, "takeoff", 1);
 
                 -- Sound effects.
-                StartSoundEffect("dropdoor.wav", Mission.m_RecyDropship);
+                StartSoundEffect("dropleave.wav", Mission.m_RecyDropship);
 
                 -- Wait 3 seconds before running again.
                 Mission.m_RecyclerMoveTime = Mission.m_MissionTime + SecondsToTurns(3);
@@ -1135,7 +1137,7 @@ Functions[35] = function()
 
         -- Set a delay based on time.
         Mission.m_ScionWaveCooldown = Mission.m_MissionTime +
-        SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
+            SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1175,7 +1177,7 @@ Functions[36] = function()
 
         -- Set a delay based on time.
         Mission.m_ScionWaveCooldown = Mission.m_MissionTime +
-        SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
+            SecondsToTurns(attackWaveCooldown[Mission.m_MissionDifficulty]);
 
         -- Advance the attacks.
         Mission.m_ScionWaveCount = Mission.m_ScionWaveCount + 1;

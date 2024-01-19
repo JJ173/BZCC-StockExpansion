@@ -223,6 +223,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Keep track of the main player.
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
@@ -233,7 +238,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -399,7 +404,7 @@ Functions[1] = function()
     end
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
+    _Cooperative.CleanSpawns();
 
     -- Small amount of damage for the Truck to repair.
     Damage(Mission.m_Ship4, 1000);
@@ -572,10 +577,10 @@ end
 
 Functions[8] = function()
     -- Mark the player as lost.
-    if (not IsPlayerWithinDistance(Mission.m_Shabayev, 200, _Cooperative.m_TotalPlayerCount)) then
+    if (not IsPlayerWithinDistance(Mission.m_Shabayev, 200, _Cooperative.GetTotalPlayers())) then
         -- So she starts yelling at the player.
         Mission.m_PlayerLost = true;
-    elseif (IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.m_TotalPlayerCount) and Mission.m_TruckFollowing) then
+    elseif (IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers()) and Mission.m_TruckFollowing) then
         -- Face the Truck.
         LookAt(Mission.m_Shabayev, Mission.m_Truck, 1);
 
@@ -604,7 +609,7 @@ Functions[9] = function()
 
         if (Mission.m_TruckFollowing) then
             -- Truck is near, let's move out.
-            if (IsPlayerWithinDistance(Mission.m_Truck, 70, _Cooperative.m_TotalPlayerCount) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+            if (IsPlayerWithinDistance(Mission.m_Truck, 70, _Cooperative.GetTotalPlayers()) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Shab: Okay, follow me...
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0209.wav");
 
@@ -674,7 +679,7 @@ end
 
 Functions[13] = function()
     -- Check that one of the players are now near the Builder and start performing our Jammer build.
-    if (IsAlive(Mission.m_Builder1) and (IsPlayerWithinDistance(Mission.m_Builder1, GetDistance(Mission.m_Builder1, "dist_check"), _Cooperative.m_TotalPlayerCount))) then
+    if (IsAlive(Mission.m_Builder1) and (IsPlayerWithinDistance(Mission.m_Builder1, GetDistance(Mission.m_Builder1, "dist_check"), _Cooperative.GetTotalPlayers()))) then
         -- Build that Jammer!
         Dropoff(Mission.m_Builder1, "jammer_spawn", 1);
 
@@ -688,9 +693,9 @@ Functions[14] = function()
     if (IsAlive(Mission.m_Jammer)) then
         -- Spawn our first attack wave.
         Mission.m_Scion1 = BuildObjectAtSafePath(m_FirstScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
-            "espawn1_jammer", "espawn3_jammer", _Cooperative.m_TotalPlayerCount);
+            "espawn1_jammer", "espawn3_jammer", _Cooperative.GetTotalPlayers());
         Mission.m_Scion2 = BuildObjectAtSafePath(m_FirstScionWave2[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
-            "espawn2_jammer", "espawn4_jammer", _Cooperative.m_TotalPlayerCount);
+            "espawn2_jammer", "espawn4_jammer", _Cooperative.GetTotalPlayers());
 
         -- Set skill based on difficulty.
         SetSkill(Mission.m_Scion1, Mission.m_MissionDifficulty);
@@ -851,12 +856,12 @@ end
 
 Functions[20] = function()
     if (GetDistance(Mission.m_Shabayev, "super_rendezvous") < 40) then
-        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.m_TotalPlayerCount)) then
+        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers())) then
             -- Have her look at the player.
             LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
 
             -- Mark the player as lost.
-            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.m_TotalPlayerCount)) then
+            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers())) then
                 -- So she starts yelling at the player.
                 Mission.m_PlayerLost = true;
             end
@@ -961,7 +966,7 @@ Functions[24] = function()
 end
 
 Functions[25] = function()
-    if (Mission.m_CheckpointDone and IsPlayerWithinDistance(Mission.m_Builder1, 175, _Cooperative.m_TotalPlayerCount) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+    if (Mission.m_CheckpointDone and IsPlayerWithinDistance(Mission.m_Builder1, 175, _Cooperative.GetTotalPlayers()) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: It's getting away, follow it!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0241.wav");
 
@@ -1005,7 +1010,7 @@ Functions[27] = function()
     end
 
     -- Distance checks to launch the second attack.
-    if (GetDistance(Mission.m_Shabayev, "jam2_spawn") < 150 or IsPlayerWithinDistance("jam2_spawn", 150, _Cooperative.m_TotalPlayerCount)) then
+    if (GetDistance(Mission.m_Shabayev, "jam2_spawn") < 150 or IsPlayerWithinDistance("jam2_spawn", 150, _Cooperative.GetTotalPlayers())) then
         -- Highlight the next  Jammer.
         SetObjectiveOn(Mission.m_Jammer2);
 
@@ -1087,12 +1092,12 @@ end
 
 Functions[30] = function()
     if (GetDistance(Mission.m_Shabayev, "jam2_spawn") < 40) then
-        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.m_TotalPlayerCount)) then
+        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers())) then
             -- Have her look at the player.
             LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
 
             -- Mark the player as lost.
-            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.m_TotalPlayerCount)) then
+            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers())) then
                 -- So she starts yelling at the player.
                 Mission.m_PlayerLost = true;
             end
@@ -1192,7 +1197,7 @@ Functions[35] = function()
         Mission.m_OnToBaseTime = Mission.m_MissionTime + SecondsToTurns(0.5);
 
         -- Move in to the base when the player is within distance.
-        if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.GetTotalPlayers())) then
             -- Move Shabayev to the base.
             Goto(Mission.m_Shabayev, "base_center");
 
@@ -1356,7 +1361,7 @@ Functions[44] = function()
         Mission.m_ShabConWaitTime = Mission.m_MissionTime + SecondsToTurns(.5);
 
         -- Run a distance check on the player.
-        if (IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.GetTotalPlayers())) then
             -- Remove the objective from the Shab scout.
             SetObjectiveOff(Mission.m_Shabayev);
             SetObjectiveName(Mission.m_Shabayev, "Scout");
@@ -1644,7 +1649,7 @@ function HandleScionAttackWaves()
             Mission.m_SafeSpawnCheckTime = Mission.m_MissionTime + SecondsToTurns(2);
 
             -- Run checks
-            if (not IsPlayerWithinDistance("base_epsawn2", 200, _Cooperative.m_TotalPlayerCount)) then
+            if (not IsPlayerWithinDistance("base_epsawn2", 200, _Cooperative.GetTotalPlayers())) then
                 -- Build and send enemy units.
                 Mission.m_Scion1 = BuildObject(m_ThirdScionWave1[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
                     "base_espawn1");
@@ -1665,8 +1670,8 @@ function HandleScionAttackWaves()
             end
         end
     elseif (Mission.m_ThirdAttackWaveSent and not Mission.m_CompanyMessagePlayed) then
-        if ((GetDistance(Mission.m_Scion1, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion1, 70, _Cooperative.m_TotalPlayerCount)) or
-                (GetDistance(Mission.m_Scion2, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion2, 70, _Cooperative.m_TotalPlayerCount))) then
+        if ((GetDistance(Mission.m_Scion1, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion1, 70, _Cooperative.GetTotalPlayers())) or
+                (GetDistance(Mission.m_Scion2, Mission.m_Shabayev) < 100 or IsPlayerWithinDistance(Mission.m_Scion2, 70, _Cooperative.GetTotalPlayers()))) then
             -- Shab: We've got company!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0259.wav");
 
@@ -1731,7 +1736,7 @@ function HandleScionBuilder()
         Mission.m_BuilderRunCheck = Mission.m_MissionTime + SecondsToTurns(2);
 
         -- Run a check to see if we need to stop or not.
-        if (GetDistance(Mission.m_Builder1, "morph_point1") < 50 and (GetDistance(Mission.m_Builder1, Mission.m_Shabayev) > 150 and IsPlayerWithinDistance(Mission.m_Builder1, 150, _Cooperative.m_TotalPlayerCount))) then
+        if (GetDistance(Mission.m_Builder1, "morph_point1") < 50 and (GetDistance(Mission.m_Builder1, Mission.m_Shabayev) > 150 and IsPlayerWithinDistance(Mission.m_Builder1, 150, _Cooperative.GetTotalPlayers()))) then
             -- Halt!
             Stop(Mission.m_Builder1, 1);
         else
@@ -1789,7 +1794,7 @@ function HandlePlayerDisobeyingOrders()
             -- Set a delay between loops.
             Mission.m_PlayerCheckTime = Mission.m_MissionTime + SecondsToTurns(1.5);
 
-            if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.GetTotalPlayers())) then
                 -- Run a reset if the player returns.
                 Mission.m_FirstWarning = false;
                 Mission.m_SecondWarning = false;

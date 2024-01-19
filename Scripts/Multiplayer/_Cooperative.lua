@@ -1,7 +1,9 @@
 local _Cooperative =
 {
-    m_TotalPlayerCount = 1,
-    m_TeamIsSetUp = { false, false, false, false, false }
+    m_GameReady = false,
+    m_TotalPlayerCount = 0,
+    m_TeamIsSetUp = { false, false, false, false },
+    m_TeamsPendingSetup = 0
 };
 
 function _Cooperative.Load(CoopData)
@@ -27,6 +29,22 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop)
     -- print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
+    -- Run a loop to see how many players are in the match at start.
+    if (IsCoop) then
+        for i = 1, 4 do
+            local player = IFace_GetString("network.stats.team" .. i .. "player");
+
+            print("Player " .. i .. " : ", player);
+
+            if (player ~= "") then
+                _Cooperative.m_TeamsPendingSetup = _Cooperative.m_TeamsPendingSetup + 1;
+            end
+        end
+
+        -- Testing again
+        print("Start complete. Players found: ", _Cooperative.m_TeamsPendingSetup);
+    end
+
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
@@ -44,6 +62,20 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop)
     SetAsUser(PlayerH, LocalTeamNum);
 end
 
+function _Cooperative.Update()
+    if (_Cooperative.m_GameReady == false) then
+        -- Check and see that all teams are set up.
+        for i = 1, _Cooperative.m_TeamsPendingSetup do
+            if (_Cooperative.m_TeamIsSetUp[i] == false) then
+                return;
+            end
+        end
+
+        -- If the return is not hit, then we are ready.
+        _Cooperative.m_GameReady = true;
+    end
+end
+
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     if (IsNewPlayer) then
         -- Create the player for the server.
@@ -54,9 +86,6 @@ function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPi
 
         -- Make sure the handle has a pilot so the player can hop out.
         AddPilotByHandle(PlayerH);
-
-        -- Keep track of how many player are in the game.
-        _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1
     end
 
     return true;
@@ -102,7 +131,7 @@ function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilot
     end
 
     -- If a person died, respawn them, etc
-    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF);
+    return DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF);
 end
 
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
@@ -270,6 +299,9 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 end
 
 function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
+    -- Keep track of how many player are in the game.
+    _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
+
     -- Setup the team if it's not set up.
     if (IsTeamplayOn()) then
         local cmdTeam = GetCommanderTeam(Team);
@@ -320,8 +352,32 @@ function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPi
     -- Make sure the handle has a pilot so the player can hop out.
     AddPilotByHandle(PlayerH);
 
+    -- Mark the team as set up.
+    _Cooperative.m_TeamIsSetUp[Team] = true;
+
     -- Return object to caller.
     return PlayerH;
+end
+
+function _Cooperative.CleanSpawns()
+    -- Check to see how many players are in the game, clean up the spawns only for slots that aren't filled.
+    for i = 1, 4 do
+        if (i > _Cooperative.m_TotalPlayerCount) then
+            -- Grab the spawn handle.
+            local spawn_handle = GetHandle("player_spawn_" .. i);
+
+            -- Remove it as we don't need it.
+            RemoveObject(spawn_handle);
+        end
+    end
+end
+
+function _Cooperative.GetGameReadyStatus()
+    return _Cooperative.m_GameReady;
+end
+
+function _Cooperative.GetTotalPlayers()
+    return _Cooperative.m_TotalPlayerCount;
 end
 
 return _Cooperative;

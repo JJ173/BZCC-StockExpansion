@@ -38,7 +38,7 @@ local Mission =
     -- Specific to mission.
     m_PlayerPilotODF = "isuser_mx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivscout_x",
+    m_PlayerShipODF = "ivplysct",
 
     m_Holders = {},
     m_Condor1 = nil,
@@ -207,6 +207,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -214,7 +219,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             if (not Mission.m_PlayerLost) then
@@ -382,9 +387,6 @@ Functions[1] = function()
     -- This is for Red Squad.
     SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
 
-    -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
-
     -- Start our Earthquake.
     StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
@@ -407,7 +409,7 @@ Functions[1] = function()
     Mission.m_Holders[#Mission.m_Holders + 1] = holder2;
 
     -- Do the same for each player.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         -- Grab the player...
         local p = GetPlayerHandle(i);
 
@@ -440,6 +442,9 @@ Functions[1] = function()
     -- Make sure our names are correct.
     SetObjectiveName(Mission.m_Shabayev, "Cmd. Shabayev");
     SetObjectiveName(Mission.m_Simms, "Lt. Simms");
+
+    -- Clean up any player spawns that haven't been taken by the player.
+    _Cooperative.CleanSpawns();
 
     -- Tiny delay before the next part.
     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
@@ -646,7 +651,7 @@ Functions[12] = function()
         end
 
         -- Make sure every player is in formation.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
+        for i = 1, _Cooperative.GetTotalPlayers() do
             local p = GetPlayerHandle(i);
 
             if (GetDistance(p, Mission.m_Shabayev) > 30) then
@@ -1205,7 +1210,7 @@ Functions[37] = function()
 end
 
 Functions[38] = function()
-    if (Mission.m_MissionDelayTime < Mission.m_MissionTime and (GetDistance(Mission.m_Shabayev, "atbase_point") < 200 or IsPlayerWithinDistance("atbase_point", 200, _Cooperative.m_TotalPlayerCount))) then
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime and (GetDistance(Mission.m_Shabayev, "atbase_point") < 200 or IsPlayerWithinDistance("atbase_point", 200, _Cooperative.GetTotalPlayers()))) then
         -- Shab: "The outpost is coming into range..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0108.wav");
 
@@ -1393,7 +1398,7 @@ Functions[47] = function()
 
     if (Mission.m_IsCooperativeMode) then
         -- Run a check against each player to see if one of them is targeting the comm station.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
+        for i = 1, _Cooperative.GetTotalPlayers() do
             if (GetUserTarget(i) == Mission.m_CommBuilding) then
                 check2 = true;
             end
@@ -1429,7 +1434,7 @@ Functions[48] = function()
             Mission.m_LeaveShipWarningActive = true;
             Mission.m_LeaveShipWarningTime = Mission.m_MissionTime + SecondsToTurns(30);
 
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 local p = GetPlayerHandle(i);
 
                 if (InBuilding(p)) then
@@ -1460,7 +1465,7 @@ end
 
 Functions[49] = function()
     -- Run a check as to whether this should be active.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
         if (IsOdf(p, Mission.m_PlayerPilotODF)) then
@@ -1470,7 +1475,7 @@ Functions[49] = function()
         end
     end
 
-    if (IsPlayerWithinDistance(Mission.m_Manson, 4, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Manson, 4, _Cooperative.GetTotalPlayers())) then
         -- This is prepping the cinematic for non-coop mode.
         if (not Mission.m_IsCooperativeMode) then
             CameraReady();
@@ -1590,7 +1595,7 @@ end
 
 Functions[51] = function()
     -- This will check that the player has returned to their ship.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(h);
 
         if (IsOdf(p, Mission.m_PlayerPilotODF)) then
@@ -1703,9 +1708,9 @@ Functions[55] = function()
     local proceed = false;
 
     -- This checks if the player or Shabayev is in range of the two hostiles.
-    if (IsAlive(Mission.m_Scion1) and (GetDistance(Mission.m_Shabayev, Mission.m_Scion1) < 150 or IsPlayerWithinDistance(Mission.m_Scion1, 150, _Cooperative.m_TotalPlayerCount))) then
+    if (IsAlive(Mission.m_Scion1) and (GetDistance(Mission.m_Shabayev, Mission.m_Scion1) < 150 or IsPlayerWithinDistance(Mission.m_Scion1, 150, _Cooperative.GetTotalPlayers()))) then
         proceed = true;
-    elseif (IsAlive(Mission.m_Scion2) and (GetDistance(Mission.m_Shabayev, Mission.m_Scion2) < 150 or IsPlayerWithinDistance(Mission.m_Scion2, 150, _Cooperative.m_TotalPlayerCount))) then
+    elseif (IsAlive(Mission.m_Scion2) and (GetDistance(Mission.m_Shabayev, Mission.m_Scion2) < 150 or IsPlayerWithinDistance(Mission.m_Scion2, 150, _Cooperative.GetTotalPlayers()))) then
         proceed = true;
     end
 
@@ -1843,7 +1848,7 @@ end
 Functions[58] = function()
     -- This is a quick check to see if the player is within range.
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 150, _Cooperative.m_TotalPlayerCount)) then
+        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 150, _Cooperative.GetTotalPlayers())) then
             -- Show objectives.
             AddObjectiveOverride("isdf0107.otf", "GREEN", 10, true);
             AddObjective("isdf0108.otf", "WHITE");
@@ -1941,9 +1946,9 @@ end
 Functions[62] = function()
     if (IsAlive(Mission.m_Scion1) or IsAlive(Mission.m_Scion2)) then
         local check1 = GetDistance(Mission.m_Shabayev, "base_center") < 60 and
-            IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.m_TotalPlayerCount);
-        local check2 = IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.m_TotalPlayerCount) or
-            IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Shabayev, 70, _Cooperative.GetTotalPlayers());
+        local check2 = IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.GetTotalPlayers()) or
+            IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.GetTotalPlayers());
 
         -- This checks to see if the player has ignored the order to attack.
         if (check1 or check2) then
@@ -1981,7 +1986,7 @@ Functions[64] = function()
     -- Do another distance check just incase Shabayev isn't at the base yet.
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and GetDistance(Mission.m_Shabayev, "base_center") < 60) then
         -- Check to see if the player has returned to Shabayev.
-        if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.GetTotalPlayers())) then
             -- Show objectives.
             AddObjectiveOverride("isdf0108.otf", "GREEN", 10, true);
 
@@ -2166,7 +2171,7 @@ Functions[71] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- If Shabayev is near the ammo depot, do a check to make sure all of the players are stocked up before we leave.
         if (GetDistance(Mission.m_Shabayev, "getammo_point") < 30) then
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 -- Check to see if this player needs supplies.
                 local p = GetPlayerHandle(i);
 
@@ -2199,7 +2204,7 @@ Functions[71] = function()
 end
 
 Functions[72] = function()
-    if (IsPlayerWithinDistance(Mission.m_Red1, 250, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Red1, 250, _Cooperative.GetTotalPlayers())) then
         -- Send Shab to the base centre.
         Goto(Mission.m_Shabayev, "base_center", 1);
 
@@ -2314,7 +2319,7 @@ end
 
 Functions[77] = function()
     -- Checks to see if a player is near the truck.
-    if (IsPlayerWithinDistance(Mission.m_Truck, 100, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Truck, 100, _Cooperative.GetTotalPlayers())) then
         -- Stop the warning.
         Mission.m_TruckHelpWarningActive = false;
 
@@ -2399,9 +2404,9 @@ Functions[81] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- This checks to see if the Scion attackers are near, dispatch Shabayev.
         local check1 = IsAlive(Mission.m_Scion1) and
-            IsPlayerWithinDistance(Mission.m_Scion1, 450, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Scion1, 450, _Cooperative.GetTotalPlayers());
         local check2 = IsAlive(Mission.m_Scion2) and
-            IsPlayerWithinDistance(Mission.m_Scion2, 450, _Cooperative.m_TotalPlayerCount);
+            IsPlayerWithinDistance(Mission.m_Scion2, 450, _Cooperative.GetTotalPlayers());
         local check3 = not IsAlive(Mission.m_Scion1) and not IsAlive(Mission.m_Scion2);
 
         -- This will dispatch Shabayev.
@@ -2491,7 +2496,7 @@ function ShabayevBrain()
         if (Mission.m_ShabLookSwitchTime < Mission.m_MissionTime) then
             if (not Mission.m_ShabLookAtPlayer) then
                 -- Let's have her look at random players for fun.
-                local randChance = math.ceil(GetRandomFloat(0, _Cooperative.m_TotalPlayerCount));
+                local randChance = math.ceil(GetRandomFloat(0, _Cooperative.GetTotalPlayers()));
 
                 -- Have her look at the main player.
                 LookAt(Mission.m_Shabayev, GetPlayerHandle(randChance), 1);
@@ -2630,7 +2635,7 @@ function ShabayevBrain()
     -- If a player is low on ammo or health.
     if (Mission.m_ShabStorageBayCheckActive) then
         if (not Mission.m_ShabStorageBayCheckDialogPlayed) then
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 -- Check to see if this player needs supplies.
                 local p = GetPlayerHandle(i);
 
@@ -2871,7 +2876,7 @@ function HandleFailureConditions()
     -- This checks to see if any of the players are lost if the check is active.
     if (Mission.m_PlayerLostCheckActive) then
         if (not Mission.m_PlayerLost) then
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 local p = GetPlayerHandle(i);
 
                 local check1 = ((not Mission.m_ShabMoveToBaseCentre or (Mission.m_ShabMoveToBaseCentre and Mission.m_ShabLeftBase)) and GetDistance(p, Mission.m_Shabayev) > 150);

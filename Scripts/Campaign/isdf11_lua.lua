@@ -389,6 +389,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -396,7 +401,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Check failure conditions over everything else.
             if (Mission.m_MissionState > 1) then
@@ -407,7 +412,7 @@ function Update()
             Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
 
             -- For each player in the mission, check their location and if they are under water.
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 -- Grab the player handle.
                 local p = GetPlayerHandle(i);
 
@@ -439,7 +444,7 @@ function Update()
             -- Run a check to see if any player is near Shab's downed dropship.
             if (Mission.m_ShabFound == false and Mission.m_MissionState > 12) then
                 -- Do a distance check.
-                if (IsPlayerWithinDistance(Mission.m_CrashShip2, 90, _Cooperative.m_TotalPlayerCount)) then
+                if (IsPlayerWithinDistance(Mission.m_CrashShip2, 90, _Cooperative.GetTotalPlayers())) then
                     -- Have the Sentries attack.
                     if (IsAliveAndEnemy(Mission.m_CheatTank1, Mission.m_EnemyTeam)) then
                         Attack(Mission.m_CheatTank1, GetPlayerHandle(1));
@@ -490,7 +495,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function DeletePlayer(id)
@@ -669,7 +674,7 @@ Functions[1] = function()
     Follow(Mission.m_Turret, Mission.m_Recycler, 1);
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
+    _Cooperative.CleanSpawns();
 
     -- If we are in coop, jump right to the destroyed dropship.
     if (Mission.m_IsCooperativeMode) then
@@ -688,7 +693,7 @@ Functions[2] = function()
         Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, Mission.m_CrashTank);
 
         -- For all of our coop players...
-        for i = 1, _Cooperative.m_TotalPlayerCount do
+        for i = 1, _Cooperative.GetTotalPlayers() do
             Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, GetPlayerHandle(i));
         end
 
@@ -844,7 +849,7 @@ Functions[9] = function()
 end
 
 Functions[10] = function()
-    if (IsPlayerWithinDistance(Mission.m_Wingman, 65, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Wingman, 65, _Cooperative.GetTotalPlayers())) then
         -- Highlight our new nav.
         SetObjectiveOn(Mission.m_Nav1);
 
@@ -870,7 +875,7 @@ end
 
 Functions[11] = function()
     -- Run a check to see if the player is near the Recycler.
-    if (Mission.m_FreeRecycler == false and IsPlayerWithinDistance(Mission.m_Recycler, 150, _Cooperative.m_TotalPlayerCount)) then
+    if (Mission.m_FreeRecycler == false and IsPlayerWithinDistance(Mission.m_Recycler, 150, _Cooperative.GetTotalPlayers())) then
         -- Give control of the Recycler, transport, and turret to the player.
         Stop(Mission.m_Recycler, 0);
         Follow(Mission.m_Transport, Mission.m_Recycler, 0);
@@ -1469,10 +1474,10 @@ function WingmanBrain()
     -- This is checking to see if the Scion base warning has been played.
     if (Mission.m_ScionBaseMessagePlayed == false) then
         -- Checks to see if the player is near the choke path so we avoid this warning.
-        if (IsPlayerWithinDistance("choke_point1", 100, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance("choke_point1", 100, _Cooperative.GetTotalPlayers())) then
             -- So we don't play this message.
             Mission.m_ScionBaseMessagePlayed = true;
-        elseif (IsPlayerWithinDistance(Mission.m_ScionScav, 140, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("antenna_point", 140, _Cooperative.m_TotalPlayerCount)) then
+        elseif (IsPlayerWithinDistance(Mission.m_ScionScav, 140, _Cooperative.GetTotalPlayers()) or IsPlayerWithinDistance("antenna_point", 140, _Cooperative.GetTotalPlayers())) then
             -- That's the scion base!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1033.wav");
 

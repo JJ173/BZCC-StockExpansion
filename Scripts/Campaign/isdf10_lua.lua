@@ -287,6 +287,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+    
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -294,13 +299,13 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- BZCC introduced a hypothermia mechanic here. Replicate it.
             Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
 
             -- For each player in the mission, check their location and if they are under water.
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 -- Grab the player handle.
                 local p = GetPlayerHandle(i);
 
@@ -349,7 +354,7 @@ function Update()
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 0.2);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
 end
 
 function DeletePlayer(id)
@@ -425,7 +430,7 @@ Functions[1] = function()
     Ally(Mission.m_EnemyTeam, 7);
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
+    _Cooperative.CleanSpawns();
 
     -- Grab all of our pre-placed handles.
     Mission.m_Condor1 = GetHandle("condor1");
@@ -461,7 +466,7 @@ Functions[1] = function()
     AddScrap(7, 40);
 
     -- For all of our coop players...
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, GetPlayerHandle(i));
     end
 
@@ -488,7 +493,7 @@ Functions[1] = function()
     Mission.m_Condor2Away = true;
 
     -- Kill the third dropship if we are not in coop mode.
-    if (_Cooperative.m_TotalPlayerCount < 2) then
+    if (_Cooperative.GetTotalPlayers() < 2) then
         -- Remove it safely.
         RemoveObject(Mission.m_Condor3);
         -- So we don't run the logic for the third Condor in the brain function.
@@ -532,7 +537,7 @@ Functions[2] = function()
 
         StartSoundEffect("dropdoor.wav", Mission.m_Condor1);
 
-        if (_Cooperative.m_TotalPlayerCount > 1) then
+        if (_Cooperative.GetTotalPlayers() > 1) then
             StartSoundEffect("dropdoor.wav", Mission.m_Condor3);
         end
 
@@ -568,7 +573,7 @@ Functions[3] = function()
     end
 
     -- This will check to see if the player goes to the cave before the convoy reaches it.
-    if (Mission.m_CaveFirst == false and IsPlayerWithinDistance(Mission.m_Cave, 150, _Cooperative.m_TotalPlayerCount)) then
+    if (Mission.m_CaveFirst == false and IsPlayerWithinDistance(Mission.m_Cave, 150, _Cooperative.GetTotalPlayers())) then
         -- Shabayev: "That looks like the cave."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1109.wav");
 
@@ -689,7 +694,7 @@ end
 
 Functions[9] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (Mission.m_TransmissionSearchMessageCounter == 0 and IsPlayerWithinDistance("bridge_check2", 150, _Cooperative.m_TotalPlayerCount)) then
+        if (Mission.m_TransmissionSearchMessageCounter == 0 and IsPlayerWithinDistance("bridge_check2", 150, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "You're close..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1117.wav");
 
@@ -704,7 +709,7 @@ Functions[9] = function()
 
             -- Advance the state.
             Mission.m_TransmissionSearchMessageCounter = Mission.m_TransmissionSearchMessageCounter + 1;
-        elseif (Mission.m_TransmissionSearchMessageCounter == 1 and IsPlayerWithinDistance(Mission.m_CenterRuin, 500, _Cooperative.m_TotalPlayerCount)) then
+        elseif (Mission.m_TransmissionSearchMessageCounter == 1 and IsPlayerWithinDistance(Mission.m_CenterRuin, 500, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "You're coming up on the signal"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1125.wav");
 
@@ -713,7 +718,7 @@ Functions[9] = function()
 
             -- Advance the state.
             Mission.m_TransmissionSearchMessageCounter = Mission.m_TransmissionSearchMessageCounter + 1;
-        elseif (Mission.m_TransmissionSearchMessageCounter == 2 and IsPlayerWithinDistance(Mission.m_CenterRuin, 400, _Cooperative.m_TotalPlayerCount)) then
+        elseif (Mission.m_TransmissionSearchMessageCounter == 2 and IsPlayerWithinDistance(Mission.m_CenterRuin, 400, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "What?... Proceed with caution!"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1126.wav");
 
@@ -728,7 +733,7 @@ Functions[9] = function()
 
             -- Advance the state.
             Mission.m_TransmissionSearchMessageCounter = Mission.m_TransmissionSearchMessageCounter + 1;
-        elseif (Mission.m_TransmissionSearchMessageCounter == 3 and IsPlayerWithinDistance(Mission.m_CenterRuin, 200, _Cooperative.m_TotalPlayerCount)) then
+        elseif (Mission.m_TransmissionSearchMessageCounter == 3 and IsPlayerWithinDistance(Mission.m_CenterRuin, 200, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "Looks like a big fight has already happened..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1108.wav");
 
@@ -737,7 +742,7 @@ Functions[9] = function()
 
             -- Advance the state.
             Mission.m_TransmissionSearchMessageCounter = Mission.m_TransmissionSearchMessageCounter + 1;
-        elseif (Mission.m_TransmissionSearchMessageCounter == 4 and IsPlayerWithinDistance(Mission.m_CenterRuin, 100, _Cooperative.m_TotalPlayerCount)) then
+        elseif (Mission.m_TransmissionSearchMessageCounter == 4 and IsPlayerWithinDistance(Mission.m_CenterRuin, 100, _Cooperative.GetTotalPlayers())) then
             -- Braddock: "The source of that transmission is in the center!"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1129.wav");
 
@@ -754,7 +759,7 @@ Functions[9] = function()
 
             -- Advance the state.
             Mission.m_TransmissionSearchMessageCounter = Mission.m_TransmissionSearchMessageCounter + 1;
-        elseif (Mission.m_TransmissionSearchMessageCounter == 5 and IsPlayerWithinDistance(Mission.m_Transmitter, 40, _Cooperative.m_TotalPlayerCount)) then
+        elseif (Mission.m_TransmissionSearchMessageCounter == 5 and IsPlayerWithinDistance(Mission.m_Transmitter, 40, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "You're over the signal!"
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1132.wav");
 
@@ -840,7 +845,7 @@ Functions[10] = function()
         -- Small delay so we don't check the distance each frame.
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
 
-        if (IsPlayerWithinDistance("bridge_center", 250, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance("bridge_center", 250, _Cooperative.GetTotalPlayers())) then
             -- Replace the cave with the variant that falls.
             Mission.m_Cave = ReplaceObject(Mission.m_Cave, "betunna0");
 
@@ -933,7 +938,7 @@ Functions[12] = function()
 end
 
 Functions[13] = function()
-    if (IsPlayerWithinDistance(Mission.m_Nav1, 60, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Nav1, 60, _Cooperative.GetTotalPlayers())) then
         -- Braddock: "Good work solider."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1106.wav");
 
@@ -964,7 +969,7 @@ function HandleFailureConditions()
             Mission.m_PlayerCaveCheckTimer = Mission.m_MissionTime + SecondsToTurns(1);
 
             -- This could be expensive...
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 local p = GetPlayerHandle(i);
 
                 -- Distance to see if this player is naughty.
@@ -1111,7 +1116,7 @@ function DropshipBrain()
     -- Check and make sure all players are clear of the dropships so we can fly away.
     if (Mission.m_Condor1Away == false) then
         if (Mission.m_PlayerClear == false) then
-            if (IsPlayerWithinDistance(Mission.m_Condor1, 40, _Cooperative.m_TotalPlayerCount) == false) then
+            if (IsPlayerWithinDistance(Mission.m_Condor1, 40, _Cooperative.GetTotalPlayers()) == false) then
                 -- This will play Shabayev's first dialog.
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1101.wav");
 
@@ -1154,7 +1159,7 @@ function DropshipBrain()
     end
 
     if (Mission.m_Condor3Away == false) then
-        if (IsPlayerWithinDistance(Mission.m_Condor3, 40, _Cooperative.m_TotalPlayerCount) == false) then
+        if (IsPlayerWithinDistance(Mission.m_Condor3, 40, _Cooperative.GetTotalPlayers()) == false) then
             -- Start the take-off sequence.
             SetAnimation(Mission.m_Condor3, "takeoff", 1);
 
@@ -1267,7 +1272,7 @@ function ScionBrain()
             AddObjectiveOverride("isdf1103.otf", "WHITE", 10, true);
             AddObjective("isdf1102.otf", "WHITE");
 
-            if (IsPlayerWithinDistance(Mission.m_sRecycler, 150, _Cooperative.m_TotalPlayerCount) == false) then
+            if (IsPlayerWithinDistance(Mission.m_sRecycler, 150, _Cooperative.GetTotalPlayers()) == false) then
                 -- This checks to see if the player has found the cave before the convoy.
                 if (Mission.m_CaveFirst) then
                     -- Braddock: "Detecting a Scion Recycler moving into the cave."
@@ -1301,7 +1306,7 @@ function ScionBrain()
                 Goto(Mission.m_Scout4, "attack_path2")
             end
 
-            if (IsPlayerWithinDistance(Mission.m_sRecycler, 200, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance(Mission.m_sRecycler, 200, _Cooperative.GetTotalPlayers())) then
                 -- Remove the highlight from the Scion Recycler.
                 SetObjectiveOff(Mission.m_sRecycler);
 
@@ -1335,7 +1340,7 @@ function ScionBrain()
             SetAIP("isdf1002_x.aip", 7);
 
             -- This is Braddock saying that they've lost the vehicles.
-            if (IsPlayerWithinDistance(Mission.m_sRecycler, 200, _Cooperative.m_TotalPlayerCount) == false) then
+            if (IsPlayerWithinDistance(Mission.m_sRecycler, 200, _Cooperative.GetTotalPlayers()) == false) then
                 -- Braddock: "We've lost the vehicles."
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1105.wav");
 

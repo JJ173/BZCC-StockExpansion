@@ -238,6 +238,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -245,14 +250,14 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
 
             -- Specific logic to send one Jak creature to the player.
             if (not IsAlive(Mission.m_Animal1)) then
-                if (not IsPlayerWithinDistance("animal1", 250, _Cooperative.m_TotalPlayerCount)) then
+                if (not IsPlayerWithinDistance("animal1", 250, _Cooperative.GetTotalPlayers())) then
                     -- Build our little pet.
                     Mission.m_Animal1 = BuildObject("mcjak01", 0, "animal1");
 
@@ -480,7 +485,7 @@ end
 
 Functions[5] = function()
     if (Mission.m_PlayerDropshipCheckTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (IsPlayerWithinDistance(Mission.m_Dropship, 30, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Dropship, 30, _Cooperative.GetTotalPlayers())) then
             -- Pilot: "Please clear the dropship".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");
 
@@ -587,7 +592,7 @@ Functions[8] = function()
             -- Probe
             Goto(
                 BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1",
-                    _Cooperative.m_TotalPlayerCount),
+                    _Cooperative.GetTotalPlayers()),
                 Mission.m_Recycler, 1);
 
             -- Advance the mission state...
@@ -653,7 +658,7 @@ Functions[10] = function()
                 -- Use a Goto instead of a Attack so they can attack random things.
                 Goto(
                     BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
-                        _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                        _Cooperative.GetTotalPlayers()), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...
@@ -717,7 +722,7 @@ Functions[12] = function()
             -- Probe
             Goto(
                 BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "spawn1", "safe1",
-                    _Cooperative.m_TotalPlayerCount),
+                    _Cooperative.GetTotalPlayers()),
                 Mission.m_Recycler, 1);
 
             -- Advance the mission state...
@@ -756,7 +761,7 @@ Functions[13] = function()
                 -- Use a Goto instead of a Attack so they can attack random things.
                 Goto(
                     BuildObjectAtSafePath(attackWave[i], Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
-                        _Cooperative.m_TotalPlayerCount), Mission.m_Recycler, 1);
+                        _Cooperative.GetTotalPlayers()), Mission.m_Recycler, 1);
             end
 
             -- Advance the mission state...
@@ -811,7 +816,7 @@ Functions[14] = function()
             for i = 1, #attackWave do
                 local unit = attackWave[i];
                 local builtUnit = BuildObjectAtSafePath(unit, Mission.m_EnemyTeam, "spawn" .. i, "safe" .. i,
-                    _Cooperative.m_TotalPlayerCount);
+                    _Cooperative.GetTotalPlayers());
 
                 if (IsOdf(builtUnit, "fvartl_x")) then
                     Attack(builtUnit, Mission.m_Recycler, 1);
@@ -997,7 +1002,7 @@ Functions[22] = function()
 
     -- Build 5 Warriors to attack.
     if (not Mission.m_KillersSpawned) then
-        if (IsPlayerWithinDistance("spawn_killers", 150, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance("spawn_killers", 150, _Cooperative.GetTotalPlayers())) then
             for i = 1, 5 do
                 -- Build units.
                 local unit = BuildObject("fvtank_x", Mission.m_EnemyTeam, "killer" .. i);
@@ -1012,7 +1017,7 @@ Functions[22] = function()
     end
 
     -- This will do a distance check on the player to make sure they get to Shabayev.
-    if (IsPlayerWithinDistance(Mission.m_ShabPilot, 50, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_ShabPilot, 50, _Cooperative.GetTotalPlayers())) then
         -- Shabayev: "Cooke, I'm hurt..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0729.wav");
 
@@ -1033,7 +1038,7 @@ Functions[22] = function()
         Retreat(Mission.m_ShabPilot, Mission.m_Ruins, 1);
 
         -- Set Objectives...
-        AddObjectiveOverride("isdf0708.otf", "WHITE", _Cooperative.m_TotalPlayerCount);
+        AddObjectiveOverride("isdf0708.otf", "WHITE", _Cooperative.GetTotalPlayers());
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1075,8 +1080,8 @@ Functions[23] = function()
     end
 
     -- Does a check to make sure we are on foot.
-    if (GetDistance(Mission.m_ShabPilot, Mission.m_Ruins) < 30 and IsPlayerWithinDistance(Mission.m_Ruins, 20, _Cooperative.m_TotalPlayerCount)) then
-        for i = 1, _Cooperative.m_TotalPlayerCount do
+    if (GetDistance(Mission.m_ShabPilot, Mission.m_Ruins) < 30 and IsPlayerWithinDistance(Mission.m_Ruins, 20, _Cooperative.GetTotalPlayers())) then
+        for i = 1, _Cooperative.GetTotalPlayers() do
             local class = GetClassLabel(GetPlayerHandle(i));
 
             if (class ~= "CLASS_PERSON") then

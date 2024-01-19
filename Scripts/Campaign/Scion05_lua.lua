@@ -317,6 +317,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -332,7 +337,7 @@ function Update()
     end
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -802,7 +807,7 @@ end
 
 Functions[14] = function()
     -- Check to make sure a player is within distance.
-    if (IsPlayerWithinDistance(Mission.m_AANBaseNav, 200, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_AANBaseNav, 200, _Cooperative.GetTotalPlayers())) then
         -- Manson: Cooke? Thank god!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0506.wav");
 
@@ -980,7 +985,7 @@ function DispatchBraddockUnits()
         -- This controls off-map units that attack Manson while the player is setting up.
         if (Mission.m_BraddockDispatchCooldown < Mission.m_MissionTime) then
             -- Check that a player isn't nearby so we can spawn units. If they are, the break the loop.
-            if (IsPlayerWithinDistance("spawn1", 200, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance("spawn1", 200, _Cooperative.GetTotalPlayers())) then
                 return;
             end
 
@@ -1035,7 +1040,7 @@ function DispatchBraddockUnits()
             for i = 1, #attacks do
                 -- Spawn each unit at a safe path.
                 local unit = BuildObjectAtSafePath(attacks[i], Mission.m_EnemyTeam, "pk" .. i, "spawn" .. i,
-                    _Cooperative.m_TotalPlayerCount);
+                    _Cooperative.GetTotalPlayers());
 
                 -- Send the unit to attack the player.
                 Goto(unit, "playerbase", 1);

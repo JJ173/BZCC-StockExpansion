@@ -177,6 +177,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -229,7 +234,7 @@ end
 -- Mission Related Logic
 ---------------------------
 function HandleMissionLogic()
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (not Mission.m_MissionStartDone) then
             HandleMissionStart();
         end
@@ -496,7 +501,7 @@ function HandleScrapPoolPart()
             Mission.m_ScrapPoolPartStage = Mission.m_ScrapPoolPartStage + 1;
         end
     elseif (Mission.m_ScrapPoolPartStage == 2) then
-        if (IsPlayerWithinDistance(Mission.m_ScionScav, 225, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_ScionScav, 225, _Cooperative.GetTotalPlayers())) then
             -- Shab: "The time looks right for an attack."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0605.wav");
 

@@ -238,6 +238,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -248,7 +253,7 @@ function Update()
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -419,7 +424,7 @@ Functions[2] = function()
 end
 
 Functions[3] = function()
-    if (IsPlayerWithinDistance("Ambush", 75, _Cooperative.m_TotalPlayerCount) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+    if (IsPlayerWithinDistance("Ambush", 75, _Cooperative.GetTotalPlayers()) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Shab: This is the ambush site.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0203.wav");
 
@@ -476,12 +481,12 @@ end
 
 Functions[6] = function()
     -- Run a set of distance checks for the player.
-    local check1 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit1, 200, _Cooperative.m_TotalPlayerCount);
-    local check2 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit2, 200, _Cooperative.m_TotalPlayerCount);
-    local check3 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit3, 200, _Cooperative.m_TotalPlayerCount);
-    local check4 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit4, 200, _Cooperative.m_TotalPlayerCount);
-    local check5 = IsPlayerWithinDistance(Mission.m_EnemyPatrol1, 75, _Cooperative.m_TotalPlayerCount);
-    local check6 = IsPlayerWithinDistance(Mission.m_EnemyPatrol2, 75, _Cooperative.m_TotalPlayerCount);
+    local check1 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit1, 200, _Cooperative.GetTotalPlayers());
+    local check2 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit2, 200, _Cooperative.GetTotalPlayers());
+    local check3 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit3, 200, _Cooperative.GetTotalPlayers());
+    local check4 = IsPlayerWithinDistance(Mission.m_EnemyBaseUnit4, 200, _Cooperative.GetTotalPlayers());
+    local check5 = IsPlayerWithinDistance(Mission.m_EnemyPatrol1, 75, _Cooperative.GetTotalPlayers());
+    local check6 = IsPlayerWithinDistance(Mission.m_EnemyPatrol2, 75, _Cooperative.GetTotalPlayers());
 
     -- If the player is within any of the distances provided, advance the mission state.
     if ((check1 or check2 or check3 or check4) or (check5 or check6)) then
@@ -593,7 +598,7 @@ end
 
 Functions[11] = function()
     -- If the player is in the base, then we have captured it.
-    if (IsPlayerWithinDistance(Mission.m_EnemyRecycler, 75, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_EnemyRecycler, 75, _Cooperative.GetTotalPlayers())) then
         -- Shab: The base is ours!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0211.wav");
 
@@ -712,11 +717,11 @@ end
 function HandleFailureConditions()
     -- Player goes into ISDF base before Jammer is ready, fail.
     if (Mission.m_MissionState <= 4) then
-        local dist1 = IsPlayerWithinDistance(Mission.m_EnemyRecycler, 200, _Cooperative.m_TotalPlayerCount);
-        local dist2 = IsPlayerWithinDistance(Mission.m_EnemyPatrol1, 75, _Cooperative.m_TotalPlayerCount);
-        local dist3 = IsPlayerWithinDistance(Mission.m_EnemyPatrol2, 75, _Cooperative.m_TotalPlayerCount);
-        local dist4 = IsPlayerWithinDistance(Mission.m_EnemyPatrol3, 75, _Cooperative.m_TotalPlayerCount);
-        local dist5 = IsPlayerWithinDistance(Mission.m_EnemyPatrol4, 75, _Cooperative.m_TotalPlayerCount);
+        local dist1 = IsPlayerWithinDistance(Mission.m_EnemyRecycler, 200, _Cooperative.GetTotalPlayers());
+        local dist2 = IsPlayerWithinDistance(Mission.m_EnemyPatrol1, 75, _Cooperative.GetTotalPlayers());
+        local dist3 = IsPlayerWithinDistance(Mission.m_EnemyPatrol2, 75, _Cooperative.GetTotalPlayers());
+        local dist4 = IsPlayerWithinDistance(Mission.m_EnemyPatrol3, 75, _Cooperative.GetTotalPlayers());
+        local dist5 = IsPlayerWithinDistance(Mission.m_EnemyPatrol4, 75, _Cooperative.GetTotalPlayers());
 
         -- Player shouldn't be near any of these until later.
         if (dist1 or dist2 or dist3 or dist4 or dist5) then

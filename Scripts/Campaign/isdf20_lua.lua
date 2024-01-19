@@ -172,6 +172,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -179,7 +184,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -407,7 +412,7 @@ Functions[4] = function()
 end
 
 Functions[5] = function()
-    local check1 = IsPlayerWithinDistance("front_ambush", 200, _Cooperative.m_TotalPlayerCount);
+    local check1 = IsPlayerWithinDistance("front_ambush", 200, _Cooperative.GetTotalPlayers());
     local check2 = GetDistance(Mission.m_PlayerUnit1, "front_ambush") < 200;
     local check3 = GetDistance(Mission.m_PlayerUnit2, "front_ambush") < 200;
 
@@ -448,7 +453,7 @@ Functions[5] = function()
 end
 
 Functions[6] = function()
-    local check1 = IsPlayerWithinDistance("front_ambush", 75, _Cooperative.m_TotalPlayerCount);
+    local check1 = IsPlayerWithinDistance("front_ambush", 75, _Cooperative.GetTotalPlayers());
     local check2 = GetDistance(Mission.m_PlayerUnit1, "front_ambush") < 75;
     local check3 = GetDistance(Mission.m_PlayerUnit2, "front_ambush") < 75;
 
@@ -491,7 +496,7 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
-    local check1 = IsPlayerWithinDistance("exit1", 50, _Cooperative.m_TotalPlayerCount);
+    local check1 = IsPlayerWithinDistance("exit1", 50, _Cooperative.GetTotalPlayers());
     local check2 = GetDistance(Mission.m_PlayerUnit1, "exit1") < 50;
     local check3 = GetDistance(Mission.m_PlayerUnit2, "exit1") < 50;
 
@@ -728,7 +733,7 @@ Functions[10] = function()
 end
 
 Functions[11] = function()
-    if (IsPlayerWithinDistance("exit1", 125, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance("exit1", 125, _Cooperative.GetTotalPlayers())) then
         -- Set our delay for the ambush.
         Mission.m_AmbushDelay = Mission.m_MissionTime + SecondsToTurns(15);
 
@@ -845,7 +850,7 @@ Functions[14] = function()
 end
 
 Functions[15] = function()
-    if (Mission.m_SeenManson == false and IsPlayerWithinDistance(Mission.m_Manson, 200, _Cooperative.m_TotalPlayerCount)) then
+    if (Mission.m_SeenManson == false and IsPlayerWithinDistance(Mission.m_Manson, 200, _Cooperative.GetTotalPlayers())) then
         -- Highlight Manson when he's near.
         SetObjectiveOn(Mission.m_Manson);
 
@@ -885,7 +890,7 @@ function RebelBrain()
                 -- Give it a target to move towards.
                 if (cmd == CMD_NONE) then
                     -- Run a check to see if any of our players are in a ship.
-                    for j = 1, _Cooperative.m_TotalPlayerCount do
+                    for j = 1, _Cooperative.GetTotalPlayers() do
                         local p = GetPlayerHandle(j);
                         local class = GetClassLabel(p);
 

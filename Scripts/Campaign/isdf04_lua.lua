@@ -229,6 +229,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Keep track of the main player.
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
@@ -239,7 +244,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- If the mission has advanced enough, start setting scrap so we can't build any more units.
             if (Mission.m_MissionState >= 39) then
@@ -550,7 +555,7 @@ Functions[8] = function()
     if (GetDistance(Mission.m_Recycler, "deploy_point") < 20) then
         -- Check our delay.
         if (Mission.m_RecyclerMoveTime < Mission.m_MissionTime) then
-            if (IsPlayerWithinDistance("recy_drop_point", 20, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance("recy_drop_point", 20, _Cooperative.GetTotalPlayers())) then
                 if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                     -- Pilot: "Please clear the dropship".
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");
@@ -772,7 +777,7 @@ end
 
 Functions[18] = function()
     -- Check to see if a player or the Scav is near the pool.
-    if (IsPlayerWithinDistance(Mission.m_Pool, 60, _Cooperative.m_TotalPlayerCount) or GetDistance(Mission.m_Scavenger, Mission.m_Pool) < 60) then
+    if (IsPlayerWithinDistance(Mission.m_Pool, 60, _Cooperative.GetTotalPlayers()) or GetDistance(Mission.m_Scavenger, Mission.m_Pool) < 60) then
         -- Show objectives.
         AddObjectiveOverride("isdf0402.otf", "WHITE", 10, true);
         AddObjective("isdf0403.otf", "WHITE");
@@ -872,7 +877,7 @@ end
 
 Functions[22] = function()
     if (IsAlive(Mission.m_Scion1)) then
-        if (GetDistance(Mission.m_Scion1, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.m_TotalPlayerCount)) then
+        if (GetDistance(Mission.m_Scion1, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion1, 200, _Cooperative.GetTotalPlayers())) then
             -- Shab: More of them again!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0411.wav");
 
@@ -886,7 +891,7 @@ Functions[22] = function()
             Mission.m_MissionState = Mission.m_MissionState + 1;
         end
     elseif (IsAlive(Mission.m_Scion2)) then
-        if (GetDistance(Mission.m_Scion2, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.m_TotalPlayerCount)) then
+        if (GetDistance(Mission.m_Scion2, Mission.m_Scavenger) < 200 or IsPlayerWithinDistance(Mission.m_Scion2, 200, _Cooperative.GetTotalPlayers())) then
             -- Shab: More of them again!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0411.wav");
 
@@ -1019,7 +1024,7 @@ Functions[28] = function()
 end
 
 Functions[29] = function()
-    if (IsPlayerWithinDistance(Mission.m_Recycler, 60, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Recycler, 60, _Cooperative.GetTotalPlayers())) then
         -- Braddock: Commander, meet Blue Squad in Sector 12.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0441.wav");
 
@@ -1289,7 +1294,7 @@ Functions[41] = function()
 end
 
 Functions[42] = function()
-    if (IsPlayerWithinDistance(Mission.m_FieldBunker, 200, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_FieldBunker, 200, _Cooperative.GetTotalPlayers())) then
         -- Manson: The flock is moving General
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0427.wav");
 
@@ -1302,7 +1307,7 @@ Functions[42] = function()
 end
 
 Functions[43] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_FieldBunker, 50, _Cooperative.m_TotalPlayerCount)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_FieldBunker, 50, _Cooperative.GetTotalPlayers())) then
         -- Braddock: Get inside that bunker now, move!
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0428.wav");
 
@@ -1346,7 +1351,7 @@ end
 
 Functions[44] = function()
     -- Check to see if one of our players is in the bunker.
-    if (IsPlayerInBuilding(_Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerInBuilding(_Cooperative.GetTotalPlayers())) then
         -- Braddock: Okay Cooke... you've just become a key part of this op.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0430b.wav", true);
 
@@ -1597,7 +1602,7 @@ end
 Functions[51] = function()
     -- Play the cliff crumble animation when we are near it.
     if (not Mission.m_CliffCrumble) then
-        if (IsPlayerWithinDistance("cliff_point", 30, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance("cliff_point", 30, _Cooperative.GetTotalPlayers())) then
             -- Set the cliff to fall.
             SetAnimation(Mission.m_Cliff, "crumble", 1);
 
@@ -1640,7 +1645,7 @@ Functions[51] = function()
 end
 
 Functions[52] = function()
-    if (IsPlayerWithinDistance("show_time_point", 120, _Cooperative.m_TotalPlayerCount) or Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+    if (IsPlayerWithinDistance("show_time_point", 120, _Cooperative.GetTotalPlayers()) or Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Manson: They're leaving General.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0437.wav");
 
@@ -1783,7 +1788,7 @@ function TugBrain()
 
     -- Run a check to make sure the player is not near a tug.
     if (not Mission.m_CloseTugDropshipDoors and Mission.m_Tug1Board and Mission.m_Tug2Board and Mission.m_TugCheckTime < Mission.m_MissionTime) then
-        if (IsPlayerWithinDistance(Mission.m_Tug1, 40, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Tug1, 40, _Cooperative.GetTotalPlayers())) then
             if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 -- Pilot: "Please clear the dropship".
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0444.wav");

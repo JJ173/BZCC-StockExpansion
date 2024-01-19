@@ -150,6 +150,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -157,7 +162,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -254,7 +259,7 @@ Functions[1] = function()
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
+    _Cooperative.CleanSpawns();
 
     -- Create our first nav.
     Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "manson_base");
@@ -343,7 +348,7 @@ end
 
 Functions[3] = function()
     -- Persistent checks to see if the player is in any of the swamps.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
         local check1 = GetDistance(p, "swamp_1") < 50;
@@ -407,7 +412,7 @@ Functions[3] = function()
 
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This will be mostly distance checks.
-        if (not Mission.m_Played0804 and IsPlayerWithinDistance("play_0804", 80, _Cooperative.m_TotalPlayerCount)) then
+        if (not Mission.m_Played0804 and IsPlayerWithinDistance("play_0804", 80, _Cooperative.GetTotalPlayers())) then
             -- Shab: "The patrols won't be searching for you".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0804.wav");
 
@@ -418,7 +423,7 @@ Functions[3] = function()
             Mission.m_Played0804 = true;
         end
 
-        if (not Mission.m_Played0805 and IsPlayerWithinDistance("play_0805", 80, _Cooperative.m_TotalPlayerCount)) then
+        if (not Mission.m_Played0805 and IsPlayerWithinDistance("play_0805", 80, _Cooperative.GetTotalPlayers())) then
             -- Shab: "Use the swamp to your advantage...".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0805.wav");
 
@@ -429,7 +434,7 @@ Functions[3] = function()
             Mission.m_Played0805 = true;
         end
 
-        if (not Mission.m_Played0805 and IsPlayerWithinDistance("alchemator", 100, _Cooperative.m_TotalPlayerCount)) then
+        if (not Mission.m_Played0805 and IsPlayerWithinDistance("alchemator", 100, _Cooperative.GetTotalPlayers())) then
             -- Shab: "Use the swamp to your advantage...".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0807.wav");
 
@@ -440,7 +445,7 @@ Functions[3] = function()
             Mission.m_Played0805 = true;
         end
 
-        if (not Mission.m_Played0806 and IsPlayerWithinDistance("turret_1", 150, _Cooperative.m_TotalPlayerCount)) then
+        if (not Mission.m_Played0806 and IsPlayerWithinDistance("turret_1", 150, _Cooperative.GetTotalPlayers())) then
             -- Shab: "What are you doing? Head West".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0806.wav");
 
@@ -452,7 +457,7 @@ Functions[3] = function()
         end
 
         -- This is to advance the mission state.
-        if (IsPlayerWithinDistance("enterbase_1", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_2", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_3", 100, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance("enterbase_1", 100, _Cooperative.GetTotalPlayers()) or IsPlayerWithinDistance("enterbase_2", 100, _Cooperative.GetTotalPlayers()) or IsPlayerWithinDistance("enterbase_3", 100, _Cooperative.GetTotalPlayers())) then
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
         end
@@ -502,7 +507,7 @@ Functions[4] = function()
     end
 
     -- This does a check to make sure the player is in the base.
-    if (IsPlayerWithinDistance(Mission.m_Nav, 150, _Cooperative.m_TotalPlayerCount)) then
+    if (IsPlayerWithinDistance(Mission.m_Nav, 150, _Cooperative.GetTotalPlayers())) then
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -603,7 +608,7 @@ function PlacePlayerBase()
 end
 
 function ScionBrain()
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
         if (IsAlive(Mission.m_Gun1)) then
@@ -673,7 +678,7 @@ function ScionBrain()
 end
 
 function JakBrain()
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
         if (not Mission.m_Jak1Attack and IsAlive(Mission.m_Jak1) and GetDistance(p, Mission.m_Jak1) < 50) then

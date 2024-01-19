@@ -274,6 +274,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -371,7 +376,7 @@ end
 -- Mission Related Logic
 ---------------------------
 function HandleMissionLogic()
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (not Mission.m_MissionStartDone) then
             HandleMissionStart();
         end
@@ -577,9 +582,9 @@ function HandleMissionStart()
         if (IsBuilding(Mission.m_Recycler)) then
             -- Send a couple of enemies to attack.
             Mission.m_Enemy1 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid1", "raid3",
-                _Cooperative.m_TotalPlayerCount);
+                _Cooperative.GetTotalPlayers());
             Mission.m_Enemy2 = BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid2", "raid4",
-                _Cooperative.m_TotalPlayerCount);
+                _Cooperative.GetTotalPlayers());
 
             -- Send enemies to attack.
             Goto(Mission.m_Enemy1, "recy_deploy", 1);
@@ -726,9 +731,9 @@ function HandleScionAttackState()
             if (IsAlive(Mission.m_Power1) and Mission.m_FirstPowerAttackTime < Mission.m_MissionTime) then
                 -- Spawn enemies.
                 Mission.m_Enemy1 = BuildObjectAtSafePath("fvtank_x", Mission.m_EnemyTeam, "raid1", "raid3",
-                    _Cooperative.m_TotalPlayerCount);
+                    _Cooperative.GetTotalPlayers());
                 Mission.m_Enemy2 = BuildObjectAtSafePath("fvsent_x", Mission.m_EnemyTeam, "raid4", "raid2",
-                    _Cooperative.m_TotalPlayerCount);
+                    _Cooperative.GetTotalPlayers());
 
                 -- Send the enemies to the perimeter.
                 Goto(Mission.m_Enemy1, "recy_deploy", 1);
@@ -737,12 +742,12 @@ function HandleScionAttackState()
                 if (Mission.m_MissionDifficulty > 1) then
                     Mission.m_Enemy3 =
                         BuildObjectAtSafePath("fvscout_x", Mission.m_EnemyTeam, "raid1", "raid3",
-                            _Cooperative.m_TotalPlayerCount), Mission.m_Constructor, 1;
+                            _Cooperative.GetTotalPlayers()), Mission.m_Constructor, 1;
                     Goto(Mission.m_Enemy3, "recy_deploy", 1);
 
                     if (Mission.m_MissionDifficulty > 2) then
                         Mission.m_Enemy4 = BuildObjectAtSafePath("fvarch_x", Mission.m_EnemyTeam, "raid4", "raid2",
-                            _Cooperative.m_TotalPlayerCount);
+                            _Cooperative.GetTotalPlayers());
                         Goto(Mission.m_Enemy4, "recy_deploy", 1)
                     end
                 end
@@ -795,7 +800,7 @@ function HandleScavengerState()
                 Goto(
                     BuildObjectAtSafePath(m_ScionFirstPoolGuard[Mission.m_MissionDifficulty], Mission.m_EnemyTeam,
                         "lurker1",
-                        "lurker2", _Cooperative.m_TotalPlayerCount), "scrap_field1", 1);
+                        "lurker2", _Cooperative.GetTotalPlayers()), "scrap_field1", 1);
 
                 -- Don't loop.
                 Mission.m_PlayCanopyMessage = false;
@@ -828,7 +833,7 @@ function HandleScavengerState()
         Attack(
             BuildObjectAtSafePath(m_ScionPlayerAttacker[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "spawn1",
                 "raid3",
-                _Cooperative.m_TotalPlayerCount), GetPlayerHandle(1), 1);
+                _Cooperative.GetTotalPlayers()), GetPlayerHandle(1), 1);
 
         -- Tell player about the pool.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0507.wav");
@@ -887,14 +892,14 @@ function HandleScavengerState()
         -- Handle logic for the fact the turrets are alive.
         if (not Mission.m_HandleTurretWarning) then
             -- Spawn the lurkers!
-            if (not Mission.m_SpawnedFirstLurker and IsPlayerWithinDistance("lurker1", 250, _Cooperative.m_TotalPlayerCount)) then
+            if (not Mission.m_SpawnedFirstLurker and IsPlayerWithinDistance("lurker1", 250, _Cooperative.GetTotalPlayers())) then
                 -- Build the enemy.
                 BuildObject(m_ScionFirstLurker[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "lurker1");
                 -- Only do this once.
                 Mission.m_SpawnedFirstLurker = true;
             end
 
-            if (not Mission.m_SpawnedSecondLurker and IsPlayerWithinDistance("lurker2", 250, _Cooperative.m_TotalPlayerCount)) then
+            if (not Mission.m_SpawnedSecondLurker and IsPlayerWithinDistance("lurker2", 250, _Cooperative.GetTotalPlayers())) then
                 -- Build the enemy.
                 BuildObject(m_ScionSecondLurker[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "lurker2");
                 -- Only do this once.
@@ -928,7 +933,7 @@ function HandleScavengerState()
             end
 
             -- Run a check to see if this enemy is any of the players.
-            if (IsPlayerWithinDistance(checker, dist, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance(checker, dist, _Cooperative.GetTotalPlayers())) then
                 if (checker ~= "scrap_field3") then
                     -- Make sure we play the warning audio.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0512.wav");
@@ -1044,7 +1049,7 @@ function HandleMansonState()
         end
     elseif (Mission.m_MissionMansonStage == 2) then
         -- If player is within distance of Manson, advance.
-        if (IsPlayerWithinDistance(Mission.m_Manson, 50, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Manson, 50, _Cooperative.GetTotalPlayers())) then
             -- Manson: "Intelligence has discovered a structure..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0539a.wav");
 
@@ -1089,7 +1094,7 @@ function HandleMansonState()
         AddHealth(Mission.m_Blue2, 100);
 
         -- Do a check to see if the player is too far from Manson before powering to the next path.
-        if (Mission.m_MansonWaiting and IsPlayerWithinDistance(Mission.m_Manson, 100, _Cooperative.m_TotalPlayerCount) and GetDistance(Mission.m_Manson, "manson_path1", 23) < 100) then
+        if (Mission.m_MansonWaiting and IsPlayerWithinDistance(Mission.m_Manson, 100, _Cooperative.GetTotalPlayers()) and GetDistance(Mission.m_Manson, "manson_path1", 23) < 100) then
             -- Send Manson on his way to the next path.
             Goto(Mission.m_Manson, "manson_path2");
 
@@ -1133,7 +1138,7 @@ function HandleMansonState()
             end
 
             -- Run some logic here to check that the player is near the teleport.
-            if (IsPlayerWithinDistance(Mission.m_Teleportal, 100, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance(Mission.m_Teleportal, 100, _Cooperative.GetTotalPlayers())) then
                 -- "This looks like one of ours..."
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0173.wav");
 

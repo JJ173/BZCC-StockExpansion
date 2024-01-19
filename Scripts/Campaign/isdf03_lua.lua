@@ -216,6 +216,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Keep track of the main player.
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
@@ -226,7 +231,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -424,7 +429,7 @@ end
 
 Functions[5] = function()
     -- This does a check to see if players are near the trigger points.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
         -- Run a check to see if we are next to the "strange" building, or if we are in the tunnels.
@@ -688,7 +693,7 @@ end
 
 Functions[18] = function()
     -- This runs a check to see if the player has hopped out.
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
         local currentClass = GetClassLabel(p);
         local bunkerDist = GetDistance(p, Mission.m_CommBunker);
@@ -966,7 +971,7 @@ end
 
 Functions[24] = function()
     -- Enemy units are dead, refresh.
-    if (Mission.m_HaulersDead and not IsPlayerWithinDistance("base2_espawn1", 300, _Cooperative.m_TotalPlayerCount)) then
+    if (Mission.m_HaulersDead and not IsPlayerWithinDistance("base2_espawn1", 300, _Cooperative.GetTotalPlayers())) then
         if (Mission.m_ScionWaveTime < Mission.m_MissionTime) then
             -- This creates the Haulers and their guards.
             Mission.m_Hauler1 = BuildObject("fvtug3", Mission.m_EnemyTeam, "base2_espawn3");
@@ -1173,7 +1178,7 @@ Functions[28] = function()
     local check1 = IsAlive(Mission.m_Scion1);
     local check2 = IsAlive(Mission.m_Scion2);
 
-    for i = 1, _Cooperative.m_TotalPlayerCount do
+    for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
         local check3 = GetDistance(p, Mission.m_Shabayev) < 60;
 
@@ -1507,7 +1512,7 @@ function HandleFailureConditions()
                 Mission.m_BunkerWarningPlayed = true;
             end
         elseif (not IsAlive(Mission.m_TerminalPlayer) and Mission.m_BunkerWarningPlayed) then
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 local p = GetPlayerHandle(i);
 
                 -- Reset the values.
@@ -1613,7 +1618,7 @@ function HandleFailureConditions()
     -- This is if the player abandons the base to go to Red Squad.
     if (Mission.m_BaseFailureActive) then
         if (IsAlive(Mission.m_Miller)) then
-            if (IsPlayerWithinDistance(Mission.m_Miller, 300, _Cooperative.m_TotalPlayerCount) and not IsPlayerWithinDistance("base_center", 400, _Cooperative.m_TotalPlayerCount)) then
+            if (IsPlayerWithinDistance(Mission.m_Miller, 300, _Cooperative.GetTotalPlayers()) and not IsPlayerWithinDistance("base_center", 400, _Cooperative.GetTotalPlayers())) then
                 -- Halt the mission.
                 Mission.m_MissionOver = true;
 

@@ -245,6 +245,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -252,7 +257,7 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -467,7 +472,7 @@ Functions[3] = function()
     end
 
     -- This will advance the mission state.
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_Objective, 250, _Cooperative.m_TotalPlayerCount)) then
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_Objective, 250, _Cooperative.GetTotalPlayers())) then
         -- Manson: "That's our objective, send in the APCs."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0908.wav");
 
@@ -480,9 +485,9 @@ Functions[3] = function()
 
         if (grp == nil) then
             -- Check to see if any of the players have a spare group to use instead.
-            if (Mission.m_IsCooperativeMode and _Cooperative.m_TotalPlayerCount > 1) then
+            if (Mission.m_IsCooperativeMode and _Cooperative.GetTotalPlayers() > 1) then
                 -- Run a check on each player to see if they have a free group.
-                for i = 2, _Cooperative.m_TotalPlayerCount do
+                for i = 2, _Cooperative.GetTotalPlayers() do
                     grp = GetFirstEmptyGroup(i);
 
                     if (grp > 0) then
@@ -657,7 +662,7 @@ function ShabayevBrain()
     -- This checks if a player reaches Shabayev in time.
     if (Mission.m_ShabState < 7 and Mission.m_BotchedRescue == false) then
         -- Run a distance check on each player, see if they are a pilot.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
+        for i = 1, _Cooperative.GetTotalPlayers() do
             local p = GetPlayerHandle(i);
 
             if (GetDistance(p, Mission.m_Ruin) < 200) then
@@ -834,7 +839,7 @@ function ShabayevBrain()
             Mission.m_MissionOver = true;
         end
     elseif (Mission.m_ShabState == 7) then
-        if (IsPlayerWithinDistance(Mission.m_Shabayev, 30, _Cooperative.m_TotalPlayerCount)) then
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 30, _Cooperative.GetTotalPlayers())) then
             -- Shab: "We've got to stop meeting like this..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0915.wav");
 

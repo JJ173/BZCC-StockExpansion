@@ -136,6 +136,11 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
+
+        -- Check to see if it's a pilot and remove it.
+        if (GetClassLabel(h) == "CLASS_PERSON") then
+            RemoveObject(h);
+        end
     elseif (teamNum == Mission.m_HostTeam) then
         if (Mission.m_IntroObjectivesDisplayed) then
             -- If we have enough scrap when an Extractor is deployed, show objectives.
@@ -191,6 +196,11 @@ function Start()
 end
 
 function Update()
+    -- This checks to see if the game is ready.
+    if (Mission.m_IsCooperativeMode) then
+        _Cooperative.Update();
+    end
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -198,13 +208,13 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver) then
+    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
             -- BZCC introduced a hypothermia mechanic here. Replicate it.
             Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
 
             -- For each player in the mission, check their location and if they are under water.
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+            for i = 1, _Cooperative.GetTotalPlayers() do
                 -- Grab the player handle.
                 local p = GetPlayerHandle(i);
 
@@ -567,8 +577,8 @@ Functions[5] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- If the player goes near the empty Scavs, Manson will get them to tow them.
         if (not Mission.m_TrainingDialogPlayed) then
-            local check1 = IsPlayerWithinDistance(Mission.m_EmptyScav1, 70, _Cooperative.m_TotalPlayerCount);
-            local check2 = IsPlayerWithinDistance(Mission.m_EmptyScav2, 70, _Cooperative.m_TotalPlayerCount);
+            local check1 = IsPlayerWithinDistance(Mission.m_EmptyScav1, 70, _Cooperative.GetTotalPlayers());
+            local check2 = IsPlayerWithinDistance(Mission.m_EmptyScav2, 70, _Cooperative.GetTotalPlayers());
             local check3 = GetDistance(Mission.m_Tug, Mission.m_EmptyScav1) < 70;
             local check4 = GetDistance(Mission.m_Tug, Mission.m_EmptyScav2) < 70;
 

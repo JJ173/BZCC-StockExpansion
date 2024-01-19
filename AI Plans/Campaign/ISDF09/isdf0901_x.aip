@@ -1,0 +1,301 @@
+[Start]
+scrapCount = 40
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
+IdleAllCraft = false // Prevent Interrupting AI.
+
+[IdleDispatcher]
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Cheat]
+moneyAmount = 8
+moneyDelay = 2
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan1]
+planType = "CollectPool"
+planPriority = 100
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildIfNoIdle = 1
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan2]
+planType = "CollectPool"
+planPriority = 95
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildIfNoIdle = 1
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan3]
+planType = "CollectField"
+planPriority = 90
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+planCondition2 = "FriendlyExists"
+planConditionClass2 = "resource"
+planConditionCount2 = 1
+planCompare2 = ">="
+planConditionClassProvided2 = true
+buildIfNoIdle = 1
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan4]
+planType = "BuildMinimums"
+planPriority = 85
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildType1 = "fvcons_x"
+buildCount1 = 2
+buildType2 = "fvturr_x"
+buildCount2 = 6
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan5]
+planType = "BaseBuildMinimums"
+planPriority = 80
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildType1 = "fbspir_x"
+buildLoc1 = "new_spire1"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan6]
+planType = "BaseBuildMinimums"
+planPriority = 75
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildType1 = "fbspir_x"
+buildLoc1 = "new_spire2"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan7]
+planType = "BaseBuildMinimums"
+planPriority = 70
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+buildType1 = "fbkiln_x"
+buildLoc1 = "forge_path"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan8]
+planType = "BaseBuildMinimums"
+planPriority = 65
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+planCondition2 = "Exists"
+planConditionClass2 = "VIRTUAL_CLASS_FACTORY"
+planConditionCount2 = 1
+planCompare2 = ">="
+planConditionClassProvided2 = true
+buildType1 = "fbantm_x"
+buildLoc1 = "over_path"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan9]
+planType = "Upgrade"
+planPriority = 60
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+planCondition2 = "Exists"
+planConditionClass2 = "VIRTUAL_CLASS_FACTORY"
+planConditionCount2 = 1
+planCompare2 = ">="
+planConditionClassProvided2 = true
+unitType = "fbkiln_x"
+ContinueEvenIfFail = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan10]
+planType = "Upgrade"
+planPriority = 55
+planCondition1 = "Exists"
+planConditionClass1 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+planCondition2 = "Exists"
+planConditionClass2 = "VIRTUAL_CLASS_COMMBUNKER"
+planConditionCount2 = 1
+planCompare2 = ">="
+planConditionClassProvided2 = true
+unitType = "fbantm_x"
+ContinueEvenIfFail = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan11]
+planType = "Attacker"
+planPriority = 50
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_EXTRACTOR"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_EXTRACTOR"
+attackType1 = "fvscout_x"
+attackType2 = "fvscout_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan12]
+planType = "Attacker"
+planPriority = 45
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_RECYCLERBUILDING"
+attackType1 = "fvsent_x"
+attackType2 = "fvsent_x"
+attackType3 = "fvsent_x"
+attackType4 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan13]
+planType = "Attacker"
+planPriority = 40
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_GUNTOWER"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "fvtank_x"
+attackType2 = "fvtank_x"
+attackType3 = "fvarch_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan14]
+planType = "Attacker"
+planPriority = 35
+planCondition1 = "HisExists"
+planConditionClass1 = "DefendUnit"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "DefendUnit"
+attackType1 = "fvsent_x"
+attackType2 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan15]
+planType = "Attacker"
+planPriority = 30
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_GUNTOWER"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "fvarch_x"
+attackType2 = "fvarch_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan16]
+planType = "Attacker"
+planPriority = 25
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_FACTORY"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_FACTORY"
+attackType1 = "fvsent_x"
+attackType2 = "fvsent_x"
+attackType3 = "fvscout_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan17]
+planType = "Attacker"
+planPriority = 20
+planCondition1 = "HisExists"
+planConditionClass1 = "VIRTUAL_CLASS_POWERPLANT"
+planConditionCount1 = 1
+planCompare1 = ">="
+planConditionClassProvided1 = true
+targetType = "VIRTUAL_CLASS_POWERPLANT"
+attackType1 = "fvsent_x"
+attackType2 = "fvsent_x"
+maxAttacks = 99
+buildIfNoIdle = 1
+AttackAnything = true

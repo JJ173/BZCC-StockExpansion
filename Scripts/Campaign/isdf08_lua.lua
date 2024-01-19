@@ -1,11 +1,11 @@
---[[ 
+--[[
     BZCC ISDF08 Lua Mission Script
     Written by AI_Unit
     Version 1.0 28-11-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")),"_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
@@ -25,8 +25,11 @@ local m_GameTPS = GetTPS();
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
 
+-- Mission Name
+local m_MissionName = "ISDF08: Get Help";
+
 -- Mission important variables.
-local Mission = 
+local Mission =
 {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
@@ -36,9 +39,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "ispilo_sx";
+    m_PlayerPilotODF = "ispilo_sx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivtank_x";
+    m_PlayerShipODF = "ivtank_x",
 
     m_Shabayev = nil,
     m_Nav = nil,
@@ -62,7 +65,7 @@ local Mission =
     m_Manson = nil,
 
     m_IsCooperativeMode = false,
-    m_StartDone = false,    
+    m_StartDone = false,
     m_MissionOver = false,
     m_Gun1Attack = false,
     m_Gun1Idle = false,
@@ -106,25 +109,28 @@ function InitialSetup()
     WantBotKillMessages();
 end
 
-function Save() 
-    return Mission;
+function Save()
+    return _Cooperative.Save(), Mission;
 end
 
-function Load(MissionData)
+function Load(CoopData, MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
 
+    -- Load Coop.
+    _Cooperative.Load(CoopData);
+
     -- Load mission data.
-	Mission = MissionData;
+    Mission = MissionData;
 end
 
 function AddObject(h)
     -- Handle unit skill for enemy.
     if (GetTeamNum(h) == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);       
+        SetSkill(h, Mission.m_MissionDifficulty);
     end
 end
 
@@ -136,34 +142,8 @@ function Start()
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
 
-    -- Few prints to console.
-    print("Welcome to ISDF08 (Lua)");
-    print("Written by AI_Unit");
-    
-    if (Mission.m_IsCooperativeMode) then
-        print("Cooperative mode enabled: Yes");
-    else
-        print("Cooperative mode enabled: No");
-    end
-
-    print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
-    print("Good luck and have fun :)");
-
-    -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle();
-
-	if (PlayerEntryH ~= nil) then
-		RemoveObject(PlayerEntryH);
-	end
-
-    -- Get Team Number.
-    local LocalTeamNum = GetLocalPlayerTeamNumber();
-
-    -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 0.2);
-
-    -- Make sure we give the player control of their ship.
-    SetAsUser(PlayerH, LocalTeamNum);
+    -- Call generic start logic in coop.
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -193,6 +173,10 @@ function AddPlayer(id, Team, IsNewPlayer)
     return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, true, 0.2);
 end
 
+function DeletePlayer(id)
+    return _Cooperative.DeletePlayer(id);
+end
+
 function PlayerEjected(DeadObjectHandle)
     return _Cooperative.PlayerEjected(DeadObjectHandle);
 end
@@ -210,7 +194,7 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-	return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
@@ -373,8 +357,8 @@ Functions[3] = function()
         -- This makes sure the patrols ignore the player when they are underwater.
         if (check1 or check2 or check3 or check4 or check5 or check6 or check7) then
             -- Change this player to the enemy team.
-            SetPerceivedTeam(p, Mission.m_EnemyTeam);   
-            
+            SetPerceivedTeam(p, Mission.m_EnemyTeam);
+
             -- Have the scouts become a bit stupid.
             SetIndependence(Mission.m_Scout1, 0);
 
@@ -382,8 +366,8 @@ Functions[3] = function()
             SetIndependence(Mission.m_Scout2, 0);
         else
             -- Change this player to the enemy team.
-            SetPerceivedTeam(p, Mission.m_HostTeam);   
-            
+            SetPerceivedTeam(p, Mission.m_HostTeam);
+
             -- Have the scouts become a bit stupid.
             SetIndependence(Mission.m_Scout1, 0);
 
@@ -468,7 +452,7 @@ Functions[3] = function()
         end
 
         -- This is to advance the mission state.
-        if (IsPlayerWithinDistance("enterbase_1", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_2", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_3", 100, _Cooperative.m_TotalPlayerCount)) then            
+        if (IsPlayerWithinDistance("enterbase_1", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_2", 100, _Cooperative.m_TotalPlayerCount) or IsPlayerWithinDistance("enterbase_3", 100, _Cooperative.m_TotalPlayerCount)) then
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
         end
@@ -578,7 +562,8 @@ function PlacePlayerBase()
                 end
 
                 local cleanODF = odf:gsub("%s+", "");
-                local vector = SetVector(vectorValues[1], TerrainFindFloor(vectorValues[1], vectorValues[3]), vectorValues[3]);
+                local vector = SetVector(vectorValues[1], TerrainFindFloor(vectorValues[1], vectorValues[3]),
+                    vectorValues[3]);
                 local obj = BuildObject(cleanODF, 0, vector);
 
                 -- If we are a Power Generator, or a Gun Tower, we should replace it with the destroyed version.s
@@ -596,7 +581,7 @@ function PlacePlayerBase()
                     if (cleanODF == "ibrecy_x") then
                         -- Spawn some lurkers around the ruins.
                         local lurker1 = BuildObject("fvwalk_x", Mission.m_EnemyTeam, GetPositionNear(obj, 20, 20));
-    
+
                         -- So they look randomly
                         SetRandomHeadingAngle(lurker1);
                     elseif (cleanODF == "ibcbun_x") then

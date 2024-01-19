@@ -148,8 +148,10 @@ ISDF09 (Rumble in the Jungle):
 - APCs will be held by Manson until they are all assigned to you.
 - Scion base now occupies most map pools.
 - Scion base will now dispatch turrets to keep map control.
+- Scion base will now rebuild lost structures.
 - Redesigned Manson's base to match what he builds in ISDF07.
 - The time for rescuing Shabayev is now based on difficulty.
+- Fixed ending cutscene to show the crystal correctly.
 
 - General QOL (Quality of Life) improvements.
 
@@ -204,7 +206,7 @@ ISDF12 (Counter Attack):
 
 - General QOL (Quality of Life) improvements.
 
-ISDF20 (A Traitor's Fate):
+ISDF15 (A Traitor's Fate):
 - Added Squad Two AI squadron. This was removed from the original mission.
 - Added second Service Truck for balance due to the player being in a Walker.
 - Removed health debuff from enemy Gun Towers.

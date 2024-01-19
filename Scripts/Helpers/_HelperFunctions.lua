@@ -73,7 +73,7 @@ function TableRemoveByHandle(table, handle)
 	end
 end
 
-function CleanSpawns(isCoop)
+function CleanSpawns()
     local s1 = GetHandle("player_spawn_1");
     local s2 = GetHandle("player_spawn_2");
     local s3 = GetHandle("player_spawn_3");

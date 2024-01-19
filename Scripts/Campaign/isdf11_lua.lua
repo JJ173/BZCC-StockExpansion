@@ -22,6 +22,9 @@ local _Subtitles = require('_Subtitles');
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
+-- Mission Name
+local m_MissionName = "ISDF11: On Thin Ice";
+
 local m_IceAttacker1 = { "fvscout_x", "fvsent_x", "fvtank_x" };
 local m_IceAttacker2 = { "fvscout_x", "fvscout_x", "fvsent_x" };
 
@@ -169,6 +172,7 @@ local Mission =
     m_CrashOneAround = true,
     m_CrashTwoAround = true,
     m_RecyclerBrainActive = false,
+    m_SetupDropship = false,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
@@ -228,15 +232,18 @@ function InitialSetup()
 end
 
 function Save()
-    return Mission;
+    return _Cooperative.Save(), Mission;
 end
 
-function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
+function Load(CoopData, MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
+
+    -- Load Coop.
+    _Cooperative.Load(CoopData);
 
     -- Load mission data.
     Mission = MissionData;
@@ -374,34 +381,8 @@ function Start()
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
 
-    -- Few prints to console.
-    print("Welcome to ISDF11 (Lua)");
-    print("Written by AI_Unit");
-
-    if (Mission.m_IsCooperativeMode) then
-        print("Cooperative mode enabled: Yes");
-    else
-        print("Cooperative mode enabled: No");
-    end
-
-    print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
-    print("Good luck and have fun :)");
-
-    -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
-
-    if (PlayerEntryH ~= nil) then
-        RemoveObject(PlayerEntryH);
-    end
-
-    -- Get Team Number.
-    local LocalTeamNum = GetLocalPlayerTeamNumber();
-
-    -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
-
-    -- Make sure we give the player control of their ship.
-    SetAsUser(PlayerH, LocalTeamNum);
+    -- Call generic start logic in coop.
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -510,6 +491,10 @@ end
 
 function AddPlayer(id, Team, IsNewPlayer)
     return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
+end
+
+function DeletePlayer(id)
+    return _Cooperative.DeletePlayer(id);
 end
 
 function PlayerEjected(DeadObjectHandle)
@@ -624,9 +609,6 @@ Functions[1] = function()
         Ally(Mission.m_HostTeam, i);
     end
 
-    -- Clean up any player spawns that haven't been taken by the player.
-    CleanSpawns(Mission.m_IsCooperativeMode);
-
     -- Grab our pre-placed handles.
     Mission.m_Recycler = GetHandle("recycler");
     Mission.m_SRecycler = GetHandle("srecycler");
@@ -686,34 +668,45 @@ Functions[1] = function()
     Follow(Mission.m_Transport, Mission.m_Recycler, 1);
     Follow(Mission.m_Turret, Mission.m_Recycler, 1);
 
-    -- Create our holders to keep people in place.
-    Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, Mission.m_CrashScout);
-    Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, Mission.m_CrashTank);
-
-    -- For all of our coop players...
-    for i = 1, _Cooperative.m_TotalPlayerCount do
-        Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, GetPlayerHandle(i));
-    end
-
-    -- Start our Earthquake.
-    StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
-
-    -- Do the fade in if we are not in coop mode.
-    if (not Mission.m_IsCooperativeMode) then
-        SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
-    end
-
-    -- Allow a couple of seconds before advancing the mission.
-    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
-
     -- Clean up any player spawns that haven't been taken by the player.
     CleanSpawns(Mission.m_IsCooperativeMode);
 
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
+    -- If we are in coop, jump right to the destroyed dropship.
+    if (Mission.m_IsCooperativeMode) then
+        -- Skip the intro cinematic, go right to the crash.
+        Mission.m_MissionState = 8;
+    else
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
 end
 
 Functions[2] = function()
+    if (Mission.m_SetupDropship == false) then
+        -- Create our holders to keep people in place.
+        Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, Mission.m_CrashScout);
+        Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, Mission.m_CrashTank);
+
+        -- For all of our coop players...
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            Mission.m_Holders[#Mission.m_Holders + 1] = BuildObject("stayput", 0, GetPlayerHandle(i));
+        end
+
+        -- Start our Earthquake.
+        StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
+
+        -- Do the fade in if we are not in coop mode.
+        if (not Mission.m_IsCooperativeMode) then
+            SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+        end
+
+        -- Allow a couple of seconds before advancing the mission.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
+
+        -- So we don't loop.
+        Mission.m_SetupDropship = true;
+    end
+
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- "Condor 4, take the pipe..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1030.wav");
@@ -806,32 +799,34 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
-    -- Another boom sound.
-    StartSoundEffect("xms2.wav");
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Another boom sound.
+        StartSoundEffect("xms2.wav");
 
-    -- Replace the stand-in tank with the player.
-    local pos = GetPosition(Mission.m_StandIn);
+        -- Replace the stand-in tank with the player.
+        local pos = GetPosition(Mission.m_StandIn);
 
-    -- Remove the stand-in tank.
-    RemoveObject(Mission.m_StandIn);
+        -- Remove the stand-in tank.
+        RemoveObject(Mission.m_StandIn);
 
-    -- Place the player in that position.
-    SetPosition(GetPlayerHandle(1), pos);
+        -- Place the player in that position.
+        SetPosition(GetPlayerHandle(1), pos);
 
-    -- Remove all tanks, holders, etc..
-    RemoveObject(Mission.m_CrashTank);
-    RemoveObject(Mission.m_CrashScout);
-    RemoveObject(Mission.m_OpenDropship);
+        -- Remove all tanks, holders, etc..
+        RemoveObject(Mission.m_CrashTank);
+        RemoveObject(Mission.m_CrashScout);
+        RemoveObject(Mission.m_OpenDropship);
 
-    for i = 1, #Mission.m_Holders do
-        RemoveObject(Mission.m_Holders[i]);
+        for i = 1, #Mission.m_Holders do
+            RemoveObject(Mission.m_Holders[i]);
+        end
+
+        -- Stop the Earthquake.
+        StopEarthQuake();
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
     end
-
-    -- Stop the Earthquake.
-    StopEarthQuake();
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[9] = function()

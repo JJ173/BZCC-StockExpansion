@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 12
+countISDF = 15
 
 [ISDF 1]
 missionTitle = "01: This is Not a Drill"
@@ -301,6 +301,82 @@ launchMessage = "load09.wav"
 launchBackground = "mire_load.tga"
 
 [ISDF 10]
+missionTitle = "10: Snow Blind"
+missionInfo = "isdf10.des"
+missionFile = "isdf10_lua.bzn"
+planetName = "Bane"
+planetInfo = "Bane.des"
+planetGeom = "bane.fbx"
+
+techCount = 2
+techName1 = "ISDF Rocket Tank"
+techInfo1 = "ivrckt.inf"
+techGeom1 = "ivrckt00.fbx"
+techName2 = "Ice Rhino"
+techInfo2 = "bcrhino.inf"
+techGeom2 = "rhino_skel.fbx"
+
+
+mailCount = 3
+mailName1 = "General Braddock"
+mailInfo1 = "isdf11_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes1101.wav"
+
+mailName2 = "Major Manson"
+mailInfo2 = "isdf11_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes1103.wav"
+
+mailName3 = "General Braddock"
+mailInfo3 = "isdf11_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes1104.wav"
+
+
+briefInfo = "isdf10.brf"
+
+launchMessage = "load11.wav"
+launchBackground = "bane_load.tga"
+
+[ISDF 11]
+missionTitle = "11: On Thin Ice"
+missionInfo = "isdf11.des"
+missionFile = "isdf11_lua.bzn"
+planetName = "Bane"
+planetInfo = "bane.des"
+planetGeom = "bane.fbx"
+
+techCount = 2
+techName1 = "ISDF Recycler"
+techInfo1 = "ivrecy.inf"
+techGeom1 = "ivrecy00.fbx"
+techName2 = "ISDF Assault Tank"
+techInfo2 = "ivatank.inf"
+techGeom2 = "ivatnk00.fbx"
+
+mailCount = 3
+mailName1 = "Commander Shabayev"
+mailInfo1 = "isdf10_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes1001.wav"
+
+mailName2 = "General Braddock"
+mailInfo2 = "isdf10_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes1002.wav"
+
+mailName3 = "Intercepted Transmission"
+mailInfo3 = "isdf10_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes1003.wav"
+
+briefInfo = "isdf11.brf"
+
+launchMessage = "load10.wav"
+launchBackground = "bane_load.tga"
+
+[ISDF 12]
 missionTitle = "12: Counterattack"
 missionInfo = "isdf12.des"
 missionFile = "isdf12_lua.bzn"
@@ -330,7 +406,36 @@ briefInfo = "isdf12.brf"
 launchMessage = "load12.wav"
 launchBackground = "bane_load.tga"
 
-[ISDF 11]
+[ISDF 13]
+missionTitle = "15: A Traitor's Fate"
+missionInfo = "isdf15.des"
+missionFile = "isdf20_lua.bzn"
+planetName = "Rend"
+planetInfo = "rend.des"
+planetGeom = "rend.fbx"
+
+techCount = 1
+techName1 = "ISDF Walker"
+techInfo1 = "ivwalk.inf"
+techGeom1 = "ivwalk_skel.fbx"
+
+mailCount = 2
+mailName1 = "General Braddock"
+mailInfo1 = "isdf20_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes2001.wav"
+
+mailName2 = "Major Manson"
+mailInfo2 = "isdf20_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes2002.wav"
+
+briefInfo = "isdf15.brf"
+
+launchMessage = "load20.wav"
+launchBackground = "rend_load.tga"
+
+[ISDF 14]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -355,7 +460,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 12]
+[ISDF 15]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

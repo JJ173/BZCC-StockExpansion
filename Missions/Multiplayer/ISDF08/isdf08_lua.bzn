@@ -53730,7 +53730,7 @@ objClass = ispilo_x
 seqno [1] =
 14d8
 team [1] =
-0
+17
 label = player_spawn_1
 isUser [1] =
 false
@@ -53835,7 +53835,7 @@ objClass = ispilo_x
 seqno [1] =
 14dc
 team [1] =
-0
+34
 label = player_spawn_2
 isUser [1] =
 false
@@ -53940,7 +53940,7 @@ objClass = ispilo_x
 seqno [1] =
 14e0
 team [1] =
-0
+51
 label = player_spawn_3
 isUser [1] =
 false
@@ -54045,7 +54045,7 @@ objClass = ispilo_x
 seqno [1] =
 14e4
 team [1] =
-0
+68
 label = player_spawn_4
 isUser [1] =
 false

@@ -55,6 +55,7 @@ planCompare1 = ">="
 planConditionClassProvided1 = true
 targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
 attackType1 = "fvscout_x"
+attackType2 = "fvscout_x"
 maxAttacks = 99
 buildIfNoIdle = 1
 AttackAnything = true

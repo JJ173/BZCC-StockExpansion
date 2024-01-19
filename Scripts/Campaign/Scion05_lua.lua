@@ -22,6 +22,9 @@ local _Subtitles = require('_Subtitles');
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
+-- Mission Name
+local m_MissionName = "Scion05: An Unlikely Rescue";
+
 -- Groups of New Regime attackers to hit the player.
 local delay1 = { 105, 90, 75 };
 local delay2 = { 160, 140, 120 };
@@ -204,15 +207,18 @@ function InitialSetup()
 end
 
 function Save()
-    return Mission;
+    return _Cooperative.Save(), Mission;
 end
 
-function Load(MissionData)
+function Load(CoopData, MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
+
+    -- Load Coop.
+    _Cooperative.Load(CoopData);
 
     -- Load mission data.
     Mission = MissionData;
@@ -303,34 +309,8 @@ function Start()
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
 
-    -- Few prints to console.
-    print("Welcome to Scion05 (Lua)");
-    print("Written by AI_Unit");
-
-    if (Mission.m_IsCooperativeMode) then
-        print("Cooperative mode enabled: Yes");
-    else
-        print("Cooperative mode enabled: No");
-    end
-
-    print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
-    print("Good luck and have fun :)");
-
-    -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
-
-    if (PlayerEntryH ~= nil) then
-        RemoveObject(PlayerEntryH);
-    end
-
-    -- Get Team Number.
-    local LocalTeamNum = GetLocalPlayerTeamNumber();
-
-    -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
-
-    -- Make sure we give the player control of their ship.
-    SetAsUser(PlayerH, LocalTeamNum);
+    -- Call generic start logic in coop.
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -369,6 +349,10 @@ end
 
 function AddPlayer(id, Team, IsNewPlayer)
     return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
+end
+
+function DeletePlayer(id)
+    return _Cooperative.DeletePlayer(id);
 end
 
 function PlayerEjected(DeadObjectHandle)

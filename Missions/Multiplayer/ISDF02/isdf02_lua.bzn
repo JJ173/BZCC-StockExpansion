@@ -31298,7 +31298,7 @@ objClass = isuser_mx
 seqno [1] =
 907
 team [1] =
-0
+17
 label = player_spawn_1
 isUser [1] =
 false
@@ -31403,7 +31403,7 @@ objClass = isuser_mx
 seqno [1] =
 909
 team [1] =
-0
+34
 label = player_spawn_2
 isUser [1] =
 false
@@ -31508,7 +31508,7 @@ objClass = isuser_mx
 seqno [1] =
 90b
 team [1] =
-0
+51
 label = player_spawn_3
 isUser [1] =
 false
@@ -31613,7 +31613,7 @@ objClass = isuser_mx
 seqno [1] =
 90d
 team [1] =
-0
+68
 label = player_spawn_4
 isUser [1] =
 false

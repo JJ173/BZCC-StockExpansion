@@ -25,6 +25,9 @@ local m_GameTPS = 20;
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
 
+-- Mission Name
+local m_MissionName = "ISDF09: Rumble in the Jungle";
+
 -- This will handle the Shabayev sequence based on difficulty.
 local m_Shab1Timer = { 240, 180, 120 };
 local m_Shab2Timer = { 180, 120, 60 };
@@ -56,6 +59,14 @@ local Mission =
     m_APCs = {},
     m_ShabAttacker1 = nil,
     m_ShabAttacker2 = nil,
+    m_Guardian1 = nil,
+    m_Guardian2 = nil,
+    m_Guardian3 = nil,
+    m_Guardian4 = nil,
+    m_Guardian5 = nil,
+    m_Guardian6 = nil,
+
+    m_KeyScionUnits = {},
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -65,6 +76,14 @@ local Mission =
     m_APCPilotMsgPlayed = false,
     m_ShabRescued = false,
     m_BotchedRescue = false,
+    m_APCPilotIntroPlayed = false,
+    m_MansonBaseMsgPlayed = false,
+    m_Guardian1Sent = false,
+    m_Guardian2Sent = false,
+    m_Guardian3Sent = false,
+    m_Guardian4Sent = false,
+    m_Guardian5Sent = false,
+    m_Guardian6Sent = false,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
@@ -75,6 +94,7 @@ local Mission =
     m_ShabTimer = 0,
     m_ShabState = 0,
     m_RuinCam = 0,
+    m_TurretDistpacherTimer = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -107,15 +127,18 @@ function InitialSetup()
 end
 
 function Save()
-    return Mission;
+    return _Cooperative.Save(), Mission;
 end
 
-function Load(MissionData)
-    -- Enable high TPS.
-    m_GameTPS = EnableHighTPS();
-
+function Load(CoopData, MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
+
+    -- Load Coop.
+    _Cooperative.Load(CoopData);
 
     -- Load mission data.
     Mission = MissionData;
@@ -126,7 +149,52 @@ function AddObject(h)
 
     -- Handle unit skill for enemy.
     if (team == Mission.m_EnemyTeam) then
+        -- Grab the config.
+        local class = GetClassLabel(h);
+
         SetSkill(h, Mission.m_MissionDifficulty);
+
+        if (class == "CLASS_TURRETTANK" and Mission.m_MissionState > 1) then
+            -- Try and prevent the AIP from using it.
+            SetIndependence(h, 1);
+
+            if (Mission.m_Guardian1 == nil) then
+                Mission.m_Guardian1 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian1Sent = false;
+            elseif (Mission.m_Guardian2 == nil) then
+                Mission.m_Guardian2 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian2Sent = false;
+            elseif (Mission.m_Guardian3 == nil) then
+                Mission.m_Guardian3 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian3Sent = false;
+            elseif (Mission.m_Guardian4 == nil) then
+                Mission.m_Guardian4 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian4Sent = false;
+            elseif (Mission.m_Guardian5 == nil) then
+                Mission.m_Guardian5 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian5Sent = false;
+            elseif (Mission.m_Guardian6 == nil) then
+                Mission.m_Guardian6 = h;
+
+                -- This will tell the Scion brain to send the turret back to the right path.
+                Mission.m_Guardian6Sent = false;
+            end
+        end
+
+        -- This will add units to our Scion tracker. These need to be destroyed.
+        if (class == "CLASS_RECYCLER" or class == "CLASS_FACTORY" or class == "CLASS_TURRET" or class == "CLASS_COMMTOWER") then
+            Mission.m_KeyScionUnits[#Mission.m_KeyScionUnits + 1] = h;
+        end
     elseif (team == Mission.m_HostTeam) then
         SetSkill(h, 3);
 
@@ -145,6 +213,22 @@ function AddObject(h)
     end
 end
 
+function DeleteObject(h)
+    if (h == Mission.m_Guardian1) then
+        Mission.m_Guardian1 = nil;
+    elseif (h == Mission.m_Guardian2) then
+        Mission.m_Guardian2 = nil;
+    elseif (h == Mission.m_Guardian3) then
+        Mission.m_Guardian3 = nil;
+    elseif (h == Mission.m_Guardian4) then
+        Mission.m_Guardian4 = nil;
+    elseif (h == Mission.m_Guardian5) then
+        Mission.m_Guardian5 = nil;
+    elseif (h == Mission.m_Guardian6) then
+        Mission.m_Guardian6 = nil;
+    end
+end
+
 function Start()
     -- Set difficulty based on whether it's coop or not.
     if (Mission.m_IsCooperativeMode) then
@@ -153,34 +237,8 @@ function Start()
         Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
 
-    -- Few prints to console.
-    print("Welcome to ISDF09 (Lua)");
-    print("Written by AI_Unit");
-
-    if (Mission.m_IsCooperativeMode) then
-        print("Cooperative mode enabled: Yes");
-    else
-        print("Cooperative mode enabled: No");
-    end
-
-    print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
-    print("Good luck and have fun :)");
-
-    -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
-
-    if (PlayerEntryH ~= nil) then
-        RemoveObject(PlayerEntryH);
-    end
-
-    -- Get Team Number.
-    local LocalTeamNum = GetLocalPlayerTeamNumber();
-
-    -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF);
-
-    -- Make sure we give the player control of their ship.
-    SetAsUser(PlayerH, LocalTeamNum);
+    -- Call generic start logic in coop.
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -198,6 +256,8 @@ function Update()
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
+
+            ScionTurretDispatcher();
 
             -- For the rescue sequence.
             if (Mission.m_ShabRescued == false) then
@@ -240,6 +300,14 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (Mission.m_MissionDifficulty > 1) then
+        if (GetCfg(VictimHandle) == "fvturr_x" and (OrdnanceTeam ~= Mission.m_EnemyTeam)) then
+            if (GetCurrentCommand(VictimHandle) ~= CMD_DEFEND) then
+                Defend(VictimHandle);
+            end
+        end
+    end
+
     if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and (Mission.m_Audioclip == nil or IsAudioMessageDone(Mission.m_Audioclip))) then
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
@@ -267,6 +335,12 @@ Functions[1] = function()
     Mission.m_Crystal = GetHandle("power_crystal");
     Mission.m_Objective = GetHandle("unnamed_fbrecy_x");
     Mission.m_Ruin = GetHandle("ruins");
+    Mission.m_Guardian1 = GetHandle("guardian_1");
+    Mission.m_Guardian2 = GetHandle("guardian_2");
+    Mission.m_Guardian3 = GetHandle("guardian_3");
+    Mission.m_Guardian4 = GetHandle("guardian_4");
+    Mission.m_Guardian5 = GetHandle("guardian_5");
+    Mission.m_Guardian6 = GetHandle("guardian_6");
 
     -- Build the Nav for Shabayev
     Mission.m_Nav = BuildObject("ibnav", Mission.m_HostTeam, "shab_def_spawn");
@@ -332,7 +406,11 @@ Functions[1] = function()
     -- Timer for the Shabayev Sequence.
     Mission.m_ShabTimer = Mission.m_MissionTime + SecondsToTurns(95);
 
+    -- Don't let Manson die.
+    SetMaxHealth(Mission.m_Manson, 0);
+
     -- Set a plan here for the enemy.
+    SetAIP("isdf0901_x.aip", Mission.m_EnemyTeam);
 
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -408,9 +486,6 @@ Functions[3] = function()
                     grp = GetFirstEmptyGroup(i);
 
                     if (grp > 0) then
-                        -- Debug.
-                        print("Found group, breaking loop...");
-
                         -- Set the team for the APCs.
                         team = i;
 
@@ -419,27 +494,21 @@ Functions[3] = function()
                     end
                 end
             end
+        end
 
-            -- Give the APCs to the team.
-            for i = 1, #Mission.m_APCs do
-                -- Grab the APC.
-                local apc = Mission.m_APCs[i];
+        -- Give the APCs to the team.
+        for i = 1, #Mission.m_APCs do
+            -- Grab the APC.
+            local apc = Mission.m_APCs[i];
 
-                -- Safely check if this is populated.
-                if (apc ~= nil) then
-                    -- Set the APC to the right team.
-                    SetTeamNum(apc, team);
+            -- Safely check if this is populated.
+            if (IsAround(apc)) then
+                -- Set the APC to the right team.
+                SetTeamNum(apc, team);
 
-                    -- Set the APC to the right group.
-                    SetGroup(apc, grp);
-                end
+                -- Set the APC to the right group.
+                SetGroup(apc, grp);
             end
-        else
-            -- Set the APC to the right team.
-            SetTeamNum(apc, team);
-
-            -- Set the APC to the right group.
-            SetGroup(apc, grp);
         end
 
         -- So we don't loop.
@@ -456,9 +525,21 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
+    -- This will do the APC intro.
+    if (Mission.m_APCPilotIntroPlayed == false and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Pilot: "This is APC leader..."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0910.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+        -- So we don't loop.
+        Mission.m_APCPilotIntroPlayed = true;
+    end
+
     -- This will check if the main APC is near the base.
     if (Mission.m_APCPilotMsgPlayed == false and GetDistance(Mission.m_MainAPC, Mission.m_Objective) < 250) then
-        -- "Pilot": Cue the band.
+        -- Pilot: "Cue the band".
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0911.wav");
 
         -- Timer for this audio clip.
@@ -475,7 +556,7 @@ Functions[4] = function()
 end
 
 Functions[5] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+    if (Mission.m_MansonBaseMsgPlayed == false and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Manson: "Good work Cooke, clean up that base..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0914.wav");
 
@@ -487,6 +568,25 @@ Functions[5] = function()
         AddObjective("isdf0902.otf", "GREEN");
         AddObjective("isdf0903.otf", "GREEN");
 
+        -- So we don't loop.
+        Mission.m_MansonBaseMsgPlayed = true;
+    end
+
+    -- Check that key units are dead before moving on.
+    for i = 1, #Mission.m_KeyScionUnits do
+        local unit = Mission.m_KeyScionUnits[i];
+
+        -- Unit is alive, return early..
+        if (IsAliveAndEnemy(unit, Mission.m_EnemyTeam)) then
+            return;
+        end
+    end
+
+    -- Lastly, check if turrets are dead.
+    if (IsAliveAndEnemy(Mission.m_Turret1, Mission.m_EnemyTeam) == false
+            and IsAliveAndEnemy(Mission.m_Turret2, Mission.m_EnemyTeam) == false
+            and IsAliveAndEnemy(Mission.m_Turret3, Mission.m_EnemyTeam) == false
+            and IsAliveAndEnemy(Mission.m_Turret4, Mission.m_EnemyTeam) == false) then
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -517,7 +617,7 @@ Functions[7] = function()
     if (Mission.m_MissionTime < Mission.m_MissionDelayTime) then
         -- So we run the camera.
         if (Mission.m_IsCooperativeMode == false) then
-            CameraPath("end_camera_path", 10, 250, Mission.m_Machine);
+            CameraPath("end_camera_path", 50, 250, Mission.m_Machine);
         end
     else
         -- Timer.
@@ -532,7 +632,7 @@ Functions[8] = function()
     if (Mission.m_MissionTime < Mission.m_MissionDelayTime) then
         -- So we run the camera.
         if (Mission.m_IsCooperativeMode == false) then
-            CameraPath("crystal_camera", 60, 0, Mission.m_Crystal);
+            CameraPath("crystal_camera", 400, 0, Mission.m_Crystal);
         end
     else
         -- Give the Camera back.
@@ -555,7 +655,7 @@ end
 
 function ShabayevBrain()
     -- This checks if a player reaches Shabayev in time.
-    if (Mission.m_ShabState < 6 and Mission.m_BotchedRescue == false) then
+    if (Mission.m_ShabState < 7 and Mission.m_BotchedRescue == false) then
         -- Run a distance check on each player, see if they are a pilot.
         for i = 1, _Cooperative.m_TotalPlayerCount do
             local p = GetPlayerHandle(i);
@@ -570,7 +670,7 @@ function ShabayevBrain()
                     Attack(Mission.m_ShabAttacker1, Mission.m_Shabayev, 1);
 
                     -- Set the state.
-                    Mission.m_ShabState = 4;
+                    Mission.m_ShabState = 5;
 
                     -- So we don't loop.
                     Mission.m_BotchedRescue = true;
@@ -582,7 +682,7 @@ function ShabayevBrain()
                     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
                     -- For the rescue part.
-                    Mission.m_ShabState = 6;
+                    Mission.m_ShabState = 7;
                 end
             end
         end
@@ -618,11 +718,14 @@ function ShabayevBrain()
         if (Mission.m_IsCooperativeMode == false) then
             if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                 CameraFinish();
+
+                -- Advance the mission state.
+                Mission.m_ShabState = Mission.m_ShabState + 1;
             else
                 CameraObject(Mission.m_Shabayev, 25, 2, 8, Mission.m_Shabayev);
             end
         end
-
+    elseif (Mission.m_ShabState == 2) then
         -- Do the next part.
         if (Mission.m_ShabTimer < Mission.m_MissionTime) then
             -- "Shab: Cooke, where are you?".
@@ -637,7 +740,7 @@ function ShabayevBrain()
             -- Advance the mission state.
             Mission.m_ShabState = Mission.m_ShabState + 1;
         end
-    elseif (Mission.m_ShabState == 2) then
+    elseif (Mission.m_ShabState == 3) then
         if (Mission.m_ShabTimer < Mission.m_MissionTime) then
             -- "Shab: All units! Please assist!".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0733a.wav");
@@ -651,7 +754,7 @@ function ShabayevBrain()
             -- Advance the mission state.
             Mission.m_ShabState = Mission.m_ShabState + 1;
         end
-    elseif (Mission.m_ShabState == 3) then
+    elseif (Mission.m_ShabState == 4) then
         if (Mission.m_ShabTimer < Mission.m_MissionTime) then
             -- Desperate.
             SetTeamNum(Mission.m_Ruin, Mission.m_HostTeam);
@@ -670,7 +773,7 @@ function ShabayevBrain()
             -- Advance the mission state.
             Mission.m_ShabState = Mission.m_ShabState + 1;
         end
-    elseif (Mission.m_ShabState == 4) then
+    elseif (Mission.m_ShabState == 5) then
         -- Check to see if the enemy is within distance of shabayev.
         if (Mission.m_RuinCam == 0 and GetDistance(Mission.m_ShabAttacker1, Mission.m_Shabayev) < 75 or GetDistance(Mission.m_ShabAttacker2, Mission.m_Shabayev) < 75) then
             -- Shab: "I've been found!"
@@ -710,7 +813,7 @@ function ShabayevBrain()
                 Mission.m_ShabState = Mission.m_ShabState + 1;
             end
         end
-    elseif (Mission.m_ShabState == 5) then
+    elseif (Mission.m_ShabState == 6) then
         -- If Shabayev died.
         if (IsAlive(Mission.m_Shabayev) == false) then
             -- Shab: "They are all over me!"
@@ -730,8 +833,8 @@ function ShabayevBrain()
             -- Just so we don't loop.
             Mission.m_MissionOver = true;
         end
-    elseif (Mission.m_ShabState == 6) then
-        if (IsPlayerWithinDistance(Mission.m_Ruin, 75, _Cooperative.m_TotalPlayerCount)) then
+    elseif (Mission.m_ShabState == 7) then
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 30, _Cooperative.m_TotalPlayerCount)) then
             -- Shab: "We've got to stop meeting like this..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0915.wav");
 
@@ -745,6 +848,56 @@ function ShabayevBrain()
             -- She's rescued.
             Mission.m_ShabRescued = true;
         end
+    end
+end
+
+function ScionTurretDispatcher()
+    -- Use this to dispatch the turrets.
+    if (Mission.m_TurretDistpacherTimer < Mission.m_MissionTime) then
+        if (Mission.m_Guardian1Sent == false and IsAliveAndEnemy(Mission.m_Guardian1, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian1, "turret1", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian1Sent = true;
+        end
+
+        if (Mission.m_Guardian2Sent == false and IsAliveAndEnemy(Mission.m_Guardian2, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian2, "turret2", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian2Sent = true;
+        end
+
+        if (Mission.m_Guardian3Sent == false and IsAliveAndEnemy(Mission.m_Guardian3, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian3, "turret3", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian3Sent = true;
+        end
+
+        if (Mission.m_Guardian4Sent == false and IsAliveAndEnemy(Mission.m_Guardian4, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian4, "turret4", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian4Sent = true;
+        end
+
+        if (Mission.m_Guardian5Sent == false and IsAliveAndEnemy(Mission.m_Guardian5, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian5, "turret5", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian5Sent = true;
+        end
+
+        if (Mission.m_Guardian6Sent == false and IsAliveAndEnemy(Mission.m_Guardian6, Mission.m_EnemyTeam)) then
+            Goto(Mission.m_Guardian6, "turret6", 1);
+
+            -- So we don't loop.
+            Mission.m_Guardian6Sent = true;
+        end
+
+        -- To delay loops.
+        Mission.m_TurretDistpacherTimer = Mission.m_MissionTime + SecondsToTurns(1.5);
     end
 end
 

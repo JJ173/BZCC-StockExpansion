@@ -11325,7 +11325,7 @@ objClass = ivplysct
 seqno [1] =
 543
 team [1] =
-0
+51
 label = player_spawn_2
 isUser [1] =
 false
@@ -11533,7 +11533,7 @@ objClass = ivplysct
 seqno [1] =
 54b
 team [1] =
-0
+68
 label = player_spawn_4
 isUser [1] =
 false
@@ -11637,7 +11637,7 @@ objClass = ivplysct
 seqno [1] =
 54f
 team [1] =
-0
+17
 label = player_spawn_1
 isUser [1] =
 false

@@ -19,6 +19,9 @@ local _Cooperative = require("_Cooperative");
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
 
+-- Game TPS.
+local m_GameTPS = GetTPS();
+
 -- Mission Name
 local m_MissionName = "ISDF03: We Have Hostiles";
 
@@ -212,7 +215,7 @@ function Start()
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
     -- Mark the set up as done so we can proceed with mission logic.
-    Mission.m_StartDone = true;
+    -- Mission.m_StartDone = true;
 end
 
 function Update()
@@ -222,10 +225,10 @@ function Update()
     end
 
     -- Keep track of the main player.
-    Mission.m_MainPlayer = GetPlayerHandle(1);
+    -- Mission.m_MainPlayer = GetPlayerHandle(1);
 
     -- Make sure Subtitles is always running.
-    _Subtitles.Run();
+    -- _Subtitles.Run();
 
     -- Keep track of our time.
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
@@ -360,7 +363,7 @@ Functions[1] = function()
     Pickup(Mission.m_Hauler1, Mission.m_Relic1);
 
     -- This sets the Hauler to invulnerable for a short period.
-    SetMaxHealth(Mission.m_Hauler1, 0);
+    -- SetMaxHealth(Mission.m_Hauler1, 0);
 
     -- Shabayev is looking at our player.
     LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
@@ -452,7 +455,9 @@ Functions[5] = function()
 
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_MoveHauler) then
             -- Force the Hauler to retreat.
-            Retreat(Mission.m_Hauler1, "haulerout_path1");
+            -- Retreat(Mission.m_Hauler1, "haulerout_path1");
+
+            print("Moving Hauler @: ", Mission.m_MissionTime);
 
             -- Remove the warning for checking the tunnels.
             Mission.m_TunnelWarningActive = false;
@@ -478,15 +483,15 @@ end
 
 Functions[6] = function()
     -- The Hauler needs to remain unkillable for the length that it's in the tunnel. I suspect this is to prevent further issue with other Haulers trying to pick up the ISDF crate.
-    if (not Mission.m_FixHaulerHealth) then
-        if (GetDistance(Mission.m_Hauler1, "shab_check1") < 30) then
-            -- Make it killable.
-            SetMaxHealth(Mission.m_Hauler1, 2500);
+    -- if (not Mission.m_FixHaulerHealth) then
+    --     if (GetDistance(Mission.m_Hauler1, "shab_check1") < 30) then
+    --         -- Make it killable.
+    --         SetMaxHealth(Mission.m_Hauler1, 2500);
 
-            -- So we don't loop
-            Mission.m_FixHaulerHealth = true;
-        end
-    end
+    --         -- So we don't loop
+    --         Mission.m_FixHaulerHealth = true;
+    --     end
+    -- end
 
     -- This is to check if Shabayev has made it through the tunnel. Plays the appropriate response based on if she does or doesn't.
     if (not Mission.m_ShabThroughTunnel) then

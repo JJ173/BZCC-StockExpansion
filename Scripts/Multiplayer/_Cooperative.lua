@@ -1,4 +1,4 @@
-local _Cooperative =
+_Cooperative =
 {
     m_GameReady = false,
     m_TotalPlayerCount = 0,

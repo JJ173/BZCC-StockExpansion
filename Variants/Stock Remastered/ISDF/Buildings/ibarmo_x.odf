@@ -2,6 +2,12 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibarmo"
 
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_ARMORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
 [BuildingClass]
 
 [PoweredBuildingClass]

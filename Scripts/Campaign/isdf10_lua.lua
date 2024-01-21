@@ -216,12 +216,12 @@ function AddObject(h)
     elseif (team == Mission.m_HostTeam) then
         SetSkill(h, 3);
 
+        -- Stuff
+        print(odf);
+
         -- Check to see if the bomber bay has been built.
         if (Mission.m_BomberBayBuilt == false) then
             if (odf == "ibbomb_x") then
-                -- Make sure the enemy don't attack it.
-                SetTeamNum(h, Mission.m_AlliedTeam);
-
                 -- Make it unkillable.
                 SetMaxHealth(h, 0);
 
@@ -231,6 +231,15 @@ function AddObject(h)
                 -- Store the handle.
                 Mission.m_BomberBay = h;
             end
+        end
+
+        -- Assign our bomber to this.
+        if (odf == "ivbomb_x") then
+            -- Make it unkillable.
+            SetMaxHealth(h, 0);
+
+            -- Store the handle.
+            Mission.m_Bomber = h;
         end
     end
 end
@@ -291,7 +300,7 @@ function Update()
     if (Mission.m_IsCooperativeMode) then
         _Cooperative.Update();
     end
-    
+
     -- Make sure Subtitles is always running.
     _Subtitles.Run();
 
@@ -619,19 +628,10 @@ end
 
 Functions[5] = function()
     -- This will advance the mission once the bomber has been built.
-    if (Mission.m_BomberBayBuilt) then
+    if (Mission.m_BomberBayBuilt and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show objectives for bomber bay.
         AddObjectiveOverride("isdf1105.otf", "GREEN", 10, true);
         AddObjective("isdf1102.otf", "WHITE");
-
-        -- Set the power for the team.
-        SetMaxPower(Mission.m_AlliedTeam, 1);
-
-        -- Add power to the team.
-        AddPower(Mission.m_AlliedTeam, 1);
-
-        -- Add power to the host team as well.
-        AddPower(Mission.m_HostTeam, 1);
 
         -- Shabayev: "Good work Cooke."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1120.wav");
@@ -646,12 +646,6 @@ end
 
 Functions[6] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        -- Should hopefully work.
-        Mission.m_Bomber = GetHandle("unnamed_ivbomb_x");
-
-        -- Make it unkillable.
-        SetMaxHealth(Mission.m_Bomber, 0);
-
         -- Shabayev: "Can you hear me Cooke? General?"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1121.wav");
 
@@ -694,7 +688,7 @@ end
 
 Functions[9] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (Mission.m_TransmissionSearchMessageCounter == 0 and IsPlayerWithinDistance("bridge_check2", 150, _Cooperative.GetTotalPlayers())) then
+        if (Mission.m_TransmissionSearchMessageCounter == 0 and IsPlayerWithinDistance(Mission.m_CenterRuin, 600, _Cooperative.GetTotalPlayers())) then
             -- Shabayev: "You're close..."
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1117.wav");
 

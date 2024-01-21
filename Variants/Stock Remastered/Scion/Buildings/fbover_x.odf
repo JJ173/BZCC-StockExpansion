@@ -4,6 +4,12 @@ classLabel = "fbover"
 
 categoryTypeOverride = 4
 
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_COMMBUNKER_U"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
 [PoweredBuildingClass]
 panelIcon = "icon_base_sat.tga"
 

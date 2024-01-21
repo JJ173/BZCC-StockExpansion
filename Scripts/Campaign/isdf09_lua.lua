@@ -204,11 +204,11 @@ function AddObject(h)
                 Mission.m_MainAPC = h;
             end
 
-            -- Put them in a table.
-            Mission.m_APCs[#Mission.m_APCs + 1] = h;
-
             -- Put them on Manson's team for now.
             SetTeamNum(h, Mission.m_AlliedTeam);
+
+            -- Put them in a table.
+            Mission.m_APCs[#Mission.m_APCs + 1] = h;
         end
     end
 end
@@ -490,7 +490,7 @@ Functions[3] = function()
                 for i = 2, _Cooperative.GetTotalPlayers() do
                     grp = GetFirstEmptyGroup(i);
 
-                    if (grp > 0) then
+                    if (grp ~= nil) then
                         -- Set the team for the APCs.
                         team = i;
 
@@ -501,13 +501,21 @@ Functions[3] = function()
             end
         end
 
+        print("APC Count: ", #Mission.m_APCs);
+
         -- Give the APCs to the team.
         for i = 1, #Mission.m_APCs do
             -- Grab the APC.
             local apc = Mission.m_APCs[i];
 
+            print("APC: ", apc);
+
             -- Safely check if this is populated.
             if (IsAround(apc)) then
+                -- Debug
+                print("Assigning APC to Team: ", team);
+                print("Assigning APC to Group: ", grp);
+
                 -- Set the APC to the right team.
                 SetTeamNum(apc, team);
 

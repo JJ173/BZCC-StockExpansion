@@ -1080,21 +1080,25 @@ Functions[23] = function()
     end
 
     -- Does a check to make sure we are on foot.
-    if (GetDistance(Mission.m_ShabPilot, Mission.m_Ruins) < 30 and IsPlayerWithinDistance(Mission.m_Ruins, 20, _Cooperative.GetTotalPlayers())) then
+    if (GetDistance(Mission.m_ShabPilot, Mission.m_Ruins) < 30) then
         for i = 1, _Cooperative.GetTotalPlayers() do
-            local class = GetClassLabel(GetPlayerHandle(i));
+            local p = GetPlayerHandle(i);
 
-            if (class ~= "CLASS_PERSON") then
-                return;
-            else
-                -- For use in later missions.
-                SavePlayerBaseToFile();
+            if (GetDistance(p, Mission.m_Ruins) < 25) then
+                local class = GetClassLabel(p);
 
-                -- Shab: "It looks like we're trapped".
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0731.wav");
+                if (class ~= "CLASS_PERSON") then
+                    return;
+                else
+                    -- For use in later missions.
+                    SavePlayerBaseToFile();
 
-                -- Advance the mission state...
-                Mission.m_MissionState = Mission.m_MissionState + 1;
+                    -- Shab: "It looks like we're trapped".
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0731.wav");
+
+                    -- Advance the mission state...
+                    Mission.m_MissionState = Mission.m_MissionState + 1;
+                end
             end
         end
     end

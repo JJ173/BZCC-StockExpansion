@@ -33,12 +33,12 @@ function IsPlayerWithinDistance(handleOrPath, distance, totalPlayers)
     for i = 1, totalPlayers do
         local p = GetPlayerHandle(i);
 
-        if (IsAround(p) and GetDistance(p, handleOrPath) < distance) then
+        if (IsAlive(p) and GetDistance(p, handleOrPath) < distance) then
             return true;
-        else
-            return false;
         end
     end
+
+    return false;
 end
 
 function IsPlayerInBuilding(totalPlayers)

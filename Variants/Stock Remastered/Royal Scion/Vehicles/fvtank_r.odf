@@ -1,0 +1,32 @@
+[GameObjectClass]
+classLabel = "fvtank_x"
+geometryName = "fvtank_r_skel.fbx"
+cockpitName = "fvtank_r_cockpit.fbx"
+animCount = 7
+animName1 = "forward"
+animFile1 = "fvtank_r_ASF.fbx"
+animName2 = "neutral"
+animFile2 = "fvtank_r_ASN.fbx"
+animName3 = "reverse"
+animFile3 = "fvtank_r_ASR.fbx"
+animName4 = "deploy"
+animFile4 = "fvtank_r_MORPH.fbx"
+animName5 = "forward2"
+animFile5 = "fvtank_r_MSF.fbx"
+animName6 = "neutral2"
+animFile6 = "fvtank_r_MSN.fbx"
+animName7 = "reverse2"
+animFile7 = "fvtank_r_MSR.fbx"
+
+unitName = "Royal Warrior"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+unitName = "Royal Warrior"
+
+[DeployableClass]

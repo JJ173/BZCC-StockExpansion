@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvrecy_x"
+geometryName = "fvrecy00_r.fbx"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "fbrecy_r"
+
+[RecyclerVehicleClass]

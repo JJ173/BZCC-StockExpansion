@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvtug"
+geometryName = "fvtug00_r.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fvtug00_r.fbx"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[TugClass]

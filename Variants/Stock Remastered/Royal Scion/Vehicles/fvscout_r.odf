@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "fvscout_x"
+geometryName = "fvscout_r_skel.fbx"
+cockpitName = "fvscout_r_cockpit.fbx"
+
+animCount = 7
+animName1 = "forward"
+animFile1 = "fvscout_r_ASF.fbx"
+animName2 = "neutral"
+animFile2 = "fvscout_r_ASN.fbx"
+animName3 = "reverse"
+animFile3 = "fvscout_r_ASR.fbx"
+animName4 = "deploy"
+animFile4 = "fvscout_r_MORPH.fbx"
+animName5 = "forward2"
+animFile5 = "fvscout_r_MSF.fbx"
+animName6 = "neutral2"
+animFile6 = "fvscout_r_MSN.fbx"
+animName7 = "reverse2"
+animFile7 = "fvscout_r_MSR.fbx"
+
+unitName = "Royal Drone"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+unitName = "Royal Drone"
+
+[DeployableClass]

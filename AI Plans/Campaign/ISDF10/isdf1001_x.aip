@@ -56,7 +56,7 @@ planConditionClassProvided1 = true
 targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
 attackType1 = "fvscout_x"
 attackType2 = "fvscout_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -73,7 +73,7 @@ planCompare1 = ">="
 planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_RECYCLERBUILDING"
 attackType1 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -90,7 +90,7 @@ planCompare1 = ">="
 planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_TURRET"
 attackType1 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -107,7 +107,7 @@ planCompare1 = ">="
 planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_EXTRACTOR"
 attackType1 = "fvtank_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -124,7 +124,7 @@ planCompare1 = ">="
 planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_TURRET"
 attackType1 = "fvarch_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -142,7 +142,7 @@ planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_POWERPLANT"
 attackType1 = "fvsent_x"
 attackType2 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -161,7 +161,7 @@ targetType = "VIRTUAL_CLASS_FACTORY"
 attackType1 = "fvtank_x"
 attackType2 = "fvsent_x"
 attackType3 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -179,7 +179,7 @@ planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_GUNTOWER"
 attackType1 = "fvartl_x"
 attackType2 = "fvartl_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -199,7 +199,7 @@ attackType1 = "fvarch_x"
 attackType2 = "fvarch_x"
 attackType3 = "fvwalk_x"
 attackType4 = "fvwalk_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -217,6 +217,6 @@ planConditionClassProvided1 = true
 targetType = "VIRTUAL_CLASS_SUPPLYDEPOT"
 attackType1 = "fvtank_x"
 attackType2 = "fvtank_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true

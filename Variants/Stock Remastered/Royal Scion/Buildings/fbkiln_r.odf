@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "fbkiln_x"
+geometryName = "fbkiln00_r.fbx"
+upgradeName = "fbforg_r"
+
+[PoweredBuildingClass]
+powerName = "fblung_r"
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent_r"
+buildItem2 = "fvarch_r"
+buildItem3 = "fvtank_r"
+buildItem4 = "fvartl_r"
+buildItem5 = "fvwalk_r"
+buildItem6 = "fvatank_r"
+
+[Lod1]

@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fbdowe_x"
+geometryName = "fbdowe00_r.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "fbdowe00_r.fbx"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+powerName = "fblung_r"
+
+[SupplyDepotClass]
+
+[Lod1]

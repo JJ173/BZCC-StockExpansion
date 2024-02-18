@@ -1,0 +1,32 @@
+[GameObjectClass]
+classLabel = "fvsent_x"
+geometryName = "fvsent_r_skel.fbx"
+cockpitName = "fvsent_r_cockpit.fbx"
+animCount = 7
+animName1 = "deploy"
+animFile1 = "fvsent_r_MORPH.fbx"
+animName2 = "forward"
+animFile2 = "fvsent_r_ASF.fbx"
+animName3 = "neutral"
+animFile3 = "fvsent_r_ASN.fbx"
+animName4 = "reverse"
+animFile4 = "fvsent_r_ASR.fbx"
+animName5 = "forward2"
+animFile5 = "fvsent_r_MSF.fbx"
+animName6 = "neutral2"
+animFile6 = "fvsent_r_MSN.fbx"
+animName7 = "reverse2"
+animFile7 = "fvsent_r_MSR.fbx"
+
+unitName = "Royal Sentry"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+unitName = "Royal Sentry"
+
+[DeployableClass]

@@ -1,0 +1,43 @@
+[GameObjectClass]
+classLabel = "fvwalk_x"
+geometryName = "fvwalk_r_skel.fbx"
+cockpitName = "fvwalk_r_cockpit.fbx"
+
+animCount = 10
+animName1 = "idle"
+animFile1 = "fvwalk_r_idle.fbx"
+
+animName2 = "idle2"
+animFile2 = "fvwalk_r_idle2.fbx"
+
+animName3 = "idle3"
+animFile3 = "fvwalk_r_idle3.fbx"
+
+animName4 = "sitdown"
+animFile4 = "fvwalk_r_sitdown.fbx"
+
+animName5 = "walk"
+animFile5 = "fvwalk_r_walk.fbx"
+
+animName6 = "turn"
+animFile6 = "fvwalk_r_turn.fbx"
+
+animName7 = "death"
+animFile7 = "fvwalk_r_death.fbx"
+
+animName8 = "death2"
+animFile8 = "fvwalk_r_death.fbx"
+
+animName9 = "death3"
+animFile9 = "fvwalk_r_death.fbx"
+
+animName10 = "run"
+animFile10 = "fvwalk_r_run.fbx"
+
+unitName = "Royal Mauler"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[WalkerClass]

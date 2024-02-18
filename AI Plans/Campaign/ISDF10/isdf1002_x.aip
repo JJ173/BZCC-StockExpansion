@@ -223,7 +223,7 @@ targetType = "VIRTUAL_CLASS_EXTRACTOR"
 attackType1 = "fvscout_x"
 attackType2 = "fvscout_x"
 attackType3 = "fvscout_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -246,7 +246,7 @@ planConditionClassProvided2 = true
 targetType = "VIRTUAL_CLASS_EXTRACTOR"
 attackType1 = "fvsent_x"
 attackType2 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -444,7 +444,7 @@ attackType1 = "fvtank_x"
 attackType2 = "fvtank_x"
 attackType3 = "fvtank_x"
 attackType4 = "fvtank_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -470,7 +470,7 @@ targetType3 = "VIRTUAL_CLASS_POWERPLANT"
 targetType4 = "VIRTUAL_CLASS_RECYCLERBUILDING"
 attackType1 = "fvartl_x"
 attackType2 = "fvartl_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -497,7 +497,7 @@ attackType1 = "fvarch_x"
 attackType2 = "fvsent_x"
 attackType3 = "fvtank_x"
 attackType4 = "fvsent_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -521,7 +521,7 @@ targetType1 = "VIRTUAL_CLASS_GUNTOWER"
 targetType2 = "VIRTUAL_CLASS_RECYCLERBUILDING"
 attackType1 = "fvwalk_x"
 attackType2 = "fvwalk_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true
 
@@ -548,6 +548,6 @@ targetType4 = "VIRTUAL_CLASS_RECYCLERBUILDING"
 attackType1 = "fvarch_x"
 attackType2 = "fvarch_x"
 attackType3 = "fvarch_x"
-maxAttacks = 99
+maxAttacks = 0
 buildIfNoIdle = 1
 AttackAnything = true

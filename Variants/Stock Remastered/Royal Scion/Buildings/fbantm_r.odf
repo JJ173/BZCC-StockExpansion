@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "fbantm_x"
+geometryName = "fbantm00_r.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "fbantm00_r.fbx"
+upgradeName = "fbover_r"
+
+[PoweredBuildingClass]
+powerName = "fblung_r"
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

@@ -1,0 +1,14 @@
+[solid]
+diffuse = 0.800000  0.800000  0.800000  1.000000
+specular = 0.040000  0.040000  0.040000  1.000000
+specularPower = 38.272728
+emissive = 0.500000  0.500000  0.500000  1.000000
+ambient = 0.000000  0.000000  0.000000  1.000000
+
+
+[texture]
+diffuse = fvserv00_r_d.dds
+teamColor = fvserv00_c.dds
+emissive = fvserv00_r_e.dds
+normal = fvserv00_n.dds
+specular = fvserv00_r_s.dds

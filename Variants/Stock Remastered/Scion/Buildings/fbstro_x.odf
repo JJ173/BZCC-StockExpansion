@@ -9,6 +9,7 @@ limitClass1Count = 1
 limitClass1Text = "Only One Allowed"
 
 [PoweredBuildingClass]
+panelIcon = "icon_fbstro.tga"
 
 [BuildingClass]
 

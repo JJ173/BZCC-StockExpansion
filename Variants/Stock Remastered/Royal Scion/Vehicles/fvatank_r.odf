@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvatank_x"
+geometryName = "fvtitan_r_skel.fbx"
+cockpitName = "fvtitan_r_cockpit.fbx"
+
+unitName = "Royal Titan"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

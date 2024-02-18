@@ -1,0 +1,25 @@
+[GameObjectClass]
+classLabel = "fvturr_x"
+geometryName = "fvturr_r_skel.fbx"
+cockpitName = "fvturr_r_cockpit.fbx"
+animCount = 4
+animName1 = "forward"
+animFile1 = "fvturr_r_ASF.fbx"
+animName2 = "neutral"
+animFile2 = "fvturr_r_ASN.fbx"
+animName3 = "reverse"
+animFile3 = "fvturr_r_ASR.fbx"
+animName4 = "deploy"
+animFile4 = "fvturr_r_skel.fbx"
+
+unitName = "Royal Guardian"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]

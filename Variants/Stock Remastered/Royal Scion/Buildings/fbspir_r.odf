@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fbspir_x"
+geometryName = "fbspir00_r.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fbspir00_r.fbx"
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]
+powerName = "fblung_r"

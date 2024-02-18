@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "fblung"
+geometryName = "fblung00_r.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "fblung00_r.fbx"
+
+[BuildingClass]

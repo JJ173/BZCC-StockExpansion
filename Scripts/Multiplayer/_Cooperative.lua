@@ -25,6 +25,12 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop)
         print("Cooperative mode enabled: No");
     end
 
+    -- Remove team colours here.
+    ClearTeamColors();
+
+    -- Just for the units on Team 0.
+    SetTeamNameForStat(0, "Neutral");
+
     -- TODO: Re-add when difficulty is moved to coop module.
     -- print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");

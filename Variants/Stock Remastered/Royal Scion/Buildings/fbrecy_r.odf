@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "fbrecy_x"
+geometryName = "fbrecy00_r.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fbrecy00_r.fbx"
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvscav_r"
+buildItem2 = "fvscout_r"
+buildItem3 = "fvturr_r"
+buildItem4 = "fvtug_r"
+buildItem5 = "fvcons_r"
+buildItem6 = "fvserv_r"
+
+[RecyclerClass]
+
+[PoweredBuildingClass]

@@ -1,8 +1,9 @@
 [Start]
 scrapCount = 100
-scavClass = "fvscav"
-consClass = "fvcons"
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
 IdleAllCraft = false // Prevent Interrupting AI.
+CheckProvides = true
 
 [IdleDispatcher]
 UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
@@ -13,9 +14,9 @@ UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
 [Plan1]
 planType = "BuildMinimums"
 planPriority = 100
-buildType1 = "fvtank"
+buildType1 = "fvtank_x"
 buildCount1 = 4
-buildType2 = "fvsent"
+buildType2 = "fvsent_x"
 buildCount2 = 4
-buildType3 = "fvarch"
+buildType3 = "fvarch_x"
 buildCount3 = 4

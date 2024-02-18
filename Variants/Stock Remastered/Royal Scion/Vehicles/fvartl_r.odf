@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "fvartl_x"
+geometryName = "fvartl_r_skel.fbx"
+
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fvartl_r_skel.fbx"
+
+unitName = "Royal Archer"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[ArtilleryClass]
+
+[DeployableClass]

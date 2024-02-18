@@ -3,6 +3,7 @@ scrapCount = 100
 scavClass = "fvscav_x"
 consClass = "fvcons_x"
 IdleAllCraft = false // Prevent Interrupting AI.
+CheckProvides = true
 
 [IdleDispatcher]
 UnitIdleSeconds = 999999 

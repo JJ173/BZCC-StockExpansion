@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvscav_x"
+geometryName = "fvscav00_r.fbx"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "fbscav_r"

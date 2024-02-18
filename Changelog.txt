@@ -1,6 +1,6 @@
 GENERAL
 - Satellite has been added to the 4 hotkey.
-
+- Reduced intensity of red splash screen when you take damage.
 - Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will
 drive into buildings and get stuck. 
 
@@ -203,6 +203,34 @@ ISDF12 (Counter Attack):
 - On higher difficulties, the AI will use a wider range of units to attack.
 - Added staging paths so the AI will attack from multiple directions.
 - Added hypothermia logic from ISDF11.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF13 (Payback): 
+- Added extra tank to facilitate "isdf1302.wav". This is not Manson speaking, but a general pilot.
+- Warrior will check players and friendly AI units at random during the intro scene.
+- Added logic to reduce the max health of each walker so they don't start randomly smoking after the cutscene.
+- Added logic to make all Scion vehicles look at the carrier when it's falling.
+- Updated Manson + AI to be on Team 5 and assigned to Blue Squad.
+- Added logic to give Scion vehicles different weapon loadouts to simulate a "Berserk" feeling.
+- Added more Scion units to the base at the start.
+- Rotated Scion Matriarch for better drop-off.
+- Scion base will now dispatch turrets to keep map control.
+- Extended time of Carrier crash sequence so it doesn't disappear in player view.
+- Added a mission failure condition if your Recycler is destroyed.
+- Added Royal Scions
+
+- General QOL (Quality of Life) improvements.
+
+ISDF14 (Fanning the Fire):
+- Restructured the start of the mission to allow for time for base building.
+- Changed Yelena's name to "???" to improve the pressure of the choice at the end of the mission.
+- Added an escort unit for the first Hauler at the crash site.
+- Added logic to kill Burns if you take him over the lava.
+- Added a voice line from Braddock if you take Burns back to your Recycler.
+- Added Royal Scions
+- Moved Burns and placed him next to his vehicle. Done to prevent issues with Tugs picking him up if he slides down to the carrier.
+- Fixed pathing issues with vehicles that are built at the Scion base to stop them from getting stuck on the cliffs.
 
 - General QOL (Quality of Life) improvements.
 

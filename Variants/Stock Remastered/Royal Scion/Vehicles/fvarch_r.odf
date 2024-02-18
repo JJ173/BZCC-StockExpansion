@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "fvarch_x"
+geometryName = "fvlancer_r_skel.fbx"
+cockpitName = "fvlancer_r_cockpit.fbx"
+
+animCount = 7
+animName1 = "forward"
+animFile1 = "fvlancer_r_ASF.fbx"
+animName2 = "neutral"
+animFile2 = "fvlancer_r_ASN.fbx"
+animName3 = "reverse"
+animFile3 = "fvlancer_r_ASR.fbx"
+animName4 = "deploy"
+animFile4 = "fvlancer_r_MORPH.fbx"
+animName5 = "forward2"
+animFile5 = "fvlancer_r_MSF.fbx"
+animName6 = "neutral2"
+animFile6 = "fvlancer_r_MSN.fbx"
+animName7 = "reverse2"
+animFile7 = "fvlancer_r_MSR.fbx"
+
+unitName = "Royal Lancer"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+unitName = "Royal Lancer"
+
+[DeployableClass]

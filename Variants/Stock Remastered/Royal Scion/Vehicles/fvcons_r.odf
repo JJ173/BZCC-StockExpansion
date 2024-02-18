@@ -1,0 +1,59 @@
+[GameObjectClass]
+classLabel = "fvcons_x"
+geometryName = "fvconst_r_skel.fbx"
+
+animCount = 12
+
+animName1 = "idle"
+animFile1 = "fvconst_r_idle.fbx"
+
+animName2 = "idle2"
+animFile2 = "fvconst_r_idle.fbx"
+
+animName3 = "idle3"
+animFile3 = "fvconst_r_idle.fbx"
+
+animName4 = "sitdown"
+animFile4 = "fvconst_r_idle.fbx"
+
+animName5 = "walk"
+animFile5 = "fvconst_r_walk.fbx"
+
+animName6 = "turn"
+animFile6 = "fvconst_r_turn.fbx"
+
+animName7 = "death"
+animFile7 = "fvconst_r_death01.fbx"
+
+animName8 = "death2"
+animFile8 = "fvconst_r_death02.fbx"
+
+animName9 = "cons"
+animFile9 = "fvconst_r_deploy.fbx"
+
+animName10 = "cons"
+animFile10 = "fvconst_r_deploy.fbx"
+
+animName11 = "cons2"
+animFile11 = "fvconst_r_deploy.fbx"
+
+animName12 = "cons3"
+animFile12 = "fvconst_r_deploy.fbx"
+
+unitName = "Royal Builder"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbkiln_r"
+buildItem2 = "fbspir_r"
+buildItem3 = "fbantm_r"
+buildItem4 = "fbdowe_r"
+buildItem5 = "fbstro_r"
+buildItem6 = "fbjamm_r"

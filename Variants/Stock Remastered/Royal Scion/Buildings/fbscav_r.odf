@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbscav_x"
+geometryName = "fbext00_r.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fbext00_r.fbx"
+upgradeName = "fbscup_r"
+
+[BuildingClass]
+
+[ExtractorClass]

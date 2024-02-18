@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "fbjamm_x"
+geometryName = "fbjamm00_r.fbx"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[JammerTowerClass]

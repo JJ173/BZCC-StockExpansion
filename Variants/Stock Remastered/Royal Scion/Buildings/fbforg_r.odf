@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "fbforg_x"
+geometryName = "fbforg00_r.fbx"
+
+[PoweredBuildingClass]
+powerName = "fblung_r"
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent_r"
+buildItem2 = "fvarch_r"
+buildItem3 = "fvtank_r"
+buildItem4 = "fvartl_r"
+buildItem5 = "fvwalk_r"
+buildItem6 = "fvatank_r"
+
+[Lod1]

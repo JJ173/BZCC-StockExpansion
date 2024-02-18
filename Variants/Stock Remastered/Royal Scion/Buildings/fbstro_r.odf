@@ -1,0 +1,28 @@
+[GameObjectClass]
+classLabel = "fbstro_x"
+geometryName = "fbstro00_r.fbx"
+
+[PoweredBuildingClass]
+powerName = "fblung_r"
+
+[BuildingClass]
+
+[ArmoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+
+[Lod1]

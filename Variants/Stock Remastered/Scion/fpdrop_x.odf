@@ -4,3 +4,5 @@ classLabel = "ipdrop"
 animCount = 1
 animName1 = "wave"
 animFile1 = "foflag01.fbx"
+RunAnimation = "wave"
+RunAnimIsLooped = true

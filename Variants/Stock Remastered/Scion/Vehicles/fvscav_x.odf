@@ -8,7 +8,7 @@ StayWithOwner = true
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
-PathingType = 1
+// PathingType = 1
 AvoidType = 2
 
 avoidSpeed = 16

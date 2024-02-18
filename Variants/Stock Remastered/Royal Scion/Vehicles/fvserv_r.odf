@@ -1,0 +1,22 @@
+[GameObjectClass]
+classLabel = "fvserv_x"
+geometryName = "fvserv00_r.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fvserv00_r.fbx"
+
+unitName = "Royal Healer"
+
+PilotConfig = "fspilo_r"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]

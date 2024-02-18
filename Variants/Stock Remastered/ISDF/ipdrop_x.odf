@@ -1,6 +1,9 @@
 [GameObjectClass]
 geometryName = "ioflag01.fbx"
+geometryScale = 1.0
 classLabel = "ipdrop"
 animCount = 1
 animName1 = "wave"
 animFile1 = "ioflag01.fbx"
+RunAnimation = "wave"
+RunAnimIsLooped = true

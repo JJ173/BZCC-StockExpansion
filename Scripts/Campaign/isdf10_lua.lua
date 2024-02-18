@@ -216,9 +216,6 @@ function AddObject(h)
     elseif (team == Mission.m_HostTeam) then
         SetSkill(h, 3);
 
-        -- Stuff
-        print(odf);
-
         -- Check to see if the bomber bay has been built.
         if (Mission.m_BomberBayBuilt == false) then
             if (odf == "ibbomb_x") then
@@ -258,7 +255,9 @@ function DeleteObject(h)
     end
 
     -- Just for testing.
-    if (GetTeamNum(h) == Mission.m_AlliedTeam or GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+        local cfg = GetCfg(h);
+
         if (cfg == "bbruin05") then
             -- Damage any nearby ruins with the bomb blast.
             if (IsAround(Mission.m_Ruin1)) then
@@ -343,11 +342,13 @@ function Update()
                 end
             end
 
+            -- Check failure conditions over everything else.
+            if (Mission.m_MissionState > 1) then
+                HandleFailureConditions();
+            end
+
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
-
-            -- Check any failure conditions
-            HandleFailureConditions();
 
             -- Dropship Brain.
             if (Mission.m_DropshipBrainActive) then
@@ -492,7 +493,6 @@ Functions[1] = function()
 
     -- Mask the emitter for Condor 1 and 3.
     MaskEmitter(Mission.m_Condor1, 0);
-    MaskEmitter(Mission.m_Condor3, 0);
 
     -- Start the animations.
     SetAnimation(Mission.m_Condor1, "deploy", 1);
@@ -509,6 +509,7 @@ Functions[1] = function()
         Mission.m_Condor3Away = true;
         Mission.m_Condor3Removed = true;
     else
+        MaskEmitter(Mission.m_Condor3, 0);
         SetAnimation(Mission.m_Condor3, "deploy", 1);
     end
 

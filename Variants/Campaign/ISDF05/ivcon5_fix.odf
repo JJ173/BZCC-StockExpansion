@@ -11,6 +11,4 @@ isSingle = 1
 [DeployableClass]
 
 [ConstructionRigClass]
-buildItem1 = "ibpge5_fix"
 buildItem2 = "ibfact5"
-buildItem3 = "ibcbu5"

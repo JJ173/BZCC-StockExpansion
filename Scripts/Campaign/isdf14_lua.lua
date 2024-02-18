@@ -372,7 +372,6 @@ Functions[1] = function()
     -- Ally teams to be sure.
     for i = 2, 5 do
         Ally(Mission.m_HostTeam, i);
-        Ally(i, Mission.m_EnemyTeam);
     end
 
     -- Clean up any player spawns that haven't been taken by the player.

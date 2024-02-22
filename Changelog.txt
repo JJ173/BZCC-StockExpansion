@@ -3,6 +3,7 @@ GENERAL
 - Reduced intensity of red splash screen when you take damage.
 - Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will
 drive into buildings and get stuck. 
+- New option to enable subtitles.
 
 FACTIONS
 
@@ -245,6 +246,16 @@ ISDF15 (A Traitor's Fate):
 - Base guards from the Rebels will now attack units that are attacking their base.
 - Manson's outpost has been reworked.
 - Small map changes to improve gameplay experience.
+
+- General QOL (Quality of Life) improvements.
+
+ISDF16 (Hole in One):
+- Added a second Healer to the Titan attacks.
+- Added CC111100 patrols to the surface.
+- Added new CC222200 Gun Towers to the surface.
+- Added Royal Scions
+- Attack frequency has been increased based on difficulty.
+- Scion teams will now construct full bases.
 
 - General QOL (Quality of Life) improvements.
 

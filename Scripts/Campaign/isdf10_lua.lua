@@ -213,7 +213,7 @@ function AddObject(h)
                 end
             end
         end
-    elseif (team == Mission.m_HostTeam) then
+    elseif (team < Mission.m_AlliedTeam and team > 0) then
         SetSkill(h, 3);
 
         -- Check to see if the bomber bay has been built.

@@ -153,6 +153,9 @@ function AddObject(h)
             -- Move them back to the drop-site.
             Retreat(h, "homebase", 1)
         end
+    elseif (team < Mission.m_AlliedTeam and team > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
     end
 end
 

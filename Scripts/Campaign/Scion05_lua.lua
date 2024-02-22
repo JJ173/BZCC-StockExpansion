@@ -32,18 +32,18 @@ local delay2 = { 160, 140, 120 };
 -- Each attack group for the player.
 local playerAttacks =
 {
-    { { "ivscout_x", "ivscout_x" },           { "ivscout_x", "ivmisl_x" },            { "ivscout_x", "ivtank_x" } },          -- Attack 1
-    { { "ivmisl_x", "ivscout_x" },            { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmisl_x" } },           -- Attack 2
-    { { "ivmisl_x", "ivscout_x" },            { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 3
-    { { "ivscout_x", "ivmisl_x" },            { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x" } },         -- Attack 4
-    { { "ivmisl_x", "ivmisl_x" },             { "ivtank_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 5
-    { { "ivmbike_x", "ivmbike_x" },           { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x", "ivmbike_x" } }, -- Attack 6
-    { { "ivtank_x", "ivscout_x", "ivscout_x" }, { "ivmbike_x", "ivmbike_x", "ivtank_x" }, { "ivtank_x", "ivtank_x", "ivscout_x" } }, -- Attack 7
-    { { "ivtank_x", "ivmbike_x", "ivscout_x" }, { "ivtank_x", "ivmisl_x", "ivmbike_x" }, { "ivrckt_x", "ivtank_x", "ivscout_x" } }, -- Attack 8
-    { { "ivtank_x", "ivtank_x", "ivscout_x" }, { "ivtank_x", "ivmbike_x", "ivrckt_x" }, { "ivtank_x", "ivrckt_x", "ivatank_x" } }, -- Attack 9
-    { { "ivrckt_x", "ivtank_x", "ivscout_x" }, { "ivatank_x", "ivtank_x", "ivmbike_x" }, { "ivatank_x", "ivatank_x", "ivtank_x" } }, -- Attack 10
+    { { "ivscout_x", "ivscout_x" },             { "ivscout_x", "ivmisl_x" },              { "ivscout_x", "ivtank_x" } },              -- Attack 1
+    { { "ivmisl_x", "ivscout_x" },              { "ivmisl_x", "ivmisl_x" },               { "ivtank_x", "ivmisl_x" } },               -- Attack 2
+    { { "ivmisl_x", "ivscout_x" },              { "ivmisl_x", "ivmisl_x" },               { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 3
+    { { "ivscout_x", "ivmisl_x" },              { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x" } },               -- Attack 4
+    { { "ivmisl_x", "ivmisl_x" },               { "ivtank_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivmbike_x", "ivmbike_x" } }, -- Attack 5
+    { { "ivmbike_x", "ivmbike_x" },             { "ivmisl_x", "ivmbike_x", "ivmbike_x" }, { "ivtank_x", "ivtank_x", "ivmbike_x" } },  -- Attack 6
+    { { "ivtank_x", "ivscout_x", "ivscout_x" }, { "ivmbike_x", "ivmbike_x", "ivtank_x" }, { "ivtank_x", "ivtank_x", "ivscout_x" } },  -- Attack 7
+    { { "ivtank_x", "ivmbike_x", "ivscout_x" }, { "ivtank_x", "ivmisl_x", "ivmbike_x" },  { "ivrckt_x", "ivtank_x", "ivscout_x" } },  -- Attack 8
+    { { "ivtank_x", "ivtank_x", "ivscout_x" },  { "ivtank_x", "ivmbike_x", "ivrckt_x" },  { "ivtank_x", "ivrckt_x", "ivatank_x" } },  -- Attack 9
+    { { "ivrckt_x", "ivtank_x", "ivscout_x" },  { "ivatank_x", "ivtank_x", "ivmbike_x" }, { "ivatank_x", "ivatank_x", "ivtank_x" } }, -- Attack 10
     { { "ivrckt_x", "ivatank_x", "ivscout_x" }, { "ivatank_x", "ivatank_x", "ivrckt_x" }, { "ivatank_x", "ivwalk_x", "ivatank_x" } }, -- Attack 11
-    { { "ivatank_x", "ivrckt_x", "ivrckt_x" }, { "ivatank_x", "ivatank_x", "ivwalk_x" }, { "ivwalk_x", "ivwalk_x", "ivatank_x" } } -- Attack 12
+    { { "ivatank_x", "ivrckt_x", "ivrckt_x" },  { "ivatank_x", "ivatank_x", "ivwalk_x" }, { "ivwalk_x", "ivwalk_x", "ivatank_x" } }   -- Attack 12
 }
 
 -- This is when the player takes too long to destroy the bridge.
@@ -68,16 +68,16 @@ m_BraddockBridgeAttacks =
 -- The final stand for the player.
 m_BraddockAANAttacks =
 {
-    { { "ivscout_x", "ivscout_x", "ivtank_x" },                                              { "ivmisl_x", "ivmisl_x", "ivtank_x" },                                             { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" } },                      -- Attack 1
-    { { "ivmisl_x", "ivscout_x", "ivmisl_x", "ivscout_x" },                                  { "ivmisl_x", "ivtank_x", "ivmisl_x", "ivtank_x" },                                 { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                        -- Attack 2
-    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x" },                                    { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },                  { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } }, -- Attack 3
-    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivscout_x", "ivscout_x" },          { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },   { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" } },             -- Attack 4
-    { { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },      { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                 { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivapc_x", "ivapc_x" } }, -- Attack 5
-    { { "ivmisl_x", "ivmisl_x", "ivtank_x", "ivtank_x" },                                    { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" },                      { "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },  -- Attack 6
-    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                    { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },           { "ivapc_x", "ivapc_x", "ivapc_x" } },                                       -- Attack 7
-    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" },          { "ivapc_x", "ivapc_x", "ivapc_x" },                                                { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivtank_x", "ivtank_x", "ivapc_x" } }, -- Attack 8
-    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivapc_x" }, { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" }, { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x" } },                        -- Attack 9
-    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },              { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x", "ivapc_x" }, { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } } -- Attack 10
+    { { "ivscout_x", "ivscout_x", "ivtank_x" },                                                { "ivmisl_x", "ivmisl_x", "ivtank_x" },                                               { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" } },                                                            -- Attack 1
+    { { "ivmisl_x", "ivscout_x", "ivmisl_x", "ivscout_x" },                                    { "ivmisl_x", "ivtank_x", "ivmisl_x", "ivtank_x" },                                   { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                                                              -- Attack 2
+    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x" },                                      { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },                    { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                                      -- Attack 3
+    { { "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivmisl_x", "ivscout_x", "ivscout_x" },            { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },     { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" } },                                                   -- Attack 4
+    { { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x" },        { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                   { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivapc_x", "ivapc_x" } },                                    -- Attack 5
+    { { "ivmisl_x", "ivmisl_x", "ivtank_x", "ivtank_x" },                                      { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x" },                        { "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                                        -- Attack 6
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" },                                      { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },             { "ivapc_x", "ivapc_x", "ivapc_x" } },                                                                             -- Attack 7
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" },            { "ivapc_x", "ivapc_x", "ivapc_x" },                                                  { "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivmbike_x", "ivtank_x", "ivtank_x", "ivapc_x" } }, -- Attack 8
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x", "ivapc_x" }, { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" }, { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x" } },                                                                  -- Attack 9
+    { { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x" },                { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivapc_x", "ivapc_x", "ivapc_x" },  { "ivapc_x", "ivapc_x", "ivapc_x", "ivapc_x", "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } }                   -- Attack 10
 }
 
 -- Mission important variables.
@@ -225,10 +225,12 @@ function Load(CoopData, MissionData)
 end
 
 function AddObject(h)
+    local teamNum = GetTeamNum(h);
+
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-    elseif (GetTeamNum(h) == Mission.m_AlliedTeam) then
+    elseif (teamNum == Mission.m_AlliedTeam) then
         SetSkill(h, 3); -- Manson and his army are well trained!
 
         -- Get the classes so we can assign them.
@@ -250,7 +252,10 @@ function AddObject(h)
                 Mission.m_AANTank3 = h;
             end
         end
-    elseif (GetTeamNum(h) == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         -- Need to check to see if a Gun Spire is built.
         if (Mission.m_MissionState == 18) then
             -- Get the classes so we can assign them.
@@ -1051,7 +1056,7 @@ function DispatchBraddockUnits()
 
             -- Set the loop timer so we delay.
             Mission.m_BraddockAttackPlayerDelay = Mission.m_MissionTime +
-            SecondsToTurns(delay1[Mission.m_MissionDifficulty]);
+                SecondsToTurns(delay1[Mission.m_MissionDifficulty]);
         end
     elseif (Mission.m_BridgeAlive) then
         if (Mission.m_BraddockDispatchCooldown < Mission.m_MissionTime) then
@@ -1081,7 +1086,7 @@ function DispatchBraddockUnits()
 
             -- Set the loop timer so we delay.
             Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime +
-            SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
+                SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
         end
     elseif (Mission.m_PlayerAtAANBase) then
         if (Mission.m_BraddockDispatchCooldown < Mission.m_MissionTime) then
@@ -1119,7 +1124,7 @@ function DispatchBraddockUnits()
 
             -- Set the loop timer so we delay.
             Mission.m_BraddockDispatchCooldown = Mission.m_MissionTime +
-            SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
+                SecondsToTurns(delay2[Mission.m_MissionDifficulty]);
         end
     end
 end

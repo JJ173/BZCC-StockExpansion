@@ -1,4 +1,11 @@
-[IAHumanRecyclerList]
+[RecyclerList]
 ODFName = "ivrecy_x"
 Description = "BZCC Reimagined Default"
 
+[RecyclerListFFA]
+ODFName = "ivrecy_x"
+Description = "BZCC Reimagined Default"
+
+[IAHumanRecyclerList]
+ODFName = "ivrecy_x"
+Description = "BZCC Reimagined Default"

@@ -187,7 +187,10 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-    elseif (teamNum == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         -- Check the class.
         local class = GetClassLabel(h);
 

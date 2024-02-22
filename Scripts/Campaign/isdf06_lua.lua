@@ -26,14 +26,14 @@ local m_GameTPS = GetTPS();
 local m_MissionName = "ISDF06: The Wormhole";
 
 -- Difficulty tables for times and spawns.
-local m_Breacher1Ship = { "fvscout", "fvsent", "fvarch" };
-local m_Breacher2Ship = { "fvsent", "fvtank", "fvtank" };
-local m_Breacher3Ship = { "fvscout", "fvsent", "fvarch" };
-local m_Breacher4Ship = { "fvsent", "fvarch", "fvtank" };
+local m_Breacher1Ship = { "fvscout_x", "fvsent_x", "fvarch_x" };
+local m_Breacher2Ship = { "fvsent_x", "fvtank_x", "fvtank_x" };
+local m_Breacher3Ship = { "fvscout_x", "fvsent_x", "fvarch_x" };
+local m_Breacher4Ship = { "fvsent_x", "fvarch_x", "fvtank_x" };
 
-local m_PoolAttack1Ship = { "fvscout", "fvsent", "fvarch" };
-local m_PoolAttack2Ship = { "fvsent", "fvsent", "fvtank" };
-local m_PoolAttack3Ship = { "fvscout", "fvtank", "fvtank" };
+local m_PoolAttack1Ship = { "fvscout_x", "fvsent_x", "fvarch_x" };
+local m_PoolAttack2Ship = { "fvsent_x", "fvsent_x", "fvtank_x" };
+local m_PoolAttack3Ship = { "fvscout_x", "fvtank_x", "fvtank_x" };
 
 local m_ScionPlayerAttackCooldown = { 45, 35, 25 };
 
@@ -134,29 +134,30 @@ end
 function AddObject(h)
     -- Grab the ODF name.
     local ODFName = GetCfg(h);
+    local teamNum = GetTeamNum(h);
 
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-    end
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
 
-    -- Give ivmisl the shadower.
-    if (ODFName == "ivmisl") then
-        GiveWeapon(h, "gshadow_c");
-    end
+        -- Give ivmisl the shadower.
+        if (ODFName == "ivmisl_x") then
+            GiveWeapon(h, "gshadow_c");
+        elseif (ODFName == "ibcbun") then
+            if (GetDistance(h, "pool") < 100) then
+                Mission.m_PoolBunkerBuilt = true;
 
-    -- Check the Relay Bunker and Gun Towers
-    if (ODFName == "ibcbun") then
-        if (GetDistance(h, "pool") < 100) then
-            Mission.m_PoolBunkerBuilt = true;
-
-            AddObjectiveOverride("isdf0604.otf", "WHITE", 10, true);
-            AddObjectiveOverride("isdf0605.otf", "GREEN", 10);
-            AddObjectiveOverride("isdf0606.otf", "WHITE", 10);
-        end
-    elseif (ODFName == "ibgtow") then
-        if (GetDistance(h, "pool") < 100) then
-            Mission.m_PoolTowerCount = Mission.m_PoolTowerCount + 1;
+                AddObjectiveOverride("isdf0604.otf", "WHITE", 10, true);
+                AddObjectiveOverride("isdf0605.otf", "GREEN", 10);
+                AddObjectiveOverride("isdf0606.otf", "WHITE", 10);
+            end
+        elseif (ODFName == "ibgtow") then
+            if (GetDistance(h, "pool") < 100) then
+                Mission.m_PoolTowerCount = Mission.m_PoolTowerCount + 1;
+            end
         end
     end
 end
@@ -307,10 +308,10 @@ function HandleMissionStart()
         Stop(BuildObject("ivturr", Mission.m_HostTeam, "turret2"), 1);
 
         -- Spawn Scion Patrols in their base.
-        Patrol(BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-        Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-        Patrol(BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
-        Patrol(BuildObject("fvarch", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvsent_x", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
+        Patrol(BuildObject("fvarch_x", Mission.m_EnemyTeam, GetPositionNear("patrol_spawn2", 20, 20)), "patrol", 1);
 
         -- Grab Green Squad.
         Mission.m_Green1 = GetHandle("green1");
@@ -375,12 +376,12 @@ function HandleMissionStart()
                 and not IsAliveAndEnemy(Mission.m_Attacker5, Mission.m_EnemyTeam)
                 and not IsAliveAndEnemy(Mission.m_Attacker6, Mission.m_EnemyTeam)) then
             -- Build the attackers and send them on their way.
-            Mission.m_Attacker1 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-            Mission.m_Attacker2 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-            Mission.m_Attacker3 = BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
-            Mission.m_Attacker4 = BuildObject("fvsent", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
-            Mission.m_Attacker5 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
-            Mission.m_Attacker6 = BuildObject("fvtank", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
+            Mission.m_Attacker1 = BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
+            Mission.m_Attacker2 = BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
+            Mission.m_Attacker3 = BuildObject("fvsent_x", Mission.m_EnemyTeam, GetPositionNear("attack_start1", 20, 20));
+            Mission.m_Attacker4 = BuildObject("fvsent_x", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
+            Mission.m_Attacker5 = BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
+            Mission.m_Attacker6 = BuildObject("fvtank_x", Mission.m_EnemyTeam, GetPositionNear("attack_start2", 20, 20));
 
             -- Send them to attack the player base.
             Goto(Mission.m_Attacker1, "attack_path1", 1);

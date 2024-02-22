@@ -33,7 +33,7 @@ local m_WeaponTable = {
     m_Cannons = { "gquill_c", "gsonic_c", "garc_c" },
 
     -- Table for Guns (2)
-    m_Guns = { "lockdown_c", "ggauss_c", },
+    m_Guns = { "glock_c", "ggauss_c", },
 
     -- Table for Missiles (3)
     m_Missiles = { "gmlock_c" },
@@ -225,7 +225,7 @@ function AddObject(h)
                 Mission.m_HaulerMoveTimer = Mission.m_MissionTime + SecondsToTurns(1.5);
             end
         end
-    elseif (team > 0 and team < Mission.m_EnemyTeam) then
+    elseif (team < Mission.m_AlliedTeam and team > 0) then
         -- Always max our player units.
         SetSkill(h, 3);
 

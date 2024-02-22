@@ -189,13 +189,18 @@ function Load(CoopData, MissionData)
 end
 
 function AddObject(h)
+    local teamNum = GetTeamNum(h);
+
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
         SetObjectiveName(h, "Unknown");
-    elseif (GetTeamNum(h) < 5 and GetTeamNum(h) > 0) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         if (IsOdf(h, "ibnav")) then
             -- Used for the Red 1 objective.
             Mission.m_RedNav = h;

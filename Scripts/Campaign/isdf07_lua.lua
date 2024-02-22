@@ -171,7 +171,10 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
-    elseif (teamNum == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         -- Check the class.
         local class = GetClassLabel(h);
 
@@ -214,7 +217,7 @@ function DeleteObject(h)
     -- Check the team of the handle.
     local teamNum = GetTeamNum(h);
 
-    if (teamNum == Mission.m_HostTeam) then
+    if (teamNum < Mission.m_EnemyTeam and teamNum > 0) then
         -- For the SavePlayerBaseToFile() function.
         if ((class == "CLASS_TURRET" or IsBuilding(h)) and class ~= "CLASS_BUILDING" and class ~= "CLASS_EXTRACTOR") then
             TableRemoveByHandle(Mission.m_PlayerBuildings, h);

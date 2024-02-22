@@ -122,9 +122,10 @@ end
 function AddObject(h)
     local ODFName = GetCfg(h);
     local class = GetClassLabel(h);
+    local teamNum = GetTeamNum(h);
 
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
 
         if (ODFName == "ivturr_x") then
@@ -151,7 +152,7 @@ function AddObject(h)
 
             -- Set a timer for dispatch.
             Mission.m_ScoutDispatchCooldown = Mission.m_MissionTime +
-            SecondsToTurns(m_ScoutCooldownTimeTable[Mission.m_MissionDifficulty]);
+                SecondsToTurns(m_ScoutCooldownTimeTable[Mission.m_MissionDifficulty]);
         elseif (ODFName == "ibpgen_x" and Mission.m_MissionState > 9) then
             if (not IsAlive(Mission.m_EnemyPower1)) then
                 -- Reassign the power variables for the last objective.
@@ -167,7 +168,10 @@ function AddObject(h)
                 SetObjectiveOn(h);
             end
         end
-    elseif (GetTeamNum(h) == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         if (class == "CLASS_JAMMER") then
             -- Add to a table to keep track.
             Mission.m_PlayerJammers[#Mission.m_PlayerJammers + 1] = h;

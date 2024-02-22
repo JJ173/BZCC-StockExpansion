@@ -182,9 +182,10 @@ end
 
 function AddObject(h)
     local ODFName = GetCfg(h);
+    local teamNum = GetTeamNum(h);
 
     -- Handle unit skill for enemy.
-    if (GetTeamNum(h) == Mission.m_EnemyTeam) then
+    if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
@@ -194,7 +195,10 @@ function AddObject(h)
         if (Mission.m_Jammer == nil and ODFName == "fbpjam") then
             Mission.m_Jammer = h;
         end
-    elseif (GetTeamNum(h) == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
+
         -- We need to grab Shabayev when she jumps out of the Scout.
         if (Mission.m_MissionState >= 44) then
             if (ODFName == "isshab_p") then

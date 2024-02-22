@@ -188,6 +188,9 @@ function AddObject(h)
 
         -- For this mission, we don't have intel on enemy units, so set all of their names to "Unknown".
         SetObjectiveName(h, "Unknown");
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
+        -- Always max our player units.
+        SetSkill(h, 3);
     end
 end
 

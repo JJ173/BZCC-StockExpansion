@@ -316,7 +316,7 @@ function AddObject(h)
                 end
             end
         end
-    elseif (team == Mission.m_HostTeam) then
+    elseif (team < Mission.m_AlliedTeam and team > 0) then
         SetSkill(h, 3);
 
         -- Check to see if it's a factory that has been built.

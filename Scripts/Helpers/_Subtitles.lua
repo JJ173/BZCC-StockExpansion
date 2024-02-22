@@ -24,11 +24,19 @@ local largePanel = false;
 
 -- Set the audioClip variable up so we can track when it's finished.
 function _Subtitles.AudioWithSubtitles(clip, useLargePanel)
-	-- We need this to load subtitles into the List Box.
-	subtitleToUse = RemoveWavExtension(clip) .. "_subtitle.txt";
-
 	-- Set this global variable so we can keep track of the clip until it's finished.
 	audioClip = AudioMessage(clip);
+
+	-- Check to see if the subtitles are enabled in the options menu.
+	local subtitlesEnabled = GetVarItemInt("options.play.subtitles");
+
+	-- Return early if the option for subtitles is off.
+	if (subtitlesEnabled == 0) then
+		return audioClip;
+	end
+
+	-- We need this to load subtitles into the List Box.
+	subtitleToUse = RemoveWavExtension(clip) .. "_subtitle.txt";
 
 	-- Whether we need to use a larger box.
 	largePanel = useLargePanel;

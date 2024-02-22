@@ -141,7 +141,7 @@ function AddObject(h)
         if (GetClassLabel(h) == "CLASS_PERSON") then
             RemoveObject(h);
         end
-    elseif (teamNum == Mission.m_HostTeam) then
+    elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
         if (Mission.m_IntroObjectivesDisplayed) then
             -- If we have enough scrap when an Extractor is deployed, show objectives.
             local class = GetClassLabel(h);

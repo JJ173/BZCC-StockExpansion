@@ -195,7 +195,7 @@ function AddObject(h)
         if (class == "CLASS_RECYCLER" or class == "CLASS_FACTORY" or class == "CLASS_TURRET" or class == "CLASS_COMMTOWER") then
             Mission.m_KeyScionUnits[#Mission.m_KeyScionUnits + 1] = h;
         end
-    elseif (team == Mission.m_HostTeam) then
+    elseif (team < Mission.m_AlliedTeam and team > 0) then
         SetSkill(h, 3);
 
         -- If they are the APC, give them to manson.

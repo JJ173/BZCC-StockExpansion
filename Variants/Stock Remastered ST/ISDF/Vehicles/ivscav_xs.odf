@@ -21,7 +21,7 @@ TREAD_STATIC_FRICTION=5.0
 [TrackedDeployableClass]
 
 [ScavengerClass]
-deployClass = "ibscav_x"
+deployClass = "ibscav_xs"
 
 [Lod1]
 

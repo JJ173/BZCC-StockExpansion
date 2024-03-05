@@ -15,12 +15,12 @@ setAltitude = 0.0f
 [DeployableClass]
 
 [ConstructionRigClass]
-buildItem1 = "ibpgen_x"
-buildItem2 = "ibfact_x"
-buildItem3 = "ibcbun_x"
-buildItem4 = "ibarmo_x"
-buildItem5 = "ibsbay_x"
-buildItem6 = "ibgtow_x"
-buildItem7 = "ibtrain_x"
-buildItem8 = "ibtcen_x"
-buildItem9 = "ibbomb_x"
+buildItem1 = "ibpgen_xs"
+buildItem2 = "ibfact_xs"
+buildItem3 = "ibcbun_xs"
+buildItem4 = "ibarmo_xs"
+buildItem5 = "ibsbay_xs"
+buildItem6 = "ibgtow_xs"
+buildItem7 = "ibtrain_xs"
+buildItem8 = "ibtcen_xs"
+buildItem9 = "ibbomb_xs"

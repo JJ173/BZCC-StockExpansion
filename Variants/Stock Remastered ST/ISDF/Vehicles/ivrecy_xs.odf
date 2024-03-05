@@ -12,7 +12,7 @@ deployedMsg = "ivrecy08.wav"
 [TrackedDeployableClass]
 
 [DeployBuildingClass]
-deployName = "ibrecy_x"
+deployName = "ibrecy_xs"
 
 [RecyclerVehicleClass]
 

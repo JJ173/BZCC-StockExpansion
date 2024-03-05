@@ -32,6 +32,8 @@ tunnel04DZ=2
 tunnel04Edge="wtfw" // Rec Pad - Right Nook
 
 [FactoryClass]
+
+
 buildItem1 = "ivscav_xs"
 buildItem2 = "ivscout_xs"
 buildItem3 = "ivturr_xs"
@@ -39,6 +41,7 @@ buildItem5 = "ivcons_xs"
 buildItem6 = "ivserv_xs"
 buildItem7 = "apserv_xs"
 buildItem8 = "ivscout_e_xs
+buildEmptyItem = 8
 
 selectWaitMsg = "ivrecy04.wav"
 selectUser1Msg = "ivrecy02.wav"

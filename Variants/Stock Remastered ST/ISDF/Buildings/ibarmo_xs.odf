@@ -1,27 +1,53 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibarmo"
+provideCount=4
+provideName1="ibarmo"
+provideName2="ibarmo_xs"
+provideName3="VIRTUAL_CLASS_ARMORY"
+provideName4="base"
 
 [BuildingClass]
 
 [PoweredBuildingClass]
 
 [ArmoryClass]
+// {VSR-010}
+DropoffDX=0
+DropoffDZ=16 // *32
 
 [ArmoryGroup1]
+buildItem2="aplasexs"
+buildItem3="appummxs"
+buildItem4="apchainxs"
 
 [ArmoryGroup2]
-buildItem4 = "applas_x"
+buildItem1="apstabxs"
+buildItem2="appstbxs"
+buildItem4="applasxs"
+buildItem6="apmaggxs"
 
 [ArmoryGroup3]
+buildItem1="aptaggxs"
+buildItem2="apfafmxs"
+buildItem3="apshdwxs"
 
 [ArmoryGroup4]
+buildItem1="apmortxs"
+buildItem2="apmdmgxs"
+buildItem3="apsplnxs"
 
 [ArmoryGroup5]
+buildItem1="apflarxs"
+buildItem2="apmcurxs"
+buildItem3="apmitsxs"
+buildItem4="approxxs"
 
 [ArmoryGroup6]
+buildItem1="apredfxs"
+buildItem2="apphanxs"
+buildItem3="apsitexs"
 
 [ArmoryGroup7]
-buildItem2 = "apsnip_x"
-
-[steam]
+buildItem2="apsnipxs"
+buildItem4="apjetpxs"

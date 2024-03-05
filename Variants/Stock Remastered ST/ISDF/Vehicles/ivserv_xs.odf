@@ -1,13 +1,19 @@
 [GameObjectClass]
 classLabel = "ivserv"
 PilotConfig = "ispilo_x"
+mass=3200 // {VSR-012}
+clearBuildZone=0 // {VSR-005}
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+engageRange=40 // *30 {VSR-015}
+canRescue=0
+canSnipe=0
 
 [TrackedVehicleClass]
 
 [ServiceTruck]
+serviceBuildings=1 // *0 {VSR-016}
 
 [Supply]
 

@@ -1,0 +1,7 @@
+[OrdnanceClass]
+classLabel="plasma_c"
+
+// Faster, same range
+lifeSpan=1.4 // *1.89 (to maintain range)
+shotSpeed=135.0 // *100 {VSR-132}
+

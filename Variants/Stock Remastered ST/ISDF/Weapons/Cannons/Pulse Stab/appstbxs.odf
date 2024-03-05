@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel="appstb"
+infoName="appstbxs.inf"
+
+[WeaponPowerupClass]
+weaponName="gplstabvsr_c"

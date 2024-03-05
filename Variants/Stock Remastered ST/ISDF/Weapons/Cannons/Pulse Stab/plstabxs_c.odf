@@ -1,0 +1,20 @@
+[OrdnanceClass]
+classLabel="plstab_c"
+
+shotRadius=-1.0 // *1.0 {VSR-180}
+
+lifeSpan=1.5 // *1.429 {VSR-184}
+shotSpeed=80.0 // *70.0 {VSR-181}
+
+// {VSR-185}
+damageValue(N)=220 // 240 --reverted to stock --Gravey
+damageValue(L)=205 // 230  --210 reduced by 15 vs light --Gravey
+damageValue(H)=190 // 210  -- reduced by 15 again, stock value -- Gravey
+damageValue(S)=190  // 210 -- updated to be consistent with NLH --Gravey
+damageValue(D)=205 // *190
+damageValue(A)=220 // *220 --ABS weak vs Pulse
+
+[PulseShellClass]
+pulseDelay=0.45 // .4 // *0.3 {VSR-182} --updated to be consistent with assault pulse --Gravey
+pulsePeriod=0.25 // *0.3 {VSR-183}
+xplPulse="xpulemit_c"

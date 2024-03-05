@@ -1,0 +1,5 @@
+[WeaponClass]
+classLabel="glaser_a"
+altName="glaserxs_c"
+ordName="laserxs_a"
+aiRange=150 // *100

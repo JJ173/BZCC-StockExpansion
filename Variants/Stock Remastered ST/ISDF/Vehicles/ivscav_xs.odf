@@ -1,6 +1,7 @@
 [GameObjectClass]
 classLabel = "ivscav"
 PilotConfig = "ispilo_x"
+mass=40000.0 // (stock ivscav=53157.3) {VSR-012}
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
@@ -13,7 +14,9 @@ selectPickupMsg = "ivscav05.wav"
 avoidSpeed = 16
 
 [TrackedVehicleClass]
-CENTER_SHIFT = -0.6
+//CENTER_SHIFT = -0.6
+alphaSteer=8.0 // *2.0 {VSR-014}
+TREAD_STATIC_FRICTION=5.0
 
 [TrackedDeployableClass]
 

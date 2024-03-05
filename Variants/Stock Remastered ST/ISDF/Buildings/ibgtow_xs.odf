@@ -2,13 +2,29 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibgtow"
 
-weaponName1 = "gtower_x"
-weaponName2 = "gtower_x"
+provideCount=5
+provideName1="ibgtow"
+provideName2="ibgtow_xs"
+provideName3="VIRTUAL_CLASS_GUNTOWER"
+provideName4="defender"
+provideName5 = "base"
+weaponName1 = "gtowerxs"
+weaponName2 = "gtowerxs"
 
 [BuildingClass]
 
 [CraftClass]
+use13Aim=true
+weaponPitch = 1.8
 
+filterFactor0=1.0 //To make Turret AI Level 0 more accurate
+filterFactor1=1.0 //To make Turret AI Level 1 more accurate
+filterFactor2=1.0 //To make Turret AI Level 2 more accurate
+filterFactor3=1.0 //To make Turret AI Level 3 more accurate
+fireConeXBase = 0.75 //Was added, now continues to fire even if it might not hit its target
+fireConeYBase = 0.75 //Was added, now continues to fire even if it might not hit its target
 [TurretCraftClass]
+omegaTurret = 5.0f //was 2.0, changed to 5.0f for faster reaction (side effect: faster idle spin)
+alphaTurret = 5.0f
 
 [Lod1]

@@ -1,14 +1,34 @@
 [GameObjectClass]
 classLabel = "ivturr"
 PilotConfig = "ispilo_x"
+scrapValue=15 // *10 {VSR-029}
+mass=7087.13
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+CanAIPForceIdle=false
+DoIdleDispatch=false
+sitAttackCheckAbleToHit=true // Check if can hit. If check returns false, hold immediately.
+gunTowerProcessCheckCantHit=true 
+
+MinWeaponPitch = 1.0
+MaxWeaponPitch = 1.5
+
+use13Aim=true //Was false, now uses 1.3 aiming code instead of 1.2 aiming code
+fireConeXBase = 0.75 //Was added, now continues to fire even if it might not hit its target
+fireConeYBase = 0.75 //Was added, now continues to fire even if it might not hit its target
+filterFactor0=1.0 //To make Turret AI Level 0 more accurate
+filterFactor1=1.0 //To make Turret AI Level 1 more accurate
+filterFactor2=1.0 //To make Turret AI Level 2 more accurate
+filterFactor3=1.0 //To make Turret AI Level 3 more accurate
 
 [HoverCraftClass]
 
 [DeployableClass]
+// {VSR-004}
+timeUndeploy=1.0 // *3.0
 
 [TurretTankClass]
 omegaTurret = 2.0 // Was 1.25 - AI_Unit
+alphaTurret= 1.75 // Was 10.0f in VSR, adjusted - Gravey

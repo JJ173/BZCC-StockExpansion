@@ -1,0 +1,12 @@
+[GameObjectClass]
+baseName = "apjetpxs"
+classLabel = "appack"
+
+scrapCost = 30
+
+unitName = "ISDF Jetpack"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "igjetpxs"

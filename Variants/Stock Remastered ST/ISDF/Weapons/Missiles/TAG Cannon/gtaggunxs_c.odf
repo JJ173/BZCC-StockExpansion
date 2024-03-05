@@ -1,0 +1,8 @@
+[WeaponClass]
+classLabel="gtaggun_c"
+altName="gtaggunxs_a"
+ordName="swarmerxs_c"
+aiRange = 175
+
+[TargetingGunClass]
+leaderName="leaderxs_c"

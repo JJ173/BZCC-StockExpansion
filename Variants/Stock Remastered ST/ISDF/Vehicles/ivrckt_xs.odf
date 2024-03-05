@@ -10,6 +10,9 @@ GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle 
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
 [TrackedVehicleClass]
+// {VSR-040}
+CENTER_SHIFT=-0.5 //was -0.4 Lowers the centre of gravity, reducing wobble (when sonic waved) More than this causes odd effects.
+SUSPENSION_MIN=0.2 //was-0.2 Lowers the suspension so the mudguards no longer cut into the tracks (its bothered me for ages) 
 
 [AssaultTankClass]
 

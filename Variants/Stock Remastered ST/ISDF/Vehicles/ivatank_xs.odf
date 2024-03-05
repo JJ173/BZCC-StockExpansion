@@ -3,6 +3,8 @@ classLabel = "ivatank"
 PilotConfig = "ispilo_x"
 
 weaponName1 = "gplasma_ax"
+mass=34316.1 {VSR-012}
+
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

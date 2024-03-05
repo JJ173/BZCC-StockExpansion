@@ -1,0 +1,7 @@
+[WeaponClass]
+classLabel="gatstab_a"
+altName="gatstabxs_c"
+ordName="atstabxs_a"
+
+[CannonClass]
+shotDelay=1.0 // *0.5 {VSR-127}

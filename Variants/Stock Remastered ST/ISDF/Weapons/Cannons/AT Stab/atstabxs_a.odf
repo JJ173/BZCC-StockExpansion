@@ -1,0 +1,14 @@
+[OrdnanceClass]
+classLabel="atstab_a"
+shotRadius=2.0 // *new {VSR-128}
+
+lifeSpan=0.667 // *1.5 (to maintain range)
+shotSpeed=225 // *100 {VSR-129}
+
+// {VSR-130} //Reverted to stock, unsure why this was changed -Gravey
+damageValue(N)=150 //260
+damageValue(L)=137.5 //200
+damageValue(H)=125 
+damageValue(S)=137.5 //190
+damageValue(D)=125 //120
+damageValue(A)=150 //245

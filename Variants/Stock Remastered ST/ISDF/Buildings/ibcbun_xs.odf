@@ -3,6 +3,11 @@ TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZ
 classLabel = "ibcbun"
 
 categoryTypeOverride = 4
+provideCount=4
+provideName1="ibcbun"
+provideName2="ibcbun_xs"
+provideName3="VIRTUAL_CLASS_COMMBUNKER"
+provideName4="base"
 
 [BuildingClass]
 

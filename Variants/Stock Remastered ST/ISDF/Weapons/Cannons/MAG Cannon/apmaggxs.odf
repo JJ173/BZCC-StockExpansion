@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel="apmagg"
+scrapCost = 20		//Added in VSR BZCC Release 40
+
+[WeaponPowerupClass]
+weaponName="gmaggunxs_c"

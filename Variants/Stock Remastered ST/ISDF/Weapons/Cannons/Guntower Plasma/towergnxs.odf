@@ -1,0 +1,8 @@
+[OrdnanceClass]
+classLabel="towergn"
+
+ammoCost=0 // *30 {VSR-022}
+
+kickOmega = 0 //removing omega recoil as this made assaults on bases with multiple gts cancerous to position units --Gravey
+kickVeloc = 0
+kickRadius = 0

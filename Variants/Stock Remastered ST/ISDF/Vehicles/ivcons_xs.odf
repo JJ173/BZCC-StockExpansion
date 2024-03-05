@@ -1,6 +1,8 @@
 [GameObjectClass]
 classLabel = "ivcons"
 PilotConfig = "ispilo_x"
+mass=7000 // {VSR-012}
+StayWithOwner = true // MPI Team6-10 fix. -GBD
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

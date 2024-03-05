@@ -7,5 +7,32 @@ lightName2 = "spotblue2"
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+topSpeed=42   // *30 {VSR-050}
+avoidSpeed=25 // *new {VSR-UNDOC}
+
+// Hover Physics {VSR-000}
+MIN_BOUNCE_VEL=0.1
+MAX_BOUNCE_VEL=0.8
+OBJECT_ELASTICITY=0.025
+GROUND_ELASTICITY=-0.2
+DAMAGE_SCALE=0.01
 
 [HoverCraftClass]
+setAltitude=1.2 // *1.0 {VSR-052}
+omegaSpin=5.0   // *3.5 {VSR-051}
+omegaTurn=3.0   // *3.5 {VSR-051}
+alphaSteer=7.5  // *5.5 {VSR-051}
+accelThrust = 25.0
+
+// Hover Physics {VSR-000}
+MoreLike12Physics=true
+OverWaterVelocFrontMult=1.01
+OverWaterVelocSideMult=1.0
+OverWaterThrottleMult=0.8
+airborneVelocFrontMult=1.01
+airborneVelocSideMult=1.05
+airborneThrottleMult=1.2
+airborneMinHeightRatio=1.6
+airborneMaxHeightRatio=4.0
+LIFT_SPRING=16
+LIFT_DAMP=2

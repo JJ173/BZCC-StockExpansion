@@ -1,6 +1,8 @@
 [GameObjectClass]
 classLabel = "ivrecy"
 PilotConfig = "ispilo_x"
+mass=500000
+scrapReturn=0
 
 [CraftClass]
 deployedMsg = "ivrecy08.wav"

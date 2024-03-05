@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel="proxmine"
+isAssault=0 // Mines should not make Scion AI morph {VSR-009}
+
+[MineClass]
+xplBlast="xminxplxs"

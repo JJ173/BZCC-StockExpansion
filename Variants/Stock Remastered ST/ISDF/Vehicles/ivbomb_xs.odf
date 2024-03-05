@@ -1,6 +1,7 @@
 [GameObjectClass]
 classLabel = "ivbomb"
 PilotConfig = "ispilo_x"
+canSnipe=0
 
 [CraftClass]
 TeamTransferrable = true
@@ -8,3 +9,4 @@ TeamTransferrable = true
 [HoverCraftClass]
 
 [BomberClass]
+bombName = "apwrckxs"

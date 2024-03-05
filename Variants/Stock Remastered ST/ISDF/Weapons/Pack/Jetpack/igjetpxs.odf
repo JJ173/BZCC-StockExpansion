@@ -1,0 +1,25 @@
+[WeaponClass]
+basename = "igjetpxs"
+classLabel = "jetpack"
+animCount = 1
+animName1 = "launch"
+animRate = 3  //2
+ordName = NULL
+wpnName = "Booster"
+fireSound = "whcan.wav"
+
+wpnReticle = "gphantom.0"
+wpnPriority = 0
+wpnCategory = "PACK"
+localAmmo = 1
+//addLocalAmmo = 0.02
+canSelect = 0
+MinOwnerLifetimeSeconds = 0.5 // If >= 0, used as a minimum time for weapon triggering
+
+[JetPackClass]
+ammoCost = 1
+burnTime = 3.0
+accelThrust = 30.0
+activeSound = "jpack01.wav"
+expireSound = "jpack02.wav"
+

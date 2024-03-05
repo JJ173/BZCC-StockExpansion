@@ -1,12 +1,18 @@
 [GameObjectClass]
 classLabel = "ivmbike"
 PilotConfig = "ispilo_x"
+geometryScale=1.10 // *1.00 {VSR-025}
+clearBuildZone=0 // {VSR-005}
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+blastDist=160 // {VSR-024}
 
 [HoverCraftClass]
+velocForward=32.0 // *35 {VSR-026}
+setAltitude=0.8   // *1.5 {VSR-027}
+LIFT_DAMP=5.125   // {VSR-UNDOC}
 
 [Lod1]
 

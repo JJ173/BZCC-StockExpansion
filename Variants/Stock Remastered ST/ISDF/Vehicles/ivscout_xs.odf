@@ -9,6 +9,8 @@ GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle 
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 topSpeed=42   // *30 {VSR-050}
 avoidSpeed=25 // *new {VSR-UNDOC}
+scrapCost = 30 // Reduced the stock scout cost across the board as a cheap ai entry since empties are player only. --Gravey
+scrapValue = 10 //15  Reduced the scrap value accordingly --Gravey
 
 // Hover Physics {VSR-000}
 MIN_BOUNCE_VEL=0.1

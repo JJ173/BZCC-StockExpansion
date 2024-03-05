@@ -1,0 +1,17 @@
+// ========================
+// PULSE STABBER PULSE EMIT
+// ========================
+
+[ExplosionClass]
+classLabel = "xpulemit_a"
+
+damageRadius = 15.0 // 25.0 --reduced, overkill --Gravey
+
+damageValue(N) = 175 //225 --reduced, overkill scaling --Gravey
+damageValue(L) = 125
+damageValue(H) = 75
+
+damageValue(S) = 125
+damageValue(D) = 175 //225 --reduced, overkill scaling --Gravey
+damageValue(A) = 75
+

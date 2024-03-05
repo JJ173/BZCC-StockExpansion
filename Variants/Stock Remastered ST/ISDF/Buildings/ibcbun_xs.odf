@@ -2,7 +2,6 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibcbun"
 
-categoryTypeOverride = 4
 provideCount=4
 provideName1="ibcbun"
 provideName2="ibcbun_xs"
@@ -14,6 +13,6 @@ provideName4="base"
 [CommBunkerClass]
 
 [PoweredBuildingClass]
-panelIcon = "icon_base_sat.tga"
+
 
 [Lod1]

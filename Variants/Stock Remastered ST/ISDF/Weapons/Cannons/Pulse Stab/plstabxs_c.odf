@@ -17,4 +17,4 @@ damageValue(A)=220 // *220 --ABS weak vs Pulse
 [PulseShellClass]
 pulseDelay=0.45 // .4 // *0.3 {VSR-182} --updated to be consistent with assault pulse --Gravey
 pulsePeriod=0.25 // *0.3 {VSR-183}
-xplPulse="xpulemit_c"
+xplPulse="xpulemitxs_c"

@@ -17,7 +17,7 @@ DropoffDX=0
 DropoffDZ=16 // *32
 
 [ArmoryGroup1]
-buildItem2="aplasexs"
+buildItem2="aplaserxs"
 buildItem3="appummxs"
 buildItem4="apchainxs"
 

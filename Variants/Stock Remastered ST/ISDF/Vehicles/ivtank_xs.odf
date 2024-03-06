@@ -12,8 +12,6 @@ AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents id
 //AI
 engageRange=140 // {VSR-038}
 blastDist=70    // {VSR-038}
-AttackTaskUsesGroups=false // {VSR-039}
-GoToTaskHasLeader=false    // {VSR-039}
 attackTask="ArcherAttack"  // {VSR-UNDOC}
 
 // Hover Physics {VSR-000}

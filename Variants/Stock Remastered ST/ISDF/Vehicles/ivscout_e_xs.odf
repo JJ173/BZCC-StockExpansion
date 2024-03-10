@@ -2,7 +2,7 @@
 classLabel = "ivscout_xs"
 PilotConfig = "ispilo_x"
 lightName2 = "spotblue2"
-
+scrapValue = 5 //15  Reduced the scrap value accordingly over stock inherit. Stops scrap canceling. --Gravey
 customCost=30  // *60   {VSR-054}
 buildTime=10.0 // *15.0 {VSR-006}
 

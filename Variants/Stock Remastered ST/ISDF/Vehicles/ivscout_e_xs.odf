@@ -1,7 +1,6 @@
 [GameObjectClass]
 classLabel = "ivscout_xs"
 PilotConfig = "ispilo_x"
-playerOnly = true // Added to prevent ai pilots from entering player empty scouts. --Gravey
 lightName2 = "spotblue2"
 
 customCost=30  // *60   {VSR-054}

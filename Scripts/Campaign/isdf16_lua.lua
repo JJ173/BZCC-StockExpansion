@@ -64,6 +64,7 @@ local Mission =
     m_Recycler = nil,
     m_Dropship = nil,
     m_Dropship2 = nil,
+
     m_Attack1 = nil,
     m_Attack2 = nil,
     m_Attack3 = nil,
@@ -71,6 +72,19 @@ local Mission =
     m_Attack5 = nil,
     m_Healer1 = nil,
     m_Healer2 = nil,
+
+    m_ConvoyTug = nil,
+    m_Titan1 = nil,
+    m_Titan2 = nil,
+    m_Sentry1 = nil,
+    m_Sentry2 = nil,
+
+    m_Attack2_1 = nil,
+    m_Attack2_2 = nil,
+    m_Attack2_3 = nil,
+    m_Attack2_4 = nil,
+    m_Attack2_5 = nil,
+    m_Attack2_6 = nil,
 
     m_Turret1 = nil,
     m_Turret2 = nil,
@@ -85,7 +99,18 @@ local Mission =
     m_BomberGuard5 = nil,
     m_BomberGuard6 = nil,
 
+    m_Goal1 = nil,
+    m_Goal2 = nil,
+    m_Goal3 = nil,
+    m_Goal4 = nil,
+
     m_MapPatrolBots = {},
+    m_MapAttackBots = {},
+
+    -- Specific targets for spawned attacks.
+    m_TargetPower = nil,
+    m_TargetGunTower = nil,
+    m_TargetFactory = nil,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -100,6 +125,8 @@ local Mission =
     m_Condor2Removed = false,
     m_ArteryBotsSpawned = false,
     m_MaulersSent = false,
+    m_BraddockRobotMessagePlayed = false,
+    m_PowerSurgeActivated = false,
 
     m_Turret1Sent = false,
     m_Turret2Sent = false,
@@ -113,18 +140,32 @@ local Mission =
     m_BomberGuard5Sent = false,
     m_BomberGuard6Sent = false,
 
+    -- Braddock is telling us about enemy units.
+    m_BraddockWarningPlayed = false,
+    m_BraddockHighlightMessagePlayed = false,
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
     m_Condor1Time = 0,
     m_Condor2Time = 0,
     m_CondorRemoveTime = 15,
 
+    m_AttackBotTimer = 0,
+
     m_ArteryBotDelayTime = 0,
     m_ArteryBotIterator = 0,
+
+    m_PlayerArteryCheckTime = 0,
+
+    m_PatrolBotCheckTime = 0,
+    m_PatrolBotSpawnTime = 0,
+    m_PatrolBotCount = 0,
 
     m_TurretDistpacherTimer = 0,
     m_HealerCheckTimer = 0,
     m_MaulerTime = 0,
+
+    m_ConvoyTime = 0,
 
     m_MissionDelayTime = 0,
 
@@ -172,13 +213,14 @@ function Load(CoopData, MissionData)
 end
 
 function AddObject(h)
-    -- Grab the ODF that's entered the world.
-    local ODFName = GetCfg(h);
     -- Check the team of the handle.
     local teamNum = GetTeamNum(h);
 
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam or teamNum == 7) then
+        -- Grab the ODF that's entered the world.
+        local ODFName = GetCfg(h);
+
         SetSkill(h, Mission.m_MissionDifficulty);
 
         if (ODFName == "fvturr_r") then
@@ -249,7 +291,7 @@ function AddObject(h)
 
         -- Check to see if the unit needs a weapon upgrade.
         if (Mission.m_StartDone) then
-            if (odf == "fvtank_r" or odf == "fvarch_r" or odf == "fvsent_r" or odf == "fvscout_r") then
+            if (ODFName == "fvtank_r" or ODFName == "fvarch_r" or ODFName == "fvsent_r" or ODFName == "fvscout_r") then
                 -- Run a random chance to see if they are allowed a weapon.
                 local chance = GetRandomFloat(0, 1);
                 local shieldChance = m_ShieldChance * Mission.m_MissionDifficulty;
@@ -262,24 +304,14 @@ function AddObject(h)
                 end
 
                 if (chance > weaponChance) then
-                    if (odf == "fvtank_r" or odf == "fvscout_r") then
+                    if (ODFName == "fvtank_r" or ODFName == "fvscout_r") then
                         GiveWeapon(h, m_WeaponTable.m_Cannons[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Cannons))]);
-                    elseif (odf == "fvsent_r") then
+                    elseif (ODFName == "fvsent_r") then
                         GiveWeapon(h, m_WeaponTable.m_Guns[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Guns))]);
-                    elseif (odf == "fvarch_r") then
+                    elseif (ODFName == "fvarch_r") then
                         GiveWeapon(h, m_WeaponTable.m_Missiles[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Missiles))]);
                     end
                 end
-            elseif (odf == "fvtug_r") then
-                Mission.m_Hauler = h;
-
-                -- Reset these when a new Hauler is added to the world.
-                Mission.m_HaulerPickup = false;
-                Mission.m_HaulerRetreat = false;
-                Mission.m_HaulerMove = false;
-
-                -- This will delay telling the Hauler to move to the individual Hauler drop-off.
-                Mission.m_HaulerMoveTimer = Mission.m_MissionTime + SecondsToTurns(1.5);
             end
         end
     elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
@@ -292,6 +324,9 @@ function AddObject(h)
 end
 
 function DeleteObject(h)
+    -- Grab the ODF.
+    local odf = GetCfg(h);
+
     if (h == Mission.m_Turret1) then
         Mission.m_Turret1 = nil;
     elseif (h == Mission.m_Turret2) then
@@ -300,6 +335,14 @@ function DeleteObject(h)
         Mission.m_Turret3 = nil;
     elseif (h == Mission.m_Turret4) then
         Mission.m_Turret4 = nil;
+    end
+
+    -- Check if the bot is part of Mission.m_MapPatrolBots
+    if (odf == "fc111100") then
+        -- If it's part of the table, call this.
+        TableRemoveByHandle(Mission.m_MapPatrolBots, h);
+        -- If it's part of the table, call this.
+        TableRemoveByHandle(Mission.m_MapAttackBots, h);
     end
 end
 
@@ -395,6 +438,26 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
     return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF);
 end
 
+function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (Mission.m_PowerSurgeActivated == false) then
+        -- If the Power Surge hasn't occured yet, use this to play the alert and show the objective to the player.
+        local shooterODF = GetCfg(ShooterHandle);
+        local victimODF = GetCfg(VictimHandle);
+
+        -- This will start the attacks.
+        if (shooterODF == "fc111100" or victimODF == "fc111100" or shooterODF == "cbturr02" or victimODF == "cbturr02") then
+            -- Play the sound from Betty.
+            AudioMessage("BettySurge.wav");
+
+            -- Set up our timers for the attacks.
+            Mission.m_AttackBotTimer = Mission.m_MissionTime + SecondsToTurns(80);
+
+            -- So we don't loop.
+            Mission.m_PowerSurgeActivated = true;
+        end
+    end
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -438,6 +501,12 @@ Functions[1] = function()
     Mission.m_Turret3 = BuildObject("fvturr_r", 7, "turret3");
     Mission.m_Turret4 = BuildObject("fvturr_r", 7, "turret4");
 
+    -- The goals that the player needs to reach.
+    Mission.m_Goal1 = GetHandle("goal1");
+    Mission.m_Goal2 = GetHandle("goal2");
+    Mission.m_Goal3 = GetHandle("goal3");
+    Mission.m_Goal4 = GetHandle("goal4");
+
     -- Enemy Recyclers.
     BuildObject("fvrecy_r", Mission.m_EnemyTeam, "RecyclerEnemy");
     BuildObject("fvrecy_r", 7, "base2");
@@ -466,6 +535,9 @@ Functions[1] = function()
 
     -- Activate the dropship brain.
     Mission.m_DropshipBrainActive = true;
+
+    -- The amount of "patrol" bots that should be on the map.
+    Mission.m_PatrolBotCount = 2 * Mission.m_MissionDifficulty;
 
     -- Clean up any player spawns that haven't been taken by the player.
     _Cooperative.CleanSpawns();
@@ -514,7 +586,160 @@ Functions[2] = function()
 end
 
 Functions[3] = function()
+    -- This will be Braddock telling the player about the enemy units.
+    if (Mission.m_BraddockWarningPlayed == false and (IsPlayerWithinDistance("turret1", 200, _Cooperative.GetTotalPlayers()) or IsPlayerWithinDistance("turret4", 200, _Cooperative.GetTotalPlayers()))) then
+        -- Braddock: "Recon is showing heavy enemy units on your path".
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1603.wav");
 
+        -- Set the audio timer for this clip just in case we need to check if it's done.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+        -- So we don't loop.
+        Mission.m_BraddockWarningPlayed = true;
+    end
+
+    -- This will play if the player reaches the artery.
+    if (Mission.m_PlayerArteryCheckTime < Mission.m_MissionTime) then
+        -- Run some checks to see if the player has reached the goals.
+        local check1 = IsPlayerWithinDistance(Mission.m_Goal1, 200, _Cooperative.GetTotalPlayers());
+        local check2 = IsPlayerWithinDistance(Mission.m_Goal2, 200, _Cooperative.GetTotalPlayers());
+        local check3 = IsPlayerWithinDistance(Mission.m_Goal3, 200, _Cooperative.GetTotalPlayers());
+        local check4 = IsPlayerWithinDistance(Mission.m_Goal4, 200, _Cooperative.GetTotalPlayers());
+
+        -- Play Braddock's message about fighting to the artery.
+        if (check1 or check2 or check3 or check4) then
+            -- Braddock: "That's it! We need to fight our way to that hull."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1602.wav");
+
+            -- Length of this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+            -- Spawn the Convoy.
+            Mission.m_Titan1 = BuildObject("fvatank_r", Mission.m_EnemyTeam, "convoy1");
+
+            -- Send the Titan along the path.
+            Goto(Mission.m_Titan1, "convoy_path", 1);
+
+            -- Build the convoy tug.
+            Mission.m_ConvoyTug = BuildObject("fvtug_r", Mission.m_EnemyTeam, "convoy2");
+
+            -- Tell it to follow the first Titan.
+            Follow(Mission.m_ConvoyTug, Mission.m_Titan1, 1);
+
+            -- Spawn the second Titan.
+            Mission.m_Titan2 = BuildObject("fvatank_r", Mission.m_EnemyTeam, "convoy3");
+
+            -- Have it follow the tug.
+            Follow(Mission.m_Titan2, Mission.m_ConvoyTug, 1);
+
+            -- Spawn the first Sentry.
+            Mission.m_Sentry1 = BuildObject("fvsent_r", Mission.m_EnemyTeam, "convoy4");
+
+            -- Have it follow the second Titan.
+            Follow(Mission.m_Sentry1, Mission.m_Titan2, 1);
+
+            -- Spawn the second Sentry.
+            Mission.m_Sentry2 = BuildObject("fvsent_r", Mission.m_EnemyTeam, "convoy5");
+
+            -- Have it follow the Tug.
+            Follow(Mission.m_Sentry2, Mission.m_ConvoyTug, 1);
+
+            -- Spawn the first Healer.
+            Mission.m_Healer1 = BuildObject("fvserv_r", Mission.m_EnemyTeam, "convoy4");
+
+            -- Have it follow the First Titan.
+            Follow(Mission.m_Healer1, Mission.m_Titan1, 1);
+
+            -- Spawn the second Healer.
+            Mission.m_Healer2 = BuildObject("fvserv_r", Mission.m_EnemyTeam, "convoy5");
+
+            -- Have it follow the Tug.
+            Follow(Mission.m_Healer2, Mission.m_ConvoyTug, 1);
+
+            -- Set the Convoy Timer here.
+            Mission.m_ConvoyTime = Mission.m_MissionTime + SecondsToTurns(20);
+
+            -- Switch off the Scion brain, and the Robot brain so they no longer attack.
+            Mission.m_ScionBrainActive = false;
+            Mission.m_RobotBrainActive = false;
+
+            -- Let's safely advance to the next mission stage for checking the health of the Scion bases.
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+
+        -- Delay this check so we're not doing it each frame.
+        Mission.m_PlayerArteryCheckTime = Mission.m_MissionTime + SecondsToTurns(2);
+    end
+end
+
+Functions[4] = function()
+    if (Mission.m_ConvoyTime < Mission.m_MissionTime) then
+        -- Braddock: "The Scions are retreating underground."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1603a.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+        -- Highlight the Tug.
+        SetObjectiveName(Mission.m_ConvoyTug, TranslateString("Mission1101"));
+        SetObjectiveOn(Mission.m_ConvoyTug);
+
+        -- New Objective.
+        AddObjectiveOverride("isdf1603.otf", "WHITE", 10, true);
+
+        -- Move to the next state.
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[5] = function()
+    if (Mission.m_BraddockHighlightMessagePlayed == false and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Braddock: "I've highlighted the Convoy".
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1604.wav");
+
+        -- Timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+        -- So we don't loop.
+        Mission.m_BraddockHighlightMessagePlayed = true;
+    end
+
+    -- This is where we check if the Convoy has been killed, or whether it has reached its destination.
+    if (IsAliveAndEnemy(Mission.m_ConvoyTug, Mission.m_EnemyTeam) == false) then
+        -- Show objectives.
+        AddObjectiveOverride("isdf1604.otf", "WHITE", 5, true);
+
+        -- Mission was successful.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.");
+            DoGameover(10);
+        else
+            SucceedMission(GetTime() + 10, "isdf16w1.txt");
+        end
+
+        -- Braddock: "Good work Major!".
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1605.wav");
+
+        -- Audio timer for this message.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+        -- Mission is finished.
+        Mission.m_MissionOver = true;
+    elseif (GetDistance(Mission.m_ConvoyTug, "gtow3") < 50) then
+        -- Show objectives.
+        AddObjectiveOverride("isdf1603.otf", "RED", 5, true);
+
+        -- Mission failed.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("The Convoy escaped.");
+            DoGameover(10);
+        else
+            FailMission(GetTime() + 10, "isdf16l2.txt");
+        end
+
+        -- Mission is finished.
+        Mission.m_MissionOver = true;
+    end
 end
 
 function DropshipBrain()
@@ -567,14 +792,13 @@ function RobotBrain()
         Based on the chosen difficulty, we should spawn a good amount of robots
         to patrol the tunnel artery, and the map.
     ]]
-    --
+       --
 
     if (Mission.m_ArteryBotsSpawned == false and Mission.m_ArteryBotDelayTime < Mission.m_MissionTime) then
         local botPlatoon = {};
-        local botCount = Mission.m_MissionDifficulty;
 
         -- Run a loop, spawn the bots, get them in formation, start patrol.
-        for i = 1, botCount do
+        for i = 1, Mission.m_MissionDifficulty do
             -- Build the bot.
             local bot = BuildObject("fc111100", Mission.m_EnemyTeam, GetPositionNear("artery_bots", 25, 25));
 
@@ -605,6 +829,83 @@ function RobotBrain()
             -- Delay this function.
             Mission.m_ArteryBotDelayTime = Mission.m_MissionTime + SecondsToTurns(15);
         end
+    end
+
+    -- We'll also send patrols around the map. If the player has encountered a drone, we'll get Braddock to play a message.
+    if (#Mission.m_MapPatrolBots % 2 == 0 and #Mission.m_MapPatrolBots < 6 and Mission.m_PatrolBotSpawnTime < Mission.m_MissionTime) then
+        -- Spawn 2 more based on whether 2 have died.
+        for i = 1, 2 do
+            -- Build a bot.
+            local bot = BuildObject("fc111100", Mission.m_EnemyTeam, GetPositionNear("attack" .. i, 25, 25));
+
+            -- Send a bot to patrol.
+            Patrol(bot, "robot_patrol_a", 1);
+
+            -- Add the bot to our table.
+            Mission.m_MapPatrolBots[#Mission.m_MapPatrolBots + 1] = bot;
+        end
+
+        -- Delay the loop by X seconds.
+        Mission.m_PatrolBotSpawnTime = Mission.m_MissionTime + SecondsToTurns(15);
+    end
+
+    -- Run a check here to see if the player is within distance of a bot.
+    if (Mission.m_BraddockRobotMessagePlayed == false and #Mission.m_MapPatrolBots > 0 and Mission.m_PatrolBotCheckTime < Mission.m_MissionTime) then
+        -- So we don't do this each frame. Less expensive...
+        for i = 1, #Mission.m_MapPatrolBots do
+            if (IsPlayerWithinDistance(Mission.m_MapPatrolBots[i], 200, _Cooperative.GetTotalPlayers())) then
+                -- Braddock: "Are you picking up those robot signals?"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1703.wav");
+
+                -- So we don't loop.
+                Mission.m_BraddockRobotMessagePlayed = true;
+
+                -- So we don't carry on.
+                break;
+            end
+        end
+
+        -- Do this every couple of seconds.
+        Mission.m_PatrolBotCheckTime = Mission.m_MissionTime + SecondsToTurns(2);
+    end
+
+    -- If the power surge has occured, start attacking with bots from different angles.
+    if (Mission.m_PowerSurgeActivated and Mission.m_AttackBotTimer < Mission.m_MissionTime) then
+        -- Check how many bots are currently active and spawn the right amount.
+        local botCount = 3 * Mission.m_MissionDifficulty;
+        local activeBotCount = #Mission.m_MapAttackBots;
+
+        if (activeBotCount < botCount) then
+            local diff = botCount - activeBotCount;
+            local pos = GetPosition(Mission.m_Recycler);
+
+            for i = 1, diff do
+                local chance = GetRandomFloat(0, 1);
+                local path = nil;
+
+                if (chance > 0.5) then
+                    path = 'convoy' .. i;
+                else
+                    if (i < 4) then
+                        path = 'attack' .. i;
+                    else 
+                        path = 'attack3';
+                    end
+                end
+
+                -- Create a bot around the chosen path.
+                local bot = BuildObject("fc111100", Mission.m_EnemyTeam, GetPositionNear(path, 25, 25));
+                
+                -- Store this in our table.
+                Mission.m_MapAttackBots[#Mission.m_MapAttackBots + 1] = bot;
+
+                -- Send the bot to the Recycler.
+                Goto(bot, pos, 1);
+            end
+        end
+
+        -- Reset the timer so we don't do this each frame.
+        Mission.m_AttackBotTimer = Mission.m_MissionTime + SecondsToTurns(80);
     end
 end
 
@@ -701,6 +1002,9 @@ function ScionBrain()
             -- Give the sentry the EMP lock.
             GiveWeapon(sentry, "glock_c");
 
+            -- Give the sentry a shield.
+            GiveWeapon(sentry, "gshield");
+
             -- Have the sentry defend the Mauler.
             Defend2(sentry, mauler, 1);
 
@@ -714,12 +1018,126 @@ function ScionBrain()
 
     -- This will run every 3 minutes.
     if (Mission.m_MissionTime % SecondsToTurns(180) == 0) then
+        -- Grab the position of the player Recycler and send these units there.
+        -- This will stop the chance of a unit stalling if their target is dead.
+        local pos = GetPosition(Mission.m_Recycler);
+
+        -- Rebuild the units as required, if they are not alive.
+        if (IsAliveAndEnemy(Mission.m_Attack1, Mission.m_EnemyTeam) == false) then
+            Mission.m_Attack1 = BuildObject("fvwalk_r", Mission.m_EnemyTeam, "attack1");
+
+            -- Spawn a sentry to attack with the Maulers.
+            local sentry = BuildObject("fvsent_r", Mission.m_EnemyTeam, GetPositionNear("attack1"));
+
+            -- Give the sentry the EMP lock.
+            GiveWeapon(sentry, "glock_c");
+
+            -- Have the sentry defend the Mauler.
+            Defend2(sentry, Mission.m_Attack1, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack2, Mission.m_EnemyTeam) == false) then
+            Mission.m_Attack2 = BuildObject("fvwalk_r", Mission.m_EnemyTeam, "attack2");
+
+            -- Spawn a sentry to attack with the Maulers.
+            local sentry = BuildObject("fvsent_r", Mission.m_EnemyTeam, GetPositionNear("attack2"));
+
+            -- Give the sentry the EMP lock.
+            GiveWeapon(sentry, "glock_c");
+
+            -- Have the sentry defend the Mauler.
+            Defend2(sentry, Mission.m_Attack2, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack3, Mission.m_EnemyTeam) == false) then
+            Mission.m_Attack3 = BuildObject("fvwalk_r", Mission.m_EnemyTeam, "attack3");
+
+            -- Spawn a sentry to attack with the Maulers.
+            local sentry = BuildObject("fvsent_r", Mission.m_EnemyTeam, GetPositionNear("attack3"));
+
+            -- Give the sentry the EMP lock.
+            GiveWeapon(sentry, "glock_c");
+
+            -- Have the sentry defend the Mauler.
+            Defend2(sentry, Mission.m_Attack3, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack4, Mission.m_EnemyTeam) == false) then
+            Mission.m_Attack4 = BuildObject("fvatank_r", Mission.m_EnemyTeam, "convoy1");
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack5, Mission.m_EnemyTeam) == false) then
+            Mission.m_Attack5 = BuildObject("fvatank_r", Mission.m_EnemyTeam, "convoy2");
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Healer1, Mission.m_EnemyTeam) == false) then
+            Mission.m_Healer1 = BuildObject("fvserv_r", Mission.m_EnemyTeam, GetPositionNear("convoy3", 25, 25));
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Healer2, Mission.m_EnemyTeam) == false) then
+            Mission.m_Healer2 = BuildObject("fvserv_r", Mission.m_EnemyTeam, GetPositionNear("convoy3", 25, 25));
+        end
+
         -- Start up the attacks.
-        Attack(Mission.m_Attack1, Mission.m_Recycler, 1);
-        Attack(Mission.m_Attack2, Mission.m_Recycler, 1);
-        Attack(Mission.m_Attack3, Mission.m_Recycler, 1);
-        Attack(Mission.m_Attack4, Mission.m_Recycler, 1);
-        Attack(Mission.m_Attack5, Mission.m_Recycler, 1);
+        Goto(Mission.m_Attack1, pos, 1);
+        Goto(Mission.m_Attack2, pos, 1);
+        Goto(Mission.m_Attack3, pos, 1);
+        Goto(Mission.m_Attack4, pos, 1);
+        Goto(Mission.m_Attack5, pos, 1);
+    elseif (Mission.m_MissionTime % SecondsToTurns(300) == 0) then
+        -- Grab the position of the player Recycler and send these units there.
+        -- This will stop the chance of a unit stalling if their target is dead.
+        local pos = GetPosition(Mission.m_Recycler);
+
+        -- Send some scouts with arc and shield to attack as well.
+        if (IsAliveAndEnemy(Mission.m_Attack2_1, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_1 = BuildObject("fvscout_r", Mission.m_EnemyTeam, "attack1");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_1, pos, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack2_2, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_2 = BuildObject("fvscout_r", Mission.m_EnemyTeam, "attack2");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_2, pos, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack2_3, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_3 = BuildObject("fvscout_r", Mission.m_EnemyTeam, "attack3");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_3, pos, 1);
+        end
+
+        -- Send some Lancers.
+        if (IsAliveAndEnemy(Mission.m_Attack2_4, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_4 = BuildObject("fvarch_r", Mission.m_EnemyTeam, "convoy1");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_4, pos, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack2_5, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_5 = BuildObject("fvarch_r", Mission.m_EnemyTeam, "convoy2");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_5, pos, 1);
+        end
+
+        if (IsAliveAndEnemy(Mission.m_Attack2_6, Mission.m_EnemyTeam) == false) then
+            -- Build the scout.
+            Mission.m_Attack2_6 = BuildObject("fvarch_r", Mission.m_EnemyTeam, "convoy3");
+
+            -- Attack the player.
+            Goto(Mission.m_Attack2_6, pos, 1);
+        end
     end
 
     -- This will run for each healer.
@@ -732,7 +1150,7 @@ function ScionBrain()
                 Follow(Mission.m_Healer1, Mission.m_Attack5, 1);
             else
                 -- Flee!!!!!!
-                Goto(Mission.m_Healer1, "ScoutEnemy2", 1);
+                Goto(Mission.m_Healer1, "convoy3", 1);
             end
         end
 
@@ -744,7 +1162,7 @@ function ScionBrain()
                 Follow(Mission.m_Healer2, Mission.m_Attack4, 1);
             else
                 -- Flee!!!!!!
-                Goto(Mission.m_Healer2, "ScoutEnemy2", 1);
+                Goto(Mission.m_Healer2, "convoy3", 1);
             end
         end
 

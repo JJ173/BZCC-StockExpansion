@@ -8,3 +8,4 @@ upgradeName = "fbscup_x"
 [BuildingClass]
 
 [ExtractorClass]
+initDelay = 0.0f // Was 12.0f

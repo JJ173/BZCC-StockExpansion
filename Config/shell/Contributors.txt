@@ -6,7 +6,7 @@ Publisher
 ---------------
 GrizzlyOne
 
-Balancer
+Balance Councillor
 ---------------
 Gravey
 
@@ -14,7 +14,7 @@ Artwork
 ---------------
 SIR BRAMBLEY
       
-Audio
+Audio & Weapons
 ---------------
 Zorn
 

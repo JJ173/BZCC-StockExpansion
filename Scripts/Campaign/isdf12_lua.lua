@@ -189,7 +189,7 @@ function Start()
     end
 
     -- Call generic start logic in coop.
-    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode, true, 100);
 
     -- Mark the set up as done so we can proceed with mission logic.
     Mission.m_StartDone = true;
@@ -242,6 +242,9 @@ function Update()
                     end
                 end
             end
+
+            -- HACK: Stops Manson from distracting enemy units.
+            SetPerceivedTeam(Mission.m_Manson, Mission.m_EnemyTeam);
 
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();

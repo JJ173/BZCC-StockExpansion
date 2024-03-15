@@ -1,0 +1,14 @@
+[WeaponClass]
+classLabel = "cannon"
+ordName = "TurrGauss_ORD"
+wpnName = "NAME ME"
+fireSound = "TurrGauss_Fire.wav"
+wpnReticle = "gblast"
+wpnCategory = "CANN"
+isAssault = 0
+aiRange = 350
+flashName = "gmbolt.flash"
+
+[CannonClass]
+shotDelay = 2
+shotAlternate = 0

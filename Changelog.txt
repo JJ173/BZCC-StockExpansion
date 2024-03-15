@@ -1,9 +1,8 @@
 GENERAL
-- Satellite has been added to the 4 hotkey.
 - Reduced intensity of red splash screen when you take damage.
-- Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will
-drive into buildings and get stuck. 
+- Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will drive into buildings and get stuck. 
 - New option to enable subtitles.
+- Removed initial delay of scrap income when Scavengers deploy. 
 
 FACTIONS
 
@@ -12,7 +11,8 @@ ISDF:
 - Updated Plasma Ordnance Sound
 - Turret omegaTurret value increased to 2.0, was 1.25.
 - Updated impact sounds for Pulse Rifle and Sniper
-- Rocket Tanks have been given Assault Tank AI.
+- Rocket Tanks have been given "Gech" AI.
+- Assault Tanks have been given "Gech" AI.
 - Fixed missing engine FX on flying/landing Condor Dropships.
 
 Scion:
@@ -256,6 +256,7 @@ ISDF16 (Hole in One):
 - Added Royal Scions
 - Attack frequency has been increased based on difficulty.
 - Scion teams will now construct full bases.
+- CC111100 units will attack if a patrol discovers the player.
 
 - General QOL (Quality of Life) improvements.
 

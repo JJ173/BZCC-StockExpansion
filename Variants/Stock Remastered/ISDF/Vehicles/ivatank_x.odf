@@ -2,9 +2,6 @@
 classLabel = "ivatank"
 PilotConfig = "ispilo_x"
 
-aiName = "GechProcess"
-aiName2 = "GechProcess"
-
 weaponName1 = "gplasma_ax"
 
 [CraftClass]

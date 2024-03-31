@@ -5,7 +5,7 @@
 [ExplosionClass]
 classLabel = "xpulemit_c"
 
-damageRadius = 7.5 // 15.0 -- reduced, overkill size -- Gravey 
+damageRadius = 10 // 15.0 -- reduced, overkill size -- Gravey 
 
 damageValue(N) = 150
 damageValue(L) = 100

@@ -31,4 +31,4 @@ timeUndeploy=1.0 // *3.0
 
 [TurretTankClass]
 omegaTurret = 2.0 // Was 1.25 - AI_Unit
-alphaTurret= 1.75 // Was 10.0f in VSR, adjusted - Gravey
+alphaTurret= 10.0

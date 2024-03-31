@@ -1,0 +1,96 @@
+[ExplosionClass]
+classLabel = "explosion"
+explSound = "xenergyhitgnd.wav"
+
+damageRadius = 10.0
+damageValue(N) = 100
+damageValue(L) = 50
+damageValue(H) = 10
+damageValue(S) = 30
+damageValue(D) = 30
+damageValue(A) = 35
+
+kickRadius = 5.0
+kickOmega = 10.0
+kickVeloc = 10.0
+
+particleTypes = 3
+particleClass1 = "xTgausscar.light"
+particleCount1 = 1
+particleVeloc1 = "0.0 0.0 0.0"
+
+particleClass2 = "xTgausscar.shock"
+particleCount2 = 1
+particleVeloc2 = "0.0 0.0 0.0"
+
+particleClass3 = "xTgausscar.streamer"
+particleCount3 = 5
+particleVeloc3 = "30.0 5.0 30.0"
+particleBias3 = "0.0 1.0 0.0"
+
+
+[Light]
+simulateBase = "sim_null"
+lifeTime = 1.0
+renderBase = "draw_light"
+startColor = "105 5 250 1020"
+finishColor = "155 0 0 0"
+startRadius = 30.0
+finishRadius = 30.0
+animateTime = 0.5
+attenuateConstant = 0.0
+attenuateLinear = 1.0
+attenuateQuadratic = 0.0
+
+[Shock]
+simulateBase = "sim_null"
+lifeTime = 1.2
+renderBase = "draw_sphere"
+textureName = "elecsphere.tga"
+textureBlend = "one one modulate"
+startColor = "50 1 200 255"
+finishColor = "50 0 100 0"
+startRadius = 0
+finishRadius = 4
+animateTime = 1.0
+latitudeBands = 8
+longitudeSegments = 16
+
+[Streamer]
+simulateBase = "sim_ember"
+lifeTime = 1.9
+renderBase = "draw_multi"
+renderCount = 3
+renderName1 = "xTgausscar.flare"
+renderName2 = "xTgausscar.light2"
+renderName3 = "xTgausscar.trail2"
+
+[trail2]
+renderBase = "draw_trail"
+textureBlend = "one one modulate"
+startColor = "155 127 250 255"
+finishColor = "205 0 150 0"
+startRadius = 0.05
+finishRadius = 0.0
+trailTime = 1.5
+segmentTime = 0.5
+
+[Flare]
+renderBase = "draw_sprite"
+textureName = "particle.tga"
+textureBlend = "one one modulate"
+startColor = "245 95 255 255"
+finishColor = "55 0 205 255"
+startRadius = 0.28
+finishRadius = 0.28
+
+[Light2]
+renderBase = "draw_light"
+startColor = "120 5 250 255"
+finishColor = "155 0 0 255"
+startRadius = 10.5
+finishRadius = 10.5
+animateTime = 1.9
+attenuateConstant = 0.0
+attenuateLinear = 0.5
+attenuateQuadratic = 0.0

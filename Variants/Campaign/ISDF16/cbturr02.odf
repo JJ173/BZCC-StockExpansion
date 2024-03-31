@@ -27,11 +27,12 @@ armorClass = L
 
 weaponMask = 00011
 weaponHard1 = "hp_gun_1"
-weaponName1 = "gcoretur"
+weaponName1 = "gTurrGauss"
 weaponAssault1 = 0
 recoilName1 = "recoil"
+recoilDist1 = -1.5
 weaponHard2 = "hp_gun_2"
-weaponName2 = "gcoretur"
+weaponName2 = "gTurrGauss"
 weaponAssault2 = 0
 
 turretCount = 2

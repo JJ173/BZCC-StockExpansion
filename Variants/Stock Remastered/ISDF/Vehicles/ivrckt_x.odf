@@ -2,8 +2,8 @@
 classLabel = "ivrckt"
 PilotConfig = "ispilo_x"
 
-aiName = "GechProcess"
-aiName2 = "GechProcess"
+aiName = "AssaultTankProcess"
+aiName2 = "AssaultTankProcess"
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

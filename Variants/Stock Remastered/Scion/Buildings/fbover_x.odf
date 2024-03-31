@@ -2,7 +2,7 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "fbover"
 
-categoryTypeOverride = 4
+// categoryTypeOverride = 4
 
 isSingle = 0
 
@@ -11,7 +11,7 @@ limitClass1Count = 1
 limitClass1Text = "Only One Allowed"
 
 [PoweredBuildingClass]
-panelIcon = "icon_base_sat.tga"
+// panelIcon = "icon_base_sat.tga"
 
 [BuildingClass]
 

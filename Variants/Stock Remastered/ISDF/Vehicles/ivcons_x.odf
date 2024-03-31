@@ -8,6 +8,8 @@ StayWithOwner = true
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
+AvoidType = 0
+
 otherMsg = "ivcons08.wav"
 
 [HoverCraftClass]

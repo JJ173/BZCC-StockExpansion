@@ -14,7 +14,7 @@ function _Cooperative.Save()
     return _Cooperative;
 end
 
-function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop)
+function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, SpawnPilotOnly, HeightOffset)
     -- Few prints to console.
     print("Welcome to " .. MissionName);
     print("Written by AI_Unit");
@@ -62,7 +62,7 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop)
     local LocalTeamNum = GetLocalPlayerTeamNumber();
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, PlayerShipODF, PlayerPilotODF, false, 0);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, PlayerShipODF, PlayerPilotODF, SpawnPilotOnly, HeightOffset);
 
     -- Make sure we give the player control of their ship.
     SetAsUser(PlayerH, LocalTeamNum);

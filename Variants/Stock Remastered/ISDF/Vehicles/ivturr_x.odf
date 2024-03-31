@@ -8,6 +8,8 @@ AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents id
 
 followMsg = "ivturr02.wav"
 
+AvoidType = 2
+
 [HoverCraftClass]
 
 [DeployableClass]

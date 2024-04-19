@@ -65,10 +65,15 @@ ISDF02 (A Simple S & R):
 ISDF03 (We Have Hostiles):
 - Improved Shabayev's logic so she should have no issue entering the tunnels.
 - First Hauler is unkillable until it exits the tunnels. This is to make sure there's no funky behaviour with other units if a relic is placed in the tunnel.
+- Reduced Hauler Health by 1000.
+- Added a few missing audio clips:
+	- isdf0318.wav
+	- isdf0320.wav
 - Shabayev and Red 1 will now drive off the map before disappearing from the mission.
 - Red 1 will now drive to their distress location instead of spawning there.
 - All Scion Units are classified as "Unknown" to line up with post-mission debriefings.
 - Added a couple of Scion units that chase Shabayev and Red Squad when they are returning to the base.
+- Scion Haulers will not spawn if a player is within 300 meters of their spawn point.
 
 - General QOL (Quality of Life) improvements.
 
@@ -257,6 +262,14 @@ ISDF16 (Hole in One):
 - Attack frequency has been increased based on difficulty.
 - Scion teams will now construct full bases.
 - CC111100 units will attack if a patrol discovers the player.
+
+- General QOL (Quality of Life) improvements.
+
+Scion01 (Transformation):
+- Changed Shabayev's name from "Shabayev" to "Yelena Shabayev" to match Scion naming.
+- ISDF attacks on the player base have been moved to spawn out of the map.
+- Attacks have been buffed and now vary based on difficulty.
+- Removed small delays between Shabayev's audio at the start of the mission.
 
 - General QOL (Quality of Life) improvements.
 

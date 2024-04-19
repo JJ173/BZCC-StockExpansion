@@ -1,0 +1,6 @@
+Yelena
+Scions use power differently than the ISDF. Each Scion building has its own power lung.
+If a lung is destroyed, only that building will lose power, rather than the entire base.
+You can replace lungs by using your Builder. Why don't you give it a try. Order your 
+Builder to build a lung on the Kiln by selecting the 'Add Lung' option from its build
+menu. Then select the Kiln from the menu.

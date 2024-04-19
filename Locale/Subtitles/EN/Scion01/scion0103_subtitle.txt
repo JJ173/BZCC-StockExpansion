@@ -1,0 +1,4 @@
+Yelena
+Excellent. You will notice your weapons and your craft have different abilities depending on 
+your morph state. In combat mode, you will regenerate ammo and move faster, while in assault mode,
+you will regenerate health and have a stronger weapon, but you will also move slower. 

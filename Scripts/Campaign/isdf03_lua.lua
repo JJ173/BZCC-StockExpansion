@@ -75,7 +75,7 @@ local Mission =
     -- Specific to mission.
     m_PlayerPilotODF = "isuser_mx",
     -- Specific to mission.
-    m_PlayerShipODF = "ivscout_x",
+    m_PlayerShipODF = "ivplysct",
 
     m_MainPlayer = nil,
     m_TerminalPlayer = nil,

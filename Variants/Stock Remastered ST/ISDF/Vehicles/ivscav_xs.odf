@@ -2,6 +2,7 @@
 classLabel = "ivscav"
 PilotConfig = "ispilo_x"
 mass=40000.0 // (stock ivscav=53157.3) {VSR-012}
+scrapValue = 5 // stopping scrap canceling, also reduces scrap value in general reducing the amount of loose on field -Gravey
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

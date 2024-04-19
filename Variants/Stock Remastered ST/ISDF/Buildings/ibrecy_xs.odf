@@ -37,6 +37,7 @@ tunnel04Edge="wtfw" // Rec Pad - Right Nook
 buildItem1 = "ivscav_xs"
 buildItem2 = "ivscout_xs"
 buildItem3 = "ivturr_xs"
+buildItem4 = "ivtug_xs"
 buildItem5 = "ivcons_xs"
 buildItem6 = "ivserv_xs"
 buildItem7 = "apserv_xs"

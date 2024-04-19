@@ -1,6 +1,15 @@
 [OrdnanceClass]
 classLabel="atstab_c"
 
-// {VSR-126}
-lifeSpan=0.834 // *1.0 (to maintain range)
-shotSpeed=120.0 // *100.0
+// Adjusted to improve early tank accuracy and synergy with minigun.
+
+lifeSpan=0.665 /// 0.834 // *1.0 (to maintain range)
+shotSpeed=150.0 // 120.0 // *100.0
+
+damageValue(N) = 35 // 130 // none // 260 --adjusted for aim efficiency improvement --Gravey
+damageValue(L) = 30 // 120 // light // 240
+damageValue(H) = 100 // heavy // 200 --remains unchanged as for the lack of secondary weapon synergy.
+
+damageValue(S) = 40 // 120 // standard // 240 --adjusted for combat scenarios vs other combat units and aim efficiency -- Gravey
+damageValue(D) = 35 //100 // deflection // 200
+damageValue(A) = 50 //130 // absorbtion // 130

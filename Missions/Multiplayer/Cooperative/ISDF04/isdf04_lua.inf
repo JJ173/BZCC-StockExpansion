@@ -26,4 +26,6 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "pluto.fbx"
-svar15 = "isdf04.brf"
+svar15 = "Papers found in the technical center indicate that scientists on Cerberus base had gathered technical information predating the attack on the Voyager 2 probe.  There is no record of prior violent conflict with the aliens, but information exists about their craft and methods of communication.
+
+Among the papers were sketches of alien ships and a brief description of a conversation with one of the creatures, dispelling previous assumptions that they cannot communicate via normal human speech.  The notes on the interview are brief but refer to the aliens as "Scions," which would appear to be the name of their species.  There is also mention of a figure called the "Padishah," the leader of the Scion creatures."

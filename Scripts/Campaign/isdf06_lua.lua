@@ -93,6 +93,8 @@ local Mission =
     m_ScionAttackCooldown = 0,
     m_PoolTowerCount = 0,
 
+    m_MissionDelayTime = 0,
+
     -- Steps for each section.
     m_MissionStartStage = 0,
     m_ScrapPoolPartStage = 0,
@@ -340,21 +342,29 @@ function HandleMissionStart()
         -- We have a Scavenger on reserve for the pool collection.
         Mission.m_ReserveScav = GetHandle("reserve_scav");
 
-        -- Manson: "Okay orange squad..."
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0601.wav");
-
-        -- Set the timer for this audio clip.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(20.5);
-
         -- Don't let the AI have fun with it.
         SetIndependence(Mission.m_ReserveScav, 0);
 
         -- So we don't have command of it.
         Stop(Mission.m_ReserveScav, 1);
 
+        -- Small delay.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+
         -- Advance a step.
         Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
     elseif (Mission.m_MissionStartStage == 1) then
+        if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+            -- Manson: "Okay orange squad..."
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0601.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(20.5);
+
+            -- Advance a step.
+            Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
+        end
+    elseif (Mission.m_MissionStartStage == 2) then
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- Send green squad to their doom!
             Goto(Mission.m_Green1, "green_removal", 1);
@@ -367,7 +377,7 @@ function HandleMissionStart()
             -- Advance a step.
             Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
         end
-    elseif (Mission.m_MissionStartStage == 2) then
+    elseif (Mission.m_MissionStartStage == 3) then
         if (Mission.m_ScionAttackCooldown < Mission.m_MissionTime
                 and not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam)
                 and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam)
@@ -402,7 +412,7 @@ function HandleMissionStart()
             -- Push to the next stage so we can check if they have been killed.
             Mission.m_MissionStartStage = Mission.m_MissionStartStage + 1;
         end
-    elseif (Mission.m_MissionStartStage == 3) then
+    elseif (Mission.m_MissionStartStage == 4) then
         -- Check if the enemy attackers have been killed.
         if (not IsAliveAndEnemy(Mission.m_Attacker1, Mission.m_EnemyTeam)
                 and not IsAliveAndEnemy(Mission.m_Attacker2, Mission.m_EnemyTeam)

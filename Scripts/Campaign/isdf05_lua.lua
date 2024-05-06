@@ -437,12 +437,6 @@ Functions[1] = function()
     -- Give the player some scrap.
     SetScrap(Mission.m_HostTeam, 40);
 
-    -- Manson: "You're a few hundred meters off target..."
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0500.wav");
-
-    -- Set the timer for this audio clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(15.5);
-
     -- Prepare Recycler for Deployment.
     Deploy(Mission.m_Recycler);
 
@@ -452,19 +446,30 @@ Functions[1] = function()
     -- Have the Dropship leave.
     SetAnimation(Mission.m_Dropship, "takeoff", 1);
 
+    -- Small delay.
+    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[2] = function()
-    -- Send the Recycler off to Deploy.
-    Dropoff(Mission.m_Recycler, "recy_deploy", 1);
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Manson: "You're a few hundred meters off target..."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0500.wav");
 
-    -- Dropship sound.
-    StartSoundEffect("dropleav.wav", Mission.m_Dropship);
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(15.5);
 
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
+        -- Send the Recycler off to Deploy.
+        Dropoff(Mission.m_Recycler, "recy_deploy", 1);
+
+        -- Dropship sound.
+        StartSoundEffect("dropleav.wav", Mission.m_Dropship);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
 end
 
 Functions[3] = function()

@@ -26,4 +26,8 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "dark.fbx"
-svar15 = "isdf05.brf"
+svar15 = "Using the tracer, General Braddock and his carrier have followed the Scion army to their new location on the Dark Planet.  The entire fleet has been ordered to follow.
+
+Initial intelligence on the Dark Planet indicates a semi-stable environment with high levels of low-density gases.  It lies on the furthest edge of Earth's solar system and had previous been obscured by the Kuiper belt.  There is no sign of organic life due to the low levels of oxygen available.  It has not yet been determined whether this is the Scions' planet of origin.
+
+Analysis of the Scions' previous attack on the ISDF and Cerberus Base presents a case for an incredibly intelligent species.  The aliens can form strategies requiring high-level thought and computation.  The success of certain Scion campaigns also indicates a super-human ability to predict and presume."

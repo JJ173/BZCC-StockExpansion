@@ -26,8 +26,4 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "bane.fbx"
-svar15 = "isdf12.brf"
-svar16 = "load12.wav"
-
-single.mailCount = 1
-single.mailWave1 = "load12.wav"
+svar15 = "Many ISDF soldiers did not survive the dropship crash, leaving efforts on Bane under-supported.  As a result, Major Manson's squad, which had been holding down an ISDF base on Bane, was overwhelmed by Scion forces."

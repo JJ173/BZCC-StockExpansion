@@ -26,8 +26,8 @@ svar2 = "Unknown" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "pluto.fbx"
-svar15 = "isdf02.brf"
-svar16 = "load02.wav"
+svar15 = "Some survivors of Cerberus base have been found but most of the soldiers are believed dead, victims of the initial attack 40 kilometers to the north.  An unexplored second section of the base lies to the east; this contains the base's power system, which currently needs to be reactivated.
 
-single.mailCount = 1
-single.mailWave1 = "load02.wav"
+The base should contain some construction equipment that may aid your task.
+
+Just behind the base a few vehicles modified for mining were discovered, though no evidence has yet been found to indicate that any illegal mining activity had been going on.  All records of shipments coming to and from Cerberus base -- those which have so far been uncovered -- indicate only basic life-sustaining equipment being brought in and out. Further investigation has been scheduled."

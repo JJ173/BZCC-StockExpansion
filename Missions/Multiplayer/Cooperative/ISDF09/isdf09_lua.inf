@@ -26,4 +26,4 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "mire.fbx"
-svar15 = "isdf09.brf"
+svar15 = "The data chip collected by Shabayev was passed on to Major Manson and General Braddock.  With this information they tracked the signature of the power source, securing the coordinates of the Scion base.  We must now attack the Scion base and dismantle the machine within it."

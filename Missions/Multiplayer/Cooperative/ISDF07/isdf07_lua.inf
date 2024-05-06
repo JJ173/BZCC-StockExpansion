@@ -26,4 +26,6 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "mire.fbx"
-svar15 = "isdf07.brf"
+svar15 = "On General Braddock's orders the entire Second Fleet followed the Scion forces into the wormhole, their final destination unknown.
+
+Troops have been ordered to descend to the first planet in the system: Mire, a thick, green, jungle-like land.  There, ISDF Beatrice Base will be constructed to continue the fight against the Scions."

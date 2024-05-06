@@ -74,6 +74,7 @@ ISDF03 (We Have Hostiles):
 - All Scion Units are classified as "Unknown" to line up with post-mission debriefings.
 - Added a couple of Scion units that chase Shabayev and Red Squad when they are returning to the base.
 - Scion Haulers will not spawn if a player is within 300 meters of their spawn point.
+- Reduced maximum health of initial Hauler so it doesn't take so long to destroy after it has left the tunnel.
 
 - General QOL (Quality of Life) improvements.
 

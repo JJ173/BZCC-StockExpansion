@@ -26,4 +26,6 @@ svar2 = "ISDF" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "bane.fbx"
-svar15 = "scion05.brf"
+svar15 = "The Scion Convergence has confirmed that some of their own have turned against them, protesting Burns' plan for the Scion race. 
+
+The ISDF is facing its own split.  Braddock has formed the New Regime but not all of his men have pledged their loyalty.  Manson, who survived the Scion attack on Rend, has broken off to lead a faction of AAN Loyalists.  Scion strategists theorize that if Burns and the Scions ally with Manson and the AAN, the two forces together could overthrow the New Regime."

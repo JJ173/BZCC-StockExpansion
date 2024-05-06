@@ -417,15 +417,6 @@ Functions[1] = function()
     -- Mask the emitter for the first Condor.
     MaskEmitter(Mission.m_BurnsCondor, 0);
 
-    -- Kossieh: "Remember men..."
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1301.wav");
-
-    -- Timer for this clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(13.5);
-
-    -- Show objectives.
-    AddObjectiveOverride("isdf1301.otf", "WHITE", 10, true);
-
     -- Open the Dropship.
     SetAnimation(Mission.m_BurnsCondor, "deploy", 1);
 
@@ -465,11 +456,30 @@ Functions[1] = function()
     -- Clean up any player spawns that haven't been taken by the player.
     _Cooperative.CleanSpawns();
 
+    -- Small delay.
+    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+
     -- Advance the mission state.
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[2] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then 
+        -- Kossieh: "Remember men..."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1301.wav");
+
+        -- Timer for this clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(13.5);
+
+        -- Show objectives.
+        AddObjectiveOverride("isdf1301.otf", "WHITE", 10, true);
+
+        -- Advance the mission state.
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[3] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Run some logic based on the amount of dialogues played.
         if (Mission.m_IntroDialogueCount == 0) then
@@ -506,7 +516,7 @@ Functions[2] = function()
     end
 end
 
-Functions[3] = function()
+Functions[4] = function()
     if (Mission.m_MoveBurns and Mission.m_ParadeTime < Mission.m_MissionTime) then
         -- Highlight Burns, have everyone look at him.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1305.wav");
@@ -535,7 +545,7 @@ Functions[3] = function()
     end
 end
 
-Functions[4] = function()
+Functions[5] = function()
     -- This will remove Burns' dropship and start the cutscene process.
     if (Mission.m_RemoveBurns and Mission.m_CarrierTime < Mission.m_MissionTime) then
         -- Remove Burns' Condor.
@@ -565,7 +575,7 @@ Functions[4] = function()
     end
 end
 
-Functions[5] = function()
+Functions[6] = function()
     local curFrame = GetAnimationFrame(Mission.m_Show2, "cinteractive");
 
     -- Check the frames to do effects and sounds.
@@ -594,7 +604,7 @@ Functions[5] = function()
     end
 end
 
-Functions[6] = function()
+Functions[7] = function()
     -- Start the carrier crashing process.
     StartEarthQuake(30);
 
@@ -621,7 +631,7 @@ Functions[6] = function()
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
-Functions[7] = function()
+Functions[8] = function()
     if (Mission.m_QuakeTime < Mission.m_MissionTime) then
         -- Update the Earthquake.
         UpdateEarthQuake(5.0);
@@ -651,7 +661,7 @@ Functions[7] = function()
     end
 end
 
-Functions[8] = function()
+Functions[9] = function()
     if (Mission.m_PanicTime < Mission.m_MissionTime) then
         -- Manson: "The carrier has been blown out of the sky!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1307.wav");
@@ -667,7 +677,7 @@ Functions[8] = function()
     end
 end
 
-Functions[9] = function()
+Functions[10] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Manson: "Sky 1, come in, Sky 1!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1308.wav");
@@ -680,7 +690,7 @@ Functions[9] = function()
     end
 end
 
-Functions[10] = function()
+Functions[11] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Pilot: "What do we do?!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1309.wav");
@@ -699,7 +709,7 @@ Functions[10] = function()
     end
 end
 
-Functions[11] = function()
+Functions[12] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Braddock: "Get your asses immediately to the south."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1310a.wav");
@@ -753,7 +763,7 @@ Functions[11] = function()
     end
 end
 
-Functions[12] = function()
+Functions[13] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Manson: "Do not copy, General, repeat!"
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1311.wav");
@@ -779,7 +789,7 @@ Functions[12] = function()
     end
 end
 
-Functions[13] = function()
+Functions[14] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Braddock: "Cooke, head to the south-east..."
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1312.wav");
@@ -801,7 +811,7 @@ Functions[13] = function()
     end
 end
 
-Functions[14] = function()
+Functions[15] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Delay checks for a second to avoid checks happening every frame.
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
@@ -835,7 +845,7 @@ Functions[14] = function()
     end
 end
 
-Functions[15] = function()
+Functions[16] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and IsPlayerWithinDistance(Mission.m_Recycler, 150, _Cooperative.GetTotalPlayers())) then
         -- Give the Recycler to the player.
         SetGroup(Mission.m_Recycler, 0);
@@ -893,7 +903,7 @@ Functions[15] = function()
     end
 end
 
-Functions[16] = function()
+Functions[17] = function()
     -- Here, we can just check that the tug has grabbed the power core.
     if (not Mission.m_MissionOver) then
         if (IsAlive(Mission.m_KeyDevice)) then
@@ -935,7 +945,7 @@ function HandleFailureConditions()
                 local curAmmo = GetCurAmmo(p);
 
                 -- Check if they are within distance of Manson.
-                if (GetDistance(p, Mission.m_Manson) > 60) then
+                if (GetDistance(p, "manson_start") > 60) then
                     -- Stop all audio.
                     StopAudioMessage(Mission.m_Audioclip);
 

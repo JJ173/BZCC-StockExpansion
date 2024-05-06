@@ -16,7 +16,7 @@ ivar8 = 1 // Sync Join. 0=off, 1=on.
 ivar9 = 30 //unit limit, 0 is unlimited
 ivar11 = 1 // locks team play
 ivar12 = 1 // lock all to team 1
-ivar13 = 105 // CPU Team is Scion
+ivar13 = 102 // CPU Team is Scion
 ivar25 = 1 // Lock CPU team
 
 // Svar0 (.bzn filename, used to look for an .inf file like this)
@@ -26,4 +26,6 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "rend.fbx"
-svar15 = "isdf14.brf"
+svar15 = "General Braddock has ordered a full site excavation of Ambassador Kossieh's carrier crash.  You have been named the lead point person on this mission.
+
+The AAN has temporarily halted General Braddock's court martial proceedings, since he is needed in the field to deal with the aftermath of the carrier crash and the resulting skirmish.  With no one else out in the Scion system to take the reins of the ISDF effort, Braddock has been reinstated to power."

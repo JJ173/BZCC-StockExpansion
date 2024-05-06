@@ -26,4 +26,6 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "mire.fbx"
-svar15 = "isdf08.brf"
+svar15 = "The ancient Cthonians are presumed to be the original creators of bio-metal, the substance which has become so important to modern warfare.  The culture of the Cthonians, in fact, was embedded into the metal, meshing the collective consciousness of the entire race with the molecular structure of the substance.  
+
+The birthplace of the Cthonians was never found, remaining a mythological El Dorado.  Many theorized that it would have an infinite supply of bio-metal."

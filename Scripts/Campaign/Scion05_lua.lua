@@ -49,7 +49,7 @@ local playerAttacks =
 -- This is when the player takes too long to destroy the bridge.
 -- Rather than an instant "Game Over", we just increase each attack
 -- from braddock
-m_BraddockBridgeAttacks =
+local m_BraddockBridgeAttacks =
 {
     { "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivmbike_x", "ivmbike_x" },
     { "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivtank_x",  "ivmbike_x", "ivmbike_x", "ivmisl_x",  "ivmisl_x" },
@@ -66,7 +66,7 @@ m_BraddockBridgeAttacks =
 
 -- This is when Braddock sends his last attacks to the AAN base.
 -- The final stand for the player.
-m_BraddockAANAttacks =
+local m_BraddockAANAttacks =
 {
     { { "ivscout_x", "ivscout_x", "ivtank_x" },                                                { "ivmisl_x", "ivmisl_x", "ivtank_x" },                                               { "ivtank_x", "ivtank_x", "ivmbike_x", "ivmbike_x" } },                                                            -- Attack 1
     { { "ivmisl_x", "ivscout_x", "ivmisl_x", "ivscout_x" },                                    { "ivmisl_x", "ivtank_x", "ivmisl_x", "ivtank_x" },                                   { "ivtank_x", "ivtank_x", "ivtank_x", "ivtank_x" } },                                                              -- Attack 2

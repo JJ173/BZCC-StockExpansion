@@ -26,4 +26,6 @@ svar2 = "ISDF" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "mire.fbx"
-svar15 = "scion02.brf"
+svar15 = "With the first Power Crystal recaptured, the next goal is to insert it into the Alchemator located on Mire to set the transformation process in motion.  Control of the alchemator has fallen to the ISDF, who have built a base surrounding the machine. 
+
+Padishah Burns, the leader of the Scion people, is scheduled to be released from the base hospital soon and will hold a conference to shed some light on the full story of the purpose of these alchemator machines and his ultimate plan."

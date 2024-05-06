@@ -26,8 +26,8 @@ svar2 = "Unknown" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "pluto.fbx"
-svar15 = "isdf01.brf"
-svar16 = "load01.wav"
+svar15 = "Contact has been lost with Cerberus Base on Pluto.  Cerberus Base is the ISDF's outermost defensive position, and had previously been kept so secret that it was built from diverted resources without the knowledge of the AAN (Alliance of Awakened Nations).
 
-single.mailCount = 1
-single.mailWave1 = "load01.wav"
+Because of this catastrophe Ambassador Kossieh -- president of the AAN -- has been informed of our secret base.  Since it was created without his sanction, Kossieh is likely to use this disaster as a pretext to challenge military control of the ISDF.  General Braddock needs to know what happened on Pluto as soon as possible, before the ISDF is further undermined by Earthbound bureaucrats.
+
+The two goals on Pluto are to rescue any surviving soldiers from Cerberus base and to determine the source of the attack.  You have been assigned to Cmd. Shabayev's squad, and will conduct reconnaissance.  Command requests that you conduct your search with extreme discretion; given the danger and the politically sensitive nature of the situation, you must follow orders extremely closely."

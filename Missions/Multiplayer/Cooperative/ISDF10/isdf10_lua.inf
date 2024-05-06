@@ -26,8 +26,3 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "bane.fbx"
-svar15 = "Commander Shabayev's scientific team did their own independent investigation of the Scion machine.  They also noticed the transmitters which indicate that there are more of the same machines.  Shabayev's findings, however, do not call the machine a weapon, suggesting that the power it harnesses could be used for any number of things.  The report is currently incomplete, as Shabayev's team was quickly removed from the site for security purposes.
-
-Intelligence on the ruins has affirmed early evidence that they are indeed ancient, predating any other Scion materials.  So far no long-standing Scion structures have been found, and examinations of the soil reveal that most of the planetary resources are on the verge of depletion.  
-
-Attached to this report was a brief note from Commander Shabayev, sketching out a theory that perhaps the Scions' ultimate goal is not to destroy Earth, but to colonize it; to find a new home for the race to thrive."

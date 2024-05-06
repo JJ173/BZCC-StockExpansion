@@ -26,6 +26,3 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "dark.fbx"
-svar15 = "Examination of the ruins of the device you destroyed continues.  The rubble appears to be man-made, and once bore signs of the ISDF insignia. The pieces were too small to determine what they originally formed, though statements from a mortar bike pilot in the area identify it as a quarry or mine. The pilot was killed in combat before further interrogation could be carried out.
-
-The new ISDF base on the Dark Planet, Charon Base, is nearing completion.  It is ready to be fortified and serve as a launch spot for an attack against the Scions."

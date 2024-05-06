@@ -26,4 +26,3 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "bane.fbx"
-svar15 = "Commander Shabayev has drafted a formal complaint for the AAN about General Braddock's actions, detailing his possibly unsafe haste in following the Scion army through the wormhole and concluding with the details about Braddock's attack on the ruins on Bane.  With communications temporarily cut off from the AAN, Shabayev's complaint is on file for now; regardless, a copy was submitted to General Braddock's office."

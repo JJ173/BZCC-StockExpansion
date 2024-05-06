@@ -26,6 +26,3 @@ svar2 = "Unknown" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "pluto.fbx"
-svar15 = "Early intelligence reports are providing the first few details about the alien enemy.  Soldiers in combat have noticed the alien ships' ability to morph into different forms, even while fighting.  It's a tactic used to both confuse and overwhelm their enemies.  In general, the aliens seem to have a strong affinity for and expertise with technology.  The earliest observations reveal that their use of bio-metal is several years ahead of human advancement with the same substance.
-
-Although their forces are strong, recon suggests that the units on Pluto may form only an expeditionary force.  So far the enemy bases and structures appear to be temporary, designed for quick placement and removal."

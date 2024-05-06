@@ -25,13 +25,4 @@ svar1 = "Players" // Team name for team 1
 svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
-svar14 = "rend.fbx"
-svar15 = "Padishah Burns, the leader of the Scions, succumbed under the pressure of interrogation and passed away before he was able to divulge any information. Burns' body disappeared from the ISDF camp and was unavailable for autopsy -- though the ISDF lab does have one tissue sample on file, taken when Burns was in the medical unit before the interrogation.
-
-The early records of Burns' interrogation do reveal a few facts.  The one witness observed that Burns appeared to have many human qualities, and had no trouble conversing with Braddock in English.  In fact, the witness noted, the two men seemed to have a rapport, conversing with familiarity.
-
-Preliminary results from Burns' tissue sample break it down to show characteristics of both bio-metal and human genes, implying that he is some kind of hybrid.  This is different than the previous samples taken from fallen Scion soldiers on the field. A gene sequence pinpointed in the sample put through the ISDF database came up with one match -- General Armond Braddock.
-
-Intelligence has traced a convoy of Scion ships heading towards an as yet uncharted segment of the Scion system.  Hidden there is a previously undetected planet, Core.  This, intelligence believes, is the Scions' home planet.  New Regime forces are now ordered to land on Core.
-
-Preliminary satellite photos of Core reveal it to be similar in makeup to the Dark Planet, and atmospheric samples offer the same evidence."
+svar14 = "core.fbx"

@@ -26,6 +26,3 @@ svar2 = "Scion" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "rend.fbx"
-svar15 = "General Braddock has ordered a full site excavation of Ambassador Kossieh's carrier crash.  You have been named the lead point person on this mission.
-
-The AAN has temporarily halted General Braddock's court martial proceedings, since he is needed in the field to deal with the aftermath of the carrier crash and the resulting skirmish.  With no one else out in the Scion system to take the reins of the ISDF effort, Braddock has been reinstated to power."

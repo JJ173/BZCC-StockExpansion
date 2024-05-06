@@ -26,8 +26,3 @@ svar2 = "Rebels" // Team name for team 2
 svar7 = "coop" // Custom shell page to pull up [actually bzshell_multi_####.cfg]
 svar8 = "CoopCheck.odf" // File to add to asset check
 svar14 = "rend.fbx"
-svar15 = "Reports on the exchange at the Scion base listed Shabayev's accusations, which were refuted point by point by General Braddock.  He has been cleared of all the charges previously raised in the court martial proceedings.
-
-Braddock has revealed to the highest ranking officers his vision for the future, his plan for the outcome of this war: 'Once the Scions are defeated, the ISDF must then turn our attention to control of Earth.  The time has come to realize our vision of the future.  We must vanquish the AAN and take control of the Earth's bio-metal supply.  Only then can the planet be safe from terrorists and radical nations.  Only then can our future be preserved.' 
-
-Radio signals intercepted on Rend have revealed that Manson is alive and well, not deceased as previously reported.  He and his squad have broken off to form their own army of AAN loyalists that refuse to continue fighting the Scions, instead pushing for cooperation.  This news divided the second fleet, sending half of the men into Manson's camp and leaving half still loyal to General Braddock and the 'New Regime.'"

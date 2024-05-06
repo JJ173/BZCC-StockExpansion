@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 17
+countISDF = 18
 
 [ISDF 1]
 missionTitle = "01: This is Not a Drill"
@@ -499,6 +499,42 @@ launchMessage = "load20.wav"
 launchBackground = "rend_load.tga"
 
 [ISDF 16]
+missionTitle = "16: Hole in One"
+missionInfo = "isdf16.des"
+missionFile = "isdf16_lua.bzn"
+
+planetName = "Core"
+planetInfo = "core.des"
+planetGeom = "core.fbx"
+
+techCount = 1
+techName1 = "Gun Spire"
+techInfo1 = "fbspir.inf"
+techGeom1 = "fbspir00.fbx"
+techView1 = 1
+
+mailCount = 3
+mailName1 = "Intercepted Transmission"
+mailInfo1 = "isdf16_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes1601.wav"
+
+mailName2 = "General Braddock"
+mailInfo2 = "isdf16_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes1602.wav"
+
+mailName3 = "Braddock to Cooke"
+mailInfo3 = "isdf16_m3.des"
+mailGeom3 = ""
+mailWave3 = "mes1603.wav"
+
+briefInfo = "isdf16.brf"
+
+launchMessage = "load16.wav"
+launchBackground = "core_load.tga"
+
+[ISDF 17]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -523,7 +559,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 17]
+[ISDF 18]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ibrecy_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivscav_c"
+buildItem2 = "ivscout_c"
+buildItem3 = "ivturr_c"
+buildItem5 = "ivcons_c"
+buildItem6 = "ivserv_c"
+
+[RecyclerClass]
+
+[Lod1]

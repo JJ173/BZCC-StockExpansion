@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ivserv_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 25 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]
+
+[Lod1]

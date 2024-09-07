@@ -1,0 +1,58 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+
+scrapCost = 0
+
+aiName = "RocketTankFriend"
+aiName2 = "RocketTankEnemy"
+
+unitName = "Commander"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+////////////////////////////////////
+
+weaponMask = 00111
+
+[CraftClass]
+ClosestEnemyGoodEyes = true
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+SitAttackAllowCounterattack = true
+SitAttackAllowIndependence = true
+OffensiveProcessIsTenaciousAITeam = true
+
+// Experimental
+engageRange = 175 // 175
+blastDist = 40  // Gets in close
+
+RetargetOnStrafe = true
+
+attackTask = "WingmanBlastAttack"
+subAttackTask = "ArcherSubAttack"
+waitTask = "CircleTask"
+subAttackClass = "ANN"
+
+brAccelFactor = 0.5f;
+strafeFactor = 1.4f;
+steerFactor = 5.0f;
+omegaFactor = 0.35f;
+
+alphaScale = 0.8
+omegaScale = 0.85
+
+steerScatter = 0.4
+pitchScatter = 0.1
+
+TopSpeed = 50 // Set this over actual top speed for more aggressive forward AI movement
+avoidSpeed = 32
+
+[HoverCraftClass]
+aiAccelDrag = 16
+
+[Lod1]
+
+[Lod2]

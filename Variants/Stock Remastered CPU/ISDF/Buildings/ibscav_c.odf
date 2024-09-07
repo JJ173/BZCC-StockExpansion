@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibscav_x"
+upgradeName = "ibscup_c"
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]

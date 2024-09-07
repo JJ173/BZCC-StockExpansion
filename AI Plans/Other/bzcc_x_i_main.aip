@@ -1,0 +1,293 @@
+// File: bzcc_x_i_main.aip
+// Description: BZCC X Main ISDF AIP file.
+// Author(s): AI_Unit
+// Date Modified: 29/05/2024
+
+[Start]
+scrapCount = 40
+scavClass = "ivscav_c"
+consClass = "ivcons_c"
+baseLoc = "RecyclerEnemy"
+CheckProvides = true
+
+[IdleDispatcher]
+ScavIdleSeconds = 3
+UnitIdleSeconds = 15
+BomberIdleSeconds = 55
+CraftTeamIsPilotTeam = true
+
+[Match]
+
+[Plan1]
+planType = "Recover"
+planPriority = 1000
+serviceUnit = "apserv"
+unitType1 = "DefendUnit"
+planCondition = "Lua"
+LuaFunction = "ServicePodRecoverFunction"
+
+[Plan2]
+planType = "BuildLoop"
+planPriority = 990
+buildType1 = "apserv"
+buildCount1 = 1
+MinCurScrap = 2
+planCondition = "Lua"
+LuaFunction = "ServicePodCondition"
+ContinueEvenIfFail = true
+
+[Plan3]
+planType = "CollectField"
+planPriority = 980
+planCondition = "Lua"
+LuaFunction = "CollectFieldCondition"
+buildIfNoIdle = true
+
+[Plan4]
+planType = "CollectPool"
+planPriority = 970
+planCondition = "Lua"
+buildIfNoIdle = true
+
+[Plan5]
+planType = "CollectPool"
+planPriority = 960
+planCondition = "Lua"
+buildIfNoIdle = true
+
+[Plan6]
+planType = "CollectField"
+planPriority = 950
+planCondition = "Lua"
+LuaFunction = "CollectFieldCondition"
+buildIfNoIdle = true
+
+[Plan7]
+planType = "BuildLoop"
+planPriority = 940
+buildType1 = "ivscav_c"
+buildCount1 = 1
+MinCurScrap = 10
+planCondition = "Lua"
+LuaFunction = "ScavengerCondition"
+ContinueEvenIfFail = true
+
+// Start with early map control. Start building turrets to dispatch around pools.
+[Plan8]
+planType = "BuildMinimums"
+planPriority = 930
+buildType1 = "ivcons_c"
+buildCount1 = 1
+MinCurScrap = 20
+planCondition = "Lua"
+LuaFunction = "BaseConstructorCondition"
+
+// Next, send some Patrol units.
+[Plan9]
+planType = "BuildLoop"
+planPriority = 920
+buildType1 = "ivturr_c"
+buildCount1 = 1
+MinCurScrap = 20
+planCondition = "Lua"
+LuaFunction = "PoolTurretCondition"
+ContinueEvenIfFail = true
+
+[Plan10]
+planType = "BuildMinimums"
+planPriority = 910
+buildType1 = "ivscout_d"
+buildCount1 = 4
+planCondition = "Lua"
+LuaFunction = "EarlyScoutCondition"
+
+// Start producing some constructors for base production.
+[Plan11]
+planType = "BuildMinimums"
+planPriority = 900
+buildType1 = "ivscout_p"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "EarlyScoutCondition"
+
+// Keep player Scavengers under control. Attack them if they have 2 or above.
+// Only send them if they are within 250m of a stage point. Do not extend into enemy base.
+// Attack the closest target.
+[Plan12]
+planType = "Attacker"
+planPriority = 890
+targetType1 = "VIRTUAL_CLASS_SCAVENGER"
+targetType2 = "VIRTUAL_CLASS_EXTRACTOR"
+attackType1 = "ivscout_c"
+attackType2 = "ivscout_c"
+searchRadius = 250.0
+pickTargetType = 1
+maxAttacks = 0
+MinCurScrap = 25
+buildIfNoIdle = true
+attackAnything = true
+planCondition = "Lua"
+LuaFunction = "EarlyScoutAttackCondition"
+
+// Upgrade the base pool if we get enough scrap and we have a constructor.
+// Use a custom Constructor so it does not cause a hang.
+[Plan13]
+planType = "Upgrade"
+planPriority = 880
+unitType = "ibscav_c"
+consClass = "ivcons_g"
+planCondition = "Lua"
+LuaFunction = "UpgradeBaseExtractorCondition"
+
+// Build a Power Plant to start the base process.
+[Plan14]
+planType = "BaseBuildMinimums"
+planPriority = 870
+buildType1 = "ibpgen_c"
+buildCount1 = 1
+buildLoc1 = "i_Power_1"
+MinCurScrap = 30
+planCondition = "Lua"
+LuaFunction = "PowerPlantCondition"
+
+// Build a Power Plant to start the base process.
+[Plan15]
+planType = "BaseBuildMinimums"
+planPriority = 860
+buildType1 = "ibpgen_c"
+buildCount1 = 1
+buildLoc1 = "i_Power_2"
+MinCurScrap = 30
+planCondition = "Lua"
+LuaFunction = "PowerPlantCondition"
+
+// Build a Power Plant to start the base process.
+[Plan16]
+planType = "BaseBuildMinimums"
+planPriority = 850
+buildType1 = "ibpgen_c"
+buildCount1 = 1
+buildLoc1 = "i_Power_3"
+MinCurScrap = 30
+planCondition = "Lua"
+LuaFunction = "PowerPlantCondition"
+
+// Build a Power Plant to start the base process.
+[Plan17]
+planType = "BaseBuildMinimums"
+planPriority = 840
+buildType1 = "ibpgen_c"
+buildCount1 = 1
+buildLoc1 = "i_Power_4"
+MinCurScrap = 30
+planCondition = "Lua"
+LuaFunction = "PowerPlantCondition"
+
+// Build a Factory
+[Plan18]
+planType = "BaseBuildMinimums"
+planPriority = 830
+buildType1 = "ibfact_c"
+buildCount1 = 1
+buildLoc1 = "i_Factory"
+buildHeading = 2
+MinCurScrap = 55
+planCondition = "Lua"
+LuaFunction = "FactoryCondition"
+
+// Build more Patrols.
+[Plan19]
+planType = "BuildMinimums"
+planPriority = 820
+buildType1 = "ivmisl_p"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "MissilePatrolCondition"
+
+// This is for outpost construction.
+[Plan20]
+planType = "BuildMinimums"
+planPriority = 810
+buildType1 = "ivcons_g"
+buildCount1 = 2
+MinCurScrap = 20
+planCondition = "Lua"
+LuaFunction = "GunTowerConstructorCondition"
+
+// Build an Armory.
+[Plan21]
+planType = "BaseBuildMinimums"
+planPriority = 800
+buildType1 = "ibarmo_c"
+buildCount1 = 1
+buildLoc1 = "i_Armory"
+MinCurScrap = 60
+planCondition = "Lua"
+LuaFunction = "ArmoryCondition"
+
+// Start the first outpost process
+[Plan22]
+planType = "BaseBuildMinimums"
+planPriority = 790
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Outpost_1"
+MinCurScrap = 50
+consClass = "ivcons_g"
+planCondition = "Lua"
+LuaFunction = "OutpostCondition"
+
+// Build a Gun Tower on the first Outpost.
+[Plan23]
+planType = "BaseBuildMinimums"
+planPriority = 780
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_Outpost_1_GunTower_1"
+MinCurScrap = 50
+consClass = "ivcons_g"
+planCondition = "Lua"
+LuaFunction = "Outpost1GunTower1Condition"
+
+// Build a Gun Tower on the first Outpost.
+[Plan24]
+planType = "BaseBuildMinimums"
+planPriority = 770
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_Outpost_1_GunTower_2"
+MinCurScrap = 50
+consClass = "ivcons_g"
+planCondition = "Lua"
+LuaFunction = "Outpost1GunTower2Condition"
+
+// Build a Relay Bunker so we can start outpost defence.
+[Plan25]
+planType = "BaseBuildMinimums"
+planPriority = 760
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Bunker"
+MinCurScrap = 50
+planCondition = "Lua"
+LuaFunction = "BunkerCondition"
+
+// Start building tanks now that we have a Factory, and a Bunker.
+[Plan26]
+planType = "BuildMinimums"
+planPriority = 750
+buildType1 = "ivtank_p"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "TankPatrolCondition"
+
+// Next, do the Service Bay.
+[Plan27]
+planType = "BaseBuildMinimums"
+planPriority = 740
+buildType1 = "ibsbay_c"
+buildCount1 = 1
+buildLoc1 = "i_ServiceBay"
+MinCurScrap = 50
+planCondition = "Lua"
+LuaFunction = "ServiceBayCondition"

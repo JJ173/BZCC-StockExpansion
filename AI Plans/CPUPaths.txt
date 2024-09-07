@@ -1,0 +1,50 @@
+ISDF Base Paths:
+- i_Power_1
+- i_Power_2
+- i_Power_3
+- i_Power_4
+- i_Factory
+- i_ServiceBay
+- i_Armory
+- i_Bunker
+- i_Training
+- i_Tech
+- i_Bomber
+
+- i_BaseGun_1
+- i_BaseGun_2
+- i_BaseGun_3
+
+ISDF Field Paths:
+- i_AntiAir_1
+- i_AntiAir_2
+- i_AntiAir_3
+- i_AntiAir_4
+
+- i_Turret_1
+- i_Turret_2
+- i_Turret_3
+
+- i_Outpost_1
+- i_Outpost_1_Power
+- i_Outpost_1_GunTower_1
+- i_Outpost_1_GunTower_2
+
+- i_Outpost_2
+- i_Outpost_2_Power
+- i_Outpost_2_GunTower_1
+- i_Outpost_2_GunTower_2
+
+- i_Outpost_3
+- i_Outpost_3_Power
+- i_Outpost_3_GunTower_1
+- i_Outpost_3_GunTower_2
+
+- i_Outpost_4
+- i_Outpost_4_Power
+- i_Outpost_4_GunTower_1
+- i_Outpost_4_GunTower_2
+
+- Patrol1
+- Patrol2
+- Patrol3

@@ -1,0 +1,17 @@
+[DESCRIPTION]
+missionName = "IA: Alien Dunes"
+mapTga = "st_dunes.bmp"
+mapDesc = "dunesi.des"
+mySide = 0
+
+Aware_v13 = true
+
+RaceHuman = 105 // 105 = ascii 'i' for ISDF, 102 = 'f' for Scion
+RaceCPU = 105 // 105 = ascii 'i' for ISDF, 102 = 'f' for Scion
+
+// If specified, it takes this string, and looks for bzshell_instant_xo_<string>.cfg
+ExtraOptions = "Default"
+
+options_instant_string0 = "bzcc_x_"  // Custom AIP base name, e.g. "stock_" .
+options_instant_string1 = "ivrecy_x"    // Human Starting recycler
+options_instant_string2 = "ivrecy_c" // CPU starting recycler

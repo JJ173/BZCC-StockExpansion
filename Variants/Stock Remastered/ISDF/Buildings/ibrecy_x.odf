@@ -10,6 +10,7 @@ classLabel = "ibrecy"
 buildItem1 = "ivscav_x"
 buildItem2 = "ivscout_x"
 buildItem3 = "ivturr_x"
+buildItem4 = "ivtug_x"
 buildItem5 = "ivcons_x"
 buildItem6 = "ivserv_x"
 

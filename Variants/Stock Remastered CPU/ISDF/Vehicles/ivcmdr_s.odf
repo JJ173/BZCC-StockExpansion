@@ -1,0 +1,46 @@
+[GameObjectClass]
+classLabel = "ivscout_x"
+
+scrapCost = 0
+
+unitName = "Commander"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+////////////////////////////////////
+
+weaponMask = 00011 // AI will link first 3 weapon hardpoints (if allowed by AI process)
+
+[CraftClass]
+UseSelectWeapon = 0
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+SitAttackAllowCounterattack = true
+SitAttackAllowIndependence = true
+OffensiveProcessIsTenaciousAITeam = true
+
+// Experimental
+engageRange = 175 // 175
+blastDist = 40  // Gets in close
+
+RetargetOnStrafe = true
+
+attackTask = "ArcherAttack"
+subAttackTask = "ArcherSubAttack"
+waitTask = "CircleTask"
+subAttackClass = "ANN" // AA Ability
+
+brAccelFactor = 0.45f;
+strafeFactor = 1.4f; 
+steerFactor = 1.05f;
+omegaFactor = 0.5f; 
+velFactor = 0.3f;
+
+alphaScale = 0.6
+omegaScale = 0.8
+
+[HoverCraftClass]
+aiAccelDrag = 16

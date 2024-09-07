@@ -85,4 +85,8 @@ function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
     end
 end
 
+function ReplaceCharacter(pos, str, r)
+    return table.concat{str:sub(1,pos-1), r, str:sub(pos+1)}
+end
+
 return _HelperFunctions;

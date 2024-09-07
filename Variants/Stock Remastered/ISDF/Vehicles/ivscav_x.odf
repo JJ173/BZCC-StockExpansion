@@ -8,14 +8,9 @@ StayWithOwner = true
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
-AvoidType = 2
-
 selectPickupMsg = "ivscav05.wav"
 
-avoidSpeed = 32
-
 [TrackedVehicleClass]
-CENTER_SHIFT = -0.6
 
 [TrackedDeployableClass]
 

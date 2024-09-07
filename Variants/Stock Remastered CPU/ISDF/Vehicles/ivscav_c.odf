@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ivscav_x"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 10 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "ibscav_c"
+
+[Lod1]
+
+[Lod2]

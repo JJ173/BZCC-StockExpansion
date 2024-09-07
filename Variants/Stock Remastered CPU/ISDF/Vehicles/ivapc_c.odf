@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivapc_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 25 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[APCClass]
+
+[Lod1]

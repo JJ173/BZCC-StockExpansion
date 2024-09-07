@@ -446,9 +446,6 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
 
         -- This will start the attacks.
         if (shooterODF == "fc111100" or victimODF == "fc111100" or shooterODF == "cbturr02" or victimODF == "cbturr02") then
-            -- Play the sound from Betty.
-            AudioMessage("BettySurge.wav");
-
             -- Set up our timers for the attacks.
             Mission.m_AttackBotTimer = Mission.m_MissionTime + SecondsToTurns(80);
 

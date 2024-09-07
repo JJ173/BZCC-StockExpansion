@@ -8,6 +8,7 @@ weaponName2 = "gtower_x"
 [BuildingClass]
 
 [CraftClass]
+OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 
 [TurretCraftClass]
 

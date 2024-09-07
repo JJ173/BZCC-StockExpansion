@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 23 // Original Scrap Cost (55) / 2 = 22.5, round up to 23.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

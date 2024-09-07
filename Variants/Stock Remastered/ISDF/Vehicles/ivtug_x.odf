@@ -1,0 +1,28 @@
+[GameObjectClass]
+classLabel = "ivtug"
+
+[CraftClass]
+selectWaitMsg = "avhaulve.wav"
+selectAttackMsg = "avhaulvb.wav"
+selectGoMsg = "avhaulvc.wav"
+selectFollowMsg = "avhaulv3.wav"
+selectOtherMsg = "avhaulv0.wav"
+goMsg = "avhaulvd.wav"
+goObjectMsg = "avhaulvd.wav"
+attackMsg = "avhaulv2.wav"
+followMeMsg = "avhaulvj.wav"
+followMsg = "avhaulvj.wav"
+repairMsg = ""
+reloadMsg = ""
+rescueMsg = "avhaulv5.wav"
+recycleMsg = "avhaulv6.wav"
+otherMsg = "avhaulvd.wav"
+user1Msg = ""
+killedMsg = ""
+diedMsg = "abetty3.wav"
+
+[HoverCraftClass]
+
+[TugClass]
+
+[Lod1]

@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibcbun_x"
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[PoweredBuildingClass]
+
+[Lod1]

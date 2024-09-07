@@ -8,6 +8,7 @@ lightHard2 = "hp_light_2"
 lightName2 = "spotblue2"  
 
 [CraftClass]
+OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 

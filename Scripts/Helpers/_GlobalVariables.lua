@@ -6,6 +6,16 @@ local _GlobalVariables = {};
 
 DPID_UNKNOWN = 0xFFFFFFFF
 
+-- AIPs
+AIPType0 = 0;
+AIPType1 = 1;
+AIPType2 = 2;
+AIPType3 = 3;
+AIPTypeA = 4;
+AIPTypeL = 5;
+AIPTypeS = 6;
+MAX_AIP_TYPE = 7;
+
 -- TEAM RELATIONSHIPS
 TEAMRELATIONSHIP_INVALIDHANDLE = 0 -- One or both handles is invalid
 TEAMRELATIONSHIP_SAMETEAM = 1 -- Team # for both items is the same

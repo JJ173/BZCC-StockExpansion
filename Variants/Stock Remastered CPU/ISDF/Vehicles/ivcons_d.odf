@@ -1,0 +1,28 @@
+// DEMOLISHER UNIT. USED TO DESTROY ENEMY STRUCTURES
+
+[GameObjectClass]
+classLabel = "ivcons_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 20 // Scrap cost is reduced by 50%.
+
+unitName = "Demolisher"
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = ""
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""

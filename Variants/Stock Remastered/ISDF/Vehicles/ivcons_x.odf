@@ -13,7 +13,6 @@ AvoidType = 0
 otherMsg = "ivcons08.wav"
 
 [HoverCraftClass]
-setAltitude = 0.0f
 
 [DeployableClass]
 

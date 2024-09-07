@@ -1,0 +1,107 @@
+[GameObjectClass]
+baseName = "ivstas"
+geometryName = "ivstas00.fbx"
+cockpitName = "ivstas_cockpit.fbx"
+classLabel = "minelayer"
+animCount = 3
+animName1 = "forward"
+animFile1 = "ivstassf.fbx"
+animName2 = "neutral"
+animFile2 = "ivstassn.fbx"
+animName3 = "reverse"
+animFile3 = "ivstassr.fbx"
+unitName = "Minelayer"
+scrapValue = 15
+scrapCost = 25
+aiName = "MineLayerFriend"
+aiName2 = "MineLayerEnemy"
+buildTime = 10.0
+maxHealth = 4500
+maxAmmo = 2000
+heatSignature = 0.5
+imageSignature = 2.5
+radarSignature = 0.1
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+armorClass = L
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "ibfact_c"
+requireText1 = "Build Factory"
+requireName2 = "ibarmo_c"
+requireText2 = "Build Armory"
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+provideCount = 1
+provideName1 = "MineLayer"
+////////////////////////////////////
+
+/////// WEAPONS ////////////////////
+weaponMask = 00001
+weaponHard1 = "HP_SPECIAL_1"
+weaponName1 = "gproxmin_c"
+////////////////////////////////////
+
+[CraftClass]
+rangeScan = 300.0f
+periodScan = 5.0f
+velocJam = 5.0f
+braccelFactor = 0.05
+strafeFactor = 0.1
+steerFactor = 1.0
+omegaFactor = 0.2
+velFactor = 0.2
+avoidSpeed = 20
+topSpeed = 30
+
+selectAttackMsg = "avminev0.wav"
+selectGoMsg = "avmineve.wav"
+selectFollowMsg = "avminevf.wav"
+selectOtherMsg = "avminevf.wav"
+selectUser1Msg = "avminev0.wav"
+goMsg = "avmineve.wav"
+goObjectMsg = "avmineve.wav"
+attackMsg = "avminevb.wav"
+followMeMsg = "avminev2.wav"
+followMsg = "avminevf.wav"
+repairMsg = "avminev3.wav"
+reloadMsg = "avminev4.wav"
+rescueMsg = "avminev5.wav"
+recycleMsg = "avminev6.wav"
+user1Msg = "avminevb.wav"
+killedMsg = ""
+diedMsg = "abetty3.wav"
+
+[HoverCraftClass]
+setAltitude = 1.0
+accelDragFull = 1.0
+accelDragStop = 15.0 
+alphaTrack = 30.0
+alphaDamp = 10.0
+pitchPitch = 0.25
+pitchThrust = 0.05
+rollStrafe = 0.05
+rollSteer = 0.05
+velocForward = 10.0
+velocReverse = 10.0
+velocStrafe = 10.0
+accelThrust = 30.0
+accelBrake = 50.0
+omegaSpin = 1.5
+omegaTurn = 1.0
+alphaSteer = 3.0
+accelJump = 10.0
+
+soundThrust = "avrckte0.wav"
+soundTurbo = "avrckte1.wav"
+
+[MineLayerClass]
+mineCount = 15
+radius = 10.0
+radiusInc = 10.0
+angleInc = 90.0
+angleDec = 4.0
+ringPattern = true
+timeout = 10.0

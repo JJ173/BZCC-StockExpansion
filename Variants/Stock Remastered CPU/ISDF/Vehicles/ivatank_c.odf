@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivatank_x"
+
+scrapValue = 20 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 35 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]

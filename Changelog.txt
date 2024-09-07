@@ -11,9 +11,9 @@ ISDF:
 - Updated Plasma Ordnance Sound
 - Turret omegaTurret value increased to 2.0, was 1.25.
 - Updated impact sounds for Pulse Rifle and Sniper
-- Rocket Tanks have been given "Gech" AI.
-- Assault Tanks have been given "Gech" AI.
 - Fixed missing engine FX on flying/landing Condor Dropships.
+- Added ISDF Minelayer.
+- Updated Tug Voices to use lines from BZ98 as they are more dedicated.
 
 Scion:
 - Added step sound to Scion builder.
@@ -306,7 +306,6 @@ Scion05 (An Unlikely Rescue):
 
 - General QOL (Quality of Life) improvements.
 
-Instant Action/MPI:
+INSTANT ACTION
 - CPU will now have a Commander unit.
-- CPU will spawn with 1 Scav that is commanded to go straight to the nearest pool to help reduce scrap stalling.
 - CPU will now follow a specific set of base paths to construct their bases so they are more strategic.

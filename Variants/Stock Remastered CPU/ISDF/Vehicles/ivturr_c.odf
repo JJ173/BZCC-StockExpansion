@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivturr_x"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 20 // Scrap cost is reduced by 50%.
+
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]

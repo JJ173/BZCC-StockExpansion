@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivbomb_x"
+
+scrapCost = 33 // Original Scrap Cost (75) / 2 = 32.5, round up to 33.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[BomberClass]

@@ -1,3 +1,5 @@
+Note idea from Blue: Make a new MPI mode that is "Base Recovery". 2 Enemy bases on the map, 1 is a full CPU base, the other is a partially destroyed human base. Idea: have players spawn on outskirts of base (or at a dropship area with snipers) they have to snipe enemy units and clear the base to regain control of the Recycler, and then destroy the enemy.
+
 ISDF 02:
 - Test Service Truck following reminder through the mission and fix to be less frequent.
 - Run through and rewrite some of the logic

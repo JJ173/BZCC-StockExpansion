@@ -1,0 +1,20 @@
+[GameObjectClass]
+baseName = "Patrol"
+classLabel = "ivtank_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 0 // Original Scrap Cost (55).
+
+unitName = "Patrol"
+
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

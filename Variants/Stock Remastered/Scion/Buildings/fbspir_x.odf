@@ -7,5 +7,6 @@ classLabel = "fbspir"
 [BuildingClass]
 
 [CraftClass]
+OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 
 [TurretCraftClass]

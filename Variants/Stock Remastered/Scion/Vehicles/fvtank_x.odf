@@ -6,6 +6,7 @@ aiName = "AttachWingman"
 aiName2 = "AttachWingman"
 
 [CraftClass]
+OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning.
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning.
 craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.

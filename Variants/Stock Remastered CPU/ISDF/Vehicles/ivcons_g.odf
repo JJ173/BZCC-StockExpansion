@@ -1,0 +1,24 @@
+// CONSTRUCTOR FOR OUTPOSTS AND GUN TOWERS
+
+[GameObjectClass]
+classLabel = "ivcons_x"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 20 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen_c"
+buildItem2 = "iboutpost_c"
+buildItem3 = "ibgtow_c"
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""

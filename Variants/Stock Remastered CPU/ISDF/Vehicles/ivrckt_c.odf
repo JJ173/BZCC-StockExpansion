@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivrckt_x"
+
+scrapValue = 13 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 33 // Original Scrap Cost (65) / 2 = 32.5, round up to 33.
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]
+
+[Lod2]

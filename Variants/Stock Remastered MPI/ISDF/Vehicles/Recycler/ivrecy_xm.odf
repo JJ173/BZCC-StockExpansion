@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivrecy_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ibrecy_xm"
+
+[RecyclerVehicleClass]
+
+[Lod1]

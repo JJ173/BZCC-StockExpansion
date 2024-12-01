@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ibfact_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivmbike_xm"
+buildItem2 = "ivmisl_xm"
+buildItem3 = "ivtank_xm"
+buildItem4 = "ivrckt_xm"
+buildItem5 = "ivatank_xm"
+buildItem6 = "ivwalk_xm"
+buildItem7 = "ivapc_xm"
+buildItem8 = "ivbomb_xm"
+
+[Lod1]

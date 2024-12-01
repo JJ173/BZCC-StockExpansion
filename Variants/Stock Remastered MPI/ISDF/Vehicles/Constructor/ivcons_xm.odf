@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ivcons_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen_xm"
+buildItem2 = "ibfact_xm"
+buildItem3 = "ibcbun_xm"
+buildItem4 = "ibarmo_xm"
+buildItem5 = "ibsbay_xm"
+buildItem6 = "ibgtow_xm"
+buildItem7 = "ibtrain_xm"
+buildItem8 = "ibtcen_xm"
+buildItem9 = "ibbomb_xm"

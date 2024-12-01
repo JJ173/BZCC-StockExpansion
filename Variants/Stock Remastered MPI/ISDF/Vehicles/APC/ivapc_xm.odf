@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivapc_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[APCClass]
+
+[Lod1]

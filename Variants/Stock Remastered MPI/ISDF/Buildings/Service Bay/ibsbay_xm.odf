@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibsbay_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+
+[Lod1]

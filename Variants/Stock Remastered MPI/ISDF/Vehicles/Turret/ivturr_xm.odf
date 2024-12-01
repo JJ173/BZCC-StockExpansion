@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivturr_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]

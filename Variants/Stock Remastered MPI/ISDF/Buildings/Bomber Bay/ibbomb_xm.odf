@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibbomb_x"
+
+[BuildingClass]
+
+[BomberBayClass]
+bomberType = "ivbomb_xm"
+
+[PoweredBuildingClass]
+
+[Lod1]

@@ -63,9 +63,7 @@ function _Subtitles.Run()
 			IFace_Activate("SubtitlesPanel_Large");
 		else
 			IFace_FillListBoxFromText("SubtitlesPanel", subtitleToUse);
-			-- IFace_FillListBoxFromText("SubtitlesPanel_Detailed.SubtitlesPanel_Detailed_Text_Background.SubtitlesPanel_Detailed_Text", subtitleToUse);
 			IFace_Activate("SubtitlesPanel");
-			-- IFace_Activate("SubtitlesPanel_Detailed");
 		end
 
 		-- So we only run once.
@@ -76,7 +74,6 @@ function _Subtitles.Run()
 		if (IsAudioMessageDone(audioClip)) then
 			IFace_Deactivate("SubtitlesPanel_Large");
 			IFace_Deactivate("SubtitlesPanel");
-			-- IFace_Deactivate("SubtitlesPanel_Detailed");
 		end
 	end
 end

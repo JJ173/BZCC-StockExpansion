@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ivserv_x"
+PilotConfig = "ispilo_x"
+needPilot = true
+canSnipe = true
+
+[CraftClass]
+canRescue = true // For MPI only. Add some additional fun for the casual players.
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]
+
+[Lod1]

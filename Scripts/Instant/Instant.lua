@@ -1,9 +1,3 @@
---[[
-    BZCC Instant 2.0 Lua Script
-    Written by AI_Unit
-    Version 1.0 12-05-2024
---]]
-
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
@@ -13,320 +7,819 @@ require("_GlobalVariables");
 -- Required helper functions.
 require("_HelperFunctions");
 
--- Models.
-local _Team = require("_Team");
-local _Pool = require("_Pool");
+-- Subtitles.
+local _Subtitles = require('_Subtitles');
 
--- Mission important variables.
-local _Mission =
-{
-    m_TurnCounter = 0,
+local _Session = {
+    m_GameTPS = 20,
+
+    m_CPUTeamRace = 0,
+    m_HumanTeamRace = 0,
+
+    m_MusicOptionValue = 0,
+
+    -- This is constantly 1.
     m_PlayerTeam = 1,
-    m_EnemyTeam = 6,
-
-    m_GameTPS = 0,
+    -- This may change if 1.2 features "Like Pilot" are enabled.
+    -- If 1.2 is enabled, m_StratTeam will be set to 3.
+    m_StratTeam = 1,
+    m_CompTeam = 6,
+    m_TurnCounter = 0,
+    m_MyGoal = 0,
+    m_AwareV13 = 0,
+    m_MyForce = 0,
+    m_CompForce = 0,
     m_Difficulty = 0,
-    m_LastCPUPlan = 0,
-    m_AssaultCounter = 0,
 
-    m_CanRespawn = false,
-    m_StartDone = false,
-    m_SetFirstAIP = false,
-    m_UseStockAIPLogic = false,
-    m_PastAIP0 = false,
-    m_Gameover = false,
+    m_IntroState = 1,
+    m_IntroDelay = 0,
+    m_IntroAudio = 0,
+    m_IntroMusic = 0,
+    m_IntroMusicVolume = 1,
 
+    m_IntroEnemiesSpawned = false,
+    m_IntroEnemy1 = nil,
+    m_IntroEnemy2 = nil,
+    m_IntroEnemy3 = nil,
+
+    m_CustomAIPStr = nil,
+
+    m_EnemyRecycler = nil,
+    m_Recycler = nil,
     m_Player = nil,
-    m_HumanTeam = nil,
-    m_CPUTeam = nil,
 
-    m_CustomAIPStr = '',
+    m_IntroShip1 = nil,
+    m_IntroShip2 = nil,
 
-    m_Pools = {},
-};
+    m_IntroTurret1 = nil,
+    m_IntroTurret2 = nil,
+
+    m_PlayerTurret1 = nil,
+    m_PlayerTurret2 = nil,
+
+    m_PlayerCarrier = nil,
+    m_CPUCarrier = nil,
+
+    m_DropshipTakeOffDialogPlayed = false,
+
+    m_DropshipTakeoffCheck = false,
+    m_Dropship1Takeoff = false,
+    m_Dropship1Remove = false,
+    m_Dropship1Time = 0,
+
+    m_Dropship2Takeoff = false,
+    m_Dropship2Remove = false,
+    m_Dropship2Time = 0,
+
+    m_IntroDone = false,
+    m_StartDone = false,
+    m_CanRespawn = false,
+    m_PastAIP0 = false,
+    m_LateGame = false,
+    m_HaveArmory = false,
+    m_GameOver = false,
+}
+
+-- Functions Table
+local IntroFunctions = {};
+
+---------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------- Utility Functions ---------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+function ReplaceCharacter(pos, str, r)
+    return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
+end
+
+---------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------- Event Driven Functions -------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
 
 function InitialSetup()
-    SetAutoGroupUnits(false);
+    -- This is to stop music for the intro.
+    AllowRandomTracks(false);
 
-    -- Preload all of our ODFs.
-    PreloadODF("ivrecy");
-    PreloadODF("fvrecy");
-    PreloadODF("ivrecycpu");
-    PreloadODF("fvrecycpu");
-    PreloadODF("ivrecy_x");
-    PreloadODF("fvrecy_x");
-    PreloadODF("ivrecy_c");
-    PreloadODF("fvrecy_c");
-
-    -- Make sure our team is named.
-    SetTauntCPUTeamName("CPU");
-end
-
-function Save()
-    return _Mission;
-end
-
-function Load(MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
 
-    -- Load mission data.
-    Mission = MissionData;
+    PreloadODF("ivrecy");
+    PreloadODF("fvrecy");
+    PreloadODF("ivrecycpu");
+    PreloadODF("fvrecycpu");
 end
 
-function AddObject(h)
-    -- Grab the team number for this object.
-    local teamNumber = GetTeamNum(h);
+function Save()
+    return _Session;
+end
 
-    -- Grab the class for this object as well.
-    local classLabel = GetClassLabel(h);
+function Load(Session)
+    _Session = Session;
+end
 
-    -- Get the ODF name of the handle.
-    local ODFName = GetCfg(h);
+function AddObject(handle)
+    local ODFName = GetCfg(handle);
+    local ObjClass = GetClassLabel(handle);
+    local teamNum = GetTeamNum(handle);
+    local isRecyclerVehicle = (ObjClass == "CLASS_RECYCLERVEHICLE" or ObjClass == "CLASS_RECYCLERVEHICLEH");
 
-    -- Get the base name for the handle.
-    local BaseName = GetBase(h);
+    if (teamNum == _Session.m_CompTeam) then
+        if (isRecyclerVehicle) then
+            _Session.m_EnemyRecycler = handle;
+        end
 
-    -- Let's keep track of all pools that are on the map.
-    if (classLabel == "CLASS_DEPOSIT") then
-        -- Grab the distance between this pool and the enemy position.
-        local dist = GetDistance(h, "RecyclerEnemy");
-        -- Grab the position so we can store it in the model.
-        local pos = GetPosition(h);
-        -- Create a new model for this pool.
-        local newPoolModel = _Pool:New(h, 0, pos, dist);
-        -- Grab the position vector and store it.
-        _Mission.m_Pools[#_Mission.m_Pools + 1] = newPoolModel;
-    end
+        SetSkill(handle, _Session.m_Difficulty + 1);
 
-    -- Process things that are added to the player team and adapt as per stock behaviour.
-    if (_Mission.m_CPUTeam ~= nil and teamNumber == _Mission.m_CPUTeam.Team) then
-        -- Set CPU unit skills based on difficulty.
-        SetSkill(h, _Mission.m_Difficulty + 1);
+        if (ObjClass == "CLASS_ARMORY") then
+            _Session.m_HaveArmory = true;
+        end
 
-        -- Do this as well so we can keep track of objects.
-        _Mission.m_CPUTeam:AddObject(h, classLabel, ODFName, BaseName);
+        if (_Session.m_HaveArmory) then
+            if (string.sub(ODFName, 1, 6) == "ivtank") then
+                GiveWeapon(handle, "gspstab_c");
+            elseif (string.sub(ODFName, 1, 6) == "fvtank") then
+                GiveWeapon(handle, "garc_c");
+            end
 
-        -- This will sort the weapons for the CPU team.
-        _Mission.m_CPUTeam:GiveWeapons(h, ODFName, _Mission.m_UseStockAIPLogic);
-    elseif (teamNumber == _Mission.m_PlayerTeam) then
-        -- Set player unit skills based on difficulty.
-        SetSkill(h, 4 - _Mission.m_Difficulty);
+            if (string.sub(ODFName, 1, 2) == "fv") then
+                local randomNumber = GetRandomFloat(1.0);
 
-        -- Choose an AIP if we are using stock behaviour.
-        -- Check to see if the Recycler has been deployed.
-        if (_Mission.m_UseStockAIPLogic) then
-            if (classLabel == "CLASS_RECYCLER") then
-                if (_Mission.m_PastAIP0 == false) then
-                    -- So we don't loop.
-                    _Mission.m_PastAIP0 = true;
+                if (randomNumber < 0.3) then
+                    GiveWeapon(handle, "gshield");
+                elseif (randomNumber < 0.6) then
+                    GiveWeapon(handle, "gabsorb");
+                elseif (randomNumber < 0.9) then
+                    GiveWeapon(handle, "gdeflect");
+                end
+            end
+        end
+    elseif (teamNum == _Session.m_StratTeam) then
+        if (isRecyclerVehicle) then
+            _Session.m_Recycler = handle;
+        end
 
-                    -- Pick an AIP.
-                    local stratChoice = _Mission.m_TurnCounter % 2;
+        if (_Session.m_MyGoal == 0) then
+            if (ObjClass == "CLASS_WINGMAN" or ObjClass == "CLASS_MORPHTANK" or ObjClass == "CLASS_ASSAULTTANK" or ObjClass == "CLASS_SERVICE" or ObjClass == "CLASS_WALKER") then
+                SetTeamNum(handle, _Session.m_PlayerTeam);
+                SetBestGroup(handle);
+            end
+        end
 
-                    if (_Mission.m_CPURace == 'f') then
-                        if (stratChoice == 0) then
-                            SetCPUAIPlan(AIPType1);
-                        elseif (stratChoice == 1) then
-                            SetCPUAIPlan(AIPType3);
-                        elseif (stratChoice == 2) then
-                            SetCPUAIPlan(AIPType2);
-                        end
-                    else
-                        local newChoice = stratChoice % 2;
+        if (ObjClass == "CLASS_ARTILLERY" or ObjClass == "CLASS_BOMBER") then
+            if (_Session.m_LateGame == false) then
+                _Session.m_LateGame = true;
+                SetCPUAIPlan(AIPTypeL);
+            end
+        end
 
-                        if (newChoice == 0) then
-                            SetCPUAIPlan(AIPType1);
-                        elseif (newChoice == 1) then
-                            SetCPUAIPlan(AIPType3);
-                        end
+        SetSkill(handle, 3 - _Session.m_Difficulty);
+
+        if (ObjClass == "CLASS_RECYCLER") then
+            if (_Session.m_PastAIP0 == false) then
+                _Session.m_PastAIP0 = true;
+
+                local stratChoice = _Session.m_TurnCounter % 2;
+
+                if (_Session.m_CPUTeamRace == RACE_SCION) then
+                    if (stratChoice == 0) then
+                        SetCPUAIPlan(AIPType1);
+                    elseif (stratChoice == 1) then
+                        SetCPUAIPlan(AIPType3);
+                    elseif (stratChoice == 2) then
+                        SetCPUAIPlan(AIPType2);
+                    end
+                else
+                    local modifiedStratChoice = stratChoice % 2;
+
+                    if (modifiedStratChoice == 0) then
+                        SetCPUAIPlan(AIPType1);
+                    elseif (modifiedStratChoice == 1) then
+                        SetCPUAIPlan(AIPType3);
                     end
                 end
-            elseif (classLabel == "CLASS_ASSAULTTANK" or classLabel == "CLASS_WALKER") then
-                _Mission.m_AssaultCounter = _Mission.m_AssaultCounter + 1;
+            end
+        end
+    elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
+        -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
+        -- we should switch the extractor to the right team when it's deployed to prevent breaking.
+        if (ObjClass == "CLASS_EXTRACTOR") then
+            SetTeamNum(handle, _Session.m_StratTeam);
+        end
+    end
+
+    if (_Session.m_PastAIP0 == false and (_Session.m_TurnCounter > (180 * _Session.m_GameTPS))) then
+        _Session.m_PastAIP0 = true;
+
+        local stratChoice = _Session.m_TurnCounter % 2;
+
+        if (_Session.m_CPUTeamRace == RACE_SCION) then
+            if (stratChoice == 0) then
+                SetCPUAIPlan(AIPType1);
+            elseif (stratChoice == 1) then
+                SetCPUAIPlan(AIPType3);
+            elseif (stratChoice == 2) then
+                SetCPUAIPlan(AIPType2);
+            end
+        else
+            local modifiedStratChoice = stratChoice % 2;
+
+            if (modifiedStratChoice == 0) then
+                SetCPUAIPlan(AIPType1);
+            elseif (modifiedStratChoice == 1) then
+                SetCPUAIPlan(AIPType3);
+            end
+        end
+    end
+end
+
+function DeleteObject(handle)
+    local ObjClass = GetClassLabel(handle);
+
+    if (GetTeamNum(handle) == _Session.m_CompTeam) then
+        if (ObjClass == "CLASS_ARMORY") then
+            _Session.m_HaveArmory = false;
+        end
+    end
+end
+
+function Start()
+    -- Do not auto group units.
+    SetAutoGroupUnits(false);
+
+    -- Grab the TPS.
+    _Session.m_GameTPS = GetTPS();
+
+    _Session.m_StartDone = false;
+    _Session.m_GameOver = false;
+    _Session.m_CompTeam = 6;
+    _Session.m_StratTeam = 1;
+
+    _Session.m_TurnCounter = 0;
+
+    _Session.m_LateGame = false;
+    _Session.m_HaveArmory = false;
+
+    DoTaunt(TAUNTS_GameStart);
+end
+
+function Update()
+    -- Subtitles.
+    _Subtitles.Run();
+
+    -- Keep track of our player.
+    _Session.m_Player = GetPlayerHandle(1);
+
+    -- Keep track of our turn counter.
+    _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
+
+    if (_Session.m_StartDone == false) then
+        _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
+        IFace_SetInteger("options.audio.music", 0);
+
+        _Session.m_StartDone = true;
+        _Session.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
+
+        -- Set our name for the CPU.
+        SetTauntCPUTeamName("CPU");
+
+        _Session.m_CustomAIPStr = IFace_GetString("options.instant.string0");
+        _Session.m_CPUTeamRace = string.char(IFace_GetInteger("options.instant.hisrace"));
+        _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
+        _Session.m_Difficulty = GetInstantDifficulty();
+
+        SetupExtraVehicles();
+
+        local customCPURecycler = IFace_GetString("options.instant.string2");
+
+        if (customCPURecycler ~= nil) then
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
+                customCPURecycler, "*vrecy", "RecyclerEnemy");
+        else
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
+                "*vrecy", "RecyclerEnemy");
+        end
+
+        local RecPos = GetPosition(_Session.m_EnemyRecycler);
+
+        -- Spawn CPU vehicles.
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_x",
+            GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x",
+            GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x",
+            GetPositionNear(RecPos, 20.0, 40.0));
+
+        if (_Session.m_PastAIP0 == false) then
+            SetCPUAIPlan(AIPType0);
+        end
+
+        SetScrap(_Session.m_CompTeam, 40);
+        SetScrap(_Session.m_StratTeam, 40);
+
+        local cRACE_ISDF = string.char(RACE_ISDF);
+        local cRACE_SCION = string.char(RACE_SCION);
+
+        -- Checks for team colour differences.
+        if (_Session.m_CPUTeamRace == cRACE_ISDF and _Session.m_HumanTeamRace == cRACE_ISDF) then
+            SetTeamColor(_Session.m_CompTeam, 0, 127, 255);
+        end
+
+        -- Grab dropship handles for the intro.
+        _Session.m_IntroShip1 = GetHandle("intro_drop_1");
+        _Session.m_IntroShip2 = GetHandle("intro_drop_2");
+
+        -- Grab the turrets.
+        _Session.m_IntroTurret1 = GetHandle("turret1");
+        _Session.m_IntroTurret2 = GetHandle("turret2");
+
+        -- Stop them so they can't be commanded for now.
+        Stop(_Session.m_IntroTurret1, 1);
+        Stop(_Session.m_IntroTurret2, 1);
+    end
+
+    if (_Session.m_StartDone and _Session.m_IntroDone == false) then
+        IntroFunctions[_Session.m_IntroState]();
+
+        -- Check to see that the dropship is clear.
+        if (_Session.m_DropshipTakeoffCheck) then
+            if (_Session.m_Dropship1Takeoff == false) then
+                local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
+
+                if (distCheck1 == 1) then
+                    -- Start the take-off sequence.
+                    SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
+
+                    -- Engine sound.
+                    StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
+
+                    -- Set the timer for when we remove the dropship.
+                    _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                    -- So we don't loop.
+                    _Session.m_Dropship1Takeoff = true;
+                end
+            elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
+                -- Remove the Dropship.
+                RemoveObject(_Session.m_IntroShip1);
+
+                -- Mark this as done.
+                _Session.m_Dropship1Remove = true;
+            end
+
+            if (_Session.m_Dropship2Takeoff == false) then
+                local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
+
+                if (distCheck2 == 1) then
+                    -- Start the take-off sequence.
+                    SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
+
+                    -- Engine sound.
+                    StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
+
+                    -- Set the timer for when we remove the dropship.
+                    _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                    -- So we don't loop.
+                    _Session.m_Dropship2Takeoff = true;
+                end
+            elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
+                -- Remove the Dropship.
+                RemoveObject(_Session.m_IntroShip2);
+
+                -- Mark this as done.
+                _Session.m_Dropship2Remove = true;
+            end
+
+            if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
+                -- "Condor": "We are returning to base."
+                _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
+
+                -- So we don't loop.
+                _Session.m_DropshipTakeOffDialogPlayed = true;
+            end
+
+            -- This means this method is no longer needed.
+            if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
+                _Session.m_DropshipTakeoffCheck = false;
             end
         end
     end
 
-    -- This is a check in Stock to see if the timer for switching the AIP has elapsed.
-    if (_Mission.m_UseStockAIPLogic and _Mission.m_PastAIP0 == false and (_Mission.m_TurnCounter > (180 * _Mission.m_GameTPS))) then
-        -- So we don't loop.
-        _Mission.m_PastAIP0 = true;
-
-        local stratChoice = _Mission.m_TurnCounter % 2;
-
-        if (stratChoice == 0) then
-            SetCPUAIPlan(AIPType1);
-        elseif (stratChoice == 1) then
-            SetCPUAIPlan(AIPType3);
-        end
+    -- Keep track of games.
+    if (_Session.m_IntroDone) then
+        GameConditions();
     end
 end
 
-function DeleteObject(h)
-    -- Grab the team number for this object.
-    local teamNumber = GetTeamNum(h);
+function PlayerEjected(DeadObjectHandle)
+    return DoEjectPilot;
+end
 
-    -- Grab the class for this object as well.
-    local classLabel = GetClassLabel(h);
+function PlayerDied(DeadObjectHandle, bSniped)
+    if (IsPerson(DeadObjectHandle) == false and bSniped == false) then
+        return DoEjectPilot;
+    end
 
-    -- Keep track of assault units if we are using stock behaviour.
-    if (_Mission.m_UseStockAIPLogic) then
-        if (teamNumber == _Mission.m_PlayerTeam) then
-            if (classLabel == "CLASS_ASSAULTTANK" or classLabel == "CLASS_WALKER") then
-                _Mission.m_AssaultCounter = _Mission.m_AssaultCounter - 1;
+    if (_Session.m_CanRespawn == 1 and IsAlive(_Session.m_Recycler)) then
+        RespawnPlayer(false);
+    else
+        FailMission(GetTime() + 3.0);
+    end
 
-                if (_Mission.m_AssaultCounter < 0) then
-                    _Mission.m_AssaultCounter = 0;
-                end
+    return DLLHandled;
+end
+
+function ObjectKilled(DeadObjectHandle, KillersHandle)
+    if (IsPlayer(DeadObjectHandle) == false) then
+        local bWasDeadPilot = IsPerson(DeadObjectHandle);
+
+        if (bWasDeadPilot) then
+            return DoEjectPilot;
+        end
+
+        return DLLHandled;
+    end
+
+    return PlayerDied(DeadObjectHandle, false);
+end
+
+function ObjectSniped(DeadObjectHandle, KillersHandle)
+    if (IsPlayer(DeadObjectHandle) == false) then
+        return DLLHandled;
+    end
+
+    return PlayerDied(DeadObjectHandle, true);
+end
+
+---------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------- Mission Related Logic --------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+function RespawnPlayer(isGameStart)
+    local recyclerPosition = GetPosition(_Session.m_Recycler);
+    local respawnPosition = GetPositionNear(recyclerPosition, 10, 50);
+
+    -- Prevent spawning within stuff.
+    local PlayerODF = "";
+
+    if (isGameStart) then
+        PlayerODF = _Session.m_HumanTeamRace .. "vscout";
+    else
+        respawnPosition.y = respawnPosition.y + 50;
+        PlayerODF = _Session.m_HumanTeamRace .. "spilo";
+    end
+
+    local PlayerH = BuildObject(PlayerODF, _Session.m_PlayerTeam, respawnPosition);
+    SetAsUser(PlayerH, _Session.m_PlayerTeam);
+    AddPilotByHandle(PlayerH);
+
+    -- Taunt.
+    if (isGameStart == false) then
+        DoTaunt(TAUNTS_HumanShipDestroyed);
+    end
+end
+
+function BuildStartingVehicle(aTeam, aRace, ODF1, ODF2, Where)
+    local TempODF = ReplaceCharacter(1, ODF1, aRace);
+
+    if (DoesODFExist(TempODF) == false) then
+        TempODF = ReplaceCharacter(1, ODF2, aRace);
+    end
+
+    local h = BuildObject(TempODF, aTeam, Where);
+
+    if (aTeam == _Session.m_PlayerTeam) then
+        SetBestGroup(h);
+    end
+
+    return h;
+end
+
+function GameConditions()
+    if (_Session.m_GameOver == false) then
+        if (IsAlive(_Session.m_EnemyRecycler) == false) then
+            -- Check to see if the DLL Team slot is filled first.
+            local DLLHandle = GetObjectByTeamSlot(_Session.m_CompTeam, DLL_TEAM_SLOT_RECYCLER);
+
+            if (IsAround(DLLHandle)) then
+                _Session.m_EnemyRecycler = DLLHandle;
+            else
+                -- Taunt for game over.
+                DoTaunt(TAUNTS_CPURecyDestroyed);
+                SucceedMission(GetTime() + 5, "instantw.txt");
+                _Session.m_GameOver = true;
+            end
+        elseif (IsAlive(_Session.m_Recycler) == false) then
+            -- Check to see if the DLL Team slot is filled first.
+            local DLLHandle = GetObjectByTeamSlot(_Session.m_StratTeam, DLL_TEAM_SLOT_RECYCLER);
+
+            if (IsAround(DLLHandle)) then
+                _Session.m_Recycler = DLLHandle;
+            else
+                -- Taunt for game over.
+                DoTaunt(TAUNTS_HumanRecyDestroyed);
+                SucceedMission(GetTime() + 5, "instantl.txt");
+                _Session.m_GameOver = true;
             end
         end
     end
 end
 
 function SetCPUAIPlan(type)
-    -- Clamp to legal value if not in range
     if (type < AIPType0 or type >= MAX_AIP_TYPE) then
         type = AIPType3;
     end
 
-    if (type > AIPType3 and _Mission.m_LastCPUPlan <= AIPType3) then
-        return;
-    end
+    local AIPFile;
+    local AIPString;
 
-    -- Check to see if we have a custom AIP file or stock.
-    local AIPString = 'stock_';
-    local AIPFile = '';
-
-    if (_Mission.m_CustomAIPStr ~= nil) then
-        AIPString = _Mission.m_CustomAIPStr;
+    if (_Session.m_CustomAIPStr ~= nil) then
+        AIPString = _Session.m_CustomAIPStr;
+    else
+        AIPString = StockAIPNameBase;
     end
 
     -- First pass, try to find an AIP that is designed to use Provides for enemy team, thus it only cares about CPU Race. This makes adding races much easier.
-    AIPFile = AIPString .. _Mission.m_CPURace .. type .. '.aip';
+    AIPFile = AIPString .. _Session.m_CPUTeamRace .. string.sub(AIPTypeExtensions, type, type);
 
+    -- Fallback to old method if none exists.
     if (DoesFileExist(AIPFile) == false) then
-        AIPFile = AIPString .. _Mission.m_CPURace .. _Mission.m_PlayerRace .. type .. '.aip';
+        AIPFile = AIPString ..
+            _Session.m_CPUTeamRace .. _Session.m_HumanTeamRace .. string.sub(AIPTypeExtensions, type, type);
     end
 
-    _Mission.m_LastCPUPlan = type;
+    SetAIP(AIPFile .. '.aip', _Session.m_CompTeam);
 
-    if (_Mission.m_SetFirstAIP) then
+    if (_Session.m_PastAIP0) then
         DoTaunt(TAUNTS_Random);
-    else
-        _Mission.m_SetFirstAIP = true;
-    end
-
-    SetAIP(AIPFile, _Mission.m_EnemyTeam);
-end
-
-function Start()
-    -- Get the default TPS which is 20.
-    _Mission.m_GameTPS = GetTPS();
-
-    -- Can the player respawn?
-    _Mission.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
-
-    -- Grab the difficulty.
-    _Mission.m_Difficulty = GetInstantDifficulty();
-
-    -- Create the CPU team model to keep track of what's in the world.
-    _Mission.m_CPUTeam = _Team:New(_Mission.m_EnemyTeam, nil, _Mission.m_Pools);
-
-    -- Run the set up for CPU team.
-    _Mission.m_CPUTeam:Setup(true);
-
-    -- Create the Human team model.
-    _Mission.m_HumanTeam = _Team:New(_Mission.m_PlayerTeam);
-
-    -- Run the set up for Human team.
-    _Mission.m_HumanTeam:Setup(false);
-
-    -- Set the AIP depending on the team.
-    _Mission.m_CustomAIPStr = IFace_GetString("options.instant.string0");
-
-    -- If this isn't null, use it, else default to stock.
-    if (_Mission.m_CustomAIPStr ~= nil and _Mission.m_CustomAIPStr == 'bzcc_x_') then
-        -- Use custom logic.
-        SetAIP(_Mission.m_CustomAIPStr .. _Mission.m_CPUTeam.Race .. '_main.aip', _Mission.m_CPUTeam.Team);
-
-        -- So we stick to using BZCC_X logic.
-        _Mission.m_UseStockAIPLogic = false;
-    elseif (_Mission.m_PastAIP0 == false) then
-        -- Use "Stock" logic.
-        SetCPUAIPlan(AIPType0);
-
-        -- So we stick to using BZCC_X logic.
-        _Mission.m_UseStockAIPLogic = true;
-    end
-
-    -- Our first taunt.
-    DoTaunt(TAUNTS_GameStart);
-
-    -- Mark Start as done.
-    _Mission.m_StartDone = true;
-end
-
-function Update()
-    -- Keep track of our turns.
-    _Mission.m_TurnCounter = _Mission.m_TurnCounter + 1;
-
-    -- Keep track of the player handle.
-    _Mission.m_Player = GetPlayerHandle(1);
-
-    -- Start running logic for the CPU team if they are set up.
-    if (_Mission.m_CPUTeam ~= nil) then
-        _Mission.m_CPUTeam:Run();
-    end
-
-    -- This will give the CPU a scrap cheat boost based on difficulty.
-    local Turns = _Mission.m_GameTPS * (3 - _Mission.m_Difficulty);
-
-    if (_Mission.m_TurnCounter % Turns == 0) then
-        AddScrap(_Mission.m_EnemyTeam, 1);
-    end
-
-    -- Check to see who wins.
-    if (_Mission.m_StartDone and _Mission.m_Gameover == false) then
-        -- CheckWinner();
     end
 end
 
-function CheckWinner()
-    if (IsAlive(_Mission.m_CPUTeam.Recycler) == false) then
-        -- Check to see if anything existing in the RECYCLER team slot.
-        local tempH = GetObjectByTeamSlot(_Mission.m_EnemyTeam, DLL_TEAM_SLOT_RECYCLER);
+function SetupExtraVehicles()
+    local AIPaths = GetAiPaths();
 
-        if (tempH ~= 0) then
-            _Mission.m_CPUTeam.Recycler = tempH;
-        else
-            -- Taunt the player after they win.
-            DoTaunt(TAUNTS_CPURecyDestroyed);
+    for key, value in pairs(AIPaths) do
+        local normalizedString = string.lower(value);
 
-            -- Success!
-            SucceedMission(GetTime() + 5.0, "instantw.txt");
+        -- Check if the path starts with MPI and then process it.
+        if (string.sub(normalizedString, 1, 3) == "mpi") then
+            -- Used for ODFs.
+            local ODF1;
+            local ODF2;
 
-            -- So we don't loop.
-            _Mission.m_Gameover = true;
+            -- Find the index of the first underscore.
+            local underscore = string.find(normalizedString, "_");
+
+            -- Misformat! No _ found! Bail!
+            if (underscore == nil) then
+                return;
+            end
+
+            local underscore2 = string.find(normalizedString, "_", underscore + 1);
+
+            if (underscore2 == nil) then
+                ODF1 = string.sub(normalizedString, underscore + 1);
+            else
+                ODF1 = string.sub(normalizedString, underscore + 1, underscore2 - 1);
+                ODF2 = string.sub(normalizedString, underscore2 + 1);
+            end
+
+            -- Check the first 4 letters for what team this should be spawned for.
+            local teamDiscrim = string.sub(normalizedString, 1, 4);
+
+            if (teamDiscrim == "mpic") then
+                if (ODF1 ~= nil) then
+                    ODF1 = ReplaceCharacter(1, ODF1, _Session.m_CPUTeamRace);
+                    BuildObject(ODF1, _Session.m_CompTeam, normalizedString);
+                elseif (ODF2 ~= nil) then
+                    ODF2 = ReplaceCharacter(1, ODF2, _Session.m_CPUTeamRace);
+                    BuildObject(ODF2, _Session.m_CompTeam, normalizedString);
+                end
+            elseif (teamDiscrim == "mpih") then
+                if (ODF1 ~= nil) then
+                    ODF1 = ReplaceCharacter(1, ODF1, _Session.m_HumanTeamRace);
+                    SetBestGroup(BuildObject(ODF1, _Session.m_StratTeam, normalizedString));
+                elseif (ODF2 ~= nil) then
+                    ODF2 = ReplaceCharacter(1, ODF2, _Session.m_HumanTeamRace);
+                    SetBestGroup(BuildObject(ODF2, _Session.m_StratTeam, normalizedString));
+                end
+            end
         end
-    elseif (IsAlive(_Mission.m_HumanTeam.Recycler) == false) then
-        -- Check to see if anything existing in the RECYCLER team slot.
-        local tempH = GetObjectByTeamSlot(_Mission.m_PlayerTeam, DLL_TEAM_SLOT_RECYCLER);
+    end
+end
 
-        if (tempH ~= 0) then
-            _Mission.m_HumanTeam.Recycler = tempH;
+---------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------- Intro Related Logic ---------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+IntroFunctions[1] = function()
+    -- Start our Earthquake.
+    StartEarthQuake(1);
+
+    -- This dropship for the Recycler can already be open.
+    SetAnimation(_Session.m_IntroShip2, "deploy", 1);
+
+    -- Start the music.
+    _Session.m_IntroMusic = StartSoundEffect("IA_Intro.wav");
+
+    -- Intro sequence.
+    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+
+    -- Tiny delay before the next part.
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
+
+    -- Advance the mission state...
+    _Session.m_IntroState = _Session.m_IntroState + 1;
+end
+
+IntroFunctions[2] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- "Condor": "We are approaching the dropzone..."
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav", false);
+
+        -- Wait 4 seconds.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(10);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[3] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Wait 0.4 seconds.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.2);
+
+        -- "Hit the ground".
+        UpdateEarthQuake(30);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[4] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Stop the Earthquake.
+        StopEarthQuake();
+
+        -- Wait 3 seconds.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[5] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- "Condor": "Wait for the green light..."
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav", false);
+
+        -- Wait 4 seconds.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(5);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[6] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Start the animation.
+        SetAnimation(_Session.m_IntroShip1, "deploy", 1);
+
+        -- Dropship 2 matrix.
+        local dropship2Vector = GetTransform(_Session.m_IntroShip2);
+
+        -- Build the Recycler, make it go to where it should.
+        local customHumanRecycler = IFace_GetString("options.instant.string1");
+
+        if (customHumanRecycler ~= nil) then
+            _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace,
+                customHumanRecycler, "*vrecy", dropship2Vector);
         else
-            -- Taunt the player after they win.
-            DoTaunt(TAUNTS_HumanRecyDestroyed);
+            _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
+                dropship2Vector);
+        end
 
-            -- Failed!
-            FailMission(GetTime() + 5.0, "instantl.txt");
+        SetPosition(_Session.m_Recycler, GetPosition("Recycler"));
 
-            -- So we don't loop.
-            _Mission.m_Gameover = true;
+        -- Give the human team some scrap.
+        SetScrap(_Session.m_StratTeam, 40);
+
+        -- Delay for the sound.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5);
+
+        -- Move the Recycler away from the dropship.
+        Goto(_Session.m_Recycler, "recycler_go", 0);
+
+        -- Get the turrets to move off the ship.
+        Goto(_Session.m_IntroTurret1, "turret_1_go", 1);
+        Goto(_Session.m_IntroTurret2, "turret_2_go", 1);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[7] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Open the door with sound.
+        StartSoundEffect("dropdoor.wav", _Session.m_IntroShip1);
+
+        -- Enable checks for dropship take-off.
+        _Session.m_DropshipTakeoffCheck = true;
+
+        -- Pilot tells the crew to go.
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_3.wav", false);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[8] = function()
+    if (_Session.m_IntroEnemiesSpawned == false) then
+        -- Difficulty Check
+        for i = 1, _Session.m_Difficulty + 1 do
+            local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_x", _Session.m_CompTeam, "intro_attacker_" .. i);
+
+            -- So they don't retreat.
+            SetSkill(enemy, 3);
+
+            if (i == 1) then
+                _Session.m_IntroEnemy1 = enemy;
+                Attack(enemy, _Session.m_Player, 1);
+            elseif (i == 2) then
+                _Session.m_IntroEnemy2 = enemy;
+                Attack(enemy, _Session.m_Recycler, 1);
+            elseif (i == 3) then
+                _Session.m_IntroEnemy3 = enemy;
+                Attack(enemy, _Session.m_Player, 1);
+            end
+        end
+
+        -- So we don't loop spawn,
+        _Session.m_IntroEnemiesSpawned = true;
+    end
+
+    -- Check if they are alive.
+    local check1 = IsAliveAndEnemy(_Session.m_IntroEnemy1, _Session.m_CompTeam);
+    local check2 = IsAliveAndEnemy(_Session.m_IntroEnemy2, _Session.m_CompTeam);
+    local check3 = IsAliveAndEnemy(_Session.m_IntroEnemy3, _Session.m_CompTeam);
+
+    -- Intro is done.
+    if (check1 == false and check2 == false and check3 == false) then
+        -- Small delay before audio from Sky One.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(3);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[9] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Sky One "Commander this is Sky One..."
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav", false);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[10] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        -- Sky One "Commander this is Sky One..."
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav", false);
+
+        -- Advance the mission state...
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+IntroFunctions[11] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        -- Decrease the volume of the sound effect.
+        _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02;
+
+        -- This adjusts the volume of the music.
+        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume, false);
+
+        -- Fade out slowly.
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.3);
+
+        if (_Session.m_IntroMusicVolume <= 0) then
+            StopAudio(_Session.m_IntroMusic);
+
+            -- Restore normal options.
+            IFace_SetInteger("options.audio.music", _Session.m_MusicOptionValue);
+
+            -- Intro is done.
+            _Session.m_IntroDone = true;
         end
     end
 end

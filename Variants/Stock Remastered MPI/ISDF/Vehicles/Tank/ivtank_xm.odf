@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

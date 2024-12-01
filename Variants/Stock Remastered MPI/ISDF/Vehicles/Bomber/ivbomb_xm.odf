@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "ivbomb_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[BomberClass]

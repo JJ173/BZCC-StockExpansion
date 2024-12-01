@@ -1,20 +1,25 @@
 --[[ Global Constants of BZCC. Do *NOT* try to change these. --]]
 
-local _AICmd = require('_AICmd');
-
 local _GlobalVariables = {};
 
 DPID_UNKNOWN = 0xFFFFFFFF
 
--- AIPs
-AIPType0 = 0;
-AIPType1 = 1;
-AIPType2 = 2;
-AIPType3 = 3;
-AIPTypeA = 4;
-AIPTypeL = 5;
-AIPTypeS = 6;
-MAX_AIP_TYPE = 7;
+-- Race Characters
+RACE_SCION = 102
+RACE_ISDF = 105
+
+-- AIPs (Lua index starts at 1, so we have to adjust these accordingly.)
+AIPType0 = 1;
+AIPType1 = 2;
+AIPType2 = 3;
+AIPType3 = 4;
+AIPTypeA = 5;
+AIPTypeL = 6;
+AIPTypeS = 7;
+MAX_AIP_TYPE = 8;
+
+StockAIPNameBase = "stock_";
+AIPTypeExtensions = "0123als";
 
 -- TEAM RELATIONSHIPS
 TEAMRELATIONSHIP_INVALIDHANDLE = 0 -- One or both handles is invalid

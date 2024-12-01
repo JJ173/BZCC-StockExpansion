@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibtrain_x"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[BarracksClass]
+
+[Lod1]

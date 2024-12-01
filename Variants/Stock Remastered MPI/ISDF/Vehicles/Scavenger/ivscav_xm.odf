@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivscav_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "ibscav_xm"
+
+[Lod1]
+
+[Lod2]

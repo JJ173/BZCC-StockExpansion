@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivatank_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]

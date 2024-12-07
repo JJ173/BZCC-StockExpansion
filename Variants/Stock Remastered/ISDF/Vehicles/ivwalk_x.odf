@@ -12,3 +12,4 @@ subAttackTask = "SupportSubAttack"
 subAttackClass = "ANS"
 
 [WalkerClass]
+stepSound  = "walker_foot.wav"

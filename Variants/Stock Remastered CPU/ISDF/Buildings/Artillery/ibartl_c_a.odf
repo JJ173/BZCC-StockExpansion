@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibartlghacpu"
+upgradeName = "ibartl_c_a_upgrade"
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

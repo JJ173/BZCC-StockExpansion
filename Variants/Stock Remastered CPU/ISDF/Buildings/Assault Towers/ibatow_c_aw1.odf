@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibatow_gh_aw1"
+upgradeName = "ibatow_gh_aw2_upgrade"
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]1

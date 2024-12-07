@@ -13,6 +13,9 @@ scrapCost = 10 // Scrap cost is reduced by 50%.
 [ScavengerClass]
 deployClass = "ibscav_c"
 
+// CPU Scavs should lock scrap.
+lockScrap = true;
+
 [Lod1]
 
 [Lod2]

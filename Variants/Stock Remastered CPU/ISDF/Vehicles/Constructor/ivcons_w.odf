@@ -1,0 +1,12 @@
+// CONSTRUCTOR FOR WALLS AND WALL DEFENCES
+
+[GameObjectClass]
+classLabel = "ivcons_g"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]

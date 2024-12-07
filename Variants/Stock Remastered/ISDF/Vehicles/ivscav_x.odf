@@ -1,16 +1,22 @@
+// According to Cyber, the Scavengers seem smarter in VSR,
+// so I have applied the logic here as well. Full credit to
+// to the VSR team (Feared_1, GeneralBlackDragon).
+
 [GameObjectClass]
 classLabel = "ivscav"
 PilotConfig = "ispilo_x"
+mass = 40000.0
 
 // Don't give units to the commander.
 StayWithOwner = true
 
 [CraftClass]
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
-
 selectPickupMsg = "ivscav05.wav"
 
 [TrackedVehicleClass]
+alphaSteer = 8.0
+TREAD_STATIC_FRICTION = 5.0
 
 [TrackedDeployableClass]
 

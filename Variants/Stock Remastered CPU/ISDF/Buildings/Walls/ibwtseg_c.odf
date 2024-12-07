@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "ibwtseg_gh_b"		
+scrapCost = 5
+scrapValue = 0
+scrapReturn = 0
+unitName = "Wall"
+
+[BuildingClass]

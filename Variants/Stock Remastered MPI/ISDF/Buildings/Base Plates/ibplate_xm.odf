@@ -1,0 +1,5 @@
+[GameObjectClass]
+classLabel = "ibplate_gh_a"
+unitName = "Base Plate"
+
+[BuildingClass]

@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibrtow_gh_w1"
+upgradeName = "ibhrtow_w1_c_upgrade"
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

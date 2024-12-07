@@ -1,0 +1,7 @@
+[GameObjectClass]
+classLabel = "ibplate_gh_a"
+scrapCost = 0
+scrapValue = 0
+unitName = "Base Plate"
+
+[BuildingClass]

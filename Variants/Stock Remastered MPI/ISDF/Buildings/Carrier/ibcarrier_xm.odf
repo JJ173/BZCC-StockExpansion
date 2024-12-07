@@ -1,0 +1,46 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+geometryName = "ivcarr00_new.fbx"
+classLabel = "ibrecy_x"
+animCount = 0
+unitName = "Carrier"
+
+heatSignature = 0.0
+imageSignature = 0.0
+radarSignature = 0.0
+collisionRadius = 0.0
+
+ownsTerrain = false
+categoryTypeOverride = 4
+
+[PoweredBuildingClass]
+panelIcon = "icon_ivcarr00.tga"
+
+[BuildingClass]
+soundAmbient = "carrier.wav"
+
+[FactoryClass]
+buildItem1 = "scavenger_dropship"
+buildItem2 = "defense_dropship"
+buildItem3 = "light_dropship"
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+
+selectWaitMsg = "CarrierIdle.wav"
+selectUser1Msg = ""
+selectReadyMsg = "CarrierIdle.wav"
+selectUser2Msg = "CarrierIdle.wav"
+
+reloadMsg = "CarrierBuilding.wav"
+rescueMsg = ""
+
+DropoffConfig = ""
+
+[RecyclerClass]
+scrapHold = 0 // Shouldn't have any scrap.
+scrapDelay = 0 // Shouldn't generate scrap either.
+ScrapDropPoint = false // Stop Scavengers dropping scrap (or attempting to) here.
+
+[Lod1]

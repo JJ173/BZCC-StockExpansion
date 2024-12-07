@@ -1,5 +1,6 @@
 [GameObjectClass]
 classLabel = "ibpgen_x"
+upgradeName = "ibpgen_c2"
 
 [BuildingClass]
 

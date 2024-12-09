@@ -2,9 +2,6 @@
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 classLabel = "ibpgen"
 
-collisionRadius = 10.0
-UseCollisionMeshForPathing = 1
-
 [BuildingClass]
 
 [PoweredBuildingClass]

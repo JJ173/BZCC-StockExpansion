@@ -1,0 +1,78 @@
+[GameObjectClass]
+geometryName = NULL
+baseName = "ivcomm_gh"
+classLabel = "commVehicle"
+
+unitName = "RTS Vehicle"
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+
+// Unique to this vehicle as it needs to be non-intrusive to gameplay.
+Tuggable = 0
+canInteract = false
+playerOnly = true
+canDetect = false
+canCollide = false
+isSingle = true
+needGroup = false
+isGrouped = false
+isStealth = true
+CanSelect = false
+AllowSeismic = false
+ScanTeamLimit = 3
+allowMDMCollisionDetonation = 0
+enableServiceTruckPull = 0
+serviceTruckAutoHeal = 0
+CanAcceptPowerups = false
+
+maxHealth = 0
+maxAmmo = 0
+scrapValue = 0
+scrapCost = 0
+canSnipe = 0
+
+armorClass = H
+isAssault = 1
+
+imageSignature = 0
+radarSignature = 0
+heatSignature = 0
+
+[CraftClass]
+rangeScan = 450.0f
+periodScan = 4.0f
+velocJam = 0.0f
+engageRange = 0
+
+braccelFactor = 0.1
+strafeFactor = 0.1
+velFactor =	0.3
+steerFactor = 1.0
+omegaFactor = 0.3
+
+CanUserBailout = false
+CanUserHopout = false
+
+[TrackedVehicleClass]
+velocForward = 0
+velocReverse = 0
+accelThrust = 0
+omegaSpin = 0
+omegaTurn = 0
+alphaSteer = 0
+
+engineSound	= "iserv01.wav"
+treadSound = "iserv02.wav"
+
+[TrackedDeployableClass]
+timeDeploy = 0.1
+timeUndeploy = 0.1
+soundDeploy = ""
+soundUndeploy = ""
+
+[CommVehicleClass]
+DoBettyOn = false
+DoBettyOff = false
+viewDist = 100.0
+MinViewDist = 25.0
+MaxViewDist = 250.0

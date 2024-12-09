@@ -78,6 +78,9 @@ local _Session = {
     m_LateGame = false,
     m_HaveArmory = false,
     m_GameOver = false,
+    m_IntroCutsceneEnabled = false,
+    m_AICommanderEnabled = false,
+    m_RTSModeEnabled = false,
 }
 
 -- Functions Table
@@ -275,11 +278,12 @@ function Update()
     _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
 
     if (_Session.m_StartDone == false) then
-        _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
-        IFace_SetInteger("options.audio.music", 0);
-
         _Session.m_StartDone = true;
+
         _Session.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
+        _Session.m_IntroCutsceneEnabled = IFace_GetInteger("options.instant.bool1");
+        _Session.m_AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
+        _Session.m_RTSModeEnabled = IFace_GetInteger("options.instant.bool3");
 
         -- Set our name for the CPU.
         SetTauntCPUTeamName("CPU");
@@ -337,72 +341,114 @@ function Update()
         -- Stop them so they can't be commanded for now.
         Stop(_Session.m_IntroTurret1, 1);
         Stop(_Session.m_IntroTurret2, 1);
+
+        -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
+        -- Instead, just spawn stuff normally.
+        if (_Session.m_RTSModeEnabled) then
+            -- Do not allow the intro to play.
+            DisableIntro();
+
+            -- Remove the dropships.
+            RemoveObject(_Session.m_IntroShip1);
+            RemoveObject(_Session.m_IntroShip2);
+
+            RemoveObject(_Session.m_IntroTurret1);
+            RemoveObject(_Session.m_IntroTurret2);
+
+            -- Create the Recycler.
+            BuildPlayerRecycler("Recycler");
+
+            -- Grab the position of the Recycler for spawning more units.
+            local recPos = GetPosition(_Session.m_Recycler);
+
+            -- Create a couple of turrets.
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr",
+                GetPositionNear(recPos, 20.0, 40.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr",
+                GetPositionNear(recPos, 20.0, 40.0));
+
+            -- Reset the player and give them the RTS Vehicle.
+            RemoveObject(_Session.m_Player);
+
+            -- Build the RTS vehicle.
+            local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 20.0, 40.0));
+
+            SetAsUser(PlayerH, _Session.m_PlayerTeam);
+            AddPilotByHandle(PlayerH);
+        end
     end
 
-    if (_Session.m_StartDone and _Session.m_IntroDone == false) then
-        IntroFunctions[_Session.m_IntroState]();
+    if (_Session.m_StartDone) then
+        if (_Session.m_RTSModeEnabled) then
+            -- Basically force the player into a deployed state.
+            if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then
+                Deploy(_Session.m_Player);
+            end
+        elseif (_Session.m_IntroCutsceneEnabled and _Session.m_IntroDone == false) then
+            IntroFunctions[_Session.m_IntroState]();
 
-        -- Check to see that the dropship is clear.
-        if (_Session.m_DropshipTakeoffCheck) then
-            if (_Session.m_Dropship1Takeoff == false) then
-                local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
+            -- Check to see that the dropship is clear.
+            if (_Session.m_DropshipTakeoffCheck) then
+                if (_Session.m_Dropship1Takeoff == false) then
+                    local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
 
-                if (distCheck1 == 1) then
-                    -- Start the take-off sequence.
-                    SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
+                    if (distCheck1 == 1) then
+                        -- Start the take-off sequence.
+                        SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
 
-                    -- Engine sound.
-                    StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
+                        -- Engine sound.
+                        StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
 
-                    -- Set the timer for when we remove the dropship.
-                    _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+                        -- Set the timer for when we remove the dropship.
+                        _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                        -- So we don't loop.
+                        _Session.m_Dropship1Takeoff = true;
+                    end
+                elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
+                    -- Remove the Dropship.
+                    RemoveObject(_Session.m_IntroShip1);
+
+                    -- Mark this as done.
+                    _Session.m_Dropship1Remove = true;
+                end
+
+                if (_Session.m_Dropship2Takeoff == false) then
+                    local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
+
+                    if (distCheck2 == 1) then
+                        -- Start the take-off sequence.
+                        SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
+
+                        -- Engine sound.
+                        StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
+
+                        -- Set the timer for when we remove the dropship.
+                        _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                        -- So we don't loop.
+                        _Session.m_Dropship2Takeoff = true;
+                    end
+                elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
+                    -- Remove the Dropship.
+                    RemoveObject(_Session.m_IntroShip2);
+
+                    -- Mark this as done.
+                    _Session.m_Dropship2Remove = true;
+                end
+
+                if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
+                    -- "Condor": "We are returning to base."
+                    _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
 
                     -- So we don't loop.
-                    _Session.m_Dropship1Takeoff = true;
+                    _Session.m_DropshipTakeOffDialogPlayed = true;
                 end
-            elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
-                -- Remove the Dropship.
-                RemoveObject(_Session.m_IntroShip1);
 
-                -- Mark this as done.
-                _Session.m_Dropship1Remove = true;
-            end
-
-            if (_Session.m_Dropship2Takeoff == false) then
-                local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
-
-                if (distCheck2 == 1) then
-                    -- Start the take-off sequence.
-                    SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
-
-                    -- Engine sound.
-                    StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
-
-                    -- Set the timer for when we remove the dropship.
-                    _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
-
-                    -- So we don't loop.
-                    _Session.m_Dropship2Takeoff = true;
+                -- This means this method is no longer needed.
+                if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
+                    _Session.m_DropshipTakeoffCheck = false;
                 end
-            elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
-                -- Remove the Dropship.
-                RemoveObject(_Session.m_IntroShip2);
-
-                -- Mark this as done.
-                _Session.m_Dropship2Remove = true;
-            end
-
-            if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
-                -- "Condor": "We are returning to base."
-                _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
-
-                -- So we don't loop.
-                _Session.m_DropshipTakeOffDialogPlayed = true;
-            end
-
-            -- This means this method is no longer needed.
-            if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
-                _Session.m_DropshipTakeoffCheck = false;
             end
         end
     end
@@ -456,6 +502,10 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
+
+function DisableIntro()
+    _Session.m_IntroDone = true;
+end
 
 function RespawnPlayer(isGameStart)
     local recyclerPosition = GetPosition(_Session.m_Recycler);
@@ -610,11 +660,27 @@ function SetupExtraVehicles()
     end
 end
 
+function BuildPlayerRecycler(pos)
+    local customHumanRecycler = IFace_GetString("options.instant.string1");
+
+    if (customHumanRecycler ~= nil) then
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
+            "*vrecy", pos);
+    else
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
+            pos);
+    end
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------- Intro Related Logic ---------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 IntroFunctions[1] = function()
+    -- Stop the music before we play the new intro music.
+    _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
+    IFace_SetInteger("options.audio.music", 0);
+
     -- Start our Earthquake.
     StartEarthQuake(1);
 
@@ -695,16 +761,9 @@ IntroFunctions[6] = function()
         local dropship2Vector = GetTransform(_Session.m_IntroShip2);
 
         -- Build the Recycler, make it go to where it should.
-        local customHumanRecycler = IFace_GetString("options.instant.string1");
+        BuildPlayerRecycler(dropship2Vector);
 
-        if (customHumanRecycler ~= nil) then
-            _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace,
-                customHumanRecycler, "*vrecy", dropship2Vector);
-        else
-            _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
-                dropship2Vector);
-        end
-
+        -- So it appears like it's driving from the dropship.
         SetPosition(_Session.m_Recycler, GetPosition("Recycler"));
 
         -- Give the human team some scrap.

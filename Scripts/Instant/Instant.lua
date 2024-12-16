@@ -86,6 +86,9 @@ local _Session = {
 -- Functions Table
 local IntroFunctions = {};
 
+-- Debug only.
+local debug = false;
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------- Utility Functions ---------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -265,9 +268,17 @@ function Start()
     _Session.m_HaveArmory = false;
 
     DoTaunt(TAUNTS_GameStart);
+
+    if (debug) then
+        BuildObject("ibrecy_x", 0, "RecyclerEnemy");
+    end
 end
 
 function Update()
+    if (debug) then
+        return;
+    end
+
     -- Subtitles.
     _Subtitles.Run();
 
@@ -298,29 +309,21 @@ function Update()
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
-                customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
-                "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
         end
 
         local RecPos = GetPosition(_Session.m_EnemyRecycler);
 
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_x",
-            GetPositionNear(RecPos, 20.0, 40.0));
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x",
-            GetPositionNear(RecPos, 20.0, 40.0));
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x",
-            GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_x", GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x", GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x", GetPositionNear(RecPos, 20.0, 40.0));
 
         if (_Session.m_PastAIP0 == false) then
             SetCPUAIPlan(AIPType0);
         end
-
-        SetScrap(_Session.m_CompTeam, 40);
-        SetScrap(_Session.m_StratTeam, 40);
 
         local cRACE_ISDF = string.char(RACE_ISDF);
         local cRACE_SCION = string.char(RACE_SCION);
@@ -344,7 +347,7 @@ function Update()
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.
-        if (_Session.m_RTSModeEnabled) then
+        if (_Session.m_RTSModeEnabled == 1 or _Session.m_IntroCutsceneEnabled == 0) then
             -- Do not allow the intro to play.
             DisableIntro();
 
@@ -362,29 +365,32 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr",
-                GetPositionNear(recPos, 20.0, 40.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr",
-                GetPositionNear(recPos, 20.0, 40.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr", GetPositionNear(recPos, 20.0, 40.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr", GetPositionNear(recPos, 20.0, 40.0));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
 
-            -- Build the RTS vehicle.
-            local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 20.0, 40.0));
+            SetScrap(_Session.m_CompTeam, 40);
 
-            SetAsUser(PlayerH, _Session.m_PlayerTeam);
-            AddPilotByHandle(PlayerH);
+            if (_Session.m_RTSModeEnabled == 1) then
+                -- Build the RTS vehicle.
+                local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 20.0, 40.0));
+                SetAsUser(PlayerH, _Session.m_PlayerTeam);
+                AddPilotByHandle(PlayerH);
+            else
+                RespawnPlayer(true);
+            end
         end
     end
 
     if (_Session.m_StartDone) then
-        if (_Session.m_RTSModeEnabled) then
+        if (_Session.m_RTSModeEnabled == 1) then
             -- Basically force the player into a deployed state.
             if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then
                 Deploy(_Session.m_Player);
             end
-        elseif (_Session.m_IntroCutsceneEnabled and _Session.m_IntroDone == false) then
+        elseif (_Session.m_IntroCutsceneEnabled == 1 and _Session.m_IntroDone == false) then
             IntroFunctions[_Session.m_IntroState]();
 
             -- Check to see that the dropship is clear.
@@ -596,8 +602,7 @@ function SetCPUAIPlan(type)
 
     -- Fallback to old method if none exists.
     if (DoesFileExist(AIPFile) == false) then
-        AIPFile = AIPString ..
-            _Session.m_CPUTeamRace .. _Session.m_HumanTeamRace .. string.sub(AIPTypeExtensions, type, type);
+        AIPFile = AIPString .. _Session.m_CPUTeamRace .. _Session.m_HumanTeamRace .. string.sub(AIPTypeExtensions, type, type);
     end
 
     SetAIP(AIPFile .. '.aip', _Session.m_CompTeam);
@@ -664,12 +669,12 @@ function BuildPlayerRecycler(pos)
     local customHumanRecycler = IFace_GetString("options.instant.string1");
 
     if (customHumanRecycler ~= nil) then
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
-            "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler, "*vrecy", pos);
     else
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
-            pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy", pos);
     end
+
+    SetScrap(_Session.m_StratTeam, 40);
 end
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -765,9 +770,6 @@ IntroFunctions[6] = function()
 
         -- So it appears like it's driving from the dropship.
         SetPosition(_Session.m_Recycler, GetPosition("Recycler"));
-
-        -- Give the human team some scrap.
-        SetScrap(_Session.m_StratTeam, 40);
 
         -- Delay for the sound.
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5);

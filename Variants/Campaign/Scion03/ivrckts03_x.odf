@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivrckt_x"
+
+[CraftClass]
+DoIdleDispatch = 0
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]
+
+[Lod2]

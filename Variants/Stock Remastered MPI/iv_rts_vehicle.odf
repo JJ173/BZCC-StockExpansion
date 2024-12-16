@@ -1,11 +1,7 @@
 [GameObjectClass]
-geometryName = NULL
-baseName = "ivcomm_gh"
-classLabel = "commVehicle"
+classLabel = "ivcomm_gh"
 
 unitName = "RTS Vehicle"
-aiName = "SupportProcess"
-aiName2 = "SupportProcess"
 
 // Unique to this vehicle as it needs to be non-intrusive to gameplay.
 Tuggable = 0
@@ -39,17 +35,6 @@ radarSignature = 0
 heatSignature = 0
 
 [CraftClass]
-rangeScan = 450.0f
-periodScan = 4.0f
-velocJam = 0.0f
-engageRange = 0
-
-braccelFactor = 0.1
-strafeFactor = 0.1
-velFactor =	0.3
-steerFactor = 1.0
-omegaFactor = 0.3
-
 CanUserBailout = false
 CanUserHopout = false
 
@@ -73,6 +58,3 @@ soundUndeploy = ""
 [CommVehicleClass]
 DoBettyOn = false
 DoBettyOff = false
-viewDist = 100.0
-MinViewDist = 25.0
-MaxViewDist = 250.0

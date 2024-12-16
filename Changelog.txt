@@ -291,6 +291,13 @@ Scion02 (Ambush):
 
 - General QOL (Quality of Life) improvements.
 
+Scion03 (Crystals):
+- Added Yelena to the mission.
+- Rotated ISDF Factory to stop units from getting stuck.
+- Improved ISDF AIP.
+
+- General QOL (Quality of Life) improvements.
+
 Scion05 (An Unlikely Rescue):
 - AAN will no longer steal pools outside of their base.
 - AAN colour has been changed to blue.
@@ -309,3 +316,5 @@ Scion05 (An Unlikely Rescue):
 INSTANT ACTION
 - CPU will now have a Commander unit.
 - CPU will now follow a specific set of base paths to construct their bases so they are more strategic.
+- New Intro Cutscene for Instant Action.
+- RTS Mode has been added.

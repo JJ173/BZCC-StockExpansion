@@ -10,6 +10,9 @@ assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 -- Required Globals.
 require("_GlobalVariables");
 
+-- Required AI Commands.
+require("_AICmd");
+
 -- Required helper functions.
 require("_HelperFunctions");
 
@@ -47,6 +50,7 @@ local Mission =
     -- Specific to mission.
     m_PlayerShipODF = "fvtank_x",
 
+    m_Nav1 = nil,
     m_Power = nil,
     m_Recy1 = nil,
     m_Alpha1 = nil,
@@ -71,6 +75,9 @@ local Mission =
     m_ISDFScav1 = nil,
     m_Hauler = nil,
     m_Yelena = nil,
+    m_ISDFTank1 = nil,
+    m_ISDFTank2 = nil,
+    m_ISDFTank3 = nil,
 
     m_Wave_Unit_A = nil,
     m_Wave_Unit_B = nil,
@@ -78,17 +85,29 @@ local Mission =
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
+    m_MissionPaused = false,
 
     m_AlphaSpotted = false,
     m_WavesActive = false,
     m_Wave1Spawned = false,
     m_Wave2Spawned = false,
+    m_YelenaBrainActive = false,
+
+    m_Tank1Moved = false,
+    m_Tank2Moved = false,
+    m_Tank3Moved = false,
+
+    m_PlayerHasPower = false,
+    m_PlayerDistanceChecker = true,
+    m_PlayerDistanceWarningCount = 0,
+    m_PlayerDistanceCheckerDelay = 0,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
     m_MissionDelayTime = 0,
     m_WaveTimer = 0,
+    m_TankMoveTimer = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1
@@ -145,12 +164,40 @@ function AddObject(h)
     -- Handle unit skill for enemy.
     if (team == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
+
+        -- Grab tanks for the AIP Helper.
+        if (IsOdf(h, "ivtank_x")) then
+            -- Assign some time before we move the tanks.
+            Mission.m_TankMoveTimer = Mission.m_MissionTime + SecondsToTurns(2);
+
+            -- This will handle assigning the tanks to the relevant variables for the helper.
+            if (IsAliveAndEnemy(Mission.m_ISDFTank1, Mission.m_EnemyTeam) == false) then
+                Mission.m_ISDFTank1 = h;
+                Mission.m_Tank1Moved = false;
+            elseif (IsAliveAndEnemy(Mission.m_ISDFTank2, Mission.m_EnemyTeam) == false) then
+                Mission.m_ISDFTank2 = h;
+                Mission.m_Tank2Moved = false;
+            elseif (IsAliveAndEnemy(Mission.m_ISDFTank3, Mission.m_EnemyTeam) == false) then
+                Mission.m_ISDFTank3 = h;
+                Mission.m_Tank3Moved = false;
+            end
+        end
     elseif (team < Mission.m_AlliedTeam and team > 0) then
         SetSkill(h, 3);
 
         if (ObjClass == "VIRTUAL_CLASS_TUG") then
             Mission.m_Hauler = h;
         end
+    end
+end
+
+function DeleteObject(h)
+    if (h == Mission.m_Recy1) then
+        -- Recycler has been destroyed.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0303.wav");
+
+        -- Timer for the audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
     end
 end
 
@@ -182,16 +229,32 @@ function Update()
     Mission.m_MissionTime = Mission.m_MissionTime + 1;
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
+    if (Mission.m_MissionOver == false and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
         if (Mission.m_StartDone) then
-            -- Run each function for the mission.
-            Functions[Mission.m_MissionState]();
+            if (Mission.m_MissionPaused == false) then
+                -- Run each function for the mission.
+                Functions[Mission.m_MissionState]();
+            end
 
             -- Check failure conditions...
             HandleFailureConditions();
 
+            -- Method for waves while Alpha Squad are scouting.
             if (Mission.m_WavesActive) then
-                WavesLogic();
+                WaveBrain();
+            end
+
+            -- Run logic for the AIP Helper.
+            AIPHelper();
+
+            -- Check to see if the player is too far from the Matriarch.
+            if (Mission.m_PlayerDistanceChecker) then
+                PlayerDistanceChecker();
+            end
+
+            -- Brain for Yelena.
+            if (Mission.m_YelenaBrainActive) then
+                YelenaBrain();
             end
         end
     end
@@ -452,7 +515,14 @@ end
 
 Functions[7] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Show Objectives.
         AddObjective("scion0304.otf", "WHITE");
+
+        -- Stop her from doing anything.
+        Stop(Mission.m_Yelena, 1);
+
+        -- Activate Yelena's brain.
+        Mission.m_YelenaBrainActive = true;
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -460,12 +530,12 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
-    -- Stop the player from assisting Alpha Wing for the time being.
-
-
     -- This will check to see if the waves are completed, and dead.
     if (Mission.m_Wave2Spawned and (IsAliveAndEnemy(Mission.m_Wave_Unit_A, 7) == false and IsAliveAndEnemy(Mission.m_Wave_Unit_B, 7) == false)) then
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(8);
+
+        -- Stop the player distance checker.
+        Mission.m_PlayerDistanceChecker = false;
 
         -- Stop the wave logic.
         Mission.m_WavesActive = false;
@@ -545,7 +615,98 @@ Functions[12] = function()
 end
 
 Functions[13] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- SHAB - We've lost contact with Alpha Wing.  Luckily, we were able to get the coordinates
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0314.wav");
 
+        -- Timer for the audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+        -- Run a small delay here before Yelena gives us the coordinates.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(10);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[14] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- SHAB - I'm giving you the coordinates of the base. First, focus on destroying the base's defenses.  Then when you are able, move in with a Hauler and bring the power crystal back to your base.  Expect VERY heavy resistance, the ISDF will do whatever they can to keep us from the power crystal. Those two Scions died for this mission, Cooke.  If you fail, their deaths will be in vain.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0301.wav");
+
+        -- Timer for the audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(20.5);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[15] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        ClearObjectives();
+        AddObjective("scion0301.otf", "WHITE");
+
+        Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "nav1");
+        SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0301"));
+        SetObjectiveOn(Mission.m_Nav1);
+
+        SetObjectiveName(Mission.m_Power, TranslateString("MissionS0302"));
+        SetObjectiveOn(Mission.m_Power);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[16] = function()
+    -- This will check to see if the player has grabbed the Power Crystal.
+    if (Mission.m_PlayerHasPower == false and GetTug(Mission.m_Power)) then
+        -- Prevent looping.
+        Mission.m_PlayerHasPower = true;
+
+        -- SHAB - Good Cooke, you've got it.  Bring it back to base, hurry!
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0302.wav");
+
+        -- Timer for the audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+        -- Converge enemy Rocket Tanks on to the Hauler.
+        if (IsAlive(Mission.m_Hauler)) then
+            SendRocketTanksToTarget(Mission.m_Hauler);
+        end
+    elseif (Mission.m_PlayerHasPower) then
+        -- Run a distance check to see if the power is near the player Recycler.
+        if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0 and GetDistance(Mission.m_Power, Mission.m_PlayersRecy) < 150) then
+            -- Burns - All is going according to plan.  Thank you, John.  You're a worthy protege.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0304.wav");
+
+            -- Timer for the audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+    end
+end
+
+Functions[17] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- So we don't loop.
+        Mission.m_MissionOver = true;
+
+        -- Show success objective.
+        AddObjectiveOverride("scion0303.otf", "WHITE", 10, true);
+
+        -- Succeed.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.");
+            DoGameover(12);
+        else
+            SucceedMission(GetTime() + 12, "scion03w1.txt");
+        end
+    end
 end
 
 function HandleFailureConditions()
@@ -569,10 +730,30 @@ function HandleFailureConditions()
         else
             FailMission(GetTime() + 15, "scion03L2.txt");
         end
+    elseif (IsAround(Mission.m_PlayersRecy) == false) then
+        -- Stop the mission.
+        Mission.m_MissionOver = true;
+
+        -- Show failure objective.
+        AddObjectiveOverride("scion0305.otf", "RED", 10, true);
+
+        -- Mission failed.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0399.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+        -- Failure.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("The Matriarch was destroyed.");
+            DoGameover(10);
+        else
+            FailMission(GetTime() + 10, "scion03L3.txt");
+        end
     end
 end
 
-function WavesLogic()
+function WaveBrain()
     if (Mission.m_WaveTimer < Mission.m_MissionTime) then
         if (Mission.m_Wave1Spawned == false) then
             -- Build enemies.
@@ -602,5 +783,130 @@ function WavesLogic()
 
             Mission.m_Wave2Spawned = true;
         end
+    end
+end
+
+function PunishmentBrain()
+
+end
+
+function AIPHelper()
+    -- Handle the tanks movement.
+    if (Mission.m_TankMoveTimer < Mission.m_MissionTime) then
+        -- Check that the tanks exist.
+        if (Mission.m_Tank1Moved == false and IsAliveAndEnemy(Mission.m_ISDFTank1, Mission.m_EnemyTeam)) then
+            -- Mark this as done so we don't loop.
+            Mission.m_Tank1Moved = true;
+
+            -- Move the unit to the right path.
+            Goto(Mission.m_ISDFTank1, "scout1point");
+        end
+
+        if (Mission.m_Tank2Moved == false and IsAliveAndEnemy(Mission.m_ISDFTank2, Mission.m_EnemyTeam)) then
+            -- Mark this as done so we don't loop.
+            Mission.m_Tank2Moved = true;
+
+            -- Move the unit to the right path.
+            Goto(Mission.m_ISDFTank2, "scout2point");
+        end
+
+        if (Mission.m_Tank3Moved == false and IsAliveAndEnemy(Mission.m_ISDFTank3, Mission.m_EnemyTeam)) then
+            -- Mark this as done so we don't loop.
+            Mission.m_Tank3Moved = true;
+
+            -- Move the unit to the right path.
+            Goto(Mission.m_ISDFTank3, "scout3point");
+        end
+    end
+end
+
+function YelenaBrain()
+    -- This will run every 5 seconds to see if Yelena is doing something. If she's not, we will move her to a random position in the base.
+    if (Mission.m_MissionTime % SecondsToTurns(10) == 0 and GetCurrentCommand(Mission.m_Yelena) == CMD_NONE) then
+        -- Pick a random position near her path.
+        local pathPos = GetPosition("YelenaRadius");
+        local chosenPos = GetPositionNear(pathPos, 5, 60);
+
+        -- Send Yelena to the position.
+        Goto(Mission.m_Yelena, chosenPos, 1);
+    end
+end
+
+function PlayerDistanceChecker()
+    -- Check to see how many players are active and then do a distance check every .5 of a second.
+    if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local handle = GetPlayerHandle(i);
+
+            if (GetDistance(handle, Mission.m_PlayersRecy) >= 500) then
+                -- This will pause the missions.
+                Mission.m_MissionPaused = true;
+
+                if (Mission.m_PlayerDistanceCheckerDelay < Mission.m_MissionTime) then
+                    -- Stop any preceeding messages from playing.
+                    StopAudioMessage(Mission.m_Audioclip);
+
+                    -- Remove the timer.
+                    Mission.m_AudioTimer = 0;
+
+                    -- Check how many warnings have passed.
+                    if (Mission.m_PlayerDistanceWarningCount == 0) then
+                        -- Yelena - Cooke, where are you going?  You must stay at the base, I can't defend it by myself.
+                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0315.wav");
+
+                        -- Set the timer for this audio clip.
+                        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+                    elseif (Mission.m_PlayerDistanceWarningCount == 1) then
+                        -- Yelena - John, you must get back to the base now, or this mission is scrubbed.
+                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0316.wav");
+
+                        -- Set the timer for this audio clip.
+                        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+                    else
+                        -- Mark the mission as failed.
+                        Mission.m_MissionOver = true;
+
+                        -- Start punishment process for ISDF to destroy the Matriarch.
+                        SendRocketTanksToTarget(Mission.m_PlayersRecy);
+
+                        -- Disable this so it stops.
+                        Mission.m_PlayerDistanceChecker = false;
+                    end
+
+                    -- Add delay again.
+                    Mission.m_PlayerDistanceWarningCount = Mission.m_PlayerDistanceWarningCount + 1;
+                end
+            end
+        end
+    end
+end
+
+function SendRocketTanksToTarget(targetHandle)
+    if (IsAliveAndEnemy(Mission.m_Rocket1, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket1, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket2, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket2, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket3, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket3, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket4, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket4, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket5, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket5, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket6, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket6, targetHandle);
+    end
+
+    if (IsAliveAndEnemy(Mission.m_Rocket7, Mission.m_EnemyTeam)) then
+        Attack(Mission.m_Rocket7, targetHandle);
     end
 end

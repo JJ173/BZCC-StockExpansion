@@ -15,18 +15,43 @@ CraftTeamIsPilotTeam = false
 UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
 
 [Plan1]
-planType = "CollectPool"
+planType = "Recover"
 planPriority = 200
-buildIfNoIdle = true
+serviceUnit = "ibsbay_x"
+unitType1 = "ivscout_x"
+unitType2 = "ivmbike_x"
+unitType3 = "ivtank_x"
+unitType4 = "ivmisl_x"
+unitType5 = "ivrckt_x"
+unitType6 = "ivatank_x"
 
 [Plan2]
-planType = "CollectPool"
+planType = "Service"
 planPriority = 190
-buildIfNoIdle = true
+serviceUnit = "ivserv_x"
+unitType1 = "ivscout_x"
+unitType2 = "ivmbike_x"
+unitType3 = "ivtank_x"
+unitType4 = "ibscav_x"
+unitType5 = "ibscup_x"
+unitType6 = "ivrckt_x"
+unitType7 = "ivrckts03_x"
+unitType8 = "ivcons_x"
+unitType9 = "ibgtow_x"
 
 [Plan3]
-planType = "CollectField"
+planType = "CollectPool"
 planPriority = 180
+buildIfNoIdle = true
+
+[Plan4]
+planType = "CollectPool"
+planPriority = 170
+buildIfNoIdle = true
+
+[Plan5]
+planType = "CollectField"
+planPriority = 160
 planCondition = "FriendlyExists"
 planConditionClass = "resource"
 planConditionCount = 1
@@ -35,9 +60,9 @@ planConditionClassProvided = true
 planConditionOr = false
 buildIfNoIdle = true
 
-[Plan4]
+[Plan6]
 planType = "BuildMinimums"
-planPriority = 170
+planPriority = 150
 planCondition1 = "NotExists"
 planConditionClass1 = "ivcons_x"
 planConditionCount1 = 1
@@ -46,9 +71,9 @@ buildCount1 = 1
 MinTtlScrap = 60
 MinCurScrap = 50
 
-[Plan5]
+[Plan7]
 planType = "BaseBuildMinimums"
-planPriority = 160
+planPriority = 140
 buildType1 = "ibpgen_x"
 buildLoc1 = "aipgen1"
 buildType2 = "ibcbun_x"
@@ -56,9 +81,9 @@ buildLoc2 = "aicbun"
 buildType3 = "ibgtow_x"
 buildLoc3 = "aigtow"
 
-[Plan6]
+[Plan8]
 planType = "BaseBuildMinimums"
-planPriority = 150
+planPriority = 130
 buildType1 = "ibpgen_x"
 buildLoc1 = "aipgen2"
 buildType2 = "ibfact_x"
@@ -66,9 +91,9 @@ buildLoc2 = "aifact"
 buildType3 = "ibgtow_x"
 buildLoc3 = "aigtow2"
 
-[Plan7]
+[Plan9]
 planType = "BuildMinimums"
-planPriority = 140
+planPriority = 120
 planCondition1 = "Exists"
 planConditionClass1 = "ibfact_x"
 planConditionCount1 = 1
@@ -76,14 +101,28 @@ planCondition2 = "Exists"
 planConditionClass2 = "ibcbun_x"
 planConditionCount2 = 1
 buildType1 = "ivtank_x"
-buildCount1 = 4
+buildCount1 = 3
 
-[Plan8]
+[Plan10]
 planType = "BaseBuildMinimums"
-planPriority = 130
+planPriority = 110
 buildType1 = "ibpgen_x"
 buildLoc1 = "aipgen3"
 buildType2 = "ibsbay_x"
 buildLoc2 = "aisbay"
 buildType3 = "ibgtow_x"
 buildLoc3 = "aigtow3"
+
+[Plan11]
+planType = "BuildMinimums"
+planPriority = 100
+planCondition1 = "NotExists"
+planConditionClass1 = "ivserv_x"
+planConditionCount1 = 4
+planCondition2 = "Exists"
+planConditionClass2 = "ibsbay_x"
+planConditionCount2 = 1
+buildType1 = "ivserv_x"
+buildCount1 = 4
+MinTtlScrap = 60
+MinCurScrap = 50

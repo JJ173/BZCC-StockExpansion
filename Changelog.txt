@@ -295,6 +295,11 @@ Scion03 (Crystals):
 - Added Yelena to the mission.
 - Rotated ISDF Factory to stop units from getting stuck.
 - Improved ISDF AIP.
+- Removed Waves and replaced them with attacks from the AIP.
+- Added more Gun Towers to the ISDF base.
+- ISDF AI will now actively capture empty pools and loose scrap.
+- Moved paths for some scripted spawns so they aren't visible to the player.
+- Added punishment logic if the player strays too far from Yelena when Alpha Wing is scouting.
 
 - General QOL (Quality of Life) improvements.
 

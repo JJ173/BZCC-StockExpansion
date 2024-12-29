@@ -8,70 +8,59 @@ ISDF Base Paths:
 - i_Power_2
 - i_Power_3
 
-- i_BaseAA_1
-- i_BaseAA_2
-- i_BaseAA_3
-
-- i_BaseGun_1
-- i_BaseGun_2
-
 - i_Factory
+- i_Bunker // Main relay bunker for the base.
 - i_ServiceBay
 - i_Armory
 - i_Tech
 - i_Training
 - i_BomberBay
-- i_Bunker
 - i_LandingPad
 
-- i_Wall_Gun_1
-- i_Wall_Gun_2
-- i_Wall_Gun_3
-- i_Wall_Gun_4
+- i_Plate_1
+- i_Plate_2
+- i_Plate_3
+- i_Plate_4
+- i_Plate_5
+- i_Plate_6
+- i_Plate_7
+- i_Plate_8
 
-- i_Wall_Plate_1
-- i_Wall_Plate_2
-- i_Wall_Plate_3
-- i_Wall_Plate_4
+- i_GunTower_1
+- i_GunTower_2
+- i_GunTower_3
+- i_GunTower_4
 
-- i_Wall_1
-- i_Wall_2
-- i_Wall_3
-- i_Wall_4
-- i_Wall_5
-- i_Wall_6
-- i_Wall_7
-- i_Wall_8
-- i_Wall_9
-- i_Wall_10
-- i_Wall_11
-- i_Wall_12
-- i_Wall_13
-- i_Wall_14
-- i_Wall_15
-- i_Wall_16
-- i_Wall_17
-- i_Wall_18
-- i_Wall_19
-- i_Wall_20
-- i_Wall_21
-- i_Wall_22
-- i_Wall_Corner_1
-- i_Wall_Corner_2
-- i_Wall_Corner_3
-- i_Wall_Corner_4
-- i_Wall_Corner_5
-- i_Wall_Corner_6
-- i_Wall_Corner_7
-- i_Wall_Corner_8
-- i_Wall_Corner_9
-- i_Wall_Corner_10
+- i_Base_AntiAir_1
+- i_Base_AntiAir_2
+
+// Group base defences requiring a bunker together.
+- i_Base_Artillery_1
+- i_Base_Bunker_1
+
+- i_Base_Bunker_2
+- i_Base_AssaultTower_1
+
+- i_Base_Bunker_3
+
+- i_Base_Bunker_4
+- i_Base_Artillery_2
+
+// Group Bunkers and Gun Towers by Number.
+- i_Field_Bunker_1
+- i_Field_GunTower_1
+- i_Field_AssualtTower_1_A
+- i_Field_AssualtTower_1_B
+- i_Field_RocketTower_1
+
+- i_Field_Bunker_2
+- i_Field_GunTower_2
+- i_Field_AssualtTower_2_A
+- i_Field_AssualtTower_2_B
+- i_Field_RocketTower_2
 
 ISDF Field Paths:
 - Patrol1
 - Patrol2
 - Patrol3
 
-- i_FieldGun_1
-- i_FieldGun_2
-- i_FieldGun_3

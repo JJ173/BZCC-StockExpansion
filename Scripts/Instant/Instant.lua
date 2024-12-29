@@ -74,8 +74,6 @@ local _Session = {
     m_IntroDone = false,
     m_StartDone = false,
     m_CanRespawn = false,
-    m_PastAIP0 = false,
-    m_LateGame = false,
     m_HaveArmory = false,
     m_GameOver = false,
     m_IntroCutsceneEnabled = false,
@@ -111,10 +109,17 @@ function InitialSetup()
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
 
+    -- Preload ODFs to save time when they spawn.
     PreloadODF("ivrecy");
     PreloadODF("fvrecy");
     PreloadODF("ivrecycpu");
     PreloadODF("fvrecycpu");
+    PreloadODF("ivrecy_x");
+    PreloadODF("fvrecy_x");
+    PreloadODF("ivrecy_c");
+    PreloadODF("fvrecy_c");
+
+    -- Preload Audio handles here as well.
 end
 
 function Save()
@@ -126,7 +131,6 @@ function Load(Session)
 end
 
 function AddObject(handle)
-    local ODFName = GetCfg(handle);
     local ObjClass = GetClassLabel(handle);
     local teamNum = GetTeamNum(handle);
     local isRecyclerVehicle = (ObjClass == "CLASS_RECYCLERVEHICLE" or ObjClass == "CLASS_RECYCLERVEHICLEH");
@@ -141,26 +145,6 @@ function AddObject(handle)
         if (ObjClass == "CLASS_ARMORY") then
             _Session.m_HaveArmory = true;
         end
-
-        if (_Session.m_HaveArmory) then
-            if (string.sub(ODFName, 1, 6) == "ivtank") then
-                GiveWeapon(handle, "gspstab_c");
-            elseif (string.sub(ODFName, 1, 6) == "fvtank") then
-                GiveWeapon(handle, "garc_c");
-            end
-
-            if (string.sub(ODFName, 1, 2) == "fv") then
-                local randomNumber = GetRandomFloat(1.0);
-
-                if (randomNumber < 0.3) then
-                    GiveWeapon(handle, "gshield");
-                elseif (randomNumber < 0.6) then
-                    GiveWeapon(handle, "gabsorb");
-                elseif (randomNumber < 0.9) then
-                    GiveWeapon(handle, "gdeflect");
-                end
-            end
-        end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
@@ -173,69 +157,13 @@ function AddObject(handle)
             end
         end
 
-        if (ObjClass == "CLASS_ARTILLERY" or ObjClass == "CLASS_BOMBER") then
-            if (_Session.m_LateGame == false) then
-                _Session.m_LateGame = true;
-                SetCPUAIPlan(AIPTypeL);
-            end
-        end
-
-        SetSkill(handle, 3 - _Session.m_Difficulty);
-
-        if (ObjClass == "CLASS_RECYCLER") then
-            if (_Session.m_PastAIP0 == false) then
-                _Session.m_PastAIP0 = true;
-
-                local stratChoice = _Session.m_TurnCounter % 2;
-
-                if (_Session.m_CPUTeamRace == RACE_SCION) then
-                    if (stratChoice == 0) then
-                        SetCPUAIPlan(AIPType1);
-                    elseif (stratChoice == 1) then
-                        SetCPUAIPlan(AIPType3);
-                    elseif (stratChoice == 2) then
-                        SetCPUAIPlan(AIPType2);
-                    end
-                else
-                    local modifiedStratChoice = stratChoice % 2;
-
-                    if (modifiedStratChoice == 0) then
-                        SetCPUAIPlan(AIPType1);
-                    elseif (modifiedStratChoice == 1) then
-                        SetCPUAIPlan(AIPType3);
-                    end
-                end
-            end
-        end
+        -- Always max out player units.
+        SetSkill(handle, 3);
     elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
         -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
         -- we should switch the extractor to the right team when it's deployed to prevent breaking.
         if (ObjClass == "CLASS_EXTRACTOR") then
             SetTeamNum(handle, _Session.m_StratTeam);
-        end
-    end
-
-    if (_Session.m_PastAIP0 == false and (_Session.m_TurnCounter > (180 * _Session.m_GameTPS))) then
-        _Session.m_PastAIP0 = true;
-
-        local stratChoice = _Session.m_TurnCounter % 2;
-
-        if (_Session.m_CPUTeamRace == RACE_SCION) then
-            if (stratChoice == 0) then
-                SetCPUAIPlan(AIPType1);
-            elseif (stratChoice == 1) then
-                SetCPUAIPlan(AIPType3);
-            elseif (stratChoice == 2) then
-                SetCPUAIPlan(AIPType2);
-            end
-        else
-            local modifiedStratChoice = stratChoice % 2;
-
-            if (modifiedStratChoice == 0) then
-                SetCPUAIPlan(AIPType1);
-            elseif (modifiedStratChoice == 1) then
-                SetCPUAIPlan(AIPType3);
-            end
         end
     end
 end
@@ -259,13 +187,11 @@ function Start()
 
     _Session.m_StartDone = false;
     _Session.m_GameOver = false;
+    _Session.m_HaveArmory = false;
     _Session.m_CompTeam = 6;
     _Session.m_StratTeam = 1;
 
     _Session.m_TurnCounter = 0;
-
-    _Session.m_LateGame = false;
-    _Session.m_HaveArmory = false;
 
     DoTaunt(TAUNTS_GameStart);
 
@@ -304,8 +230,6 @@ function Update()
         _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
         _Session.m_Difficulty = GetInstantDifficulty();
 
-        SetupExtraVehicles();
-
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
@@ -317,13 +241,11 @@ function Update()
         local RecPos = GetPosition(_Session.m_EnemyRecycler);
 
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_x", GetPositionNear(RecPos, 20.0, 40.0));
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x", GetPositionNear(RecPos, 20.0, 40.0));
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_x", GetPositionNear(RecPos, 20.0, 40.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c", GetPositionNear(RecPos, 40.0, 60.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
 
-        if (_Session.m_PastAIP0 == false) then
-            SetCPUAIPlan(AIPType0);
-        end
+        SetScrap(_Session.m_CompTeam, 40);
 
         local cRACE_ISDF = string.char(RACE_ISDF);
         local cRACE_SCION = string.char(RACE_SCION);
@@ -365,17 +287,15 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr", GetPositionNear(recPos, 20.0, 40.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr", "*vturr", GetPositionNear(recPos, 20.0, 40.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
 
-            SetScrap(_Session.m_CompTeam, 40);
-
             if (_Session.m_RTSModeEnabled == 1) then
                 -- Build the RTS vehicle.
-                local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 20.0, 40.0));
+                local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 40.0, 60.0));
                 SetAsUser(PlayerH, _Session.m_PlayerTeam);
                 AddPilotByHandle(PlayerH);
             else
@@ -607,62 +527,8 @@ function SetCPUAIPlan(type)
 
     SetAIP(AIPFile .. '.aip', _Session.m_CompTeam);
 
-    if (_Session.m_PastAIP0) then
-        DoTaunt(TAUNTS_Random);
-    end
-end
-
-function SetupExtraVehicles()
-    local AIPaths = GetAiPaths();
-
-    for key, value in pairs(AIPaths) do
-        local normalizedString = string.lower(value);
-
-        -- Check if the path starts with MPI and then process it.
-        if (string.sub(normalizedString, 1, 3) == "mpi") then
-            -- Used for ODFs.
-            local ODF1;
-            local ODF2;
-
-            -- Find the index of the first underscore.
-            local underscore = string.find(normalizedString, "_");
-
-            -- Misformat! No _ found! Bail!
-            if (underscore == nil) then
-                return;
-            end
-
-            local underscore2 = string.find(normalizedString, "_", underscore + 1);
-
-            if (underscore2 == nil) then
-                ODF1 = string.sub(normalizedString, underscore + 1);
-            else
-                ODF1 = string.sub(normalizedString, underscore + 1, underscore2 - 1);
-                ODF2 = string.sub(normalizedString, underscore2 + 1);
-            end
-
-            -- Check the first 4 letters for what team this should be spawned for.
-            local teamDiscrim = string.sub(normalizedString, 1, 4);
-
-            if (teamDiscrim == "mpic") then
-                if (ODF1 ~= nil) then
-                    ODF1 = ReplaceCharacter(1, ODF1, _Session.m_CPUTeamRace);
-                    BuildObject(ODF1, _Session.m_CompTeam, normalizedString);
-                elseif (ODF2 ~= nil) then
-                    ODF2 = ReplaceCharacter(1, ODF2, _Session.m_CPUTeamRace);
-                    BuildObject(ODF2, _Session.m_CompTeam, normalizedString);
-                end
-            elseif (teamDiscrim == "mpih") then
-                if (ODF1 ~= nil) then
-                    ODF1 = ReplaceCharacter(1, ODF1, _Session.m_HumanTeamRace);
-                    SetBestGroup(BuildObject(ODF1, _Session.m_StratTeam, normalizedString));
-                elseif (ODF2 ~= nil) then
-                    ODF2 = ReplaceCharacter(1, ODF2, _Session.m_HumanTeamRace);
-                    SetBestGroup(BuildObject(ODF2, _Session.m_StratTeam, normalizedString));
-                end
-            end
-        end
-    end
+    -- Leave this for now, but it might be fun to turn this to a timed thing like G66 (Thanks Natty, forever the inspiration).
+    DoTaunt(TAUNTS_Random);
 end
 
 function BuildPlayerRecycler(pos)

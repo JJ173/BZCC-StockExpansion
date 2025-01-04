@@ -278,7 +278,7 @@ Scion02 (Ambush):
 - Added music
 - Mission has been given a complete overhaul.
 - New mission map: now uses the same map as ISDF09 (Rumble in the Jungle).
-- Alcehmator added to ISDF base
+- Alchemator added to ISDF base
 - Various units added to ISDF base to add life
 - Patrols added to ISDF base
 - Jammer has been added to the player base at the start of the mission. This is to add a reason as to why the enemy units must scout to find you, instead of just radioing back to base.
@@ -302,6 +302,11 @@ Scion03 (Crystals):
 - Added punishment logic if the player strays too far from Yelena when Alpha Wing is scouting.
 
 - General QOL (Quality of Life) improvements.
+
+Scion04 (Escort):
+- Re-added taunt voice line from Rebel Scouts when you fight them.
+
+- General QOL (Quality of Life) improvements. 
 
 Scion05 (An Unlikely Rescue):
 - AAN will no longer steal pools outside of their base.

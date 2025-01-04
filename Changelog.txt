@@ -307,6 +307,7 @@ Scion03 (Crystals):
 
 Scion04 (Escort):
 - Re-added taunt voice line from Rebel Scouts when you fight them.
+- Reduced warning times from initial Rebel Scouts so they won't wait for the player for too long.
 
 - General QOL (Quality of Life) improvements. 
 

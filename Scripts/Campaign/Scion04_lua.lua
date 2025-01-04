@@ -94,6 +94,13 @@ local Mission =
 
     m_TugShot_Look1 = nil,
 
+    m_Attack1 = false,
+
+    m_PlayerAttackedRebels = false,
+    m_PlayerAmbushed = false,
+    m_RebelAttacksPlayer = false,
+    m_PlayerCaughtUp = false,
+
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
@@ -102,6 +109,9 @@ local Mission =
     m_AudioTimer = 0,
 
     m_MissionDelayTime = 0,
+
+    m_RebelWarningCount = 0,
+    m_RebelWarningTimer = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -192,6 +202,9 @@ function Update()
 
             -- Check failure conditions...
             HandleFailureConditions();
+
+            -- Attack Brains.
+            AttacksBrain();
         end
     end
 end
@@ -356,7 +369,183 @@ end
 
 Functions[2] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Ok Cooke, we MUST get this power source to the data transfer machine.
+        -- We have been unable to locate any scrap veins in the area, so you will have to make due with the units we have available.
+        -- Good luck Cooke, the fate of an entire race is in your hands.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0401.wav", false);
 
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[3] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Show Objectives.
+        AddObjectiveOverride("scion0401.otf", "WHITE", 10, true);
+
+        -- Change the name of the machine.
+        SetObjectiveName(Mission.m_Machine, TranslateString("MissionS0401"));
+
+        -- Highlight the machine.
+        SetObjectiveOn(Mission.m_Machine);
+
+        -- Move the first Scout to attack the player.
+        Goto(Mission.m_RTAttack1, Mission.m_MainPlayer);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[4] = function()
+    -- This handles the Rebels meeting the player.
+    if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
+        -- Unique loop here so we know which player to look at when we meet the Rebels.
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            -- Grab the player handle.
+            local pHandle = GetPlayerHandle(i);
+
+            -- Check the distance from the player to the ship of interest.
+            if (GetDistance(pHandle, Mission.m_Evil1) < 85) then
+                -- Have the Rebels look at the nearest player.
+                LookAt(Mission.m_Evil1, pHandle);
+                LookAt(Mission.m_Evil2, pHandle);
+                LookAt(Mission.m_Evil3, pHandle);
+
+                -- Cooke stop! The way ahead is very dangerous, a massive ISDF blockade is entrenched in the canyon.  Follow us we know a safe way through the pass!
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0402.wav", false);
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
+
+                -- Advance the mission state...
+                Mission.m_MissionState = Mission.m_MissionState + 1;
+            end
+        end
+    end
+end
+
+Functions[5] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Move the Rebels down the path of retreat.
+        Retreat(Mission.m_Evil1, "evilpath");
+
+        -- Have the other Scouts follow.
+        Follow(Mission.m_Evil2, Mission.m_Evil1, 1);
+        Follow(Mission.m_Evil3, Mission.m_Evil2, 1);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[6] = function()
+    -- These are the Rebel warnings.
+    if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
+        -- Check to see if the Rebels have been attacked first.
+        if (Mission.m_PlayerAttackedRebels == false and Mission.m_RebelAttacksPlayer == false) then
+            -- This'll check if we can "Resume" the paths.
+            if (Mission.m_PlayerCaughtUp == false and Mission.m_RebelWarningCount > 0) then
+                -- Check to see if a player has caught up with the Rebels.
+                if (IsPlayerWithinDistance(Mission.m_Evil1, 100, _Cooperative.m_TotalPlayerCount)) then
+                    -- Tell the Rebels to retreat again.
+                    Retreat(Mission.m_Evil1, "evilpath");
+
+                    -- Have the other Scouts follow.
+                    Follow(Mission.m_Evil2, Mission.m_Evil1, 1);
+                    Follow(Mission.m_Evil3, Mission.m_Evil2, 1);
+
+                    -- So we don't loop.
+                    Mission.m_PlayerCaughtUp = true;
+                end
+            end
+
+            -- The Rebels are moving, let's check to see if a player is still near them.
+            if (Mission.m_RebelWarningTimer < Mission.m_MissionTime and IsPlayerWithinDistance(Mission.m_Evil1, 110, _Cooperative.m_TotalPlayerCount) == false) then
+                -- First warning for the Rebels.
+                if (Mission.m_RebelWarningCount == 0) then
+                    -- Start the Rebel voices.
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0403.wav", false);
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+                    -- Give the player some time to catch up.
+                    Mission.m_RebelWarningTimer = Mission.m_MissionTime + SecondsToTurns(30);
+
+                    -- Have the Rebels stop and look at the player.
+                    LookAt(Mission.m_Evil1, Mission.m_MainPlayer, 1);
+                    LookAt(Mission.m_Evil2, Mission.m_MainPlayer, 1);
+                    LookAt(Mission.m_Evil3, Mission.m_MainPlayer, 1);
+
+                    -- Advance to the next step.
+                    Mission.m_RebelWarningCount = Mission.m_RebelWarningCount + 1;
+                else
+                    -- Ok Cooke, I was hoping we could do this the easy way but you are too stubborn! Attack men
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0405.wav", false);
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+                    -- This is everything else. The Rebels will attack the player if they are sick of waiting.
+                    SetTeamNum(Mission.m_Evil1, 7);
+                    SetTeamNum(Mission.m_Evil2, 7);
+                    SetTeamNum(Mission.m_Evil3, 7);
+
+                    -- Have them attack the player.
+                    Attack(Mission.m_Evil1, Mission.m_MainPlayer, 1);
+                    Attack(Mission.m_Evil2, Mission.m_MainPlayer, 1);
+                    Attack(Mission.m_Evil3, Mission.m_MainPlayer, 1);
+
+                    -- So we don't loop, and we can move to the next part of the mission.
+                    Mission.m_RebelAttacksPlayer = true;
+                end
+            end
+        end
+
+        if (Mission.m_RebelAttacksPlayer or Mission.m_PlayerAttackedRebels) then
+            -- Check to see if the Rebels are dead.
+            if (IsAliveAndEnemy(Mission.m_Evil1, 7) == false and IsAliveAndEnemy(Mission.m_Evil2, 7) == false and IsAliveAndEnemy(Mission.m_Evil3, 7) == false) then
+                -- Only play this voice from Burns if the player didn't fall for the trap.
+                if (Mission.m_PlayerAmbushed == false) then
+                    -- You did the right thing, John,  Those were the rebels!
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav", false);
+
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+                end
+
+                -- Advance the mission state...
+                Mission.m_MissionState = Mission.m_MissionState + 1;
+            end
+        end
+    end
+end
+
+function AttacksBrain()
+    -- Keep track of the attackers and when they have been sent.
+    if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
+        -- Check the first attackers.
+        if (Mission.m_Attack1 == false) then
+            -- Unique loop here so we know which player to attack.
+            for i = 1, _Cooperative.m_TotalPlayerCount do
+                -- Grab the player handle.
+                local pHandle = GetPlayerHandle(i);
+
+                -- Check the distance from the player to the ship of interest.
+                if (GetDistance(pHandle, Mission.m_RTAttack2) < 150) then
+                    -- Attack.
+                    Goto(Mission.m_RTAttack2, pHandle, 1);
+                    Goto(Mission.m_RTAttack3, pHandle, 1);
+
+                    Mission.m_Attack1 = true;
+                end
+            end
+        end
     end
 end
 

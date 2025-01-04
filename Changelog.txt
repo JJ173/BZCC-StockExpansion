@@ -300,6 +300,8 @@ Scion03 (Crystals):
 - ISDF AI will now actively capture empty pools and loose scrap.
 - Moved paths for some scripted spawns so they aren't visible to the player.
 - Added punishment logic if the player strays too far from Yelena when Alpha Wing is scouting.
+- Moved Power Crystal to behind the enemy base to prevent accidental destruction.
+- Added ISDF Tug which is placed next to Power Crystal to make it appear as if it has been transported.
 
 - General QOL (Quality of Life) improvements.
 

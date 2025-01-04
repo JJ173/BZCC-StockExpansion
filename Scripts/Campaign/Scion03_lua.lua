@@ -50,6 +50,8 @@ local Mission =
     -- Specific to mission.
     m_PlayerShipODF = "fvtank_x",
 
+    m_BadPlayer = nil,
+
     m_Nav1 = nil,
     m_Power = nil,
     m_Recy1 = nil,
@@ -86,6 +88,7 @@ local Mission =
     m_StartDone = false,
     m_MissionOver = false,
     m_MissionPaused = false,
+    m_Punishment = false,
 
     m_AlphaSpotted = false,
     m_WavesActive = false,
@@ -105,6 +108,7 @@ local Mission =
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
+    m_PunishDelay = 0,
     m_MissionDelayTime = 0,
     m_WaveTimer = 0,
     m_TankMoveTimer = 0,
@@ -246,6 +250,10 @@ function Update()
 
             -- Run logic for the AIP Helper.
             AIPHelper();
+
+            if (Mission.m_MissionPaused and Mission.m_Punishment) then
+                PunishmentBrain();
+            end
 
             -- Check to see if the player is too far from the Matriarch.
             if (Mission.m_PlayerDistanceChecker) then
@@ -604,6 +612,9 @@ Functions[12] = function()
             -- Small delay before Yelena's next message.
             Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(6);
 
+            -- Switch the AI Plan.
+            SetAIP("scion0302_x.aip", Mission.m_EnemyTeam);
+
             -- Send the patrols back to their patrol paths.
             Patrol(Mission.m_Misl1, "misl1_patrol");
             Patrol(Mission.m_Misl2, "misl2_patrol");
@@ -787,7 +798,30 @@ function WaveBrain()
 end
 
 function PunishmentBrain()
+    if (Mission.m_PunishDelay < Mission.m_MissionTime) then
+        -- Spawn in a bunch of units to attack the Matriarch to ensure this mission is over.
+        for i = 1, 12 do
+            local path = '';
+            local handle = nil;
 
+            -- Determine safer spawn points to use.
+            if (i % 2 == 0) then
+                -- Build our unit.
+                handle = BuildObjectAtSafePath("ivtank_x", 7, "punish_2", "spawn_2", _Cooperative.m_TotalPlayerCount);
+            else
+                handle = BuildObjectAtSafePath("ivtank_x", 7, "punish_1", "spawn_1", _Cooperative.m_TotalPlayerCount);
+            end
+
+            -- Give it a weapon upgrade.
+            GiveWeapon(handle, "gspstab_c");
+
+            -- Send it to attack.
+            Attack(handle, Mission.m_PlayersRecy, 1);
+        end
+
+        -- Add a delay so this isn't instant.
+        Mission.m_PunishDelay = Mission.m_MissionTime + SecondsToTurns(40);
+    end
 end
 
 function AIPHelper()
@@ -838,9 +872,24 @@ function PlayerDistanceChecker()
         for i = 1, _Cooperative.m_TotalPlayerCount do
             local handle = GetPlayerHandle(i);
 
+            -- Check to see if this player is the "Faulting Player". If so, check if they have returned.
+            if (Mission.m_MissionPaused and handle == Mission.m_BadPlayer) then
+                -- Check Distance to see if they have returned to base.
+                if (GetDistance(handle, Mission.m_PlayersRecy) < 500) then
+                    -- Clear the faulting player handle.
+                    Mission.m_BadPlayer = nil;
+
+                    -- Returned to base as per instructions. Unpause the mission, restart the sequence that was interrupted.
+                    Mission.m_MissionPaused = false;
+                end
+            end
+
             if (GetDistance(handle, Mission.m_PlayersRecy) >= 500) then
                 -- This will pause the missions.
                 Mission.m_MissionPaused = true;
+
+                -- Mark the player as the "Faulting" Player.
+                Mission.m_BadPlayer = handle;
 
                 if (Mission.m_PlayerDistanceCheckerDelay < Mission.m_MissionTime) then
                     -- Stop any preceeding messages from playing.
@@ -851,20 +900,26 @@ function PlayerDistanceChecker()
 
                     -- Check how many warnings have passed.
                     if (Mission.m_PlayerDistanceWarningCount == 0) then
+                        -- Add a timer so this isn't instant per cycler.
+                        Mission.m_PlayerDistanceCheckerDelay = Mission.m_MissionTime + SecondsToTurns(20);
+
                         -- Yelena - Cooke, where are you going?  You must stay at the base, I can't defend it by myself.
                         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0315.wav");
 
                         -- Set the timer for this audio clip.
                         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
                     elseif (Mission.m_PlayerDistanceWarningCount == 1) then
+                        -- Add a timer so this isn't instant per cycler.
+                        Mission.m_PlayerDistanceCheckerDelay = Mission.m_MissionTime + SecondsToTurns(25);
+
                         -- Yelena - John, you must get back to the base now, or this mission is scrubbed.
                         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0316.wav");
 
                         -- Set the timer for this audio clip.
                         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
                     else
-                        -- Mark the mission as failed.
-                        Mission.m_MissionOver = true;
+                        -- Player has gone too far and must be punished.
+                        Mission.m_Punishment = true;
 
                         -- Start punishment process for ISDF to destroy the Matriarch.
                         SendRocketTanksToTarget(Mission.m_PlayersRecy);

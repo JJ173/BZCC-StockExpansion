@@ -7,6 +7,10 @@ require("_GlobalVariables");
 -- Required helper functions.
 require("_HelperFunctions");
 
+-- Models
+local _AIController = require("_AIController");
+local _Pool = require("_Pool");
+
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
 
@@ -61,7 +65,6 @@ local _Session = {
     m_CPUCarrier = nil,
 
     m_DropshipTakeOffDialogPlayed = false,
-
     m_DropshipTakeoffCheck = false,
     m_Dropship1Takeoff = false,
     m_Dropship1Remove = false,
@@ -71,14 +74,36 @@ local _Session = {
     m_Dropship2Remove = false,
     m_Dropship2Time = 0,
 
+    m_TauntTimer = 0,
+
     m_IntroDone = false,
     m_StartDone = false,
     m_CanRespawn = false,
-    m_HaveArmory = false,
     m_GameOver = false,
     m_IntroCutsceneEnabled = false,
     m_AICommanderEnabled = false,
     m_RTSModeEnabled = false,
+
+    m_AIController = nil,
+
+    m_Pools = {},
+}
+
+-- Potential Supporter Names for CPU.
+local _CPUNames =
+{
+    "SIR BRAMBLEY",
+    "GrizzlyOne95",
+    "BlackDragon",
+    "Spymaster",
+    "Autarch Katherlyn",
+    "blue_banana",
+    "Zorn",
+    "Gravey",
+    "VTrider",
+    "Ultraken",
+    "Darkvale",
+    "Econchump"
 }
 
 -- Functions Table
@@ -131,9 +156,20 @@ function Load(Session)
 end
 
 function AddObject(handle)
-    local ObjClass = GetClassLabel(handle);
+    local classLabel = GetClassLabel(handle);
     local teamNum = GetTeamNum(handle);
-    local isRecyclerVehicle = (ObjClass == "CLASS_RECYCLERVEHICLE" or ObjClass == "CLASS_RECYCLERVEHICLEH");
+    local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH");
+
+    if (classLabel == "CLASS_DEPOSIT") then
+        -- Grab the distance between this pool and the enemy position.
+        local dist = GetDistance(handle, "RecyclerEnemy");
+        -- Grab the position so we can store it in the model.
+        local pos = GetPosition(handle);
+        -- Create a new model for this pool.
+        local newPoolModel = _Pool:New(handle, 0, pos, dist);
+        -- Grab the position vector and store it.
+        _Session.m_Pools[#_Session.m_Pools + 1] = newPoolModel;
+    end
 
     if (teamNum == _Session.m_CompTeam) then
         if (isRecyclerVehicle) then
@@ -141,17 +177,13 @@ function AddObject(handle)
         end
 
         SetSkill(handle, _Session.m_Difficulty + 1);
-
-        if (ObjClass == "CLASS_ARMORY") then
-            _Session.m_HaveArmory = true;
-        end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
         end
 
         if (_Session.m_MyGoal == 0) then
-            if (ObjClass == "CLASS_WINGMAN" or ObjClass == "CLASS_MORPHTANK" or ObjClass == "CLASS_ASSAULTTANK" or ObjClass == "CLASS_SERVICE" or ObjClass == "CLASS_WALKER") then
+            if (classLabel == "CLASS_WINGMAN" or classLabel == "CLASS_MORPHTANK" or classLabel == "CLASS_ASSAULTTANK" or classLabel == "CLASS_SERVICE" or classLabel == "CLASS_WALKER") then
                 SetTeamNum(handle, _Session.m_PlayerTeam);
                 SetBestGroup(handle);
             end
@@ -162,18 +194,8 @@ function AddObject(handle)
     elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
         -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
         -- we should switch the extractor to the right team when it's deployed to prevent breaking.
-        if (ObjClass == "CLASS_EXTRACTOR") then
+        if (classLabel == "CLASS_EXTRACTOR") then
             SetTeamNum(handle, _Session.m_StratTeam);
-        end
-    end
-end
-
-function DeleteObject(handle)
-    local ObjClass = GetClassLabel(handle);
-
-    if (GetTeamNum(handle) == _Session.m_CompTeam) then
-        if (ObjClass == "CLASS_ARMORY") then
-            _Session.m_HaveArmory = false;
         end
     end
 end
@@ -185,15 +207,27 @@ function Start()
     -- Grab the TPS.
     _Session.m_GameTPS = GetTPS();
 
+    -- Reset the turn counter.
+    _Session.m_TurnCounter = 0;
+
     _Session.m_StartDone = false;
     _Session.m_GameOver = false;
-    _Session.m_HaveArmory = false;
     _Session.m_CompTeam = 6;
     _Session.m_StratTeam = 1;
 
-    _Session.m_TurnCounter = 0;
+    _Session.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
+    _Session.m_IntroCutsceneEnabled = IFace_GetInteger("options.instant.bool1");
+    _Session.m_RTSModeEnabled = IFace_GetInteger("options.instant.bool3");
 
-    DoTaunt(TAUNTS_GameStart);
+    _Session.m_CPUTeamRace = string.char(IFace_GetInteger("options.instant.hisrace"));
+    _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
+    _Session.m_Difficulty = GetInstantDifficulty();
+
+    -- Create the CPU team model to keep track of what's in the world.
+    _Session.m_AIController = _AIController:New(_Session.m_EnemyTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+
+    -- Run the set up for CPU team.
+    _Session.m_AIController:Setup(_Session.m_CompTeam);
 
     if (debug) then
         BuildObject("ibrecy_x", 0, "RecyclerEnemy");
@@ -215,44 +249,43 @@ function Update()
     _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
 
     if (_Session.m_StartDone == false) then
+        -- Set their name, and their scrap.
+        local randomName = _CPUNames[math.ceil(GetRandomFloat(0, #_CPUNames))];
+
+        print("AI should be called: ", randomName);
+
+        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
+        SetTeamNameForStat(_Session.m_CompTeam, randomName);
+        SetTauntCPUTeamName(randomName)
+
         _Session.m_StartDone = true;
-
-        _Session.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
-        _Session.m_IntroCutsceneEnabled = IFace_GetInteger("options.instant.bool1");
-        _Session.m_AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
-        _Session.m_RTSModeEnabled = IFace_GetInteger("options.instant.bool3");
-
-        -- Set our name for the CPU.
-        SetTauntCPUTeamName("CPU");
-
-        _Session.m_CustomAIPStr = IFace_GetString("options.instant.string0");
-        _Session.m_CPUTeamRace = string.char(IFace_GetInteger("options.instant.hisrace"));
-        _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
-        _Session.m_Difficulty = GetInstantDifficulty();
 
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
+                customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
+                "*vrecy", "RecyclerEnemy");
         end
 
         local RecPos = GetPosition(_Session.m_EnemyRecycler);
 
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c", GetPositionNear(RecPos, 40.0, 60.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c",
+            GetPositionNear(RecPos, 40.0, 60.0));
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
-
-        SetScrap(_Session.m_CompTeam, 40);
 
         local cRACE_ISDF = string.char(RACE_ISDF);
         local cRACE_SCION = string.char(RACE_SCION);
 
         -- Checks for team colour differences.
         if (_Session.m_CPUTeamRace == cRACE_ISDF and _Session.m_HumanTeamRace == cRACE_ISDF) then
-            SetTeamColor(_Session.m_CompTeam, 0, 127, 255);
+            SetTeamColor(_Session.m_CompTeam, 0, 127, 255); -- Blue like in the campaign.
+        elseif (_Session.m_CPUTeamRace == cRACE_SCION and _Session.m_HumanTeamRace == cRACE_SCION) then
+            SetTeamColor(_Session.m_CompTeam, 85, 255, 85); -- Green (Rebels) like in the campaign.
         end
 
         -- Grab dropship handles for the intro.
@@ -287,8 +320,10 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+                GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+                GetPositionNear(recPos, 40.0, 60.0));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
@@ -305,6 +340,9 @@ function Update()
     end
 
     if (_Session.m_StartDone) then
+        -- Run a taunt when they're set up.
+        DoTaunt(TAUNTS_GameStart);
+
         if (_Session.m_RTSModeEnabled == 1) then
             -- Basically force the player into a deployed state.
             if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then
@@ -503,41 +541,15 @@ function GameConditions()
     end
 end
 
-function SetCPUAIPlan(type)
-    if (type < AIPType0 or type >= MAX_AIP_TYPE) then
-        type = AIPType3;
-    end
-
-    local AIPFile;
-    local AIPString;
-
-    if (_Session.m_CustomAIPStr ~= nil) then
-        AIPString = _Session.m_CustomAIPStr;
-    else
-        AIPString = StockAIPNameBase;
-    end
-
-    -- First pass, try to find an AIP that is designed to use Provides for enemy team, thus it only cares about CPU Race. This makes adding races much easier.
-    AIPFile = AIPString .. _Session.m_CPUTeamRace .. string.sub(AIPTypeExtensions, type, type);
-
-    -- Fallback to old method if none exists.
-    if (DoesFileExist(AIPFile) == false) then
-        AIPFile = AIPString .. _Session.m_CPUTeamRace .. _Session.m_HumanTeamRace .. string.sub(AIPTypeExtensions, type, type);
-    end
-
-    SetAIP(AIPFile .. '.aip', _Session.m_CompTeam);
-
-    -- Leave this for now, but it might be fun to turn this to a timed thing like G66 (Thanks Natty, forever the inspiration).
-    DoTaunt(TAUNTS_Random);
-end
-
 function BuildPlayerRecycler(pos)
     local customHumanRecycler = IFace_GetString("options.instant.string1");
 
     if (customHumanRecycler ~= nil) then
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler, "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
+            "*vrecy", pos);
     else
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
+            pos);
     end
 
     SetScrap(_Session.m_StratTeam, 40);

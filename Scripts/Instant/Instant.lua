@@ -223,12 +223,6 @@ function Start()
     _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
     _Session.m_Difficulty = GetInstantDifficulty();
 
-    -- Create the CPU team model to keep track of what's in the world.
-    _Session.m_AIController = _AIController:New(_Session.m_EnemyTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
-
-    -- Run the set up for CPU team.
-    _Session.m_AIController:Setup(_Session.m_CompTeam);
-
     if (debug) then
         BuildObject("ibrecy_x", 0, "RecyclerEnemy");
     end
@@ -252,12 +246,6 @@ function Update()
         -- Set their name, and their scrap.
         local randomName = _CPUNames[math.ceil(GetRandomFloat(0, #_CPUNames))];
 
-        print("AI should be called: ", randomName);
-
-        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
-        SetTeamNameForStat(_Session.m_CompTeam, randomName);
-        SetTauntCPUTeamName(randomName)
-
         _Session.m_StartDone = true;
 
         local customCPURecycler = IFace_GetString("options.instant.string2");
@@ -273,8 +261,7 @@ function Update()
         local RecPos = GetPosition(_Session.m_EnemyRecycler);
 
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c",
-            GetPositionNear(RecPos, 40.0, 60.0));
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c", GetPositionNear(RecPos, 40.0, 60.0));
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
 
@@ -288,6 +275,12 @@ function Update()
             SetTeamColor(_Session.m_CompTeam, 85, 255, 85); -- Green (Rebels) like in the campaign.
         end
 
+        -- Create the CPU team model to keep track of what's in the world.
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+
+        -- Setup the AI Controller.
+        _Session.m_AIController:Setup(_Session.m_CompTeam);
+
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1");
         _Session.m_IntroShip2 = GetHandle("intro_drop_2");
@@ -299,6 +292,11 @@ function Update()
         -- Stop them so they can't be commanded for now.
         Stop(_Session.m_IntroTurret1, 1);
         Stop(_Session.m_IntroTurret2, 1);
+
+        -- Handle names for teams and the stats.
+        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
+        SetTeamNameForStat(_Session.m_CompTeam, randomName);
+        SetTauntCPUTeamName(randomName);
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.

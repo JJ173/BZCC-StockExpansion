@@ -1,11 +1,11 @@
 [Start]
 scrapCount = 40
-scavClass = "ivscav_x"
-consClass = "ivcons_x"
+scavClass = "ivscav_c"
+consClass = "ivcons_c"
 
 [IdleDispatcher]
 
 [Plan1]
 planType = "BuildMinimums"
 planPriority = 100
-buildType1 = "ivscav_x"
+buildType1 = "ivscav_c"

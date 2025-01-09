@@ -49,8 +49,8 @@ function AIController:Setup(CPUTeamNumber)
     table.sort(self.Pools, Compare);
 
     -- Check any options.
-    AIController.AIPString = IFace_GetString("options.instant.string0");
-    AIController.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
+    self.AIPString = IFace_GetString("options.instant.string0");
+    self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
 
     -- Give them scrap.
     SetScrap(CPUTeamNumber, 40);

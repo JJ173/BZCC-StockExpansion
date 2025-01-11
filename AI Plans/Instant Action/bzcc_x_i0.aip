@@ -2,10 +2,48 @@
 scrapCount = 40
 scavClass = "ivscav_c"
 consClass = "ivcons_c"
+CheckProvides = true
+DLLCanSwitch = false
+baseLoc = "RecyclerEnemy"
+
+[Cheat] // Bit of a boost as we don't have a "Player" here.
+moneyAmount = 5
+moneyDelay = 4
 
 [IdleDispatcher]
+ScavIdleSeconds = 999999
+UnitIdleSeconds = 999999
+BomberIdleSeconds = 999999
+CraftTeamIsPilotTeam = true
 
-[Plan1]
+[Plan1] // Build the Commander (Scout) if the option is enabled.
 planType = "BuildMinimums"
-planPriority = 100
+planPriority = 1000
+planCondition = "Lua"
+buildType1 = "ivcmdr_s"
+buildCount1 = 1
+LuaFunction = "BuildScoutCommander"
+
+[Plan2] // Build the Commander (Tank) if the option is enabled.
+planType = "BuildMinimums"
+planPriority = 990
+planCondition = "Lua"
+buildType1 = "ivcmdr_t"
+buildCount1 = 1
+LuaFunction = "BuildTankCommander"
+
+[Plan3] // Always maintain at least 3 Scavengers for the Lua to control.
+planType = "BuildMinimums"
+planPriority = 980
+planCondition = "Lua"
 buildType1 = "ivscav_c"
+buildCount1 = 3
+LuaFunction = "BuildScavengerCondition"
+
+[Plan4] // Build a Service Pod for early servicing.
+planType = "BuildLoop"
+planPriority = 970
+planCondition = "Lua"
+buildType1 = "apserv"
+buildCount1 = 1
+LuaFunction = "BuildServicePodCondition"

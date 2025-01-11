@@ -12,9 +12,12 @@ Pool =
 
     -- Another CPU only variable. We want this so we can calculate the distance between the pool and the CPU Recycler for priority use.
     DistanceFromCPURecycler = 0,
+
+    -- Check to see if this is locked. 
+    isLocked = false,
 }
 
-function Pool:New(Handle, Guard, Position, DistanceFromCPURecycler)
+function Pool:New(Handle, Guard, Position, DistanceFromCPURecycler, isLocked)
     local o = {}
 
     setmetatable(o, { __index = self });
@@ -23,6 +26,7 @@ function Pool:New(Handle, Guard, Position, DistanceFromCPURecycler)
     o.Guard = Guard or 0;
     o.Position = Position or 0;
     o.DistanceFromCPURecycler = DistanceFromCPURecycler or 0;
+    o.isLocked = isLocked or false;
 
     return o;
 end

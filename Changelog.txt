@@ -330,7 +330,14 @@ Scion05 (An Unlikely Rescue):
 - General QOL (Quality of Life) improvements.
 
 INSTANT ACTION
-- CPU will now have a Commander unit.
-- CPU will now follow a specific set of base paths to construct their bases so they are more strategic.
 - New Intro Cutscene for Instant Action.
 - RTS Mode has been added.
+
+CPU Changes:
+- CPU will now have a Commander unit.
+- CPU will now follow a specific set of base paths to construct their bases so they are more strategic.
+- CPU will use carrier mechanics like the player.
+- CPU units will be mostly controlled by Lua.
+- CPU Scavengers will now make use of the 'lockScrap' mechanic, meaning that their Scavengers that are collecting loose will not go for the same piece of scrap.
+- CPU Scavengers will retreat to a safe location when there are no pools or scrap to collect.
+- CPU Constructors will retreat to a safe location when they have finished upgrading units in the field.

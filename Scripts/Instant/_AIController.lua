@@ -1,5 +1,3 @@
-local _Pool = require("_Pool");
-
 AIController =
 {
     AIPString = "",
@@ -17,24 +15,40 @@ AIController =
 
     Commander = nil,
 
+    -- Check Recycler Deployment. Once done, we can start our dispatch.
+    RecyclerDeployed = false,
+
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     Scavengers = {},
     Constructors = {},
     Turrets = {},
     Patrols = {},
-    Defenders = {}
+    Defenders = {},
+
+    -- Cooldowns for different functions so we don't run them per frame.
+    TauntCooldown = 0
 }
 
-function AIController:New(Team, Race, Pools, Recycler, Factory, Armory, Commander)
+function AIController:New(Team, Race, Pools)
     local o = {}
 
     o.Team = Team or 0;
     o.Race = Race or nil;
     o.Pools = Pools or {};
-    o.Recycler = Recycler or nil;
-    o.Factory = Factory or nil;
-    o.Armory = Armory or nil;
-    o.Commander = Commander or nil;
+
+    o.AIPString = "";
+    o.AICommanderEnabled = false;
+    o.Recycler = nil;
+    o.Factory = nil;
+    o.Armory = nil;
+    o.ServiceBay = nil;
+    o.Commander = nil;
+    o.Scavengers = {};
+    o.Constructors = {};
+    o.Turrets = {};
+    o.Patrols = {};
+    o.Defenders = {};
+    o.RecyclerDeployed = false;
 
     setmetatable(o, { __index = self });
 
@@ -52,6 +66,11 @@ function AIController:Setup(CPUTeamNumber)
     self.AIPString = IFace_GetString("options.instant.string0");
     self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
 
+    -- If the Commander is enabled, build one.
+    if (self.AICommanderEnabled) then
+        self.Commander = BuildObject(self.Race .. "vcmdr_s", self.Team, GetPositionNear("RecyclerEnemy", 30, 60));
+    end
+
     -- Give them scrap.
     SetScrap(CPUTeamNumber, 40);
 
@@ -59,8 +78,20 @@ function AIController:Setup(CPUTeamNumber)
     self:SetPlan(AIPType0);
 end
 
-function AIController:Run()
+function AIController:Run(MissionTurnCount)
     -- Handle the taunts from the CPU Team here.
+    if (self.TauntCooldown < MissionTurnCount) then
+        -- Run a random taunt.
+        DoTaunt(TAUNTS_Random);
+
+        -- Cooldown so we don't call this every frame.
+        self.TauntCooldown = MissionTurnCount + SecondsToTurns(30);
+    end
+
+    -- Only do this when the Recycler is deployed.
+    if (self.RecyclerDeployed) then
+        -- Run each dispatcher.
+    end
 end
 
 function AIController:CarrierLogic()
@@ -68,7 +99,10 @@ function AIController:CarrierLogic()
 end
 
 function AIController:AddObject(handle, objClass)
-
+    -- Indicates the Recycler has been deployed at the start of the match.
+    if (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
+        self.RecyclerDeployed = true;
+    end
 end
 
 function AIController:DeleteObject(handle)
@@ -97,9 +131,6 @@ function AIController:SetPlan(type)
 
     -- Leave this for now, but it might be fun to turn this to a timed thing like G66 (Thanks Natty, forever the inspiration).
     DoTaunt(TAUNTS_Random);
-end
-
-function AIController:DispatchScavengers()
 end
 
 function AIController:DispatchTurrets()

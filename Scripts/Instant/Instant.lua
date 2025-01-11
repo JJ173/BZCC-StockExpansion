@@ -166,7 +166,7 @@ function AddObject(handle)
         -- Grab the position so we can store it in the model.
         local pos = GetPosition(handle);
         -- Create a new model for this pool.
-        local newPoolModel = _Pool:New(handle, 0, pos, dist);
+        local newPoolModel = _Pool:New(handle, 0, pos, dist, false);
         -- Grab the position vector and store it.
         _Session.m_Pools[#_Session.m_Pools + 1] = newPoolModel;
     end
@@ -177,6 +177,11 @@ function AddObject(handle)
         end
 
         SetSkill(handle, _Session.m_Difficulty + 1);
+
+        -- Add the objects to the AI Controller.
+        if (_Session.m_AIController ~= nil) then
+            _Session.m_AIController:AddObject(handle, classLabel);
+        end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
@@ -243,25 +248,19 @@ function Update()
     _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
 
     if (_Session.m_StartDone == false) then
-        -- Set their name, and their scrap.
-        local randomName = _CPUNames[math.ceil(GetRandomFloat(0, #_CPUNames))];
-
         _Session.m_StartDone = true;
 
+        -- Set their name, and their scrap.
+        local randomName = _CPUNames[math.ceil(GetRandomFloat(0, #_CPUNames))];
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
-                customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
-                "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
         end
 
-        local RecPos = GetPosition(_Session.m_EnemyRecycler);
-
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vscav_x", "*vscav_c", GetPositionNear(RecPos, 40.0, 60.0));
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
 
@@ -298,6 +297,9 @@ function Update()
         SetTeamNameForStat(_Session.m_CompTeam, randomName);
         SetTauntCPUTeamName(randomName);
 
+        -- Random taunt from the AI on game start.
+        DoTaunt(TAUNTS_GameStart);
+
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.
         if (_Session.m_RTSModeEnabled == 1 or _Session.m_IntroCutsceneEnabled == 0) then
@@ -318,10 +320,8 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
@@ -338,9 +338,6 @@ function Update()
     end
 
     if (_Session.m_StartDone) then
-        -- Run a taunt when they're set up.
-        DoTaunt(TAUNTS_GameStart);
-
         if (_Session.m_RTSModeEnabled == 1) then
             -- Basically force the player into a deployed state.
             if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then
@@ -415,9 +412,12 @@ function Update()
         end
     end
 
-    -- Keep track of games.
     if (_Session.m_IntroDone) then
+        -- Game conditions to see if either Recycler has been destroyed.
         GameConditions();
+
+        -- Run the AI Controller instance for the CPU team.
+        _Session.m_AIController:Run(_Session.m_TurnCounter);
     end
 end
 

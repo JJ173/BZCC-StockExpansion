@@ -267,10 +267,8 @@ function Update()
         -- Pick a random name for the CPU.
         local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
 
-        -- Testing
-        SetTeamNameForStat(_Session.m_CompTeam, chosenCPUName);
-        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
-        SetTauntCPUTeamName(chosenCPUName);
+        -- Set the CPU Taunt Name.
+        SetCPUTauntName(chosenCPUName, _Session.m_TurnCounter);
 
         -- Create the CPU team model to keep track of what's in the world.
         _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools, chosenCPUName);

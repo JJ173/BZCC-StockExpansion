@@ -113,14 +113,6 @@ local IntroFunctions = {};
 local debug = false;
 
 ---------------------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------ Utility Functions ---------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------
-
-function ReplaceCharacter(pos, str, r)
-    return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
-end
-
----------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -180,7 +172,7 @@ function AddObject(handle)
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel);
+            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle));
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
@@ -250,8 +242,6 @@ function Update()
     if (_Session.m_StartDone == false) then
         _Session.m_StartDone = true;
 
-        -- Set their name, and their scrap.
-        local randomName = _CPUNames[math.ceil(GetRandomFloat(0, #_CPUNames))];
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
@@ -274,11 +264,22 @@ function Update()
             SetTeamColor(_Session.m_CompTeam, 85, 255, 85); -- Green (Rebels) like in the campaign.
         end
 
+        -- Pick a random name for the CPU.
+        local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
+
+        -- Testing
+        SetTeamNameForStat(_Session.m_CompTeam, chosenCPUName);
+        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
+        SetTauntCPUTeamName(chosenCPUName);
+
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools, chosenCPUName);
 
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
+
+        -- Random taunt from the AI on game start.
+        DoTaunt(TAUNTS_GameStart);
 
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1");
@@ -291,14 +292,6 @@ function Update()
         -- Stop them so they can't be commanded for now.
         Stop(_Session.m_IntroTurret1, 1);
         Stop(_Session.m_IntroTurret2, 1);
-
-        -- Handle names for teams and the stats.
-        SetTeamNameForStat(_Session.m_PlayerTeam, "Player");
-        SetTeamNameForStat(_Session.m_CompTeam, randomName);
-        SetTauntCPUTeamName(randomName);
-
-        -- Random taunt from the AI on game start.
-        DoTaunt(TAUNTS_GameStart);
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.

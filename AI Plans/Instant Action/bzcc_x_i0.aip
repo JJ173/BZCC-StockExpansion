@@ -6,14 +6,10 @@ CheckProvides = true
 DLLCanSwitch = false
 baseLoc = "RecyclerEnemy"
 
-[Cheat] // Bit of a boost as we don't have a "Player" here.
-moneyAmount = 5
-moneyDelay = 4
-
 [IdleDispatcher]
-ScavIdleSeconds = 999999
-UnitIdleSeconds = 999999
-BomberIdleSeconds = 999999
+ScavIdleSeconds = 20
+UnitIdleSeconds = 35
+BomberIdleSeconds = 60
 CraftTeamIsPilotTeam = true
 
 [Plan1] // Build the Commander (Scout) if the option is enabled.
@@ -32,18 +28,113 @@ buildType1 = "ivcmdr_t"
 buildCount1 = 1
 LuaFunction = "BuildTankCommander"
 
-[Plan3] // Always maintain at least 3 Scavengers for the Lua to control.
-planType = "BuildMinimums"
+[Plan3]
+planType = "BuildLoop"
 planPriority = 980
 planCondition = "Lua"
 buildType1 = "ivscav_c"
-buildCount1 = 3
+buildCount1 = 1
 LuaFunction = "BuildScavengerCondition"
+ContinueEvenIfFail = true
 
-[Plan4] // Build a Service Pod for early servicing.
-planType = "BuildLoop"
+[Plan4] // Collect Loose First.
+planType = "CollectField"
 planPriority = 970
+planCondition = "Lua"
+LuaFunction = "CollectFieldCondition"
+
+[Plan5] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
+planType = "CollectPool"
+planPriority = 960
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+
+[Plan6]
+planType = "CollectPool"
+planPriority = 950
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+
+[Plan7]
+planType = "BuildLoop"
+planPriority = 940
 planCondition = "Lua"
 buildType1 = "apserv"
 buildCount1 = 1
 LuaFunction = "BuildServicePodCondition"
+
+[Plan8]
+planType = "Recover"
+planPriority = 930
+planCondition = "Lua"
+serviceUnit = "apserv"
+MinWreckAmmo = 0.2
+MaxWreckAmmo = 0.6
+MinWreckHealth = 0.3
+MaxWreckHealth = 0.45
+unitType1 = "ivscout_c"
+unitType2 = "ivcmdr_s"
+unitType3 = "ivmisl_c"
+unitType4 = "ivmbike_c"
+unitType5 = "ivtank_c"
+
+[Plan9]
+planType = "BuildMinimums"
+planPriority = 920
+planCondition = "Lua"
+buildType1 = "ivcons_c"
+buildCount1 = 1
+LuaFunction = "BuildConstructorCondition"
+
+[Plan10]
+planType = "BuildMinimums"
+planPriority = 910
+planCondition = "Lua"
+buildType1 = "ivcons_u"
+buildCount1 = 1
+LuaFunction = "BuildConstructorCondition"
+
+[Plan11]
+planType = "BuildMinimums"
+planPriority = 900
+planCondition = "Lua"
+buildType1 = "ivcons_g"
+buildCount1 = 1
+LuaFunction = "BuildConstructorCondition"
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 890
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_1"
+LuaFunction = "BuildPath1BasePlate"
+
+[Plan13]
+planType = "BaseBuildMinimums"
+planPriority = 880
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_2"
+LuaFunction = "BuildPath2BasePlate"
+
+[Plan14]
+planType = "Upgrade"
+planPriority = 870
+planCondition = "Lua"
+unitType = "ibscav_c"
+consClass = "ivcons_u"
+LuaFunction = "UpgradePoolCondition"
+
+[Plan15]
+planType = "BaseBuildMinimums"
+planPriority = 860
+planCondition = "Lua"
+buildType1 = "ibpgen_c"
+buildCount1 = 1
+buildLoc1 = "i_Power_1"
+LuaFunction = "BuildPower1"

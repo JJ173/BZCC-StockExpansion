@@ -3,5 +3,10 @@ classLabel = "ibplate_gh_a"
 scrapCost = 0
 scrapValue = 0
 unitName = "Base Plate"
+canDetect = 1
+canInteract = 0
+canTarget = false
 
 [BuildingClass]
+justTerrain = 1
+justFlat = 1

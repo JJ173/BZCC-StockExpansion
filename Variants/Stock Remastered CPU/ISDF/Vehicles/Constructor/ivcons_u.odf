@@ -1,4 +1,4 @@
-// CONSTRUCTOR FOR WALLS AND WALL DEFENCES
+// CONSTRUCTOR FOR UPGRADES
 
 [GameObjectClass]
 classLabel = "ivcons_g"

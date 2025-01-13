@@ -55,22 +55,33 @@ end
 
 -- Credit to Rhade for this.
 function TableRemoveByHandle(table, handle)
-	local length = #table;
+    local length = #table;
 
     -- Return early if the last handle is what we need to remove.
-	if (table[length] == handle) then
-		table[length] = nil;
-		return
-	end
+    if (table[length] == handle) then
+        table[length] = nil;
+        return
+    end
 
-	-- Check the rest of the table.
-	for i = 1, length - 1 do
-		if (table[i] == handle) then
-			table[i] = table[length];
-			table[length] = nil;
-			return;
-		end
-	end
+    -- Check the rest of the table.
+    for i = 1, length - 1 do
+        if (table[i] == handle) then
+            table[i] = table[length];
+            table[length] = nil;
+            return;
+        end
+    end
+end
+
+-- Credit to Nielk1 for this.
+function GetRandomInt(Min, Max)
+    local retVal = GetRandomFloat(Min, Max + 1);
+
+    if (retVal > Max) then
+        return Max;
+    end
+
+    return math.floor(retVal);
 end
 
 function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
@@ -86,7 +97,7 @@ function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
 end
 
 function ReplaceCharacter(pos, str, r)
-    return table.concat{str:sub(1,pos-1), r, str:sub(pos+1)}
+    return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
 end
 
 return _HelperFunctions;

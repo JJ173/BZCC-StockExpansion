@@ -25,11 +25,20 @@ AIController =
     Patrols = {},
     Defenders = {},
 
+    -- Name that's picked from a random list for the team.
+    Name = "";
+
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0
-}
+};
 
-function AIController:New(Team, Race, Pools)
+-- States for the AI Commander.
+CMD_IDLE = 0;
+CMD_ATTACK = 1;
+CMD_DEFEND = 2;
+CMD_RETREAT = 3;
+
+function AIController:New(Team, Race, Pools, Name)
     local o = {}
 
     o.Team = Team or 0;
@@ -49,6 +58,7 @@ function AIController:New(Team, Race, Pools)
     o.Patrols = {};
     o.Defenders = {};
     o.RecyclerDeployed = false;
+    o.Name = Name or "";
 
     setmetatable(o, { __index = self });
 
@@ -67,8 +77,9 @@ function AIController:Setup(CPUTeamNumber)
     self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
 
     -- If the Commander is enabled, build one.
-    if (self.AICommanderEnabled) then
+    if (self.AICommanderEnabled == 1) then
         self.Commander = BuildObject(self.Race .. "vcmdr_s", self.Team, GetPositionNear("RecyclerEnemy", 30, 60));
+        SetObjectiveName(self.Commander, self.Name);
     end
 
     -- Give them scrap.
@@ -85,12 +96,16 @@ function AIController:Run(MissionTurnCount)
         DoTaunt(TAUNTS_Random);
 
         -- Cooldown so we don't call this every frame.
-        self.TauntCooldown = MissionTurnCount + SecondsToTurns(30);
+        self.TauntCooldown = MissionTurnCount + SecondsToTurns(60);
     end
 
     -- Only do this when the Recycler is deployed.
     if (self.RecyclerDeployed) then
         -- Run each dispatcher.
+        self:DispatchTurrets();
+
+        -- Handle the Commander.
+        self:CommanderBrain();
     end
 end
 
@@ -98,7 +113,13 @@ function AIController:CarrierLogic()
 
 end
 
-function AIController:AddObject(handle, objClass)
+function AIController:AddObject(handle, objClass, objCfg)
+    -- If it's the Commander, replace our reference.
+    if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vtank_s") then
+        self.Commander = handle;
+        SetObjectiveName(self.Commander, self.Name);
+    end
+
     -- Indicates the Recycler has been deployed at the start of the match.
     if (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
@@ -114,7 +135,6 @@ function AIController:SetPlan(type)
         type = AIPType3;
     end
 
-    local AIPFile;
     local AIPString;
 
     if (self.AIPString ~= nil) then
@@ -124,7 +144,7 @@ function AIController:SetPlan(type)
     end
 
     -- First pass, try to find an AIP that is designed to use Provides for enemy team, thus it only cares about CPU Race. This makes adding races much easier.
-    AIPFile = AIPString .. self.Race .. type;
+    local AIPFile = AIPString .. self.Race .. type;
 
     -- Run the plans.
     SetAIP(AIPFile .. '.aip', self.Team);
@@ -134,6 +154,10 @@ function AIController:SetPlan(type)
 end
 
 function AIController:DispatchTurrets()
+end
+
+function AIController:CommanderBrain()
+
 end
 
 -- Local utilities.

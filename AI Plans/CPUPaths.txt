@@ -1,9 +1,4 @@
 ISDF Base Paths:
-- i_Plate_1
-- i_Plate_2
-- i_Plate_3
-- i_Plate_4
-
 - i_Power_1
 - i_Power_2
 - i_Power_3

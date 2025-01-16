@@ -311,6 +311,7 @@ Scion04 (Escort):
 - Pre-placed ISDF units will now look at the player instead of random directions.
 - Fixed logical issue with Power Crystal objective. The mission would only fail if the Power Crystal was destroyed before the Rebels attacked the Hauler during the cutscene. This has been changed so that the mission will fail if the Power Crystal dies in any circumstance.
 - Added logic to move the Scout/Sabre if their partner is sniped.
+- Removed patrols that were driving over lava and damaging themselves.
 
 - General QOL (Quality of Life) improvements. 
 

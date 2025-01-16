@@ -135,6 +135,8 @@ function InitialSetup()
     PreloadODF("fvrecy_x");
     PreloadODF("ivrecy_c");
     PreloadODF("fvrecy_c");
+    PreloadODF("ibcarrier_xm");
+    PreloadODF("fbcarrier_xm");
 
     -- Preload Audio handles here as well.
 end
@@ -163,12 +165,13 @@ function AddObject(handle)
         _Session.m_Pools[#_Session.m_Pools + 1] = newPoolModel;
     end
 
+    -- Max out skills.
+    SetSkill(handle, 3);
+
     if (teamNum == _Session.m_CompTeam) then
         if (isRecyclerVehicle) then
             _Session.m_EnemyRecycler = handle;
         end
-
-        SetSkill(handle, _Session.m_Difficulty + 1);
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
@@ -185,9 +188,6 @@ function AddObject(handle)
                 SetBestGroup(handle);
             end
         end
-
-        -- Always max out player units.
-        SetSkill(handle, 3);
     elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
         -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
         -- we should switch the extractor to the right team when it's deployed to prevent breaking.
@@ -245,9 +245,11 @@ function Update()
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
+                customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
+                "*vrecy", "RecyclerEnemy");
         end
 
         -- Spawn CPU vehicles.
@@ -268,10 +270,11 @@ function Update()
         local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
 
         -- Set the CPU Taunt Name.
-        SetCPUTauntName(chosenCPUName, _Session.m_TurnCounter);
+        SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
 
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools, chosenCPUName);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools,
+            chosenCPUName);
 
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
@@ -311,8 +314,20 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+                GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+                GetPositionNear(recPos, 40.0, 60.0));
+
+            -- Grab the position of the Carrier path for spawning.
+            local carrierPath = GetPosition("Carrier");
+            local carrierEnemyPath = GetPosition("CarrierEnemy");
+
+            -- Spawn Carriers for both teams.
+            BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam,
+                SetVector(carrierPath.x, 800, carrierPath.z));
+            BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam,
+                SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);

@@ -2,6 +2,7 @@
 local APC_SCRAP_COST = 25;
 local ATANK_SCRAP_COST = 35;
 local BOMBER_SCRAP_COST = 33;
+local BUNKER_SCRAP_COST = 50;
 local CONST_SCRAP_COST = 20;
 local MLAY_SCRAP_COST = 25;
 local MISL_SCRAP_COST = 23;
@@ -224,6 +225,55 @@ function BuildPower1(team, time)
     return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
 end
 
+function BuildPower2(team, time)
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Power_2") == false) then
+        return false, "Path: i_Power_2 doesn't exist, so I can't build a Base Plate there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Power_2")) then
+        return false, "Path: i_Power_2 has a building on it, so I can't build a Base Plate there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < POWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Power Plant.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
+end
+
+function BuildFieldBunker1(team, time)
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Field_Bunker_1") == false) then
+        return false, "Path: i_Field_Bunker_1 doesn't exist, so I can't build a Base Plate there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_1")) then
+        return false, "Path: i_Field_Bunker_1 has a building on it, so I can't build a Base Plate there.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Comm Bunker.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < BUNKER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Comm Bunker.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct a Relay Bunker. Tasking a Constructor to build a Relay Bunker...";
+end
+
 -- COUNT FUNCTIONS TO CHECK IF A NUMBER OF GAME OBJECT EXISTS.
 
 function ScavengerCount(team, time)
@@ -236,6 +286,24 @@ end
 
 function ConstructorCount(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_CONSTRUCTIONRIG", "sameteam", true);
+end
+
+-- ATTACKER PLAN CONDITIONS.
+function EarlyScoutAttackCondition(team, time)
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time)) then
+        return false, "I have a Factory already, I don't want to send Scouts to attack now.";
+    end
+
+    if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 0) then
+        return false, "Enemy defenses are too strong. Don't waste time with Scouts.";
+    end
+
+    return true, "I am going to send early Scouts to attack.";
 end
 
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.

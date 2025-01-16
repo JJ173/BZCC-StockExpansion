@@ -95,13 +95,10 @@ local Mission =
     m_TugShot_Look1 = nil,
 
     m_Attack1 = false,
-
     m_RebelBrainActive = false,
-
-    m_StartBigSpawn = false,
-
-    m_PlayerMetRebels = false,
     m_RebelRetreat = false,
+    m_StartBigSpawn = false,
+    m_PlayerMetRebels = false,
     m_PlayerAttackedRebels = false,
     m_PlayerAmbushed = false,
     m_PlayerCaughtUp = false,

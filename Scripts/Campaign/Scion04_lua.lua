@@ -94,14 +94,26 @@ local Mission =
 
     m_TugShot_Look1 = nil,
 
+    m_Bossman = nil,
+
+    m_Evil1Check = false,
+    m_Evil2Check = false,
+    m_Evil3Check = false,
+    m_EvilsDead = false,
+
     m_Attack1 = false,
-    m_RebelBrainActive = false,
+
     m_RebelRetreat = false,
+    m_RebelsTurnEvil = false,
+
     m_StartBigSpawn = false,
+
     m_PlayerMetRebels = false,
-    m_PlayerAttackedRebels = false,
     m_PlayerAmbushed = false,
     m_PlayerCaughtUp = false,
+
+    m_BurnsRebelDialogPlayed = false,
+    m_BurnsAmbushDialogPlayed = false,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -113,6 +125,7 @@ local Mission =
     m_MissionDelayTime = 0,
     m_RebelWarningCount = 0,
     m_RebelWarningTimer = 0,
+    m_BurnsAmbushTimer = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -207,8 +220,13 @@ function Update()
             -- Attack Brains.
             AttacksBrain();
 
+            -- Ambush.
+            if (Mission.m_PlayerAmbushed == false) then
+                AmbushBrain();
+            end
+
             -- Handle the Rebels outside of the main mission logic.
-            if (Mission.m_RebelBrainActive) then
+            if (Mission.m_EvilsDead == false) then
                 RebelBrain();
             end
         end
@@ -237,10 +255,12 @@ end
 
 function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
     -- Unique logic for this mission to check one of the attack pairs has been sniped.
-    if (victimHandle == Mission.m_RTAttack2) then
-        Goto(Mission.m_RTAttack3, Mission.m_Tug1, 1);
-    elseif (victimHandle == Mission.m_RTAttack3) then
-        Goto(Mission.m_RTAttack2, Mission.m_Tug1, 1);
+    if (Mission.m_Attack1 == false) then
+        if (victimHandle == Mission.m_RTAttack2) then
+            Goto(Mission.m_RTAttack3, Mission.m_Tug1, 1);
+        elseif (victimHandle == Mission.m_RTAttack3) then
+            Goto(Mission.m_RTAttack2, Mission.m_Tug1, 1);
+        end
     end
 
     return _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF);
@@ -259,19 +279,23 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
-    if (Mission.m_PlayerAttackedRebels == false and Mission.m_RebelAttacksPlayer == false) then
+    if (Mission.m_RebelsTurnEvil == false) then
         if (IsPlayer(ShooterHandle) and (VictimHandle == Mission.m_Evil1 or VictimHandle == Mission.m_Evil2 or VictimHandle == Mission.m_Evil3)) then
-            -- Rebel: He's onto us! Attack!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0404.wav", false);
+            if (GetCurHealth(VictimHandle) < 750) then
+                -- Rebel: He's onto us! Attack!
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0404.wav", false);
 
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
-            -- He's onto us! Attack!
-            RebuildRebels();
+                -- He's onto us! Attack!
+                RebuildRebels();
 
-            -- So we don't do this again.
-            Mission.m_PlayerAttackedRebels = true;
+                -- Have them attack the user who shot them.
+                Attack(Mission.m_Evil1, ShooterHandle);
+                Attack(Mission.m_Evil2, ShooterHandle);
+                Attack(Mission.m_Evil3, ShooterHandle);
+            end
         end
     end
 end
@@ -285,13 +309,15 @@ Functions[1] = function()
     SetTeamNameForStat(7, "Scion Rebels");
     SetTeamNameForStat(Mission.m_EnemyTeam, "ISDF");
 
-    -- Ally teams to be sure.
-    for i = 2, 5 do
-        Ally(Mission.m_HostTeam, i);
-    end
-
     -- Make sure the enemy doesn't attack the Team 5 units for now.
-    Ally(Mission.m_AlliedTeam, Mission.m_EnemyTeam);
+    if (Mission.m_IsCooperativeMode == false) then
+        for i = 2, 5 do
+            Ally(Mission.m_HostTeam, i);
+        end
+
+        Ally(Mission.m_AlliedTeam, Mission.m_EnemyTeam);
+        Ally(Mission.m_EnemyTeam, 7);
+    end
 
     -- Put the Rebel colour on teams 5 and 7 for coop.
     SetTeamColor(Mission.m_AlliedTeam, 85, 255, 85);
@@ -316,11 +342,11 @@ Functions[1] = function()
     Mission.m_Evil3 = GetHandle("evil3");
 
     Mission.m_Ambusher1 = GetHandle("ambusher1");
-    Mission.m_Ambusher2 = GetHandle("ambusher1");
-    Mission.m_Ambusher3 = GetHandle("ambusher1");
-    Mission.m_Ambusher4 = GetHandle("ambusher1");
-    Mission.m_Ambusher5 = GetHandle("ambusher1");
-    Mission.m_Ambusher6 = GetHandle("ambusher1");
+    Mission.m_Ambusher2 = GetHandle("ambusher2");
+    Mission.m_Ambusher3 = GetHandle("ambusher3");
+    Mission.m_Ambusher4 = GetHandle("ambusher4");
+    Mission.m_Ambusher5 = GetHandle("ambusher5");
+    Mission.m_Ambusher6 = GetHandle("ambusher6");
 
     Mission.m_Rckt1 = GetHandle("rckt1");
     Mission.m_Rckt2 = GetHandle("rckt2");
@@ -357,6 +383,11 @@ Functions[1] = function()
 
     Mission.m_TugShot_Look1 = GetHandle("tugshot_look1");
 
+    Mission.m_Bossman = BuildObject("fvwalk_x", 7, "bossman_spawn");
+
+    -- Stop the AI from acting.
+    SetIndependence(Mission.m_Bossman, 0);
+
     -- Put the existing Rebels onto the allied team.
     SetTeamNum(Mission.m_Evil1, Mission.m_AlliedTeam);
     SetTeamNum(Mission.m_Evil2, Mission.m_AlliedTeam);
@@ -369,6 +400,8 @@ Functions[1] = function()
 
     -- Max out the health of the alchemator to avoid death.
     SetMaxHealth(Mission.m_Machine, 0);
+    SetMaxHealth(Mission.m_Dropship1, 0);
+    SetMaxHealth(Mission.m_Dropship2, 0);
 
     -- Force the tug to grab the power.
     Pickup(Mission.m_Tug1, Mission.m_Power, 0);
@@ -394,10 +427,6 @@ Functions[1] = function()
     SetIndependence(Mission.m_Ambusher4, 0);
     SetIndependence(Mission.m_Ambusher5, 0);
     SetIndependence(Mission.m_Ambusher6, 0);
-
-    -- Don't let the dropships die.
-    SetMaxHealth(Mission.m_Dropship1, 0);
-    SetMaxHealth(Mission.m_Dropship2, 0);
 
     -- Minor delay before starting the mission.
     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1.5);
@@ -444,7 +473,32 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
+    -- Only play this voice from Burns if the player didn't fall for the trap.
+    if (Mission.m_PlayerAmbushed == false and Mission.m_BurnsRebelDialogPlayed == false) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+            -- You did the right thing, John,  Those were the rebels!
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav", false);
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+            -- So this doesn't loop.
+            Mission.m_BurnsRebelDialogPlayed = true;
+        end
+    end
+
+    if (Mission.m_EvilsDead == false and Mission.m_BurnsAmbushDialogPlayed == false and Mission.m_BurnsAmbushTimer < Mission.m_MissionTime) then
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+            -- John, you fell right into a trap...those were the rebels!
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0412.wav", false);
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+
+            -- So this doesn't loop.
+            Mission.m_BurnsAmbushDialogPlayed = true;
+        end
+    end
 end
 
 function RebuildRebels()
@@ -463,10 +517,50 @@ function RebuildRebels()
     SetIndependence(Mission.m_Evil2, 1);
     SetIndependence(Mission.m_Evil3, 1);
 
-    -- Have them attack the player.
-    Attack(Mission.m_Evil1, Mission.m_MainPlayer, 1);
-    Attack(Mission.m_Evil2, Mission.m_MainPlayer, 1);
-    Attack(Mission.m_Evil3, Mission.m_MainPlayer, 1);
+    -- So certain logic doesn't retreat.
+    Mission.m_RebelsTurnEvil = true;
+end
+
+function AmbushBrain()
+    if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
+        -- This'll handle the ambush.
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local pHandle = GetPlayerHandle(i);
+
+            if (GetDistance(pHandle, "ambush") < 120) then
+                -- Ambushers get thier brain back.
+                SetIndependence(Mission.m_Ambusher1, 0);
+                SetIndependence(Mission.m_Ambusher2, 0);
+                SetIndependence(Mission.m_Ambusher3, 0);
+                SetIndependence(Mission.m_Ambusher4, 0);
+                SetIndependence(Mission.m_Ambusher5, 0);
+                SetIndependence(Mission.m_Ambusher6, 0);
+
+                -- Start attacking.
+                Attack(Mission.m_Ambusher1, Mission.m_Tug1);
+                Attack(Mission.m_Ambusher2, pHandle);
+                Attack(Mission.m_Ambusher3, Mission.m_Tug1);
+                Attack(Mission.m_Ambusher5, Mission.m_FVServ1);
+
+                Attack(Mission.m_Ambusher4, pHandle);
+                Attack(Mission.m_Ambusher6, pHandle);
+
+                -- Rebuild the Rebels.
+                RebuildRebels();
+
+                -- Get them to attack the player who fell for the trap.
+                Attack(Mission.m_Evil1, pHandle, 1);
+                Attack(Mission.m_Evil2, pHandle, 1);
+                Attack(Mission.m_Evil3, pHandle, 1);
+
+                -- Little delay before Burns tells the player they fell into a trap.
+                Mission.m_BurnsAmbushTimer = Mission.m_MissionTime + SecondsToTurns(2);
+
+                -- So we don't loop.
+                Mission.m_PlayerAmbushed = true;
+            end
+        end
+    end
 end
 
 function AttacksBrain()
@@ -498,7 +592,6 @@ function AttacksBrain()
 end
 
 function RebelBrain()
-    -- This handles the Rebels meeting the player.
     if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
         -- First, check to see if the Player has met with the Rebels.
         if (Mission.m_PlayerMetRebels == false) then
@@ -538,7 +631,7 @@ function RebelBrain()
                 Mission.m_RebelRetreat = true;
             end
         else
-            if (Mission.m_PlayerAttackedRebels == false) then
+            if (Mission.m_RebelsTurnEvil == false) then
                 -- This'll check if we can "Resume" the paths.
                 if (Mission.m_PlayerCaughtUp == false and Mission.m_RebelWarningCount > 0) then
                     -- Check to see if a player has caught up with the Rebels.
@@ -588,23 +681,38 @@ function RebelBrain()
                         -- Rebuild the Rebels so they use proper Scout ODFs to attack.
                         RebuildRebels();
 
-                        -- So we don't loop, and we can move to the next part of the mission.
-                        Mission.m_PlayerAttackedRebels = true;
+                        -- Have them attack the player.
+                        Attack(Mission.m_Evil1, Mission.m_MainPlayer, 1);
+                        Attack(Mission.m_Evil2, Mission.m_MainPlayer, 1);
+                        Attack(Mission.m_Evil3, Mission.m_MainPlayer, 1);
                     end
                 end
-            end
-
-            if (Mission.m_PlayerAttackedRebels) then
+            else
                 -- Check to see if the Rebels are dead.
-                if (IsAliveAndEnemy(Mission.m_Evil1, 7) == false and IsAliveAndEnemy(Mission.m_Evil2, 7) == false and IsAliveAndEnemy(Mission.m_Evil3, 7) == false) then
-                    -- Only play this voice from Burns if the player didn't fall for the trap.
-                    if (Mission.m_PlayerAmbushed == false) then
-                        -- You did the right thing, John,  Those were the rebels!
-                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav", false);
+                if (Mission.m_Evil1Check == false and IsAliveAndEnemy(Mission.m_Evil1, 7) == false) then
+                    -- Tell burns we will never return with him to earth!
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0407.wav", false);
 
-                        -- Set the timer for this audio clip.
-                        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
-                    end
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+                    -- So we don't loop.
+                    Mission.m_Evil1Check = true;
+                end
+
+                if (Mission.m_Evil2Check == false and IsAliveAndEnemy(Mission.m_Evil2, 7) == false) then
+                    -- So we don't loop.
+                    Mission.m_Evil2Check = true;
+                end
+
+                if (Mission.m_Evil3Check == false and IsAliveAndEnemy(Mission.m_Evil3, 7) == false) then
+                    -- So we don't loop.
+                    Mission.m_Evil3Check = true;
+                end
+
+                if (Mission.m_Evil1Check and Mission.m_Evil2Check and Mission.m_Evil3Check) then
+                    -- For other functions.
+                    Mission.m_EvilsDead = true;
 
                     -- Advance the mission state...
                     Mission.m_RebelBrainActive = false;

@@ -13,6 +13,7 @@ selectUser2Msg = "ivserv01.wav"
 [TrackedVehicleClass]
 
 [ServiceTruck]
+ServiceSTs = true
 
 [Supply]
 

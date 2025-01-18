@@ -1,0 +1,47 @@
+[GameObjectClass]
+classLabel = "ivscout_x"
+
+heatSignature = 1.2
+radarSignature = 0.2
+
+armorClass = L
+
+/////// PROVIDES ///////////////////
+
+provideCount = 4
+provideName2 = "ivplysct"
+provideName3 = "VIRTUAL_CLASS_SCOUT"
+provideName4 = "DefendUnit"
+
+////////////////////////////////////
+
+[CraftClass]
+rangeScan = 400.0f
+
+braccelFactor = 0.05f;
+strafeFactor = 0.1f;
+steerFactor = 5.0f;
+omegaFactor = 0.5f;
+velFactor = 0.2f;
+
+avoidSpeed = 20;
+topSpeed = 30;
+
+[HoverCraftClass]
+velocForward = 30.0 // 
+
+accelThrust = 15.0 // acceleration 
+accelBrake = 75.0 // braking
+accelDragStop = 10.0 // how fast it stops once hands are off controls 
+
+pitchThrust = 0.1 // nose down 
+
+rollStrafe = 0.08 // rolls while strafing 
+omegaSpin = 2.5 // spinning in place speed 
+omegaTurn = 3.45 // turning while moving speed 
+alphaSteer = 3.5 // how fast it responds to steering 
+rollSteer = 0.08 // rolls while steering
+
+[Lod1]
+
+[Lod2]

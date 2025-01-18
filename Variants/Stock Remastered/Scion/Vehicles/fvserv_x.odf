@@ -8,6 +8,7 @@ GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle 
 [TrackedVehicleClass]
 
 [ServiceTruck]
+ServiceSTs = true
 
 [Supply]
 

@@ -141,6 +141,13 @@ function InitialSetup()
     -- Check if we are cooperative mode.
     Mission.m_IsCooperativeMode = IsNetworkOn();
 
+    -- Set difficulty based on whether it's coop or not.
+    if (Mission.m_IsCooperativeMode) then
+        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
+    else
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
+    end
+
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
@@ -179,13 +186,6 @@ function AddObject(h)
 end
 
 function Start()
-    -- Set difficulty based on whether it's coop or not.
-    if (Mission.m_IsCooperativeMode) then
-        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
-    else
-        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
-    end
-
     -- Call generic start logic in coop.
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
@@ -261,6 +261,9 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
         elseif (victimHandle == Mission.m_RTAttack3) then
             Goto(Mission.m_RTAttack2, Mission.m_Tug1, 1);
         end
+
+        -- Prevent other logic from running.
+        Mission.m_Attack1 = true;
     end
 
     return _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF);
@@ -474,7 +477,7 @@ end
 
 Functions[4] = function()
     -- Only play this voice from Burns if the player didn't fall for the trap.
-    if (Mission.m_PlayerAmbushed == false and Mission.m_BurnsRebelDialogPlayed == false) then
+    if (Mission.m_EvilsDead and Mission.m_PlayerAmbushed == false and Mission.m_BurnsRebelDialogPlayed == false) then
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- You did the right thing, John,  Those were the rebels!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav", false);
@@ -487,7 +490,7 @@ Functions[4] = function()
         end
     end
 
-    if (Mission.m_EvilsDead == false and Mission.m_BurnsAmbushDialogPlayed == false and Mission.m_BurnsAmbushTimer < Mission.m_MissionTime) then
+    if (Mission.m_PlayerAmbushed and Mission.m_EvilsDead == false and Mission.m_BurnsAmbushDialogPlayed == false and Mission.m_BurnsAmbushTimer < Mission.m_MissionTime) then
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- John, you fell right into a trap...those were the rebels!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0412.wav", false);
@@ -566,10 +569,10 @@ end
 function AttacksBrain()
     -- Keep track of the attackers and when they have been sent.
     if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
-        -- Check the first attackers.
-        if (Mission.m_Attack1 == false) then
-            -- Unique loop here so we know which player to attack.
-            for i = 1, _Cooperative.m_TotalPlayerCount do
+        -- Unique loop here so we know which player to attack.
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            -- Check the first attackers.
+            if (Mission.m_Attack1 == false) then
                 -- Grab the player handle.
                 local pHandle = GetPlayerHandle(i);
 

@@ -3,6 +3,7 @@ GENERAL
 - Scavengers / Harvesters have been tweaked. This means that there's hopefully less chance that they will drive into buildings and get stuck. 
 - New option to enable subtitles.
 - Removed initial delay of scrap income when Scavengers deploy. 
+- Service Trucks will now repair each other automatically when idle.
 
 FACTIONS
 
@@ -35,6 +36,7 @@ General:
 - Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
 
 ISDF01 (This is not a Drill):
+- Removed unique FAF missile weapon which had more ammo but did significantly less damage.
 - Added third Dropship for extra players.
 - Added extra sound effect to the cliff when it's finished crumbling and hits the ground.
 - Fixed code where the rest of Red Squad are meant to look at your team while they wait for you to catch up.
@@ -90,8 +92,6 @@ ISDF04 (Too Hot):
 
 ISDF05 (The Dark Planet):
 - Scion units will now attack the player from multiple angles, rather than spawning in one place and attacking.
-- Shabayev will no longer cause mission failure if her Tank is destroyed. Instead she will have the Recycler build a replacement Scout for her to pilot.
-	- Mission will fail if her pilot is killed.
 - Players now spawn in a "ivtank" instead of using whatever is saved in BZN by the editor.
 - Shabayev now spawns in "ivtank" instead of "ivtan5".
 - Re-added missing "isdf0501.wav" dialogue to the start of the mission.
@@ -267,7 +267,7 @@ ISDF16 (Hole in One):
 - General QOL (Quality of Life) improvements.
 
 Scion01 (Transformation):
-- Changed Shabayev's name from "Shabayev" to "Yelena Shabayev" to match Scion naming.
+- Changed Shabayev's name from "Shabayev" to "Yelena" to match Scion naming.
 - ISDF attacks on the player base have been moved to spawn out of the map.
 - Attacks have been buffed and now vary based on difficulty.
 - Removed small delays between Shabayev's audio at the start of the mission.
@@ -310,7 +310,7 @@ Scion04 (Escort):
 - Reduced warning times from initial Rebel Scouts so they won't wait for the player for too long.
 - Pre-placed ISDF units will now look at the player instead of random directions.
 - Fixed logical issue with Power Crystal objective. The mission would only fail if the Power Crystal was destroyed before the Rebels attacked the Hauler during the cutscene. This has been changed so that the mission will fail if the Power Crystal dies in any circumstance.
-- Added logic to move the Scout/Sabre if their partner is sniped.
+- Added logic to move the Scout/Sabre pairs if their partner is sniped.
 - Removed patrols that were driving over lava and damaging themselves.
 
 - General QOL (Quality of Life) improvements. 
@@ -333,6 +333,8 @@ Scion05 (An Unlikely Rescue):
 INSTANT ACTION
 - New Intro Cutscene for Instant Action.
 - RTS Mode has been added.
+- New Carrier Mechanics
+- Re-added Pilot / Commander modes.
 
 CPU Changes:
 - CPU will now have a Commander unit.

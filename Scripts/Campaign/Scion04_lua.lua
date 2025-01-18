@@ -96,6 +96,22 @@ local Mission =
 
     m_Bossman = nil,
 
+    m_StealerWalker1 = nil,
+    m_StealerWalker2 = nil,
+
+    m_Stealer1 = nil,
+    m_Stealer2 = nil,
+    m_Stealer3 = nil,
+    m_Stealer4 = nil,
+    m_Stealer5 = nil,
+    m_Stealer6 = nil,
+    m_Stealer7 = nil,
+    m_Stealer8 = nil,
+    m_Stealer9 = nil,
+    m_Stealer10 = nil,
+    m_Stealer11 = nil,
+    m_Stealer12 = nil,
+
     m_Evil1Check = false,
     m_Evil2Check = false,
     m_Evil3Check = false,
@@ -108,6 +124,31 @@ local Mission =
 
     m_StartBigSpawn = false,
 
+    m_SpawnStealerPair1 = false,
+    m_SpawnStealerPair2 = false,
+    m_SpawnStealerPair3 = false,
+    m_SpawnStealerPair4 = false,
+    m_SpawnStealerPair5 = false,
+    m_SpawnStealerPair6 = false,
+
+    m_Stop1 = false,
+    m_Stop2 = false,
+    m_Stop3 = false,
+    m_Stop4 = false,
+    m_Stop5 = false,
+    m_Stop6 = false,
+    m_Stop7 = false,
+    m_Stop8 = false,
+    m_Stop9 = false,
+    m_Stop10 = false,
+    m_Stop11 = false,
+    m_Stop12 = false,
+
+    m_StopTug = false,
+
+    m_CutsceneState = 1,
+    m_CutsceneStateDelay = 0,
+
     m_PlayerMetRebels = false,
     m_PlayerAmbushed = false,
     m_PlayerCaughtUp = false,
@@ -119,6 +160,9 @@ local Mission =
     m_StartDone = false,
     m_MissionOver = false,
 
+    m_PrepCamera1 = false,
+    m_PrepCamera2 = false,
+
     m_Audioclip = nil,
     m_AudioTimer = 0,
 
@@ -126,6 +170,14 @@ local Mission =
     m_RebelWarningCount = 0,
     m_RebelWarningTimer = 0,
     m_BurnsAmbushTimer = 0,
+
+    -- Timers to spawn the enemy Warrior pairs on each side of the Alchemator.
+    m_StealerPair1Timer = 0,
+    m_StealerPair2Timer = 0,
+    m_StealerPair3Timer = 0,
+    m_StealerPair4Timer = 0,
+    m_StealerPair5Timer = 0,
+    m_StealerPair6Timer = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -261,9 +313,6 @@ function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnance
         elseif (victimHandle == Mission.m_RTAttack3) then
             Goto(Mission.m_RTAttack2, Mission.m_Tug1, 1);
         end
-
-        -- Prevent other logic from running.
-        Mission.m_Attack1 = true;
     end
 
     return _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF);
@@ -312,6 +361,10 @@ Functions[1] = function()
     SetTeamNameForStat(7, "Scion Rebels");
     SetTeamNameForStat(Mission.m_EnemyTeam, "ISDF");
 
+    -- Put the Rebel colour on teams 5 and 7 for coop.
+    SetTeamColor(Mission.m_AlliedTeam, 85, 255, 85);
+    SetTeamColor(7, 85, 255, 85);
+
     -- Make sure the enemy doesn't attack the Team 5 units for now.
     if (Mission.m_IsCooperativeMode == false) then
         for i = 2, 5 do
@@ -321,10 +374,6 @@ Functions[1] = function()
         Ally(Mission.m_AlliedTeam, Mission.m_EnemyTeam);
         Ally(Mission.m_EnemyTeam, 7);
     end
-
-    -- Put the Rebel colour on teams 5 and 7 for coop.
-    SetTeamColor(Mission.m_AlliedTeam, 85, 255, 85);
-    SetTeamColor(7, 85, 255, 85);
 
     -- Grab all handles that are placed on the map.
     Mission.m_Tug1 = GetHandle("tug1");
@@ -388,8 +437,13 @@ Functions[1] = function()
 
     Mission.m_Bossman = BuildObject("fvwalk_x", 7, "bossman_spawn");
 
+    Mission.m_StealerWalker1 = BuildObject("fvwalk_x", 7, "stealer_walk1");
+    Mission.m_StealerWalker2 = BuildObject("fvwalk_x", 7, "stealer_walk2");
+
     -- Stop the AI from acting.
     SetIndependence(Mission.m_Bossman, 0);
+    SetIndependence(Mission.m_StealerWalker1, 0);
+    SetIndependence(Mission.m_StealerWalker2, 0);
 
     -- Put the existing Rebels onto the allied team.
     SetTeamNum(Mission.m_Evil1, Mission.m_AlliedTeam);
@@ -502,6 +556,397 @@ Functions[4] = function()
             Mission.m_BurnsAmbushDialogPlayed = true;
         end
     end
+
+    -- Check to see when the player has reached the Alchemator to start the cutscene.
+    if (GetTug(Mission.m_Tug1) == Mission.m_Power and GetDistsance(Mission.m_Tug1, Mission.m_Machine) < 200) then
+        -- So the objective doesn't fail when we have the Hauler destroyed.
+        Mission.m_StartBigSpawn = true;
+
+        -- Show complete objective.
+        AddObjectiveOverride("scion0401.otf", "GREEN", 10, true);
+
+        -- Advance the mission state.
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[5] = function()
+    -- Move the Tug to the point of death for the cutscene.
+    Retreat(Mission.m_Tug1, "tug_die_here", 1);
+
+    -- Set the timers to spawn the Rebel Warriors from the canyons.
+    Mission.m_StealerPair1Timer = Mission.m_MissionTime + SecondsToTurns(0);
+    Mission.m_StealerPair2Timer = Mission.m_MissionTime + SecondsToTurns(1.5);
+    Mission.m_StealerPair3Timer = Mission.m_MissionTime + SecondsToTurns(3);
+    Mission.m_StealerPair4Timer = Mission.m_MissionTime + SecondsToTurns(4.5);
+    Mission.m_StealerPair5Timer = Mission.m_MissionTime + SecondsToTurns(6);
+    Mission.m_StealerPair6Timer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+    -- Move the player units to their respective paths.
+    if (IsPlayer(Mission.m_FvSent1) == false and IsAlive(Mission.m_FvSent1)) then
+        SetIndependence(Mission.m_FvSent1, 0);
+        Goto(Mission.m_FvSent1, "fvsent1");
+    end
+
+    if (IsPlayer(Mission.m_FvSent2) == false and IsAlive(Mission.m_FvSent2)) then
+        SetIndependence(Mission.m_FvSent2, 0);
+        Goto(Mission.m_FvSent2, "fvsent2");
+    end
+
+    if (IsPlayer(Mission.m_FvSent3) == false and IsAlive(Mission.m_FvSent3)) then
+        SetIndependence(Mission.m_FvSent3, 0);
+        Goto(Mission.m_FvSent3, "fvsent3");
+    end
+
+    if (IsPlayer(Mission.m_FVTank1) == false and IsAlive(Mission.m_FVTank1)) then
+        SetIndependence(Mission.m_FVTank1, 0);
+        Goto(Mission.m_FVTank1, "fvtank1");
+    end
+
+    if (IsPlayer(Mission.m_FVTank2) == false and IsAlive(Mission.m_FVTank2)) then
+        SetIndependence(Mission.m_FVTank2, 0);
+        Goto(Mission.m_FVTank2, "fvtank2");
+    end
+
+    if (IsPlayer(Mission.m_FVTank3) == false and IsAlive(Mission.m_FVTank3)) then
+        SetIndependence(Mission.m_FVTank3, 0);
+        Goto(Mission.m_FVTank3, "fvtank3");
+    end
+
+    if (IsPlayer(Mission.m_FVArch1) == false and IsAlive(Mission.m_FVArch1)) then
+        SetIndependence(Mission.m_FVArch1, 0);
+        Goto(Mission.m_FVArch1, "fvarch1");
+    end
+
+    if (IsPlayer(Mission.m_FVArch2) == false and IsAlive(Mission.m_FVArch2)) then
+        SetIndependence(Mission.m_FVArch2, 0);
+        Goto(Mission.m_FVArch2, "fvarch2");
+    end
+
+    if (IsAlive(Mission.m_FVServ1)) then
+        SetIndependence(Mission.m_FVServ1, 0);
+        Goto(Mission.m_FVServ1, "fvserv1");
+    end
+
+    -- Small delay for the next screen.
+    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+
+    -- Advance the mission state.
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[6] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Cutscene state will manage things.
+        if (Mission.m_CutsceneState == 1) then
+            -- Prepare the first camera.
+            if (Mission.m_PrepCamera1 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Delay so we don't advance too much.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(7);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera1 = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("bigspawn_campath1", 1000, 0, Mission.m_BigSpawn_Cam1Look);
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 2) then
+            -- Prepare the second camera.
+            if (Mission.m_PrepCamera2 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Delay so we don't advance too much.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(5);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera2 = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("bigspawn_campath2", 1000, 0, Mission.m_BigSpawn_Cam2Look);
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 3) then
+            
+        end
+    end
+
+    -- Spawn the "actors".
+    if (Mission.m_SpawnStealerPair1 == false and Mission.m_StealerPair1Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer1 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer7 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer1, "stealer1");
+        Retreat(Mission.m_Stealer7, "stealer7");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer1, 6000);
+        SetCurHealth(Mission.m_Stealer1, 6000);
+        SetMaxHealth(Mission.m_Stealer7, 6000);
+        SetCurHealth(Mission.m_Stealer7, 6000);
+
+        SetIndependence(Mission.m_Stealer1, 0);
+        SetIndependence(Mission.m_Stealer7, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair1 = true;
+    end
+
+    if (Mission.m_SpawnStealerPair2 == false and Mission.m_StealerPair2Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer2 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer8 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer2, "stealer2");
+        Retreat(Mission.m_Stealer8, "stealer8");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer2, 6000);
+        SetCurHealth(Mission.m_Stealer2, 6000);
+        SetMaxHealth(Mission.m_Stealer8, 6000);
+        SetCurHealth(Mission.m_Stealer8, 6000);
+
+        SetIndependence(Mission.m_Stealer2, 0);
+        SetIndependence(Mission.m_Stealer8, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair2 = true;
+    end
+
+    if (Mission.m_SpawnStealerPair3 == false and Mission.m_StealerPair3Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer3 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer9 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer3, "stealer3");
+        Retreat(Mission.m_Stealer9, "stealer9");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer3, 6000);
+        SetCurHealth(Mission.m_Stealer3, 6000);
+        SetMaxHealth(Mission.m_Stealer9, 6000);
+        SetCurHealth(Mission.m_Stealer9, 6000);
+
+        SetIndependence(Mission.m_Stealer3, 0);
+        SetIndependence(Mission.m_Stealer9, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair3 = true;
+    end
+
+    if (Mission.m_SpawnStealerPair4 == false and Mission.m_StealerPair4Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer4 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer10 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer4, "stealer4");
+        Retreat(Mission.m_Stealer10, "stealer10");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer4, 6000);
+        SetCurHealth(Mission.m_Stealer4, 6000);
+        SetMaxHealth(Mission.m_Stealer10, 6000);
+        SetCurHealth(Mission.m_Stealer10, 6000);
+
+        SetIndependence(Mission.m_Stealer4, 0);
+        SetIndependence(Mission.m_Stealer10, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair4 = true;
+    end
+
+    if (Mission.m_SpawnStealerPair5 == false and Mission.m_StealerPair5Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer5 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer11 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer5, "stealer5");
+        Retreat(Mission.m_Stealer11, "stealer11");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer5, 6000);
+        SetCurHealth(Mission.m_Stealer5, 6000);
+        SetMaxHealth(Mission.m_Stealer11, 6000);
+        SetCurHealth(Mission.m_Stealer11, 6000);
+
+        SetIndependence(Mission.m_Stealer5, 0);
+        SetIndependence(Mission.m_Stealer11, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair5 = true;
+    end
+
+    if (Mission.m_SpawnStealerPair6 == false and Mission.m_StealerPair6Timer < Mission.m_MissionTime) then
+        -- Spawn the first pair.
+        Mission.m_Stealer6 = BuildObject("fvtkscn4", 7, "bigspawn1");
+        Mission.m_Stealer12 = BuildObject("fvtkscn4", 7, "bigspawn2");
+
+        -- Have them retreat.
+        Retreat(Mission.m_Stealer6, "stealer6");
+        Retreat(Mission.m_Stealer12, "stealer12");
+
+        -- Tweak their health.
+        SetMaxHealth(Mission.m_Stealer6, 6000);
+        SetCurHealth(Mission.m_Stealer6, 6000);
+        SetMaxHealth(Mission.m_Stealer12, 6000);
+        SetCurHealth(Mission.m_Stealer12, 6000);
+
+        SetIndependence(Mission.m_Stealer6, 0);
+        SetIndependence(Mission.m_Stealer12, 0);
+
+        -- So we don't loop.
+        Mission.m_SpawnStealerPair6 = true;
+    end
+
+    -- Controlling the Warriors.
+    if (Mission.m_SpawnStealerPair1) then
+        if (Mission.m_Stop1 == false and GetDistance(Mission.m_Stealer1, "stealer1") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer1, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop1 = true;
+        end
+
+        if (Mission.m_Stop7 == false and GetDistance(Mission.m_Stealer7, "stealer7") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer7, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop7 = true;
+        end
+    end
+
+    if (Mission.m_SpawnStealerPair2) then
+        if (Mission.m_Stop2 == false and GetDistance(Mission.m_Stealer2, "stealer2") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer2, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop2 = true;
+        end
+
+        if (Mission.m_Stop8 == false and GetDistance(Mission.m_Stealer8, "stealer8") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer8, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop8 = true;
+        end
+    end
+
+    if (Mission.m_SpawnStealerPair3) then
+        if (Mission.m_Stop3 == false and GetDistance(Mission.m_Stealer3, "stealer3") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer3, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop3 = true;
+        end
+
+        if (Mission.m_Stop9 == false and GetDistance(Mission.m_Stealer9, "stealer9") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer9, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop9 = true;
+        end
+    end
+
+    if (Mission.m_SpawnStealerPair4) then
+        if (Mission.m_Stop4 == false and GetDistance(Mission.m_Stealer4, "stealer4") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer4, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop4 = true;
+        end
+
+        if (Mission.m_Stop10 == false and GetDistance(Mission.m_Stealer10, "stealer10") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer10, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop10 = true;
+        end
+    end
+
+    if (Mission.m_SpawnStealerPair5) then
+        if (Mission.m_Stop5 == false and GetDistance(Mission.m_Stealer5, "stealer5") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer5, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop5 = true;
+        end
+
+        if (Mission.m_Stop11 == false and GetDistance(Mission.m_Stealer11, "stealer11") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer11, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop11 = true;
+        end
+    end
+
+    if (Mission.m_SpawnStealerPair6) then
+        if (Mission.m_Stop6 == false and GetDistance(Mission.m_Stealer6, "stealer6") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer6, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop6 = true;
+        end
+
+        if (Mission.m_Stop12 == false and GetDistance(Mission.m_Stealer12, "stealer12") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Stealer12, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Stop12 = true;
+        end
+    end
+
+    -- Controlling the Walkers.
+
+    -- Controlling the Hauler.
+    if (Mission.m_StopTug == false and Mission.m_StartBigSpawn) then
+        if (GetDistance(Mission.m_Tug1, "tug_die_here") < 10) then
+            -- Have the tug look at the machine.
+            LookAt(Mission.m_Tug1, Mission.m_Machine);
+
+            -- So we don't loop.
+            Mission.m_StopTug = true;
+        end
+    end
 end
 
 function RebuildRebels()
@@ -569,10 +1014,10 @@ end
 function AttacksBrain()
     -- Keep track of the attackers and when they have been sent.
     if (Mission.m_MissionTime % SecondsToTurns(0.5) == 0) then
-        -- Unique loop here so we know which player to attack.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
-            -- Check the first attackers.
-            if (Mission.m_Attack1 == false) then
+        -- Check the first attackers.
+        if (Mission.m_Attack1 == false) then
+            -- Unique loop here so we know which player to attack.
+            for i = 1, _Cooperative.m_TotalPlayerCount do
                 -- Grab the player handle.
                 local pHandle = GetPlayerHandle(i);
 

@@ -121,6 +121,10 @@ local Mission =
 
     m_RebelRetreat = false,
     m_RebelsTurnEvil = false,
+    m_RebelsAttack = false,
+    m_RebelsReserveAttack = false,
+    m_RebelsPickTarget = false,
+    m_RebelsChasePlayer = false,
 
     m_StartBigSpawn = false,
 
@@ -144,10 +148,25 @@ local Mission =
     m_Stop11 = false,
     m_Stop12 = false,
 
+    m_Stealer9Relook = false,
+    m_Stealer10Relook = false,
+    m_Stealer11Relook = false,
+    m_Stealer12Relook = false,
+
     m_StopTug = false,
 
     m_CutsceneState = 1,
     m_CutsceneStateDelay = 0,
+    m_CutsceneVoiceDelay = 0,
+
+    m_CutsceneVO1Played = false,
+    m_CutsceneVO3Played = false,
+    m_CutsceneVO4Played = false,
+    m_CutsceneVO5Played = false,
+    m_CutsceneVO6Played = false,
+
+    m_CutsceneAttackTug = false,
+    m_CutsceneTugDead = false,
 
     m_PlayerMetRebels = false,
     m_PlayerAmbushed = false,
@@ -162,6 +181,11 @@ local Mission =
 
     m_PrepCamera1 = false,
     m_PrepCamera2 = false,
+    m_PrepCamera3 = false,
+    m_PrepCamera4 = false,
+    m_PrepCamera5 = false,
+    m_PrepCamera6 = false,
+    m_PrepCamera7 = false,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
@@ -169,6 +193,8 @@ local Mission =
     m_MissionDelayTime = 0,
     m_RebelWarningCount = 0,
     m_RebelWarningTimer = 0,
+    m_RebelReserveReleaseTimer = 0,
+    m_RebelsChasePlayerTimer = 0,
     m_BurnsAmbushTimer = 0,
 
     -- Timers to spawn the enemy Warrior pairs on each side of the Alchemator.
@@ -493,6 +519,16 @@ Functions[1] = function()
 end
 
 Functions[2] = function()
+    -- REMOVE THIS!
+    local position = GetPosition("tugshot_campath1");
+
+    SetPosition(Mission.m_Tug1, position);
+    SetPosition(Mission.m_Power, position);
+    SetPosition(Mission.m_MainPlayer, position);
+
+    -- State
+    Mission.m_MissionState = 5;
+
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Ok Cooke, we MUST get this power source to the data transfer machine.
         -- We have been unable to locate any scrap veins in the area, so you will have to make due with the units we have available.
@@ -558,10 +594,7 @@ Functions[4] = function()
     end
 
     -- Check to see when the player has reached the Alchemator to start the cutscene.
-    if (GetTug(Mission.m_Tug1) == Mission.m_Power and GetDistsance(Mission.m_Tug1, Mission.m_Machine) < 200) then
-        -- So the objective doesn't fail when we have the Hauler destroyed.
-        Mission.m_StartBigSpawn = true;
-
+    if (GetTug(Mission.m_Tug1) == Mission.m_Power and GetDistance(Mission.m_Tug1, Mission.m_Machine) < 200) then
         -- Show complete objective.
         AddObjectiveOverride("scion0401.otf", "GREEN", 10, true);
 
@@ -571,6 +604,9 @@ Functions[4] = function()
 end
 
 Functions[5] = function()
+    -- So the objective doesn't fail when we have the Hauler destroyed.
+    Mission.m_StartBigSpawn = true;
+
     -- Move the Tug to the point of death for the cutscene.
     Retreat(Mission.m_Tug1, "tug_die_here", 1);
 
@@ -583,19 +619,19 @@ Functions[5] = function()
     Mission.m_StealerPair6Timer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
     -- Move the player units to their respective paths.
-    if (IsPlayer(Mission.m_FvSent1) == false and IsAlive(Mission.m_FvSent1)) then
-        SetIndependence(Mission.m_FvSent1, 0);
-        Goto(Mission.m_FvSent1, "fvsent1");
+    if (IsPlayer(Mission.m_FVSent1) == false and IsAlive(Mission.m_FVSent1)) then
+        SetIndependence(Mission.m_FVSent1, 0);
+        Goto(Mission.m_FVSent1, "fvsent1");
     end
 
-    if (IsPlayer(Mission.m_FvSent2) == false and IsAlive(Mission.m_FvSent2)) then
-        SetIndependence(Mission.m_FvSent2, 0);
-        Goto(Mission.m_FvSent2, "fvsent2");
+    if (IsPlayer(Mission.m_FVSent2) == false and IsAlive(Mission.m_FVSent2)) then
+        SetIndependence(Mission.m_FVSent2, 0);
+        Goto(Mission.m_FVSent2, "fvsent2");
     end
 
-    if (IsPlayer(Mission.m_FvSent3) == false and IsAlive(Mission.m_FvSent3)) then
-        SetIndependence(Mission.m_FvSent3, 0);
-        Goto(Mission.m_FvSent3, "fvsent3");
+    if (IsPlayer(Mission.m_FVSent3) == false and IsAlive(Mission.m_FVSent3)) then
+        SetIndependence(Mission.m_FVSent3, 0);
+        Goto(Mission.m_FVSent3, "fvsent3");
     end
 
     if (IsPlayer(Mission.m_FVTank1) == false and IsAlive(Mission.m_FVTank1)) then
@@ -689,7 +725,312 @@ Functions[6] = function()
                 Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
             end
         elseif (Mission.m_CutsceneState == 3) then
-            
+            -- Prepare the third camera.
+            if (Mission.m_PrepCamera3 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Delay so we don't advance too much.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(15);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera3 = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("bigspawn_campath3", 3000, 1200, Mission.m_BigSpawn_Cam3Look);
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 4) then
+            -- Prepare the fourth camera.
+            if (Mission.m_PrepCamera4 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Delay so we don't advance too much.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(10);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera4 = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("bigspawn_campath4", 3000, 100, Mission.m_BigSpawn_Cam4Look);
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 5) then
+            -- Prepare the fifth camera.
+            if (Mission.m_PrepCamera5 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Delay so we don't advance too much.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(7);
+
+                -- Delay for cutscene voices.
+                Mission.m_CutsceneVoiceDelay = Mission.m_MissionTime + SecondsToTurns(2);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera5 = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraObject(Mission.m_Bossman, 0, -5, 20, Mission.m_Bossman);
+            end
+
+            -- First voice over for the missions.
+            if (Mission.m_CutsceneVO1Played == false and Mission.m_CutsceneVoiceDelay < Mission.m_MissionTime) then
+                -- So...you thought it would be that easy? I think not
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0401.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+                -- So we don't loop.
+                Mission.m_CutsceneVO1Played = true;
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 6) then
+            -- Prepare the sixth camera.
+            if (Mission.m_PrepCamera6 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Set the Hauler to low health.
+                SetMaxHealth(Mission.m_Tug1, 775);
+                SetCurHealth(Mission.m_Tug1, 775);
+
+                -- Give the AI their independence.
+                SetIndependence(Mission.m_Stealer9, 1);
+                SetIndependence(Mission.m_Stealer10, 1);
+                SetIndependence(Mission.m_Stealer11, 1);
+                SetIndependence(Mission.m_Stealer12, 1);
+
+                -- Small delay for the next scene where the warriors attack the Hauler.
+                Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(0.5);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera6 = true;
+            end
+
+            if (Mission.m_CutsceneAttackTug == false) then
+                -- Attack the Hauler.
+                Attack(Mission.m_Stealer9, Mission.m_Tug1, 1);
+                Attack(Mission.m_Stealer10, Mission.m_Tug1, 1);
+                Attack(Mission.m_Stealer11, Mission.m_Tug1, 1);
+                Attack(Mission.m_Stealer12, Mission.m_Tug1, 1);
+
+                -- So we don't loop.
+                Mission.m_CutsceneAttackTug = true;
+            end
+
+            if (Mission.m_CutsceneTugDead == false and IsAround(Mission.m_Tug1) == false) then
+                -- Strip the AI of their independence.
+                SetIndependence(Mission.m_Stealer9, 0);
+                SetIndependence(Mission.m_Stealer10, 0);
+                SetIndependence(Mission.m_Stealer11, 0);
+                SetIndependence(Mission.m_Stealer12, 0);
+
+                -- Send the Warriors back to their path.
+                Retreat(Mission.m_Stealer9, "stealer9");
+                Retreat(Mission.m_Stealer10, "stealer10");
+                Retreat(Mission.m_Stealer11, "stealer11");
+                Retreat(Mission.m_Stealer12, "stealer12");
+
+                -- For the next part of the cutscene.
+                Mission.m_CutsceneStateDelay = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+                -- For the next VO time.
+                Mission.m_CutsceneVoiceDelay = Mission.m_MissionTime + SecondsToTurns(4);
+
+                -- So we don't loop.
+                Mission.m_CutsceneTugDead = true;
+            end
+
+            if (Mission.m_CutsceneTugDead and Mission.m_CutsceneVO3Played == false and Mission.m_CutsceneVoiceDelay < Mission.m_MissionTime) then
+                -- "Why, why do you betray us?"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0403.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+                -- So we don't loop.
+                Mission.m_CutsceneVO3Played = true;
+            end
+
+            if (Mission.m_Stealer9Relook == false and GetDistance(Mission.m_Stealer9, "stealer9") < 8) then
+                -- Relook at the target.
+                LookAt(Mission.m_Stealer9, Mission.m_AILook);
+
+                -- So we don't loop.
+                Mission.m_Stealer9Relook = true;
+            end
+
+            if (Mission.m_Stealer10Relook == false and GetDistance(Mission.m_Stealer10, "stealer10") < 8) then
+                -- Relook at the target.
+                LookAt(Mission.m_Stealer10, Mission.m_AILook);
+
+                -- So we don't loop.
+                Mission.m_Stealer10Relook = true;
+            end
+
+            if (Mission.m_Stealer11Relook == false and GetDistance(Mission.m_Stealer11, "stealer11") < 8) then
+                -- Relook at the target.
+                LookAt(Mission.m_Stealer11, Mission.m_AILook);
+
+                -- So we don't loop.
+                Mission.m_Stealer11Relook = true;
+            end
+
+            if (Mission.m_Stealer12Relook == false and GetDistance(Mission.m_Stealer12, "stealer12") < 8) then
+                -- Relook at the target.
+                LookAt(Mission.m_Stealer12, Mission.m_AILook);
+
+                -- So we don't loop.
+                Mission.m_Stealer12Relook = true;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("tugshot_campath1", 3000, 0, Mission.m_TugShot_Look1);
+            end
+
+            -- Advance the state of the cutscenes.
+            if (Mission.m_CutsceneTugDead and Mission.m_CutsceneStateDelay < Mission.m_MissionTime) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+        elseif (Mission.m_CutsceneState == 7) then
+            -- Prepare the seventh camera.
+            if (Mission.m_PrepCamera7 == false) then
+                -- If we are not coop, then start the camera sequence.
+                if (Mission.m_IsCooperativeMode == false) then
+                    -- Start the camera.
+                    CameraReady();
+                end
+
+                -- Small delay before the next voice line.
+                Mission.m_CutsceneVoiceDelay = Mission.m_MissionTime + SecondsToTurns(0.5);
+
+                -- So we don't loop.
+                Mission.m_PrepCamera7 = true;
+            end
+
+            if (Mission.m_CutsceneVO4Played == false and Mission.m_CutsceneVoiceDelay < Mission.m_MissionTime) then
+                -- "Our home is here, and if our core planet dies, we die with it. We will not return to earth to live among humans"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0404.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+
+                -- So we don't loop.
+                Mission.m_CutsceneVO4Played = true;
+            end
+
+            if (Mission.m_CutsceneVO5Played == false and Mission.m_CutsceneVO4Played and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+                -- "Were WE not once human?"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0405.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+                -- So we don't loop.
+                Mission.m_CutsceneVO5Played = true;
+            end
+
+            if (Mission.m_CutsceneVO6Played == false and Mission.m_CutsceneVO5Played and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+                -- "You perhaps. But I am Scion, through and through,"
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cutsc0406.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+                -- So we don't loop.
+                Mission.m_CutsceneVO6Played = true;
+            end
+
+            if (Mission.m_CutsceneVO6Played and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+                Mission.m_CutsceneState = Mission.m_CutsceneState + 1;
+            end
+
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraPath("shot7_path1", 500, 120, Mission.m_Bossman);
+            end
+        elseif (Mission.m_CutsceneState == 8) then
+            -- Again, only if we're not in coop.
+            if (Mission.m_IsCooperativeMode == false) then
+                CameraFinish();
+            end
+
+            -- Give the units back to the player.
+            if (IsPlayer(Mission.m_FVSent1) == false and IsAlive(Mission.m_FVSent1)) then
+                SetIndependence(Mission.m_FVSent1, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVSent2) == false and IsAlive(Mission.m_FVSent2)) then
+                SetIndependence(Mission.m_FVSent2, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVSent3) == false and IsAlive(Mission.m_FVSent3)) then
+                SetIndependence(Mission.m_FVSent3, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVTank1) == false and IsAlive(Mission.m_FVTank1)) then
+                SetIndependence(Mission.m_FVTank1, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVTank2) == false and IsAlive(Mission.m_FVTank2)) then
+                SetIndependence(Mission.m_FVTank2, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVTank3) == false and IsAlive(Mission.m_FVTank3)) then
+                SetIndependence(Mission.m_FVTank3, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVArch1) == false and IsAlive(Mission.m_FVArch1)) then
+                SetIndependence(Mission.m_FVArch1, 1);
+            end
+
+            if (IsPlayer(Mission.m_FVArch2) == false and IsAlive(Mission.m_FVArch2)) then
+                SetIndependence(Mission.m_FVArch2, 1);
+            end
+
+            if (IsAlive(Mission.m_FVServ1)) then
+                SetIndependence(Mission.m_FVServ1, 1);
+            end
+
+            -- Minor delay before the next mission state.
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1);
+
+            -- Move to the next state.
+            Mission.m_MissionState = Mission.m_MissionState + 1;
         end
     end
 
@@ -949,6 +1290,204 @@ Functions[6] = function()
     end
 end
 
+Functions[7] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        if (Mission.m_RebelsAttack == false) then
+            -- "John run! Get to the dropship!";
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0410.wav");
+
+            -- Don't let the crystal die.
+            SetTeamNum(Mission.m_Power, 0);
+            SetMaxHealth(Mission.m_Power, 0);
+
+            -- Timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+
+            -- Agro the AI.
+            SetIndependence(Mission.m_Stealer1, 1);
+            SetIndependence(Mission.m_Stealer2, 1);
+            SetIndependence(Mission.m_Stealer3, 1);
+            SetIndependence(Mission.m_Stealer4, 1);
+            SetIndependence(Mission.m_Stealer5, 1);
+            SetIndependence(Mission.m_Stealer6, 1);
+
+            -- Reserves to release in the next 15 seconds.
+            SetIndependence(Mission.m_Stealer7, 0);
+            SetIndependence(Mission.m_Stealer8, 0);
+            SetIndependence(Mission.m_Stealer9, 0);
+            SetIndependence(Mission.m_Stealer10, 0);
+            SetIndependence(Mission.m_Stealer11, 0);
+            SetIndependence(Mission.m_Stealer12, 0);
+
+            -- Give the AI something to attack other than the player so the player can get away.
+            if (Mission.m_RebelsPickTarget == false) then
+                -- Check to see what units we can attack.
+                if (IsPlayer(Mission.m_FVTank1) == false and IsAlive(Mission.m_FVTank1) and GetDistance(Mission.m_FVTank1, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVTank1);
+                    Attack(Mission.m_Stealer2, Mission.m_FVTank1);
+                    Attack(Mission.m_Stealer3, Mission.m_FVTank1);
+                    Attack(Mission.m_Stealer4, Mission.m_FVTank1);
+                    Attack(Mission.m_Stealer5, Mission.m_FVTank1);
+                    Attack(Mission.m_Stealer6, Mission.m_FVTank1);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                elseif (IsPlayer(Mission.m_FVTank2) == false and IsAlive(Mission.m_FVTank2) and GetDistance(Mission.m_FVTank2, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVTank2);
+                    Attack(Mission.m_Stealer2, Mission.m_FVTank2);
+                    Attack(Mission.m_Stealer3, Mission.m_FVTank2);
+                    Attack(Mission.m_Stealer4, Mission.m_FVTank2);
+                    Attack(Mission.m_Stealer5, Mission.m_FVTank2);
+                    Attack(Mission.m_Stealer6, Mission.m_FVTank2);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                elseif (IsPlayer(Mission.m_FVTank3) == false and IsAlive(Mission.m_FVTank3) and GetDistance(Mission.m_FVTank3, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVTank3);
+                    Attack(Mission.m_Stealer2, Mission.m_FVTank3);
+                    Attack(Mission.m_Stealer3, Mission.m_FVTank3);
+                    Attack(Mission.m_Stealer4, Mission.m_FVTank3);
+                    Attack(Mission.m_Stealer5, Mission.m_FVTank3);
+                    Attack(Mission.m_Stealer6, Mission.m_FVTank3);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                elseif (IsPlayer(Mission.m_FVSent1) == false and IsAlive(Mission.m_FVSent1) and GetDistance(Mission.m_FVSent1, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVSent1);
+                    Attack(Mission.m_Stealer2, Mission.m_FVSent1);
+                    Attack(Mission.m_Stealer3, Mission.m_FVSent1);
+                    Attack(Mission.m_Stealer4, Mission.m_FVSent1);
+                    Attack(Mission.m_Stealer5, Mission.m_FVSent1);
+                    Attack(Mission.m_Stealer6, Mission.m_FVSent1);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                elseif (IsPlayer(Mission.m_FVSent2) == false and IsAlive(Mission.m_FVSent2) and GetDistance(Mission.m_FVSent2, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVSent2);
+                    Attack(Mission.m_Stealer2, Mission.m_FVSent2);
+                    Attack(Mission.m_Stealer3, Mission.m_FVSent2);
+                    Attack(Mission.m_Stealer4, Mission.m_FVSent2);
+                    Attack(Mission.m_Stealer5, Mission.m_FVSent2);
+                    Attack(Mission.m_Stealer6, Mission.m_FVSent2);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                elseif (IsPlayer(Mission.m_FVSent3) == false and IsAlive(Mission.m_FVSent3) and GetDistance(Mission.m_FVSent3, Mission.m_Machine) < 600) then
+                    Attack(Mission.m_Stealer1, Mission.m_FVSent3);
+                    Attack(Mission.m_Stealer2, Mission.m_FVSent3);
+                    Attack(Mission.m_Stealer3, Mission.m_FVSent3);
+                    Attack(Mission.m_Stealer4, Mission.m_FVSent3);
+                    Attack(Mission.m_Stealer5, Mission.m_FVSent3);
+                    Attack(Mission.m_Stealer6, Mission.m_FVSent3);
+
+                    -- Found a target, break loop.
+                    Mission.m_RebelsPickTarget = true;
+                end
+            end
+
+            -- Small delay before releasing the rest of the Rebels.
+            Mission.m_RebelReserveReleaseTimer = Mission.m_MissionTime + SecondsToTurns(15);
+
+            -- Objectives.
+            AddObjectiveOverride("scion0406.otf", "WHITE", 10, true);
+
+            -- Remove the highlight from the Alchemator.
+            SetObjectiveOff(Mission.m_Machine);
+
+            -- Highlight the dropship.
+            SetObjectiveName(Mission.m_Dropship1, TranslateString("Mission1702"));
+            SetObjectiveOn(Mission.m_Dropship1);
+
+            -- So we don't loop.
+            Mission.m_RebelsAttack = true;
+        elseif (Mission.m_RebelsReserveAttack == false and Mission.m_RebelReserveReleaseTimer < Mission.m_MissionTime) then
+            -- Agro the AI.
+            SetIndependence(Mission.m_Stealer7, 1);
+            SetIndependence(Mission.m_Stealer8, 1);
+            SetIndependence(Mission.m_Stealer9, 1);
+            SetIndependence(Mission.m_Stealer10, 1);
+            SetIndependence(Mission.m_Stealer11, 1);
+            SetIndependence(Mission.m_Stealer12, 1);
+
+            -- Send them after the player.
+            Attack(Mission.m_Stealer7, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer8, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer9, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer10, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer11, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer12, Mission.m_MainPlayer);
+
+            -- Small delay before sending the rest of the Rebels after the player.
+            Mission.m_RebelsChasePlayerTimer = Mission.m_MissionTime + SecondsToTurns(10);
+
+            -- So we don't loop.
+            Mission.m_RebelsReserveAttack = true;
+        elseif (Mission.m_RebelsChasePlayer == false and Mission.m_RebelsChasePlayerTimer < Mission.m_MissionTime) then
+            -- Send the rest of the Rebels to chase the player.
+            Attack(Mission.m_Stealer1, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer2, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer3, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer4, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer5, Mission.m_MainPlayer);
+            Attack(Mission.m_Stealer6, Mission.m_MainPlayer);
+
+            -- Give the Maulers their AI back and send them too.
+            SetIndependence(Mission.m_Bossman, 1);
+            SetIndependence(Mission.m_StealerWalker1, 1);
+            SetIndependence(Mission.m_StealerWalker2, 1);
+
+            Attack(Mission.m_Bossman, Mission.m_MainPlayer, 1);
+            Attack(Mission.m_StealerWalker1, Mission.m_MainPlayer, 1);
+            Attack(Mission.m_StealerWalker2, Mission.m_MainPlayer, 1);
+
+            -- So we don't loop.
+            Mission.m_RebelsChasePlayer = true;
+        end
+    end
+
+    -- This checks to see if the player has made it to the dropship.
+    if (Mission.m_RebelsAttack and IsPlayerWithinDistance(Mission.m_Dropship1, 10, _Cooperative.m_TotalPlayerCount)) then
+        -- Clean up the Rebels.
+        RemoveObject(Mission.m_Stealer1);
+        RemoveObject(Mission.m_Stealer2);
+        RemoveObject(Mission.m_Stealer3);
+        RemoveObject(Mission.m_Stealer4);
+        RemoveObject(Mission.m_Stealer5);
+        RemoveObject(Mission.m_Stealer6);
+        RemoveObject(Mission.m_Stealer7);
+        RemoveObject(Mission.m_Stealer8);
+        RemoveObject(Mission.m_Stealer9);
+        RemoveObject(Mission.m_Stealer10);
+        RemoveObject(Mission.m_Stealer11);
+        RemoveObject(Mission.m_Stealer12);
+
+        RemoveObject(Mission.m_Bossman);
+        RemoveObject(Mission.m_StealerWalker1);
+        RemoveObject(Mission.m_StealerWalker2);
+
+        -- Stop the wingmen so they don't follow the player.
+        Stop(Mission.m_FVSent1);
+        Stop(Mission.m_FVSent2);
+        Stop(Mission.m_FVSent3);
+        Stop(Mission.m_FVTank1);
+        Stop(Mission.m_FVTank2);
+        Stop(Mission.m_FVTank3);
+        Stop(Mission.m_FVServ1);
+        Stop(Mission.m_FVArch1);
+        Stop(Mission.m_FVArch2);
+
+        -- Green objective.
+        AddObjectiveOverride("scion0406.otf", "GREEN", 10, true);
+
+        -- Advance the mission state.
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[8] = function()
+    
+end
+
 function RebuildRebels()
     -- Give them the normal scouts.
     Mission.m_Evil1 = ReplaceObject(Mission.m_Evil1, "fvscout_x");
@@ -1172,48 +1711,50 @@ end
 
 -- Checks for failure conditions.
 function HandleFailureConditions()
-    if (IsAround(Mission.m_Power) == false) then
-        -- Stop the mission.
-        Mission.m_MissionOver = true;
-
-        -- The Power Crystal has been destroyed.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0409.wav", false);
-
-        -- Set the timer for this audio clip.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
-
-        -- Show Objectives.
-        AddObjectiveOverride("scion0403.otf", "RED", 10, true);
-
-        -- Failure.
-        if (Mission.m_IsCooperativeMode) then
-            NoteGameoverWithCustomMessage("The Power Crystal was destroyed.");
-            DoGameover(10);
-        else
-            FailMission(GetTime() + 10, "scion04L1.txt");
+    if (Mission.m_StartBigSpawn == false) then
+        if (IsAround(Mission.m_Power) == false) then
+            -- Stop the mission.
+            Mission.m_MissionOver = true;
+    
+            -- The Power Crystal has been destroyed.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0409.wav", false);
+    
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+    
+            -- Show Objectives.
+            AddObjectiveOverride("scion0403.otf", "RED", 10, true);
+    
+            -- Failure.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("The Power Crystal was destroyed.");
+                DoGameover(10);
+            else
+                FailMission(GetTime() + 10, "scion04L1.txt");
+            end
         end
-    end
-
-    -- This checks if the Hauler is still alive before the big cutscene.
-    if (Mission.m_StartBigSpawn == false and IsAlive(Mission.m_Tug1) == false) then
-        -- Stop the mission.
-        Mission.m_MissionOver = true;
-
-        -- Dammit the Hauler has been destroyed!
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0415.wav", false);
-
-        -- Set the timer for this audio clip.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
-
-        -- Show Objectives.
-        AddObjectiveOverride("scion0404.otf", "RED", 10, true);
-
-        -- Failure.
-        if (Mission.m_IsCooperativeMode) then
-            NoteGameoverWithCustomMessage("The Hauler was destroyed.");
-            DoGameover(10);
-        else
-            FailMission(GetTime() + 10, "scion04L2.txt");
-        end
+    
+        -- This checks if the Hauler is still alive before the big cutscene.
+        if (IsAlive(Mission.m_Tug1) == false) then
+            -- Stop the mission.
+            Mission.m_MissionOver = true;
+    
+            -- Dammit the Hauler has been destroyed!
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0415.wav", false);
+    
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+    
+            -- Show Objectives.
+            AddObjectiveOverride("scion0404.otf", "RED", 10, true);
+    
+            -- Failure.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("The Hauler was destroyed.");
+                DoGameover(10);
+            else
+                FailMission(GetTime() + 10, "scion04L2.txt");
+            end
+        end 
     end
 end

@@ -23254,7 +23254,7 @@ objClass = fvdrop
 seqno [1] =
 24e2
 team [1] =
-17
+0
 label = dropship1
 isUser [1] =
 false
@@ -23350,7 +23350,7 @@ objClass = fvdrop
 seqno [1] =
 24e3
 team [1] =
-17
+0
 label = dropship2
 isUser [1] =
 false

@@ -313,6 +313,7 @@ Scion04 (Escort):
 - Added logic to move the Scout/Sabre pairs if their partner is sniped.
 - Removed patrols that were driving over lava and damaging themselves.
 - Fixed the main objective to check that the Hauler is carrying the Power Crystal when it reaches the Alchemator.
+- Changed Scion Dropships team to team 0 so they don't appear on the radar too early.
 
 - General QOL (Quality of Life) improvements. 
 

@@ -112,6 +112,11 @@ local Mission =
     m_Stealer11 = nil,
     m_Stealer12 = nil,
 
+    m_Faker1 = nil,
+    m_Faker2 = nil,
+    m_Faker3 = nil,
+    m_Faker4 = nil,
+
     m_Evil1Check = false,
     m_Evil2Check = false,
     m_Evil3Check = false,
@@ -153,6 +158,13 @@ local Mission =
     m_Stealer11Relook = false,
     m_Stealer12Relook = false,
 
+    m_Walker1Stop = false,
+    m_Walker2Stop = false,
+    m_BossmanStop = false,
+
+    m_WalkerMove = false,
+    m_BossmanMove = false,
+
     m_StopTug = false,
 
     m_CutsceneState = 1,
@@ -175,6 +187,9 @@ local Mission =
     m_BurnsRebelDialogPlayed = false,
     m_BurnsAmbushDialogPlayed = false,
 
+    m_TakeoffDone = false,
+    m_TakeoffSoundDone = false,
+
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
@@ -186,6 +201,15 @@ local Mission =
     m_PrepCamera5 = false,
     m_PrepCamera6 = false,
     m_PrepCamera7 = false,
+
+    m_PrepFinalCamera = false,
+
+    m_FakersStopAttack = false,
+
+    m_TakeoffTime = 0,
+    m_TakeoffSoundTime = 0,
+
+    m_FakersStopAttackTime = 0,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
@@ -204,6 +228,10 @@ local Mission =
     m_StealerPair4Timer = 0,
     m_StealerPair5Timer = 0,
     m_StealerPair6Timer = 0,
+
+    -- Timers for moving the walkers.
+    m_WalkerMoveTime = 0,
+    m_BossmanMoveTime = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -461,16 +489,6 @@ Functions[1] = function()
 
     Mission.m_TugShot_Look1 = GetHandle("tugshot_look1");
 
-    Mission.m_Bossman = BuildObject("fvwalk_x", 7, "bossman_spawn");
-
-    Mission.m_StealerWalker1 = BuildObject("fvwalk_x", 7, "stealer_walk1");
-    Mission.m_StealerWalker2 = BuildObject("fvwalk_x", 7, "stealer_walk2");
-
-    -- Stop the AI from acting.
-    SetIndependence(Mission.m_Bossman, 0);
-    SetIndependence(Mission.m_StealerWalker1, 0);
-    SetIndependence(Mission.m_StealerWalker2, 0);
-
     -- Put the existing Rebels onto the allied team.
     SetTeamNum(Mission.m_Evil1, Mission.m_AlliedTeam);
     SetTeamNum(Mission.m_Evil2, Mission.m_AlliedTeam);
@@ -510,6 +528,16 @@ Functions[1] = function()
     SetIndependence(Mission.m_Ambusher4, 0);
     SetIndependence(Mission.m_Ambusher5, 0);
     SetIndependence(Mission.m_Ambusher6, 0);
+
+    -- Spawn the enemy walkers early for the final cutscene.
+    Mission.m_Bossman = BuildObject("fvwalk_x", 7, "bossman_spawn");
+    Mission.m_StealerWalker1 = BuildObject("fvwalk_x", 7, "stealer_walk1");
+    Mission.m_StealerWalker2 = BuildObject("fvwalk_x", 7, "stealer_walk2");
+
+    -- Stop the AI from acting.
+    SetIndependence(Mission.m_Bossman, 0);
+    SetIndependence(Mission.m_StealerWalker1, 0);
+    SetIndependence(Mission.m_StealerWalker2, 0);
 
     -- Minor delay before starting the mission.
     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1.5);
@@ -1163,6 +1191,9 @@ Functions[6] = function()
         SetIndependence(Mission.m_Stealer6, 0);
         SetIndependence(Mission.m_Stealer12, 0);
 
+        -- Small delay before we move the Walkers.
+        Mission.m_WalkerMoveTime = Mission.m_MissionTime + SecondsToTurns(5);
+
         -- So we don't loop.
         Mission.m_SpawnStealerPair6 = true;
     end
@@ -1277,6 +1308,51 @@ Functions[6] = function()
     end
 
     -- Controlling the Walkers.
+    if (Mission.m_SpawnStealerPair6 and Mission.m_WalkerMove == false and Mission.m_WalkerMoveTime < Mission.m_MissionTime) then
+        -- Let's move the walkers.
+        Retreat(Mission.m_StealerWalker1, "walk1_path");
+        Retreat(Mission.m_StealerWalker2, "walk2_path");
+
+        -- Delay for the "Bossman" walker to move.
+        Mission.m_BossmanMoveTime = Mission.m_MissionTime + SecondsToTurns(15);
+
+        -- So we don't loop.
+        Mission.m_WalkerMove = true;
+    end
+
+    if (Mission.m_WalkerMove) then
+        if (Mission.m_BossmanMove == false and Mission.m_BossmanMoveTime < Mission.m_MissionTime) then
+            -- Have "Bossman" retreat.
+            Retreat(Mission.m_Bossman, "bossman");
+
+            -- So we don't loop.
+            Mission.m_BossmanMove = true;
+        end
+
+        if (Mission.m_Walker1Stop == false and GetDistance(Mission.m_StealerWalker1, "walk1_path_end") < 15) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_StealerWalker1, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Walker1Stop = true;
+        end
+
+        if (Mission.m_Walker2Stop == false and GetDistance(Mission.m_StealerWalker2, "walk2_path_end") < 15) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_StealerWalker2, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Walker2Stop = true;
+        end
+
+        if (Mission.m_BossmanStop == false and GetDistance(Mission.m_Bossman, "bossman") < 5) then
+            -- Have the AI look at the right place.
+            LookAt(Mission.m_Bossman, Mission.m_AILook);
+
+            -- So we don't loop.
+            Mission.m_Walker2Stop = true;
+        end
+    end
 
     -- Controlling the Hauler.
     if (Mission.m_StopTug == false and Mission.m_StartBigSpawn) then
@@ -1394,6 +1470,9 @@ Functions[7] = function()
             -- Remove the highlight from the Alchemator.
             SetObjectiveOff(Mission.m_Machine);
 
+            -- Change the Dropship team number.
+            SetTeamNum(Mission.m_Dropship1, Mission.m_HostTeam);
+
             -- Highlight the dropship.
             SetObjectiveName(Mission.m_Dropship1, TranslateString("Mission1702"));
             SetObjectiveOn(Mission.m_Dropship1);
@@ -1476,16 +1555,97 @@ Functions[7] = function()
         Stop(Mission.m_FVArch1);
         Stop(Mission.m_FVArch2);
 
-        -- Green objective.
-        AddObjectiveOverride("scion0406.otf", "GREEN", 10, true);
-
         -- Advance the mission state.
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[8] = function()
-    
+    if (Mission.m_IsCooperativeMode) then
+        -- So we don't loop.
+        Mission.m_MissionOver = true;
+
+        -- Finish the mission.
+        NoteGameoverWithCustomMessage("Mission Accomplished.");
+        DoGameover(10);
+    end
+
+    -- This will handle the cutscene if we are not in Cooperative.
+    if (Mission.m_PrepFinalCamera == false) then
+        -- Prepare the Camera.
+        CameraReady();
+
+        -- Change the cinematic dropship to the right team.
+        SetTeamNum(Mission.m_Dropship2, Mission.m_HostTeam);
+
+        -- Build the "Fakers".
+        Mission.m_Faker1 = BuildObject("fvtank_x", 7, "faker1");
+        Mission.m_Faker2 = BuildObject("fvtank_x", 7, "faker2");
+        Mission.m_Faker3 = BuildObject("fvtank_x", 7, "faker3");
+        Mission.m_Faker4 = BuildObject("fvtank_x", 7, "faker4");
+
+        -- Have them attack the Dropship.
+        Attack(Mission.m_Faker1, Mission.m_Dropship2);
+        Attack(Mission.m_Faker2, Mission.m_Dropship2);
+        Attack(Mission.m_Faker3, Mission.m_Dropship2);
+        Attack(Mission.m_Faker4, Mission.m_Dropship2);
+
+        -- Prepare the Dropship for take-off.
+        Mission.m_TakeoffTime = Mission.m_MissionTime + SecondsToTurns(8);
+
+        -- So we don't loop.
+        Mission.m_PrepFinalCamera = true;
+    end
+
+    -- Start the Camera Path for the final scene.
+    CameraPath("takeoff_campath1", 1000, 0, Mission.m_Dropship2);
+
+    if (Mission.m_TakeoffDone == false and Mission.m_TakeoffTime < Mission.m_MissionTime) then
+        -- Have the Dropship perform the take-off.
+        SetAnimation(Mission.m_Dropship2, "takeoff", 1);
+
+        -- Timer for the "Fakers" to stop attacking the Dropship.
+        Mission.m_FakersStopAttackTime = Mission.m_MissionTime + SecondsToTurns(3);
+
+        -- Timer for the take-off sound.
+        Mission.m_TakeoffSoundTime = Mission.m_MissionTime + SecondsToTurns(4);
+
+        -- So we don't loop.
+        Mission.m_TakeoffDone = true;
+    end
+
+    -- Check to see when we need to play the dropshop take-off sound.
+    if (Mission.m_TakeoffDone) then
+        if (Mission.m_TakeoffSoundDone == false and Mission.m_TakeoffSoundTime < Mission.m_MissionTime) then
+            -- Play the dropship sound.
+            AudioMessage("droptoff.wav");
+
+            -- So we don't loop.
+            Mission.m_TakeoffSoundDone = true;
+        end
+
+        if (Mission.m_FakersStopAttack == false and Mission.m_FakersStopAttackTime < Mission.m_MissionTime) then
+            SetIndependence(Mission.m_Faker1, 0);
+			SetIndependence(Mission.m_Faker2, 0);
+			SetIndependence(Mission.m_Faker3, 0);
+			SetIndependence(Mission.m_Faker4, 0);
+
+            -- Have the fakers go out of shot.
+            Patrol(Mission.m_Faker1, "faker_path");
+            Patrol(Mission.m_Faker2, "faker_path");
+            Patrol(Mission.m_Faker3, "faker_path");
+            Patrol(Mission.m_Faker4, "faker_path");
+
+            -- Succeed the mission.
+            SucceedMission(GetTime() + 10, "scion04w1.txt");
+
+            -- So we don't loop.
+            Mission.m_FakersStopAttack = true;
+
+            -- Mission is done.
+            Mission.m_MissionOver = true;
+        end
+    end
 end
 
 function RebuildRebels()
@@ -1715,16 +1875,16 @@ function HandleFailureConditions()
         if (IsAround(Mission.m_Power) == false) then
             -- Stop the mission.
             Mission.m_MissionOver = true;
-    
+
             -- The Power Crystal has been destroyed.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0409.wav", false);
-    
+
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
-    
+
             -- Show Objectives.
             AddObjectiveOverride("scion0403.otf", "RED", 10, true);
-    
+
             -- Failure.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("The Power Crystal was destroyed.");
@@ -1733,21 +1893,21 @@ function HandleFailureConditions()
                 FailMission(GetTime() + 10, "scion04L1.txt");
             end
         end
-    
+
         -- This checks if the Hauler is still alive before the big cutscene.
         if (IsAlive(Mission.m_Tug1) == false) then
             -- Stop the mission.
             Mission.m_MissionOver = true;
-    
+
             -- Dammit the Hauler has been destroyed!
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0415.wav", false);
-    
+
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
-    
+
             -- Show Objectives.
             AddObjectiveOverride("scion0404.otf", "RED", 10, true);
-    
+
             -- Failure.
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("The Hauler was destroyed.");
@@ -1755,6 +1915,6 @@ function HandleFailureConditions()
             else
                 FailMission(GetTime() + 10, "scion04L2.txt");
             end
-        end 
+        end
     end
 end

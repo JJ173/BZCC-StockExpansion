@@ -5,5 +5,7 @@ scrapValue = 8 // Scrap value for the CPU is reduced by half so it drops less lo
 scrapCost = 25 // Scrap cost is reduced by 50%.
 
 [CraftClass]
+AIWeaponMaskVsCombat = 7
+AIWeaponMaskVsAssault = 3
 
 [HoverCraftClass]

@@ -1,11 +1,12 @@
--- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required Globals.
 require("_GlobalVariables");
 
 -- Required helper functions.
 require("_HelperFunctions");
+
+-- Required Skins Logic.
+require("_Skins");
 
 -- Models
 local _AIController = require("_AIController");
@@ -466,6 +467,21 @@ function ObjectSniped(DeadObjectHandle, KillersHandle)
 
     return PlayerDied(DeadObjectHandle, true);
 end
+
+-- function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
+--     if (IsPlayer(pilotHandle)) then
+--         -- Check their name.
+--         local name = GetPlayerName(pilotHandle);
+
+--         -- Just for testing.
+--         print(name);
+
+--         -- Apply the skin to the unit.
+--         ApplySkinToHandle(name, emptyCraftHandle);
+--     end
+
+--     return PREGETIN_ALLOW;
+-- end
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------

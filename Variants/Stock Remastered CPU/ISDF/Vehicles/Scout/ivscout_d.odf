@@ -1,8 +1,7 @@
 [GameObjectClass]
 baseName = "Defender"
-classLabel = "ivscout_x"
+classLabel = "ivscout_c"
 
-scrapValue = 8 // Scrap value for the CPU is reduced by half so it drops less loose.
 scrapCost = 0 // Original Scrap Cost (45).
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 

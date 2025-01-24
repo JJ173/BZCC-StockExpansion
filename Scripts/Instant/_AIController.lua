@@ -25,6 +25,9 @@ AIController =
     Patrols = {},
     Defenders = {},
 
+    Carrier = nil,
+    LandingPad = nil,
+
     -- Name that's picked from a random list for the team.
     Name = "";
 
@@ -114,15 +117,19 @@ function AIController:CarrierLogic()
 end
 
 function AIController:AddObject(handle, objClass, objCfg)
-    -- If it's the Commander, replace our reference.
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vtank_s") then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
-    end
-
-    -- Indicates the Recycler has been deployed at the start of the match.
-    if (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
+    elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
+    elseif (objClass == "VIRTUAL_CLASS_TURRET") then
+        self.Turrets[#self.Turrets + 1] = handle;
+    elseif (objClass == "VIRTUAL_CLASS_SCAVENGER") then
+        self.Scavengers[#self.Scavengers + 1] =  handle;
+    elseif (objClass == "VIRTUAL_CLASS_CONSTRUCTIONRIG") then
+        self.Constructors[#self.Constructors + 1] = handle;
+    elseif (objCfg == self.Race .. "bcarrier_xm") then
+        self.Carrier = handle;
     end
 end
 

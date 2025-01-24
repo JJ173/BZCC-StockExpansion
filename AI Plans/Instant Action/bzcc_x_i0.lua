@@ -4,6 +4,7 @@ local ATANK_SCRAP_COST = 35;
 local BOMBER_SCRAP_COST = 33;
 local BUNKER_SCRAP_COST = 50;
 local CONST_SCRAP_COST = 20;
+local FACTORY_SCRAP_COST = 55;
 local MLAY_SCRAP_COST = 25;
 local MISL_SCRAP_COST = 23;
 local MBIKE_SCRAP_COST = 23;
@@ -47,13 +48,17 @@ function CollectPoolCondition(team, time)
 end
 
 -- BUILD PLAN CONDITIONS.
-function UpgradePoolCondition(team, time)
+function UpgradeFirstPoolCondition(team, time)
     if (DoesConstructorExist(team, time) == false) then
         return false, "I don't have a Constructor yet.";
     end
 
     if (ExtractorCount(team, time) <= 0) then
         return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (UpgradedExtractorCount(team, time) >= 1) then
+        return false, "I have one upgrade. I don't need another yet.";
     end
 
     if (AIPUtil.GetScrap(team, false) < 60) then
@@ -118,8 +123,23 @@ function BuildConstructorCondition(team, time)
         return false, "I don't have enough scrap for a Constructor.";
     end
 
-    return true,
-        "My Recycler is healthy, I have an Extractor, and I need more Constructors. Tasking Recycler to build a Constructor.";
+    return true, "My Recycler is healthy, I have an Extractor, and I need more Constructors. Tasking Recycler to build a Constructor.";
+end
+
+function BuildTurretCondition(team, time)
+    if (DoesRecyclerExist(team, time) == false) then
+        return false, "I don't have a Recycler yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < TURRET_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Turret.";
+    end
+
+    return true, "My Recycler is healthy, I have an Extractor, and I need more Turrets. Tasking Recycler to build a Turret.";
 end
 
 function BuildScoutCommander(team, time)
@@ -132,11 +152,28 @@ function BuildScoutCommander(team, time)
         return false, "I don't have a Recycler yet.";
     end
 
-    if (DoesFactoryExist(team, time) and DoesCommBunkerExist(team, time)) then
+    if (DoesFactoryExist(team, time) and DoesRelayBunkerExist(team, time)) then
         return false, "I have a Factory so I can build a better Commander unit.";
     end
 
     return true, "I can replace the Commander in a Scout unit. Tasking Recycler to build.";
+end
+
+function BuildScoutCondition(team, time)
+    if (DoesRecyclerExist(team, time) == false) then
+        return false, "I don't have a Recycler yet.";
+    end
+
+    if (DoesFactoryExist(team, time)) then
+        return false, "I have a Factory so I can build better Patrol/Defender unit.";
+    end
+
+    -- Check that we have enough to build a scout.
+    if (AIPUtil.GetScrap(team, false) < SCOUT_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Scout.";
+    end
+
+    return true, "I can build a Scout unit."
 end
 
 function BuildTankCommander(team, time)
@@ -149,7 +186,7 @@ function BuildTankCommander(team, time)
         return false, "I don't have a Factory yet.";
     end
 
-    if (DoesCommBunkerExist(team, time) == false) then
+    if (DoesRelayBunkerExist(team, time) == false) then
         return false, "I don't have a Relay Bunker yet.";
     end
 
@@ -195,11 +232,51 @@ function BuildPath2BasePlate(team, time)
 end
 
 function BuildPath3BasePlate(team, time)
+    -- Check we have a Factory first.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
 
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Plate_3") == false) then
+        return false, "Path: i_Plate_3 doesn't exist, so I can't build a Base Plate there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Plate_3")) then
+        return false, "Path: i_Plate_3 has a building on it, so I can't build a Base Plate there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPath4BasePlate(team, time)
+    -- Check we have a Factory first.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
 
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Plate_4") == false) then
+        return false, "Path: i_Plate_4 doesn't exist, so I can't build a Base Plate there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Plate_4")) then
+        return false, "Path: i_Plate_4 has a building on it, so I can't build a Base Plate there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPower1(team, time)
@@ -248,15 +325,43 @@ function BuildPower2(team, time)
     return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
 end
 
+function BuildFactory(team, time)
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Factory") == false) then
+        return false, "Path: i_Factory doesn't exist, so I can't build a Factory there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Factory")) then
+        return false, "Path: i_Factory has a building on it, so I can't build a Factory there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < FACTORY_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Factory.";
+    end
+
+    -- Make sure I have enough Power.
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough power for a Factory.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct a Factory. Tasking a Constructor to build a Factory...";
+end
+
 function BuildFieldBunker1(team, time)
     -- Check that the path exists first.
     if (AIPUtil.PathExists("i_Field_Bunker_1") == false) then
-        return false, "Path: i_Field_Bunker_1 doesn't exist, so I can't build a Base Plate there.";
+        return false, "Path: i_Field_Bunker_1 doesn't exist, so I can't build a Relay Bunker there.";
     end
 
     -- Check that the path doesn't have a building first.
     if (AIPUtil.PathBuildingExists("i_Field_Bunker_1")) then
-        return false, "Path: i_Field_Bunker_1 has a building on it, so I can't build a Base Plate there.";
+        return false, "Path: i_Field_Bunker_1 has a building on it, so I can't build a Relay Bunker there.";
     end
 
     if (DoesConstructorExist(team, time) == false) then
@@ -274,6 +379,33 @@ function BuildFieldBunker1(team, time)
     return true, "The right path exists, there's no building there, so I will construct a Relay Bunker. Tasking a Constructor to build a Relay Bunker...";
 end
 
+function BuildFieldGunTower1(team, time)
+    -- Check that a Relay Bunker has been built on the right path.
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_1") == false) then
+        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
+    end
+
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Field_GunTower_1") == false) then
+        return false, "Path: i_Field_GunTower_1 doesn't exist, so I can't build a Gun Tower there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Field_GunTower_1")) then
+        return false, "Path: i_Field_GunTower_1 has a building on it, so I can't build a Gun Tower there.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Gun Tower.";
+    end
+
+    return true, "I can build a Gun Tower on i_Field_GunTower_1";
+end
+
 -- COUNT FUNCTIONS TO CHECK IF A NUMBER OF GAME OBJECT EXISTS.
 
 function ScavengerCount(team, time)
@@ -282,6 +414,10 @@ end
 
 function ExtractorCount(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_EXTRACTOR", "sameteam", true);
+end
+
+function UpgradedExtractorCount(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_EXTRACTOR_Upgraded", "sameteam", true);
 end
 
 function ConstructorCount(team, time)
@@ -297,6 +433,11 @@ function EarlyScoutAttackCondition(team, time)
 
     if (DoesFactoryExist(team, time)) then
         return false, "I have a Factory already, I don't want to send Scouts to attack now.";
+    end
+
+    -- Check that we have enough to build a scout.
+    if (AIPUtil.GetScrap(team, false) < SCOUT_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Scout.";
     end
 
     if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 0) then

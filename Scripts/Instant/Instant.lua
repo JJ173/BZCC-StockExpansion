@@ -177,7 +177,7 @@ function AddObject(handle)
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle));
+            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session.m_TurnCounter);
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then

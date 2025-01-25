@@ -1,3 +1,5 @@
+local _Dispatch = require("_Dispatch");
+
 AIController =
 {
     AIPString = "",
@@ -21,6 +23,8 @@ AIController =
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     Scavengers = {},
     Constructors = {},
+
+    -- Store units to dispatch here.
     TurretsToDispatch = {},
     PatrolsToDispatch = {},
     DefendersToDispatch = {},
@@ -94,38 +98,33 @@ function AIController:Setup(CPUTeamNumber)
     self:SetPlan(AIPType0);
 end
 
-function AIController:Run(MissionTurnCount)
+function AIController:Run(missionTurnCount)
     -- Handle the taunts from the CPU Team here.
-    if (self.TauntCooldown < MissionTurnCount) then
+    if (self.TauntCooldown < missionTurnCount) then
         -- Run a random taunt.
         DoTaunt(TAUNTS_Random);
 
         -- Cooldown so we don't call this every frame.
-        self.TauntCooldown = MissionTurnCount + SecondsToTurns(60);
+        self.TauntCooldown = missionTurnCount + SecondsToTurns(60);
     end
 
     -- Only do this when the Recycler is deployed.
     if (self.RecyclerDeployed) then
         -- Run each dispatcher.
-        if (self.DispatchCooldown < MissionTurnCount) then
-            print("Running dispatch");
-            print("Number of Turrets: ", #self.TurretsToDispatch);
-            print("Number of Patrols: ", #self.PatrolsToDispatch);
-            print("Number of Defenders: ", #self.DefendersToDispatch);
-
+        if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
-                self:DispatchTurrets();
+                self:DispatchTurrets(missionTurnCount);
             end
 
             if (#self.DefendersToDispatch > 0) then
-                self:DispatchDefenders();
+                self:DispatchDefenders(missionTurnCount);
             end
 
             if (#self.PatrolsToDispatch > 0) then
-                self:DispatchPatrols();
+                self:DispatchPatrols(missionTurnCount);
             end
 
-            self.DispatchCooldown = MissionTurnCount + SecondsToTurns(3);
+            self.DispatchCooldown = missionTurnCount + SecondsToTurns(3);
         end
 
         -- Handle the Commander.
@@ -137,24 +136,24 @@ function AIController:CarrierLogic()
 
 end
 
-function AIController:AddObject(handle, objClass, objCfg, objBase)
+function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCount)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
     elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
-    elseif (objClass == "CLASS_TURRETTANK") then
-        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = handle;
     elseif (objClass == "CLASS_SCAVENGER") then
         self.Scavengers[#self.Scavengers + 1] =  handle;
     elseif (objClass == "CLASS_CONSTRUCTIONRIG") then
         self.Constructors[#self.Constructors + 1] = handle;
     elseif (objCfg == self.Race .. "bcarrier_xm") then
         self.Carrier = handle;
+    elseif (objClass == "CLASS_TURRETTANK") then
+        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     elseif (objBase == "Patrol") then
-        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = handle;
+        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     elseif (objBase == "Defender") then
-        self.DefendersToDispatch[#self.DefendersToDispatch + 1] = handle;
+        self.DefendersToDispatch[#self.DefendersToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     end
 end
 
@@ -191,40 +190,50 @@ function AIController:SetPlan(type)
     DoTaunt(TAUNTS_Random);
 end
 
-function AIController:DispatchTurrets()
+function AIController:DispatchTurrets(missionTurnCount)
     -- For any turrets that need dispatching, let's send them around the map.
     for i = 1, #self.TurretsToDispatch do
         -- Grab the turret.
-        local turr = self.TurretsToDispatch[i];
+        local dispatch = self.TurretsToDispatch[i];
+
+        -- Check to see if the dispatch cooldown has passed.
+        if (dispatch.DispatchDelay >= missionTurnCount) then
+            break;
+        end
 
         -- Get a random pool, but don't use the first or last in the list as these are likely base pools.
         local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
 
         -- Send the unit to defend near the pool.
-        Goto(turr, GetPositionNear(poolOfChoice, 40, 60));
+        Retreat(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
 
         -- Remove the turret from the  list of units to be dispatched.
-        TableRemoveByHandle(self.TurretsToDispatch, turr);
+        TableRemoveByHandle(self.TurretsToDispatch, dispatch);
     end
 end
 
-function AIController:DispatchPatrols()
+function AIController:DispatchPatrols(missionTurnCount)
     for i = 1, #self.PatrolsToDispatch do
         -- Grab the Patrol unit.
-        local unit = self.PatrolsToDispatch[i];
+        local dispatch = self.PatrolsToDispatch[i];
+
+        -- Check to see if the dispatch cooldown has passed.
+        if (dispatch.DispatchDelay >= missionTurnCount) then
+            break;
+        end
 
         -- Grab a random path.
-        local path = "Patrol_" .. GetRandomInt(1, 2);
+        local path = "patrol_" .. GetRandomInt(1, 2);
 
         -- Send the unit to Patrol.
-        Patrol(unit, path);
+        Patrol(dispatch.Handle, path);
 
         -- Remove the turret from the  list of units to be dispatched.
-        TableRemoveByHandle(self.PatrolsToDispatch, unit);
+        TableRemoveByHandle(self.PatrolsToDispatch, dispatch);
     end
 end
 
-function AIController:DispatchDefenders()
+function AIController:DispatchDefenders(missionTurnCount)
 
 end
 
@@ -235,6 +244,10 @@ end
 -- Local utilities.
 function Compare(a, b)
     return a["DistanceFromCPURecycler"] < b["DistanceFromCPURecycler"];
+end
+
+function CreateDispatchUnit(handle, missionTurn)
+    return _Dispatch:New(handle, missionTurn + SecondsToTurns(2));
 end
 
 -- Return to caller.

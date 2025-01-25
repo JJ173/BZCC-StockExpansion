@@ -125,7 +125,8 @@ function BuildConstructorCondition(team, time)
         return false, "I don't have enough scrap for a Constructor.";
     end
 
-    return true, "My Recycler is healthy, I have an Extractor, and I need more Constructors. Tasking Recycler to build a Constructor.";
+    return true,
+        "My Recycler is healthy, I have an Extractor, and I need more Constructors. Tasking Recycler to build a Constructor.";
 end
 
 function BuildTurretCondition(team, time)
@@ -141,7 +142,8 @@ function BuildTurretCondition(team, time)
         return false, "I don't have enough scrap for a Turret.";
     end
 
-    return true, "My Recycler is healthy, I have an Extractor, and I need more Turrets. Tasking Recycler to build a Turret.";
+    return true,
+        "My Recycler is healthy, I have an Extractor, and I need more Turrets. Tasking Recycler to build a Turret.";
 end
 
 function BuildScoutCommander(team, time)
@@ -183,6 +185,24 @@ function BuildScoutCondition(team, time)
     return true, "I can build a Scout unit."
 end
 
+function BuildMissileScoutCondition(team, time)
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory so I can't build any Missile Scout units.";
+    end
+
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    -- Check that we have enough to build a scout.
+    if (AIPUtil.GetScrap(team, false) < MISL_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Missile Scout.";
+    end
+
+    return true, "I can build a Missile Scout unit."
+end
+
 function BuildTankCommander(team, time)
     -- Check if the Commander option was enabled in the lobby before we build this unit.
     if (IsCommanderOptionEnabled(team, time) == false) then
@@ -216,7 +236,8 @@ function BuildPath1BasePlate(team, time)
         return false, "I don't have a Constructor yet.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPath2BasePlate(team, time)
@@ -235,7 +256,8 @@ function BuildPath2BasePlate(team, time)
         return false, "I don't have a Constructor yet.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPath3BasePlate(team, time)
@@ -259,7 +281,8 @@ function BuildPath3BasePlate(team, time)
         return false, "I don't have a Constructor yet.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPath4BasePlate(team, time)
@@ -283,7 +306,8 @@ function BuildPath4BasePlate(team, time)
         return false, "I don't have a Constructor yet.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Base Plate. Tasking a Constructor to build a Base Plate...";
 end
 
 function BuildPower1(team, time)
@@ -306,7 +330,8 @@ function BuildPower1(team, time)
         return false, "I don't have enough scrap for a Power Plant.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
 end
 
 function BuildPower2(team, time)
@@ -338,7 +363,8 @@ function BuildPower2(team, time)
         return false, "Path: i_Power_2 has a building on it, so I can't build a Base Plate there.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
 end
 
 function BuildFactory(team, time)
@@ -366,7 +392,8 @@ function BuildFactory(team, time)
         return false, "I don't have enough power for a Factory.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Factory. Tasking a Constructor to build a Factory...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Factory. Tasking a Constructor to build a Factory...";
 end
 
 function BuildArmory(team, time)
@@ -394,7 +421,8 @@ function BuildArmory(team, time)
         return false, "I don't have enough scrap for an Armory.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct an Armory. Tasking a Constructor to build an Armory...";
+    return true,
+        "The right path exists, there's no building there, so I will construct an Armory. Tasking a Constructor to build an Armory...";
 end
 
 function BuildFieldBunker1(team, time)
@@ -412,6 +440,11 @@ function BuildFieldBunker1(team, time)
         return false, "I don't have a Constructor yet.";
     end
 
+    -- Check we have a Factory first.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
     if (AIPUtil.GetPower(team, false) <= 0) then
         return false, "I don't have enough Power for a Comm Bunker.";
     end
@@ -420,7 +453,8 @@ function BuildFieldBunker1(team, time)
         return false, "I don't have enough scrap for a Comm Bunker.";
     end
 
-    return true, "The right path exists, there's no building there, so I will construct a Relay Bunker. Tasking a Constructor to build a Relay Bunker...";
+    return true,
+        "The right path exists, there's no building there, so I will construct a Relay Bunker. Tasking a Constructor to build a Relay Bunker...";
 end
 
 function BuildFieldGunTower1(team, time)
@@ -506,7 +540,7 @@ function PowerPlantCount(team, time)
 end
 
 -- ATTACKER PLAN CONDITIONS.
-function EarlyScoutAttackCondition(team, time)
+function Attack1Condition(team, time)
     -- Make sure we have a pool first.
     if (ExtractorCount(team, time) <= 0) then
         return false, "I don't have any deployed Scavengers yet.";
@@ -516,16 +550,28 @@ function EarlyScoutAttackCondition(team, time)
         return false, "I have a Factory already, I don't want to send Scouts to attack now.";
     end
 
-    -- Check that we have enough to build a scout.
-    if (AIPUtil.GetScrap(team, false) < SCOUT_SCRAP_COST) then
-        return false, "I don't have enough scrap for a Scout.";
-    end
-
     if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 0) then
-        return false, "Enemy defenses are too strong. Don't waste time with Scouts.";
+        return false, "Enemy defenses are too strong.";
     end
 
-    return true, "I am going to send early Scouts to attack.";
+    return true, "First attack is being sent.";
+end
+
+function Attack2Condition(team, time)
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == IsAudioMessageFinished) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 1) then
+        return false, "Enemy defenses are too strong.";
+    end
+
+    return true, "Second attack is being sent.";
 end
 
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.

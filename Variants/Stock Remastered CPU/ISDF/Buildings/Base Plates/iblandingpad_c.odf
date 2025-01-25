@@ -1,6 +1,4 @@
 [GameObjectClass]
-classLabel = "ibplate_gh_b"
-scrapCost = 60
-unitName = "Landing Pad"
+classLabel = "iblandingpad_xm"
 
 [BuildingClass]

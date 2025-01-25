@@ -34,9 +34,7 @@ AIController =
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0,
 
-    DefenderDispatchCooldown = 0,
-    TurretDistpatchCooldown = 0,
-    PatrolDispatchCooldown = 0,
+    DispatchCooldown = 0,
 };
 
 -- States for the AI Commander.
@@ -109,16 +107,25 @@ function AIController:Run(MissionTurnCount)
     -- Only do this when the Recycler is deployed.
     if (self.RecyclerDeployed) then
         -- Run each dispatcher.
-        if (#self.TurretsToDispatch > 0 and self.TurretDistpatchCooldown <  MissionTurnCount) then
-            self:DispatchTurrets(MissionTurnCount);
-        end
+        if (self.DispatchCooldown < MissionTurnCount) then
+            print("Running dispatch");
+            print("Number of Turrets: ", #self.TurretsToDispatch);
+            print("Number of Patrols: ", #self.PatrolsToDispatch);
+            print("Number of Defenders: ", #self.DefendersToDispatch);
 
-        if (#self.DefendersToDispatch > 0 and self.DefenderDispatchCooldown <  MissionTurnCount) then
-            self:DispatchDefenders(MissionTurnCount);
-        end
+            if (#self.TurretsToDispatch > 0) then
+                self:DispatchTurrets();
+            end
 
-        if (#self.PatrolsToDispatch > 0 and self.PatrolDispatchCooldown <  MissionTurnCount) then
-            self:DispatchPatrols(MissionTurnCount);
+            if (#self.DefendersToDispatch > 0) then
+                self:DispatchDefenders();
+            end
+
+            if (#self.PatrolsToDispatch > 0) then
+                self:DispatchPatrols();
+            end
+
+            self.DispatchCooldown = MissionTurnCount + SecondsToTurns(3);
         end
 
         -- Handle the Commander.
@@ -131,18 +138,16 @@ function AIController:CarrierLogic()
 end
 
 function AIController:AddObject(handle, objClass, objCfg, objBase)
-    print(objBase);
-
-    if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vtank_s") then
+    if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
     elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
-    elseif (objClass == "VIRTUAL_CLASS_TURRET") then
+    elseif (objClass == "CLASS_TURRETTANK") then
         self.TurretsToDispatch[#self.TurretsToDispatch + 1] = handle;
-    elseif (objClass == "VIRTUAL_CLASS_SCAVENGER") then
+    elseif (objClass == "CLASS_SCAVENGER") then
         self.Scavengers[#self.Scavengers + 1] =  handle;
-    elseif (objClass == "VIRTUAL_CLASS_CONSTRUCTIONRIG") then
+    elseif (objClass == "CLASS_CONSTRUCTIONRIG") then
         self.Constructors[#self.Constructors + 1] = handle;
     elseif (objCfg == self.Race .. "bcarrier_xm") then
         self.Carrier = handle;
@@ -153,8 +158,14 @@ function AIController:AddObject(handle, objClass, objCfg, objBase)
     end
 end
 
-function AIController:DeleteObject(handle)
-
+function AIController:DeleteObject(handle, objClass, objCfg)
+    if (objClass == "CLASS_SCAVENGER") then
+        TableRemoveByHandle(self.Scavengers, handle);
+    elseif (objClass == "CLASS_CONSTRUCTIONRIG") then
+        TableRemoveByHandle(self.Constructors, handle);
+    elseif (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
+        self.Commander = nil;
+    end
 end
 
 function AIController:SetPlan(type)
@@ -180,17 +191,41 @@ function AIController:SetPlan(type)
     DoTaunt(TAUNTS_Random);
 end
 
-function AIController:DispatchTurrets(missionTurnCount)
+function AIController:DispatchTurrets()
+    -- For any turrets that need dispatching, let's send them around the map.
+    for i = 1, #self.TurretsToDispatch do
+        -- Grab the turret.
+        local turr = self.TurretsToDispatch[i];
 
+        -- Get a random pool, but don't use the first or last in the list as these are likely base pools.
+        local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
+
+        -- Send the unit to defend near the pool.
+        Goto(turr, GetPositionNear(poolOfChoice, 40, 60));
+
+        -- Remove the turret from the  list of units to be dispatched.
+        TableRemoveByHandle(self.TurretsToDispatch, turr);
+    end
 end
 
-function AIController:DispatchPatrols(missionTurnCount)
+function AIController:DispatchPatrols()
+    for i = 1, #self.PatrolsToDispatch do
+        -- Grab the Patrol unit.
+        local unit = self.PatrolsToDispatch[i];
 
+        -- Grab a random path.
+        local path = "Patrol_" .. GetRandomInt(1, 2);
+
+        -- Send the unit to Patrol.
+        Patrol(unit, path);
+
+        -- Remove the turret from the  list of units to be dispatched.
+        TableRemoveByHandle(self.PatrolsToDispatch, unit);
+    end
 end
 
-function AIController:DispatchDefenders(missionTurnCount)
-    -- For a cooldown it's not run every turn.
-    self.DefenderDispatchCooldown = 
+function AIController:DispatchDefenders()
+
 end
 
 function AIController:CommanderBrain()

@@ -5,6 +5,8 @@ scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less l
 scrapCost = 20 // Scrap cost is reduced by 50%.
 
 [CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
 
 [HoverCraftClass]
 
@@ -19,6 +21,7 @@ buildItem6 = "ibgtow_c"
 buildItem7 = "ibtrain_c"
 buildItem8 = "ibtcen_c"
 buildItem9 = "ibbomb_c"
+buildItem10 = "iblandingpad_c"
 
 [BuildGroup5]
 buildLabel = "Service Bays"

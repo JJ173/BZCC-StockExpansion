@@ -1,10 +1,11 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
 geometryName = "ivcarr_x00.fbx"
-classLabel = "ibrecy_x"
+classLabel = "ibfact_x"
 animCount = 0
 unitName = "Carrier"
 
+powerCost = 0
 heatSignature = 0.0
 imageSignature = 0.0
 radarSignature = 0.0
@@ -12,6 +13,9 @@ collisionRadius = 0.0
 
 ownsTerrain = false
 categoryTypeOverride = 4
+
+requireCount = 0
+provideCount = 0
 
 [PoweredBuildingClass]
 panelIcon = "icon_ivcarr00.tga"
@@ -36,7 +40,7 @@ selectUser2Msg = "CarrierIdle.wav"
 reloadMsg = "CarrierBuilding.wav"
 rescueMsg = ""
 
-DropoffConfig = ""
+DropoffConfig = "CarrierDropoff"
 
 [RecyclerClass]
 scrapHold = 0 // Shouldn't have any scrap.

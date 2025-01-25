@@ -1,7 +1,7 @@
 // CONSTRUCTOR FOR UPGRADES
 
 [GameObjectClass]
-classLabel = "ivcons_g"
+classLabel = "ivcons_c"
 
 [CraftClass]
 

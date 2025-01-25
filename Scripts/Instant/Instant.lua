@@ -199,6 +199,15 @@ function AddObject(handle)
     end
 end
 
+function DeleteObject(handle)
+    if (GetTeamNum(handle) == _Session.m_CompTeam) then
+        -- Remove the objects from the AI Controller.
+        if (_Session.m_AIController ~= nil) then
+            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle));
+        end
+    end
+end
+
 function Start()
     -- Do not auto group units.
     SetAutoGroupUnits(false);
@@ -247,11 +256,9 @@ function Update()
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
-                customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
-                "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
         end
 
         -- Spawn CPU vehicles.
@@ -275,8 +282,7 @@ function Update()
         SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
 
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools,
-            chosenCPUName);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools, chosenCPUName);
 
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
@@ -566,11 +572,9 @@ function BuildPlayerRecycler(pos)
     local customHumanRecycler = IFace_GetString("options.instant.string1");
 
     if (customHumanRecycler ~= nil) then
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
-            "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler, "*vrecy", pos);
     else
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
-            pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy", pos);
     end
 
     SetScrap(_Session.m_StratTeam, 40);

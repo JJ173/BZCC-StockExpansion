@@ -1,5 +1,6 @@
 -- CONST VARIABLES FOR SCRAP COST OF UNITS.
 local APC_SCRAP_COST = 25;
+local ARMORY_SCRAP_COST = 60;
 local ATANK_SCRAP_COST = 35;
 local BOMBER_SCRAP_COST = 33;
 local BUNKER_SCRAP_COST = 50;
@@ -323,8 +324,8 @@ function BuildPower2(team, time)
         return false, "I haven't built the first Power Plant yet.";
     end
 
-    if (AIPUtil.GetPower(team, false) <= 0) then
-        return false, "I don't have enough Power for a Comm Bunker.";
+    if (AIPUtil.GetPower(team, false) > 0) then
+        return false, "I have enough Power for now.";
     end
 
     -- Check that the path exists first.
@@ -366,6 +367,34 @@ function BuildFactory(team, time)
     end
 
     return true, "The right path exists, there's no building there, so I will construct a Factory. Tasking a Constructor to build a Factory...";
+end
+
+function BuildArmory(team, time)
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_Armory") == false) then
+        return false, "Path: i_Armory doesn't exist, so I can't build an Armory there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_Armory")) then
+        return false, "Path: i_Armory has a building on it, so I can't build an Armory there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    -- Check we have a Factory first.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < ARMORY_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Armory.";
+    end
+
+    return true, "The right path exists, there's no building there, so I will construct an Armory. Tasking a Constructor to build an Armory...";
 end
 
 function BuildFieldBunker1(team, time)

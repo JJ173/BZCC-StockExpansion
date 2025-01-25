@@ -7,6 +7,8 @@ scrapCost = 20 // Scrap cost is reduced by 50%.
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
 [CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
 
 [HoverCraftClass]
 

@@ -1,4 +1,5 @@
 [GameObjectClass]
+geometryName = "iblandingpad00.fbx"
 classLabel = "ibplate_gh_b"
 scrapCost = 60
 unitName = "Landing Pad"

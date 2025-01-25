@@ -138,6 +138,7 @@ function InitialSetup()
     PreloadODF("fvrecy_c");
     PreloadODF("ibcarrier_xm");
     PreloadODF("fbcarrier_xm");
+    PreloadODF("ivpdrop_x");
 
     -- Preload Audio handles here as well.
 end
@@ -161,7 +162,7 @@ function AddObject(handle)
         -- Grab the position so we can store it in the model.
         local pos = GetPosition(handle);
         -- Create a new model for this pool.
-        local newPoolModel = _Pool:New(handle, 0, pos, dist, false);
+        local newPoolModel = _Pool:New(handle, pos, dist);
         -- Grab the position vector and store it.
         _Session.m_Pools[#_Session.m_Pools + 1] = newPoolModel;
     end
@@ -176,7 +177,7 @@ function AddObject(handle)
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle));
+            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle));
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then

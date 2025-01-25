@@ -106,7 +106,7 @@ planPriority = 900
 buildType1 = "ivscout_p"
 buildCount1 = 2
 buildType2 = "ivscout_d"
-buildCount2 = 2
+buildCount2 = 3
 planCondition = "Lua"
 LuaFunction = "BuildScoutCondition"
 
@@ -120,7 +120,6 @@ targetType3 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
 targetType4 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "ivscout_c"
 LuaFunction = "EarlyScoutAttackCondition"
-maxAttacks = 4
 AttackAnything = true
 buildIfNoIdle = true
 
@@ -134,7 +133,6 @@ targetType3 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
 targetType4 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "ivscout_c"
 LuaFunction = "EarlyScoutAttackCondition"
-maxAttacks = 4
 AttackAnything = true
 buildIfNoIdle = true
 
@@ -182,6 +180,7 @@ buildCount1 = 1
 buildLoc1 = "i_Field_Bunker_1"
 LuaFunction = "BuildFieldBunker1"
 consClass = "ivcons_g"
+ContinueEvenIfFail = true
 
 [Plan19]
 planType = "BaseBuildMinimums"
@@ -192,6 +191,7 @@ buildCount1 = 1
 buildLoc1 = "i_Field_GunTower_1"
 LuaFunction = "BuildFieldGunTower1"
 consClass = "ivcons_g"
+ContinueEvenIfFail = true
 
 [Plan20]
 planType = "BaseBuildMinimums"
@@ -200,7 +200,7 @@ planCondition = "Lua"
 buildType1 = "ibfact_c"
 buildCount1 = 1
 buildLoc1 = "i_Factory"
-buildHeading = 2
+buildHeading = 1
 LuaFunction = "BuildFactory"
 
 [Plan21]
@@ -211,3 +211,12 @@ buildType1 = "ibpgen_c"
 buildCount1 = 1
 buildLoc1 = "i_Power_2"
 LuaFunction = "BuildPower2"
+
+[Plan22]
+planType = "BaseBuildMinimums"
+planPriority = 790
+planCondition = "Lua"
+buildType1 = "iblandingpad_xm"
+buildCount1 = 1
+buildLoc1 = "i_LandingPad"
+LuaFunction = "BuildLandingPad"

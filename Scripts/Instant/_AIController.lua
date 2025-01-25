@@ -21,9 +21,9 @@ AIController =
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     Scavengers = {},
     Constructors = {},
-    Turrets = {},
-    Patrols = {},
-    Defenders = {},
+    TurretsToDispatch = {},
+    PatrolsToDispatch = {},
+    DefendersToDispatch = {},
 
     Carrier = nil,
     LandingPad = nil,
@@ -32,7 +32,11 @@ AIController =
     Name = "";
 
     -- Cooldowns for different functions so we don't run them per frame.
-    TauntCooldown = 0
+    TauntCooldown = 0,
+
+    DefenderDispatchCooldown = 0,
+    TurretDistpatchCooldown = 0,
+    PatrolDispatchCooldown = 0,
 };
 
 -- States for the AI Commander.
@@ -57,9 +61,9 @@ function AIController:New(Team, Race, Pools, Name)
     o.Commander = nil;
     o.Scavengers = {};
     o.Constructors = {};
-    o.Turrets = {};
-    o.Patrols = {};
-    o.Defenders = {};
+    o.TurretsToDispatch = {};
+    o.PatrolsToDispatch = {};
+    o.DefendersToDispatch = {};
     o.RecyclerDeployed = false;
     o.Name = Name or "";
 
@@ -105,7 +109,17 @@ function AIController:Run(MissionTurnCount)
     -- Only do this when the Recycler is deployed.
     if (self.RecyclerDeployed) then
         -- Run each dispatcher.
-        self:DispatchTurrets();
+        if (#self.TurretsToDispatch > 0 and self.TurretDistpatchCooldown <  MissionTurnCount) then
+            self:DispatchTurrets(MissionTurnCount);
+        end
+
+        if (#self.DefendersToDispatch > 0 and self.DefenderDispatchCooldown <  MissionTurnCount) then
+            self:DispatchDefenders(MissionTurnCount);
+        end
+
+        if (#self.PatrolsToDispatch > 0 and self.PatrolDispatchCooldown <  MissionTurnCount) then
+            self:DispatchPatrols(MissionTurnCount);
+        end
 
         -- Handle the Commander.
         self:CommanderBrain();
@@ -116,20 +130,26 @@ function AIController:CarrierLogic()
 
 end
 
-function AIController:AddObject(handle, objClass, objCfg)
+function AIController:AddObject(handle, objClass, objCfg, objBase)
+    print(objBase);
+
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vtank_s") then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
     elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
     elseif (objClass == "VIRTUAL_CLASS_TURRET") then
-        self.Turrets[#self.Turrets + 1] = handle;
+        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = handle;
     elseif (objClass == "VIRTUAL_CLASS_SCAVENGER") then
         self.Scavengers[#self.Scavengers + 1] =  handle;
     elseif (objClass == "VIRTUAL_CLASS_CONSTRUCTIONRIG") then
         self.Constructors[#self.Constructors + 1] = handle;
     elseif (objCfg == self.Race .. "bcarrier_xm") then
         self.Carrier = handle;
+    elseif (objBase == "Patrol") then
+        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = handle;
+    elseif (objBase == "Defender") then
+        self.DefendersToDispatch[#self.DefendersToDispatch + 1] = handle;
     end
 end
 
@@ -160,7 +180,17 @@ function AIController:SetPlan(type)
     DoTaunt(TAUNTS_Random);
 end
 
-function AIController:DispatchTurrets()
+function AIController:DispatchTurrets(missionTurnCount)
+
+end
+
+function AIController:DispatchPatrols(missionTurnCount)
+
+end
+
+function AIController:DispatchDefenders(missionTurnCount)
+    -- For a cooldown it's not run every turn.
+    self.DefenderDispatchCooldown = 
 end
 
 function AIController:CommanderBrain()

@@ -5,6 +5,7 @@ local BOMBER_SCRAP_COST = 33;
 local BUNKER_SCRAP_COST = 50;
 local CONST_SCRAP_COST = 20;
 local FACTORY_SCRAP_COST = 55;
+local LANDING_PAD_COST = 60;
 local MLAY_SCRAP_COST = 25;
 local MISL_SCRAP_COST = 23;
 local MBIKE_SCRAP_COST = 23;
@@ -162,6 +163,11 @@ end
 function BuildScoutCondition(team, time)
     if (DoesRecyclerExist(team, time) == false) then
         return false, "I don't have a Recycler yet.";
+    end
+
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
     end
 
     if (DoesFactoryExist(team, time)) then
@@ -406,6 +412,39 @@ function BuildFieldGunTower1(team, time)
     return true, "I can build a Gun Tower on i_Field_GunTower_1";
 end
 
+function BuildLandingPad(team, time)
+    -- Check to see if we already have a landing pad.
+    if (DoesLandingPadExist(team, time)) then
+        return false, "I already have a Landing Pad.";
+    end
+
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_LandingPad") == false) then
+        return false, "Path: i_LandingPad doesn't exist, so I can't build a Landing Pad there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_LandingPad")) then
+        return false, "Path: i_LandingPad has a building on it, so I can't build a Landing Pad there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    -- Check that I have a Factory.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I should prioritise the Factory first.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < LANDING_PAD_COST) then
+        return false, "I don't have enough scrap for a Landing Pad.";
+    end
+
+    return true, "I can build a Landing Pad.";
+end
+
 -- COUNT FUNCTIONS TO CHECK IF A NUMBER OF GAME OBJECT EXISTS.
 
 function ScavengerCount(team, time)
@@ -487,4 +526,8 @@ end
 
 function DoesScrapPoolExist(team, time)
     return AIPUtil.CountUnits(team, "biometal", "friendly", true) > 0;
+end
+
+function DoesLandingPadExist(team, time)
+    return AIPUtil.CountUnits(team, "LandingPad", "sameteam", true) > 0;
 end

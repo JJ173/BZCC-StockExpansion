@@ -1,0 +1,14 @@
+[GameObjectClass]
+geometryName = ""
+classLabel = "ibplate_gh_b"
+scrapCost = 60
+unitName = "Landing Pad"
+
+limitClass1 = "LandingPad"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+buildSupport = "A"
+buildRequire = "F"
+
+[BuildingClass]

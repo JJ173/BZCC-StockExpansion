@@ -1,6 +1,6 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
-geometryName = "ivcarr00_new.fbx"
+geometryName = "ivcarr_x00.fbx"
 classLabel = "ibrecy_x"
 animCount = 0
 unitName = "Carrier"

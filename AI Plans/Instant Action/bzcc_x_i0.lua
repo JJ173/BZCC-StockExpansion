@@ -309,6 +309,24 @@ function BuildPower1(team, time)
 end
 
 function BuildPower2(team, time)
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < POWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Power Plant.";
+    end
+
+    -- Check if a Power Plant exists.
+    if (PowerPlantCount(team, time) <= 0) then
+        return false, "I haven't built the first Power Plant yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Comm Bunker.";
+    end
+
     -- Check that the path exists first.
     if (AIPUtil.PathExists("i_Power_2") == false) then
         return false, "Path: i_Power_2 doesn't exist, so I can't build a Base Plate there.";
@@ -317,15 +335,6 @@ function BuildPower2(team, time)
     -- Check that the path doesn't have a building first.
     if (AIPUtil.PathBuildingExists("i_Power_2")) then
         return false, "Path: i_Power_2 has a building on it, so I can't build a Base Plate there.";
-    end
-
-    -- Check that I have a constructor.
-    if (DoesConstructorExist(team, time) == false) then
-        return false, "I don't have a Constructor yet.";
-    end
-
-    if (AIPUtil.GetScrap(team, false) < POWER_SCRAP_COST) then
-        return false, "I don't have enough scrap for a Power Plant.";
     end
 
     return true, "The right path exists, there's no building there, so I will construct a Power Plant. Tasking a Constructor to build a Power Plant...";
@@ -461,6 +470,10 @@ end
 
 function ConstructorCount(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_CONSTRUCTIONRIG", "sameteam", true);
+end
+
+function PowerPlantCount(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_POWERPLANT", "sameteam", true);
 end
 
 -- ATTACKER PLAN CONDITIONS.

@@ -561,6 +561,11 @@ function BuildServiceBay(team, time)
         return false, "I don't have a Factory yet.";
     end
 
+    -- Check we also have an Armory first.
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I should build an Armory first.";
+    end
+
     if (AIPUtil.GetScrap(team, false) < SBAY_SCRAP_COST) then
         return false, "I don't have enough scrap for an Service Bay.";
     end

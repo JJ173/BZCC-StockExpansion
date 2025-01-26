@@ -17,6 +17,8 @@ categoryTypeOverride = 4
 requireCount = 0
 provideCount = 0
 
+useCollisionMeshForPathing = true
+
 [PoweredBuildingClass]
 panelIcon = "icon_ivcarr00.tga"
 

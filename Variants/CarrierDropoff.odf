@@ -1,5 +1,5 @@
 [GameObjectClass]
-geometryName = "soundcube.xsi"
+geometryName = NULL
 classLabel = "ipdrop"
 animCount = 0
 canCollide = 0

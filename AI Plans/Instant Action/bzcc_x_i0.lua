@@ -71,32 +71,6 @@ function UpgradeFirstPoolCondition(team, time)
     return true, "I have an Extractor that can be upgraded. Tasking Constructor to upgrade an Extractor.";
 end
 
-function BuildServicePodCondition(team, time)
-    if (DoesRecyclerExist(team, time) == false) then
-        return false, "I don't have a Recycler yet.";
-    end
-
-    -- Check we have at least 2 Scavengers in the field before doing this.
-    if (ScavengerCount(team, time) < 2) then
-        return false, "I need to prioritise Scavengers over Service Pods first.";
-    end
-
-    if (AIPUtil.GetScrap(team, false) < POD_SCRAP_COST) then
-        return false, "I don't have enough scrap for a Service Pod.";
-    end
-
-    -- Check to see if Service Pods exist.
-    if (AIPUtil.CountUnits(team, "apserv", "sameteam", false) >= 1) then
-        return false, "I already have enough Service Pods.";
-    end
-
-    if (DoesServiceBayExist(team, time)) then
-        return false, "I have a Service Bay now, no more pods are needed.";
-    end
-
-    return true, "Building Service Pods for Recovery.";
-end
-
 function BuildScavengerCondition(team, time)
     if (DoesRecyclerExist(team, time) == false) then
         return false, "I don't have a Recycler yet.";

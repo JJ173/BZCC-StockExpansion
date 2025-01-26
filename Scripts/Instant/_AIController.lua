@@ -28,6 +28,7 @@ AIController =
     TurretsToDispatch = {},
     PatrolsToDispatch = {},
     DefendersToDispatch = {},
+    AntiAirToDispatch = {},
 
     Carrier = nil,
     LandingPad = nil,
@@ -113,7 +114,7 @@ function AIController:Run(missionTurnCount)
         -- Run each dispatcher.
         if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
-                -- self:DispatchTurrets(missionTurnCount);
+                self:DispatchTurrets(missionTurnCount);
             end
 
             if (#self.DefendersToDispatch > 0) then
@@ -122,6 +123,10 @@ function AIController:Run(missionTurnCount)
 
             if (#self.PatrolsToDispatch > 0) then
                 self:DispatchPatrols(missionTurnCount);
+            end
+
+            if (#self.AntiAirToDispatch > 0) then
+                self:DispatchAntiAir(missionTurnCount);
             end
 
             self.DispatchCooldown = missionTurnCount + SecondsToTurns(3);
@@ -154,6 +159,8 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     elseif (objBase == "Defender") then
         self.DefendersToDispatch[#self.DefendersToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+    elseif (objBase == "AntiAir") then
+        self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     end
 end
 
@@ -239,6 +246,10 @@ function AIController:DispatchPatrols(missionTurnCount)
 end
 
 function AIController:DispatchDefenders(missionTurnCount)
+
+end
+
+function AIController:DispatchAntiAir(missionTurnCount)
 
 end
 

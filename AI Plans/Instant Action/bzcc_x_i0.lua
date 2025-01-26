@@ -13,6 +13,7 @@ local MBIKE_SCRAP_COST = 23;
 local POD_SCRAP_COST = 2;
 local POWER_SCRAP_COST = 30;
 local RCKT_SCRAP_COST = 33;
+local SBAY_SCRAP_COST = 50;
 local SCAV_SCRAP_COST = 10;
 local SCOUT_SCRAP_COST = 25;
 local SERV_SCRAP_COST = 25;
@@ -186,21 +187,43 @@ function BuildScoutCondition(team, time)
 end
 
 function BuildMissileScoutCondition(team, time)
-    if (DoesFactoryExist(team, time) == false) then
-        return false, "I don't have a Factory so I can't build any Missile Scout units.";
-    end
-
     -- Make sure we have a pool first.
     if (ExtractorCount(team, time) <= 0) then
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    -- Check that we have enough to build a scout.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory so I can't build any Missile Scouts.";
+    end
+
+    -- Check that we have enough to build a Missile Scout.
     if (AIPUtil.GetScrap(team, false) < MISL_SCRAP_COST) then
         return false, "I don't have enough scrap for a Missile Scout.";
     end
 
-    return true, "I can build a Missile Scout unit."
+    return true, "I can build a Missile Scout.";
+end
+
+function BuildTankCondition(team, time)
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory so I can't build any Tanks.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker so I can't build any Tanks.";
+    end
+
+    -- Check that we have enough to build a Missile Scout.
+    if (AIPUtil.GetScrap(team, false) < TANK_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Tank.";
+    end
+
+    return true, "I can build a Tank.";
 end
 
 function BuildTankCommander(team, time)
@@ -517,6 +540,35 @@ function BuildLandingPad(team, time)
     return true, "I can build a Landing Pad.";
 end
 
+function BuildServiceBay(team, time)
+    -- Check that the path exists first.
+    if (AIPUtil.PathExists("i_ServiceBay") == false) then
+        return false, "Path: i_ServiceBay doesn't exist, so I can't build a Service Bay there.";
+    end
+
+    -- Check that the path doesn't have a building first.
+    if (AIPUtil.PathBuildingExists("i_ServiceBay")) then
+        return false, "Path: i_ServiceBay has a building on it, so I can't build a Service Bay there.";
+    end
+
+    -- Check that I have a constructor.
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    -- Check we have a Factory first.
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < SBAY_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Service Bay.";
+    end
+
+    return true,
+        "The right path exists, there's no building there, so I will construct a Service Bay. Tasking a Constructor to build an Service Bay...";
+end
+
 -- COUNT FUNCTIONS TO CHECK IF A NUMBER OF GAME OBJECT EXISTS.
 
 function ScavengerCount(team, time)
@@ -550,7 +602,7 @@ function Attack1Condition(team, time)
         return false, "I have a Factory already, I don't want to send Scouts to attack now.";
     end
 
-    if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 0) then
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) > 0) then
         return false, "Enemy defenses are too strong.";
     end
 
@@ -563,15 +615,36 @@ function Attack2Condition(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesFactoryExist(team, time) == IsAudioMessageFinished) then
+    if (DoesFactoryExist(team, time) == false) then
         return false, "I don't have a Factory yet.";
     end
 
-    if (AIPUtil.CountUnits(team, "defender", 'enemy', true) > 1) then
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) > 1) then
         return false, "Enemy defenses are too strong.";
     end
 
     return true, "Second attack is being sent.";
+end
+
+function Attack3Condition(team, time)
+    -- Make sure we have a pool first.
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory yet.";
+    end
+
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) <= 0 and AIPUtil.CountUnits(team, "VIRTUAL_CLASS_TURRET", 'enemy', true) <= 0) then
+        return false, "Enemy doesn't have any defenses to target.";
+    end
+
+    return true, "Enemies has Gun Towers / Turrets. I'll send some Mortar Bikes to attack.";
 end
 
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.

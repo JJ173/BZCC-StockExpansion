@@ -113,7 +113,7 @@ function AIController:Run(missionTurnCount)
         -- Run each dispatcher.
         if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
-                self:DispatchTurrets(missionTurnCount);
+                -- self:DispatchTurrets(missionTurnCount);
             end
 
             if (#self.DefendersToDispatch > 0) then
@@ -201,22 +201,16 @@ function AIController:DispatchTurrets(missionTurnCount)
             break;
         end
 
-        -- For testing.
-        local target = GetTarget(dispatch.Handle);
-
         -- Check to see if we have a target before we move the turret as it could be engaging after being shot.
         if (GetTarget(dispatch.Handle) ~= nil) then
             break;
-        else
-            SetObjectiveName(target, "Turret Target At Turn ", missionTurnCount);
-            SetObjectiveOn(target);
         end
 
         -- Get a random pool, but don't use the first or last in the list as these are likely base pools.
         local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
 
         -- Send the unit to defend near the pool.
-        Retreat(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
+        Goto(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
 
         -- Remove the turret from the  list of units to be dispatched.
         TableRemoveByHandle(self.TurretsToDispatch, dispatch);
@@ -260,6 +254,10 @@ function AIController:TurretShot(handle, destinationVector, missionTurnCount)
 
     -- Re-add the turret to the dispatch list.
     self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+end
+
+function AIController:AssignWeapons(handle)
+
 end
 
 -- Local utilities.

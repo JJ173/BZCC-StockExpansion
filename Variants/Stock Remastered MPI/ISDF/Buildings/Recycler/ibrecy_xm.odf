@@ -11,6 +11,8 @@ buildItem2 = "ivscout_xm"
 buildItem3 = "ivturr_xm"
 buildItem5 = "ivcons_xm"
 buildItem6 = "ivserv_xm"
+buildItem8 = "ivscoutm_xm"
+buildEmptyItem = 8
 
 [RecyclerClass]
 

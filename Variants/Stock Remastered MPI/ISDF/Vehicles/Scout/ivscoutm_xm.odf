@@ -1,0 +1,39 @@
+[GameObjectClass]
+classLabel = "ivscout_x"
+
+scrapCost = 20
+customCost = 30
+
+unitName = "Empty Scout"
+
+aiName = "SentryProcess"
+aiName2 = "SentryProcess"
+
+/////// weapons ////////////////////
+
+weaponMask = 00001
+weaponHard1 = "HP_GUN_1"
+weaponName1 = "gminigun_c"
+weaponAssault1 = 0
+
+weaponHard2 = "HP_GUN_2"
+weaponName2 = "gminigun_c"
+weaponAssault2 = 0
+
+weaponHard3 = ""
+weaponName3 = ""
+weaponAssault3 = 0
+
+weaponHard4 = ""
+weaponName4 = ""
+weaponAssault4 = 0
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

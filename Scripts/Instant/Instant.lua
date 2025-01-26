@@ -1,4 +1,3 @@
-
 -- Required Globals.
 require("_GlobalVariables");
 
@@ -7,6 +6,9 @@ require("_HelperFunctions");
 
 -- Required Skins Logic.
 require("_Skins");
+
+-- Required AI Command Vars.
+require("_AICmd");
 
 -- Models
 local _AIController = require("_AIController");
@@ -177,7 +179,8 @@ function AddObject(handle)
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session.m_TurnCounter);
+            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session
+            .m_TurnCounter);
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
@@ -256,9 +259,11 @@ function Update()
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
+                customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
+                "*vrecy", "RecyclerEnemy");
         end
 
         -- Spawn CPU vehicles.
@@ -282,7 +287,8 @@ function Update()
         SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
 
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools, chosenCPUName);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools,
+            chosenCPUName);
 
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
@@ -490,6 +496,30 @@ end
 --     return PREGETIN_ALLOW;
 -- end
 
+function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (OrdnanceTeam ~= _Session.m_CompTeam) then
+        if (GetTeamNum(VictimHandle) == _Session.m_CompTeam) then
+            -- Process important units that were shot.
+            local objClass = GetClassLabel(VictimHandle);
+
+            if (objClass == "CLASS_TURRETTANK") then
+                local test = GetCurrentCommand(VictimHandle);
+
+                if (GetCurrentCommand(VictimHandle) ~= CMD_DEFEND) then
+                    -- Grab the vector that the turret was moving to so we can check later if it needs to be repositioned.
+                    local commandVector = GetCurrentCommandWhere(VictimHandle);
+
+                    -- Have the unit stop.
+                    Defend(VictimHandle);
+
+                    -- Tell the AI Controller that the turret was shot, so we can re-add it to the distribution list.
+                    _AIController:TurretShot(VictimHandle, commandVector, _Session.m_TurnCounter);
+                end
+            end
+        end
+    end
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Mission Related Logic --------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -572,9 +602,11 @@ function BuildPlayerRecycler(pos)
     local customHumanRecycler = IFace_GetString("options.instant.string1");
 
     if (customHumanRecycler ~= nil) then
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler, "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
+            "*vrecy", pos);
     else
-        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy", pos);
+        _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
+            pos);
     end
 
     SetScrap(_Session.m_StratTeam, 40);

@@ -109,6 +109,7 @@ buildType2 = "ivscout_d"
 buildCount2 = 3
 planCondition = "Lua"
 LuaFunction = "BuildScoutCondition"
+ContinueEvenIfFail = true
 
 [Plan12]
 planType = "Attacker"

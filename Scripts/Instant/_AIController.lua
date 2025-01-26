@@ -42,10 +42,10 @@ AIController =
 };
 
 -- States for the AI Commander.
-CMD_IDLE = 0;
-CMD_ATTACK = 1;
-CMD_DEFEND = 2;
-CMD_RETREAT = 3;
+local CMDR_IDLE = 0;
+local CMDR_ATTACK = 1;
+local CMDR_DEFEND = 2;
+local CMDR_RETREAT = 3;
 
 function AIController:New(Team, Race, Pools, Name)
     local o = {}
@@ -201,6 +201,17 @@ function AIController:DispatchTurrets(missionTurnCount)
             break;
         end
 
+        -- For testing.
+        local target = GetTarget(dispatch.Handle);
+
+        -- Check to see if we have a target before we move the turret as it could be engaging after being shot.
+        if (GetTarget(dispatch.Handle) ~= nil) then
+            break;
+        else
+            SetObjectiveName(target, "Turret Target At Turn ", missionTurnCount);
+            SetObjectiveOn(target);
+        end
+
         -- Get a random pool, but don't use the first or last in the list as these are likely base pools.
         local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
 
@@ -239,6 +250,16 @@ end
 
 function AIController:CommanderBrain()
 
+end
+
+function AIController:TurretShot(handle, destinationVector, missionTurnCount)
+    -- Check to see how far the turret was from the original path it was going to.
+    if (destinationVector == nil or GetDistance(handle, destinationVector) < 40) then
+        return;
+    end
+
+    -- Re-add the turret to the dispatch list.
+    self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
 end
 
 -- Local utilities.

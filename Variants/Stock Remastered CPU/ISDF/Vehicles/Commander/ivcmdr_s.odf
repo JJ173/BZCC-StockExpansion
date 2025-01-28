@@ -9,10 +9,16 @@ unitName = "Commander"
 requireCount = 0
 ////////////////////////////////////
 
-weaponMask = 00011 // AI will link first 3 weapon hardpoints (if allowed by AI process)
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName4 = "Commander"
+////////////////////////////////////
 
 [CraftClass]
-UseSelectWeapon = 0
+ClosestEnemyGoodEyes = true
+AIWeaponMaskVsCombat = 7
+AIWeaponMaskVsAssault = 3
+
 CanAIPForceIdle = false
 DoIdleDispatch = false
 

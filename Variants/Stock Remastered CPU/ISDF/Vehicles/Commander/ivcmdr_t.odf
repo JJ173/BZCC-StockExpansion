@@ -12,6 +12,11 @@ unitName = "Commander"
 requireCount = 0
 ////////////////////////////////////
 
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName4 = "Commander"
+////////////////////////////////////
+
 weaponMask = 00111
 
 [CraftClass]

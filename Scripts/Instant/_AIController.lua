@@ -23,6 +23,7 @@ AIController =
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     Scavengers = {},
     Constructors = {},
+    AssaultUnits = {},
 
     -- Store units to dispatch here.
     TurretsToDispatch = {},
@@ -64,9 +65,11 @@ function AIController:New(Team, Race, Pools, Name)
     o.Commander = nil;
     o.Scavengers = {};
     o.Constructors = {};
+    o.AssaultUnits = {};
     o.TurretsToDispatch = {};
     o.PatrolsToDispatch = {};
     o.DefendersToDispatch = {};
+    o.AntiAirToDispatch = {};
     o.RecyclerDeployed = false;
     o.Name = Name or "";
 

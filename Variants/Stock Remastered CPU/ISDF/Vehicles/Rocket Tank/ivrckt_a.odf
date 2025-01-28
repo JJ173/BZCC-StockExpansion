@@ -1,9 +1,9 @@
 [GameObjectClass]
 baseName = "AntiAir"
-classLabel = "ivrckt_x"
+classLabel = "ivrckt_c"
 
-scrapValue = 13 // Scrap value for the CPU is reduced by half so it drops less loose.
-scrapCost = 0 // Original Scrap Cost (65) / 2 = 32.5, round up to 33.
+buildTime = 7.5 // Halved to stop these units from taking up too much time when being built.
+scrapCost = 0
 
 unitName = "Rocket Tank (AA)"
 

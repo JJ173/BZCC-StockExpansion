@@ -1,8 +1,8 @@
 [GameObjectClass]
 baseName = "Patrol"
-classLabel = "ivmisl_x"
+classLabel = "ivmisl_c"
 
-scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+buildTime = 5 // Halved to stop these units from taking up too much time when being built.
 scrapCost = 0 // Original Scrap Cost (45).
 
 unitName = "Patrol"

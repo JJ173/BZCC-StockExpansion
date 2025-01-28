@@ -1,9 +1,9 @@
 [GameObjectClass]
 baseName = "Defender"
-classLabel = "ivscout_c"
+classLabel = "ivtank_c"
 
 buildTime = 5 // Halved to stop these units from taking up too much time when being built.
-scrapCost = 0 // Original Scrap Cost (45).
+scrapCost = 0 // Original Scrap Cost (55).
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
 [CraftClass]
@@ -11,3 +11,7 @@ CanAIPForceIdle = false
 DoIdleDispatch = false
 
 [HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

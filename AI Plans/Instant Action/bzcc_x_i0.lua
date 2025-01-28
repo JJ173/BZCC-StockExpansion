@@ -588,7 +588,7 @@ function Attack4Condition(team, time)
         return false, "I don't have an Armory yet.";
     end
 
-    if (DoesCommBunkerExist(team, time) == false) then
+    if (DoesRelayBunkerExist(team, time) == false) then
         return false, "I don't have a Relay Bunker yet.";
     end
 

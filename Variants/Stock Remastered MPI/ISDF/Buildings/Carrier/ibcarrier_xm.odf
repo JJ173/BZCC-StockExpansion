@@ -4,6 +4,7 @@ geometryName = "ivcarr_x00.fbx"
 classLabel = "ibfact_x"
 animCount = 0
 unitName = "Carrier"
+collisionRadius = 0.1
 
 powerCost = 0
 heatSignature = 0.0
@@ -11,6 +12,7 @@ imageSignature = 0.0
 radarSignature = 0.0
 collisionRadius = 0.0
 
+isStealth = true
 ownsTerrain = false
 categoryTypeOverride = 4
 

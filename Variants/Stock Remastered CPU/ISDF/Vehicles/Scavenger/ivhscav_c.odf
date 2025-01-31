@@ -1,0 +1,23 @@
+[GameObjectClass]
+classLabel = "ivhscav_gh"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 10 // Scrap cost is reduced by 50%.
+
+unitName = "H. Scavenger"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "ivscav"
+provideName2 = "VIRTUAL_CLASS_SCAVENGER"
+provideName3 = "ivhscav_c"
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ScavengerHClass]
+doDrop = false

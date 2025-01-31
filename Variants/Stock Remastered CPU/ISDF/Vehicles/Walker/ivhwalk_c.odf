@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ivhwalk_gh"
+
+scrapValue = 15 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 60 // Original Scrap Cost (120) / 2 = 60.
+
+[CraftClass]
+
+[WalkerClass]

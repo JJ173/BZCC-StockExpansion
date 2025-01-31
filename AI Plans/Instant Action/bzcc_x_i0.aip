@@ -28,34 +28,37 @@ buildType1 = "ivcmdr_t"
 buildCount1 = 1
 LuaFunction = "BuildTankCommander"
 
-[Plan3]
-planType = "BuildLoop"
+[Plan3] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
+planType = "CollectPool"
 planPriority = 980
 planCondition = "Lua"
-buildType1 = "ivscav_c"
-buildCount1 = 1
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan4]
+planType = "CollectPool"
+planPriority = 970
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan5]
+planType = "BuildLoop"
+planPriority = 960
+planCondition = "Lua"
+buildType1 = "ivhscav_c"
+buildCount1 = 3
 LuaFunction = "BuildScavengerCondition"
 ContinueEvenIfFail = true
 
-[Plan4] // Collect Loose First.
+[Plan6] // Collect Loose First.
 planType = "CollectField"
-planPriority = 970
-planCondition = "Lua"
-LuaFunction = "CollectFieldCondition"
-
-[Plan5] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
-planType = "CollectPool"
-planPriority = 960
-planCondition = "Lua"
-LuaFunction = "CollectPoolCondition"
-ContinueEvenIfFail = true
-
-[Plan6]
-planType = "CollectPool"
 planPriority = 950
 planCondition = "Lua"
-LuaFunction = "CollectPoolCondition"
-ContinueEvenIfFail = true
+scavClass = "ivhscav_c"
+LuaFunction = "CollectFieldCondition"
 
 [Plan7]
 planType = "BuildMinimums"
@@ -312,4 +315,34 @@ buildType1 = "ivtank_d"
 buildCount1 = 3
 planCondition = "Lua"
 LuaFunction = "BuildAssaultDefenders"
+ContinueEvenIfFail = true
+
+[Plan32]
+planType = "BuildMinimums"
+planPriority = 690
+buildType1 = "ivserv_c"
+buildCount1 = 3
+LuaFunction = "BuildServiceTrucks"
+ContinueEvenIfFail = true
+
+[Plan33]
+planType = "BaseBuildMinimums"
+planPriority = 680
+planCondition = "Lua"
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Field_Bunker_2"
+LuaFunction = "BuildFieldBunker2"
+consClass = "ivcons_g"
+ContinueEvenIfFail = true
+
+[Plan34]
+planType = "BaseBuildMinimums"
+planPriority = 670
+planCondition = "Lua"
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_Field_GunTower_2"
+LuaFunction = "BuildFieldGunTower2"
+consClass = "ivcons_g"
 ContinueEvenIfFail = true

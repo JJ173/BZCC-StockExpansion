@@ -6,11 +6,14 @@ classLabel = "ibfact_x"
 [BuildingClass]
 
 [FactoryClass]
-buildItem1 = "ivmbike_c"
 buildItem5 = "ivatank_c"
-buildItem6 = "ivwalk_c"
 buildItem7 = "ivapc_c"
 buildItem8 = "ivbomb_c"
+
+[BuildGroup1]
+buildLabel = "Mortar Bikes"
+buildItem1 = "ivmbike_c"
+buildItem2 = "ivhmbike_c"
 
 [BuildGroup2]
 buildLabel = "Missile Scouts"
@@ -21,10 +24,18 @@ buildItem2 = "ivmisl_p"
 buildLabel = "Tanks"
 buildItem1 = "ivtank_c"
 buildItem2 = "ivtank_p"
+buildItem3 = "ivtank_d"
 
 [BuildGroup4]
 buildLabel = "Rocket Tanks"
 buildItem1 = "ivrckt_c"
 buildItem2 = "ivrckt_a"
+buildItem3 = "ivhrckt_c"
+buildItem4 = "ivlrckt_c"
+
+[BuildGroup6]
+buildLabel = "Walkers"
+buildItem1 = "ivwalk_c"
+buildItem2 = "ivhwalk_c"
 
 [Lod1]

@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivhmisl_gh_b"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 38 // Original Scrap Cost (75) / 2 = 37.5, round up to 38.
+
+/////// PROVIDES ///////////////////
+provideName1 = "ivhmisl_c_b"
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[AssaultHoverClass]

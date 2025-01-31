@@ -251,6 +251,22 @@ function BuildTankCommander(team, time)
     return true, "I can replace the Commander in a Tank unit. Tasking Factory to build.";
 end
 
+function BuildServiceTrucks(team, time)
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (DoesRecyclerExist(team, time) == false) then
+        return false, "I don't have a Recycler yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    return true, "Tasking Recycler to build Service Trucks...";
+end
+
 function BuildPath1BasePlate(team, time)
     if (IsPathAvailable("i_Plate_1") == false) then
         return false, "i_Plate_1 is unavailable, or a building already exists on it."
@@ -472,6 +488,50 @@ function BuildFieldGunTower1(team, time)
     return true, "Tasking a Constructor to build a Gun Tower at i_Field_GunTower_1...";
 end
 
+function BuildFieldBunker2(team, time)
+    if (IsPathAvailable("i_Field_Bunker_2") == false) then
+        return false, "i_Field_Bunker_2 is unavailable, or a building already exists on it."
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Comm Bunker.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < BUNKER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Comm Bunker.";
+    end
+
+    return true, "Tasking a Constructor to build a Relay Bunker at i_Field_Bunker_2...";
+end
+
+function BuildFieldGunTower2(team, time)
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_2") == false) then
+        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_Field_GunTower_2") == false) then
+        return false, "i_Field_GunTower_2 is unavailable, or a building already exists on it."
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Gun Tower.";
+    end
+
+    return true, "Tasking a Constructor to build a Gun Tower at i_Field_GunTower_2...";
+end
+
 function BuildLandingPad(team, time)
     if (DoesLandingPadExist(team, time)) then
         return false, "I already have a Landing Pad.";
@@ -606,7 +666,13 @@ function IsCommanderOptionEnabled(team, time)
 end
 
 function IsPathAvailable(pathName)
-    return (AIPUtil.PathExists(pathName) and AIPUtil.PathBuildingExists(pathName) == false);
+    if (AIPUtil.PathExists(pathName) == false) then
+        return false;
+    elseif (AIPUtil.PathBuildingExists(pathName)) then
+        return false;
+    end
+
+    return true;
 end
 
 function DoesRecyclerExist(team, time)

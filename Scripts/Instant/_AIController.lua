@@ -30,6 +30,7 @@ AIController =
     PatrolsToDispatch = {},
     DefendersToDispatch = {},
     AntiAirToDispatch = {},
+    MinionsToDispatch = {},
 
     Carrier = nil,
     LandingPad = nil,
@@ -132,6 +133,10 @@ function AIController:Run(missionTurnCount)
                 self:DispatchAntiAir(missionTurnCount);
             end
 
+            if (#self.MinionsToDispatch > 0) then
+                self:DispatchMinions(missionTurnCount);
+            end
+
             self.DispatchCooldown = missionTurnCount + SecondsToTurns(3);
         end
 
@@ -164,6 +169,10 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         self.DefendersToDispatch[#self.DefendersToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     elseif (objBase == "AntiAir") then
         self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+    elseif (objBase == "Minion") then
+        self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+    elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
+        self.AssaultUnits[#self.AssaultUnits + 1] = handle;
     end
 end
 
@@ -206,6 +215,16 @@ function AIController:DispatchTurrets(missionTurnCount)
         -- Grab the turret.
         local dispatch = self.TurretsToDispatch[i];
 
+        -- If the unit is not idle, ignore it.
+        if (IsIdle(dispatch.Handle) == false) then
+            break;
+        end
+
+        -- Don't process this unit if it's built in the same turn.
+        if (dispatch.BuiltTime == missionTurnCount) then
+            break;
+        end
+
         -- Check to see if the dispatch cooldown has passed.
         if (dispatch.DispatchDelay >= missionTurnCount) then
             break;
@@ -232,6 +251,16 @@ function AIController:DispatchPatrols(missionTurnCount)
         -- Grab the Patrol unit.
         local dispatch = self.PatrolsToDispatch[i];
 
+        -- If the unit is not idle, ignore it.
+        if (IsIdle(dispatch.Handle) == false) then
+            break;
+        end
+
+        -- Don't process this unit if it's built in the same turn.
+        if (dispatch.BuiltTime == missionTurnCount) then
+            break;
+        end
+
         -- Check to see if the dispatch cooldown has passed.
         if (dispatch.DispatchDelay >= missionTurnCount) then
             break;
@@ -254,6 +283,38 @@ end
 
 function AIController:DispatchAntiAir(missionTurnCount)
 
+end
+
+function AIController:DispatchMinions(missionTurnCount)
+    -- For any turrets that need dispatching, let's send them around the map.
+    for i = 1, #self.MinionsToDispatch do
+        -- Grab the turret.
+        local dispatch = self.MinionsToDispatch[i];
+
+        -- If the unit is not idle, ignore it.
+        if (IsIdle(dispatch.Handle) == false) then
+            break;
+        end
+
+        -- Don't process this unit if it's built in the same turn.
+        if (dispatch.BuiltTime == missionTurnCount) then
+            break;
+        end
+
+        -- Check to see if the dispatch cooldown has passed.
+        if (dispatch.DispatchDelay >= missionTurnCount) then
+            break;
+        end
+
+        -- Get a random assault unit to defend.
+        local assaultUnitToDefend = self.AssaultUnits[GetRandomInt(1, #self.Pools)].Handle;
+
+        -- Send the unit to defend near the pool.
+        Defend2(dispatch.Handle, assaultUnitToDefend);
+
+        -- Remove the turret from the  list of units to be dispatched.
+        TableRemoveByHandle(self.TurretsToDispatch, dispatch);
+    end
 end
 
 function AIController:CommanderBrain()
@@ -280,7 +341,7 @@ function Compare(a, b)
 end
 
 function CreateDispatchUnit(handle, missionTurn)
-    return _Dispatch:New(handle, missionTurn + SecondsToTurns(2));
+    return _Dispatch:New(handle, missionTurn);
 end
 
 -- Return to caller.

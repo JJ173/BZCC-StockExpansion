@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivartl_gh_a"
+
+scrapValue = 23 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 43 // Original Scrap Cost (85) / 2 = 42.5, round up to 43.
+
+/////// PROVIDES ///////////////////
+provideName1 = "ivartl_c_a"
+////////////////////////////////////
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

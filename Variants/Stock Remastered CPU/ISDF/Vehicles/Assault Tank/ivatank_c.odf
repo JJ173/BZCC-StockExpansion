@@ -5,6 +5,7 @@ scrapValue = 20 // Scrap value for the CPU is reduced by half so it drops less l
 scrapCost = 35 // Scrap cost is reduced by 50%.
 
 [CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
 
 [TrackedVehicleClass]
 

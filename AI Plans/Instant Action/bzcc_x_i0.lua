@@ -6,6 +6,7 @@ local BOMBER_SCRAP_COST = 33;
 local BUNKER_SCRAP_COST = 50;
 local CONST_SCRAP_COST = 20;
 local FACTORY_SCRAP_COST = 55;
+local GUNTOWER_SCRAP_COST = 50;
 local LANDING_PAD_COST = 60;
 local MLAY_SCRAP_COST = 25;
 local MISL_SCRAP_COST = 23;
@@ -13,6 +14,7 @@ local MBIKE_SCRAP_COST = 23;
 local POD_SCRAP_COST = 2;
 local POWER_SCRAP_COST = 30;
 local RCKT_SCRAP_COST = 33;
+local RCKT_TOWER_SCRAP_COST = 65;
 local SBAY_SCRAP_COST = 50;
 local SCAV_SCRAP_COST = 10;
 local SCOUT_SCRAP_COST = 25;
@@ -50,27 +52,7 @@ function CollectPoolCondition(team, time)
     return true, "Tasking a Scavenger to collect a pool.";
 end
 
--- BUILD PLAN CONDITIONS.
-function UpgradeFirstPoolCondition(team, time)
-    if (DoesConstructorExist(team, time) == false) then
-        return false, "I don't have a Constructor yet.";
-    end
-
-    if (ExtractorCount(team, time) <= 0) then
-        return false, "I don't have any deployed Scavengers yet.";
-    end
-
-    if (UpgradedExtractorCount(team, time) >= 1) then
-        return false, "I have one upgrade. I don't need another yet.";
-    end
-
-    if (AIPUtil.GetScrap(team, false) < 60) then
-        return false, "I don't have enough scrap to upgrade an Extractor.";
-    end
-
-    return true, "Tasking Constructor to upgrade an Extractor.";
-end
-
+-- BUILD PLAN CONDITIONS [UNITS]
 function BuildScavengerCondition(team, time)
     if (DoesRecyclerExist(team, time) == false) then
         return false, "I don't have a Recycler yet.";
@@ -265,6 +247,47 @@ function BuildServiceTrucks(team, time)
     end
 
     return true, "Tasking Recycler to build Service Trucks...";
+end
+
+-- BUILD PLAN CONDITIONS [BUILDINGS]
+function UpgradeFirstPoolCondition(team, time)
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (UpgradedExtractorCount(team, time) >= 1) then
+        return false, "I have one upgrade. I don't need another yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < 60) then
+        return false, "I don't have enough scrap to upgrade an Extractor.";
+    end
+
+    return true, "Tasking Constructor to upgrade an Extractor.";
+end
+
+function UpgradeFirstPowerCondition(team, time)
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < 30) then
+        return false, "I don't have enough scrap to upgrade a Power Plant.";
+    end
+
+    return true, "Tasking Constructor to upgrade a Power Plant."; 
 end
 
 function BuildPath1BasePlate(team, time)
@@ -469,6 +492,10 @@ function BuildFieldBunker1(team, time)
 end
 
 function BuildFieldGunTower1(team, time)
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
     if (AIPUtil.PathBuildingExists("i_Field_Bunker_1") == false) then
         return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
     end
@@ -485,7 +512,43 @@ function BuildFieldGunTower1(team, time)
         return false, "I don't have enough Power for a Gun Tower.";
     end
 
+    if (AIPUtil.GetScrap(team, false) < GUNTOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Gun Tower.";
+    end
+
     return true, "Tasking a Constructor to build a Gun Tower at i_Field_GunTower_1...";
+end
+
+function BuildFieldRocketTower1(team, time)
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_1") == false) then
+        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Rocket Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_Field_RocketTower_1") == false) then
+        return false, "i_Field_RocketTower_1 is unavailable, or a building already exists on it."
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Rocket Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < RCKT_TOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Rocket Tower.";
+    end
+
+    return true, "Tasking a Constructor to build a Rocket Tower at i_Field_RocketTower_1...";
 end
 
 function BuildFieldBunker2(team, time)
@@ -513,6 +576,10 @@ function BuildFieldBunker2(team, time)
 end
 
 function BuildFieldGunTower2(team, time)
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
     if (AIPUtil.PathBuildingExists("i_Field_Bunker_2") == false) then
         return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
     end
@@ -527,6 +594,10 @@ function BuildFieldGunTower2(team, time)
 
     if (AIPUtil.GetPower(team, false) <= 0) then
         return false, "I don't have enough Power for a Gun Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUNTOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Gun Tower.";
     end
 
     return true, "Tasking a Constructor to build a Gun Tower at i_Field_GunTower_2...";
@@ -608,7 +679,7 @@ function Attack2Condition(team, time)
         return false, "I don't have a Factory yet.";
     end
 
-    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) > 1) then
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) > 0) then
         return false, "Enemy defenses are too strong.";
     end
 

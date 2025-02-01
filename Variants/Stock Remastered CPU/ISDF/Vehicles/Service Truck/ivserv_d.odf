@@ -1,0 +1,19 @@
+[GameObjectClass]
+baseName = "AssaultService"
+classLabel = "ivserv_c"
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]
+
+[Lod1]

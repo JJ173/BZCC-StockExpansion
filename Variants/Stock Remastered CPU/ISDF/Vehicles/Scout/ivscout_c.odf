@@ -5,6 +5,8 @@ scrapValue = 8 // Scrap value for the CPU is reduced by half so it drops less lo
 scrapCost = 25 // Scrap cost is reduced by 50%.
 
 [CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
 AIWeaponMaskVsCombat = 7
 AIWeaponMaskVsAssault = 3
 

@@ -498,22 +498,12 @@ end
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (OrdnanceTeam ~= _Session.m_CompTeam) then
         if (GetTeamNum(VictimHandle) == _Session.m_CompTeam) then
-            -- Process important units that were shot.
             local objClass = GetClassLabel(VictimHandle);
 
             if (objClass == "CLASS_TURRETTANK") then
-                local test = GetCurrentCommand(VictimHandle);
-
-                if (GetCurrentCommand(VictimHandle) ~= CMD_DEFEND) then
-                    -- Grab the vector that the turret was moving to so we can check later if it needs to be repositioned.
-                    local commandVector = GetCurrentCommandWhere(VictimHandle);
-
-                    -- Have the unit stop.
-                    Defend(VictimHandle);
-
-                    -- Tell the AI Controller that the turret was shot, so we can re-add it to the distribution list.
-                    _AIController:TurretShot(VictimHandle, commandVector, _Session.m_TurnCounter);
-                end
+                _AIController:TurretShot(VictimHandle, _Session.m_TurnCounter);
+            elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
+                _AIController:ScavengerShot(VictimHandle);
             end
         end
     end

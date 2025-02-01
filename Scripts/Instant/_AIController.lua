@@ -12,6 +12,7 @@ AIController =
     Factory = 0,
     Armory = 0,
     ServiceBay = 0,
+    Tech = 0,
 
     Pools = {},
 
@@ -21,22 +22,20 @@ AIController =
     RecyclerDeployed = false,
 
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
-    Scavengers = {},
-    Constructors = {},
     AssaultUnits = {},
 
     -- Store units to dispatch here.
     TurretsToDispatch = {},
     PatrolsToDispatch = {},
-    DefendersToDispatch = {},
     AntiAirToDispatch = {},
     MinionsToDispatch = {},
+    ServiceTrucksToDispatch = {},
 
     Carrier = nil,
     LandingPad = nil,
 
     -- Name that's picked from a random list for the team.
-    Name = "";
+    Name = "",
 
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0,
@@ -64,13 +63,11 @@ function AIController:New(Team, Race, Pools, Name)
     o.Armory = nil;
     o.ServiceBay = nil;
     o.Commander = nil;
-    o.Scavengers = {};
-    o.Constructors = {};
     o.AssaultUnits = {};
     o.TurretsToDispatch = {};
     o.PatrolsToDispatch = {};
-    o.DefendersToDispatch = {};
     o.AntiAirToDispatch = {};
+    o.MinionsToDispatch = {};
     o.RecyclerDeployed = false;
     o.Name = Name or "";
 
@@ -110,7 +107,7 @@ function AIController:Run(missionTurnCount)
         DoTaunt(TAUNTS_Random);
 
         -- Cooldown so we don't call this every frame.
-        self.TauntCooldown = missionTurnCount + SecondsToTurns(60);
+        self.TauntCooldown = missionTurnCount + SecondsToTurns(90);
     end
 
     -- Only do this when the Recycler is deployed.
@@ -119,10 +116,6 @@ function AIController:Run(missionTurnCount)
         if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
                 self:DispatchTurrets(missionTurnCount);
-            end
-
-            if (#self.DefendersToDispatch > 0) then
-                self:DispatchDefenders(missionTurnCount);
             end
 
             if (#self.PatrolsToDispatch > 0) then
@@ -137,16 +130,12 @@ function AIController:Run(missionTurnCount)
                 self:DispatchMinions(missionTurnCount);
             end
 
-            self.DispatchCooldown = missionTurnCount + SecondsToTurns(3);
+            self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5);
         end
 
         -- Handle the Commander.
         self:CommanderBrain();
     end
-end
-
-function AIController:CarrierLogic()
-
 end
 
 function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCount)
@@ -155,33 +144,23 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         SetObjectiveName(self.Commander, self.Name);
     elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
         self.RecyclerDeployed = true;
-    elseif (objClass == "CLASS_SCAVENGER") then
-        self.Scavengers[#self.Scavengers + 1] =  handle;
-    elseif (objClass == "CLASS_CONSTRUCTIONRIG") then
-        self.Constructors[#self.Constructors + 1] = handle;
     elseif (objCfg == self.Race .. "bcarrier_xm") then
         self.Carrier = handle;
     elseif (objClass == "CLASS_TURRETTANK") then
-        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objBase == "Patrol") then
-        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
-    elseif (objBase == "Defender") then
-        self.DefendersToDispatch[#self.DefendersToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objBase == "AntiAir") then
-        self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
-    elseif (objBase == "Minion") then
-        self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+        self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
+    elseif (objBase == "Minion" or objBase == "AssaultService") then
+        self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
         self.AssaultUnits[#self.AssaultUnits + 1] = handle;
     end
 end
 
 function AIController:DeleteObject(handle, objClass, objCfg)
-    if (objClass == "CLASS_SCAVENGER") then
-        TableRemoveByHandle(self.Scavengers, handle);
-    elseif (objClass == "CLASS_CONSTRUCTIONRIG") then
-        TableRemoveByHandle(self.Constructors, handle);
-    elseif (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
+    if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
     end
 end
@@ -215,18 +194,8 @@ function AIController:DispatchTurrets(missionTurnCount)
         -- Grab the turret.
         local dispatch = self.TurretsToDispatch[i];
 
-        -- If the unit is not idle, ignore it.
-        if (IsIdle(dispatch.Handle) == false) then
-            break;
-        end
-
-        -- Don't process this unit if it's built in the same turn.
-        if (dispatch.BuiltTime == missionTurnCount) then
-            break;
-        end
-
-        -- Check to see if the dispatch cooldown has passed.
-        if (dispatch.DispatchDelay >= missionTurnCount) then
+        -- Common function to check if the unit is available.
+        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
@@ -251,18 +220,8 @@ function AIController:DispatchPatrols(missionTurnCount)
         -- Grab the Patrol unit.
         local dispatch = self.PatrolsToDispatch[i];
 
-        -- If the unit is not idle, ignore it.
-        if (IsIdle(dispatch.Handle) == false) then
-            break;
-        end
-
-        -- Don't process this unit if it's built in the same turn.
-        if (dispatch.BuiltTime == missionTurnCount) then
-            break;
-        end
-
-        -- Check to see if the dispatch cooldown has passed.
-        if (dispatch.DispatchDelay >= missionTurnCount) then
+        -- Common function to check if the unit is available.
+        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
@@ -272,63 +231,98 @@ function AIController:DispatchPatrols(missionTurnCount)
         -- Send the unit to Patrol.
         Patrol(dispatch.Handle, path);
 
-        -- Remove the turret from the  list of units to be dispatched.
+        -- Remove the patrol unit from the list of units to be dispatched.
         TableRemoveByHandle(self.PatrolsToDispatch, dispatch);
     end
 end
 
-function AIController:DispatchDefenders(missionTurnCount)
-
-end
-
 function AIController:DispatchAntiAir(missionTurnCount)
+    -- Send the anti-air to the right path.
+    for i = 1, #self.AntiAirToDispatch do
+        -- Grab the anti-air.
+        local dispatch = self.MinionsToDispatch[i];
 
+        -- Common function to check if the unit is available.
+        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
+            break;
+        end
+
+        -- Send the Anti-Air to the path based on the increment.
+        local path = "patrol_" .. i;
+
+        -- Send the unit to Patrol.
+        Patrol(dispatch.Handle, path);
+
+        -- Remove the patrol unit from the list of units to be dispatched.
+        TableRemoveByHandle(self.AntiAirToDispatch, dispatch);
+    end
 end
 
 function AIController:DispatchMinions(missionTurnCount)
     -- For any turrets that need dispatching, let's send them around the map.
     for i = 1, #self.MinionsToDispatch do
-        -- Grab the turret.
+        -- Grab the minion.
         local dispatch = self.MinionsToDispatch[i];
 
-        -- If the unit is not idle, ignore it.
-        if (IsIdle(dispatch.Handle) == false) then
+        -- Common function to check if the unit is available.
+        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
-        -- Don't process this unit if it's built in the same turn.
-        if (dispatch.BuiltTime == missionTurnCount) then
-            break;
-        end
-
-        -- Check to see if the dispatch cooldown has passed.
-        if (dispatch.DispatchDelay >= missionTurnCount) then
+        -- Check to see if any assault units exist yet, otherwise don't dispatch.
+        if (#self.AssaultUnits <= 0) then
             break;
         end
 
         -- Get a random assault unit to defend.
-        local assaultUnitToDefend = self.AssaultUnits[GetRandomInt(1, #self.Pools)].Handle;
+        local assaultUnitToDefend = self.AssaultUnits[GetRandomInt(1, #self.AssaultUnits)];
 
-        -- Send the unit to defend near the pool.
-        Defend2(dispatch.Handle, assaultUnitToDefend);
+        -- If this minion is a Service Truck, send it to follow. Else, send a tank to defend.
+        if (dispatch.Base == "Minion") then
+            Defend2(dispatch.Handle, assaultUnitToDefend);
 
-        -- Remove the turret from the  list of units to be dispatched.
-        TableRemoveByHandle(self.TurretsToDispatch, dispatch);
+            -- Remove the minion from the right table.
+            TableRemoveByHandle(self.MinionsToDispatch, dispatch);
+        elseif (dispatch.Base == "AssaultService") then
+            Follow(dispatch.Handle, assaultUnitToDefend);
+
+            -- Remove the service truck from the right table.
+            TableRemoveByHandle(self.ServiceTrucksToDispatch, dispatch);
+        end
     end
+end
+
+function AIController:CarrierBrain()
+
 end
 
 function AIController:CommanderBrain()
 
 end
 
-function AIController:TurretShot(handle, destinationVector, missionTurnCount)
-    -- Check to see how far the turret was from the original path it was going to.
-    if (destinationVector == nil or GetDistance(handle, destinationVector) < 40) then
-        return;
-    end
+function AIController:TurretShot(handle, missionTurnCount)
+    if (GetCurrentCommand(handle) ~= CMD_DEFEND) then
+        -- Grab the vector that the turret was moving to so we can check later if it needs to be repositioned.
+        local commandVector = GetCurrentCommandWhere(handle);
 
-    -- Re-add the turret to the dispatch list.
-    self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+        -- Have the unit stop.
+        Defend(handle, 0);
+
+        -- Check to see how far the turret was from the original path it was going to.
+        if (commandVector == nil or GetDistance(handle, commandVector) < 40) then
+            return;
+        end
+
+        -- Re-add the turret to the dispatch list.
+        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
+    end
+end
+
+function AIController:ScavengerShot(handle)
+    if (IsIdle(handle)) then
+        -- Make the Scavenger retreat.
+        Goto(handle, GetPositionNear("RecyclerEnemy", 40, 60), 0);
+    end
 end
 
 function AIController:AssignWeapons(handle)
@@ -340,8 +334,27 @@ function Compare(a, b)
     return a["DistanceFromCPURecycler"] < b["DistanceFromCPURecycler"];
 end
 
-function CreateDispatchUnit(handle, missionTurn)
-    return _Dispatch:New(handle, missionTurn);
+function CreateDispatchUnit(handle, missionTurn, objBase)
+    return _Dispatch:New(handle, missionTurn, objBase);
+end
+
+function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
+    -- If the unit is not idle, ignore it.
+    if (IsIdle(dispatchUnit.Handle) == false) then
+        return false;
+    end
+
+    -- Don't process this unit if it's built in the same turn.
+    if (dispatchUnit.BuiltTime == missionTurnCount) then
+        return false;
+    end
+
+    -- Check to see if the dispatch cooldown has passed.
+    if (dispatchUnit.DispatchDelay >= missionTurnCount) then
+        return false;
+    end
+
+    return true;
 end
 
 -- Return to caller.

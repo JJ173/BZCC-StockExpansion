@@ -5,5 +5,6 @@ scrapValue = 15 // Scrap value for the CPU is reduced by half so it drops less l
 scrapCost = 60 // Original Scrap Cost (120) / 2 = 60.
 
 [CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
 
 [WalkerClass]

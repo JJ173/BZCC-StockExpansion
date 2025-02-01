@@ -14,6 +14,7 @@ provideName3 = "ivhscav_c"
 ////////////////////////////////////
 
 [CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
 
 [HoverCraftClass]
 

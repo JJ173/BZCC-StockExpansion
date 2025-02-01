@@ -2,6 +2,7 @@
 classLabel = "ibplate_gh_a"
 scrapCost = 0
 scrapValue = 0
+buildTime = 5
 unitName = "Base Plate"
 canDetect = 1
 canInteract = 0

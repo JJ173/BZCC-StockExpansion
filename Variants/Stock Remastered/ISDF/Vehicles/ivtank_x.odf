@@ -2,6 +2,8 @@
 classLabel = "ivtank"
 PilotConfig = "ispilo_x"
 
+unitName = "Sabre"
+
 lightName2 = "spotblue2"
 
 [CraftClass]

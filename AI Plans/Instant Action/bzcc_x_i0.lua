@@ -20,6 +20,7 @@ local SCAV_SCRAP_COST = 10;
 local SCOUT_SCRAP_COST = 25;
 local SERV_SCRAP_COST = 25;
 local TANK_SCRAP_COST = 23;
+local TECH_CENTER_SCRAP_COST = 80;
 local TURRET_SCRAP_COST = 20;
 local WALKER_SCRAP_COST = 50;
 
@@ -386,7 +387,35 @@ function BuildPower2(team, time)
     return true, "Tasking a Constructor to build a Power Plant...";
 end
 
+function BuildPower3(team, time)
+    if (IsPathAvailable("i_Power_3") == false) then
+        return false, "i_Power_3 is unavailable, or a building already exists on it."
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < POWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Power Plant.";
+    end
+
+    if (PowerPlantCount(team, time) < 2) then
+        return false, "I haven't built the first or second Power Plant yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) > 0) then
+        return false, "I have enough Power for now.";
+    end
+
+    return true, "Tasking a Constructor to build a Power Plant...";
+end
+
 function BuildFactory(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
     if (IsPathAvailable("i_Factory") == false) then
         return false, "i_Factory is unavailable, or a building already exists on it."
     end
@@ -408,6 +437,10 @@ function BuildFactory(team, time)
 end
 
 function BuildArmory(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
     if (IsPathAvailable("i_Armory") == false) then
         return false, "i_Armory is unavailable, or a building already exists on it."
     end
@@ -428,6 +461,10 @@ function BuildArmory(team, time)
 end
 
 function BuildRelayBunker(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
     if (IsPathAvailable("i_Bunker") == false) then
         return false, "i_Bunker is unavailable, or a building already exists on it."
     end
@@ -448,6 +485,10 @@ function BuildRelayBunker(team, time)
 end
 
 function BuildServiceBay(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
     if (IsPathAvailable("i_ServiceBay") == false) then
         return false, "i_ServiceBay is unavailable, or a building already exists on it."
     end
@@ -467,13 +508,47 @@ function BuildServiceBay(team, time)
     return true, "Tasking a Constructor to build a Service Bay...";
 end
 
-function BuildFieldBunker1(team, time)
-    if (IsPathAvailable("i_Field_Bunker_1") == false) then
-        return false, "i_Field_Bunker_1 is unavailable, or a building already exists on it."
+function BuildTechCenter(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (IsPathAvailable("i_Tech") == false) then
+        return false, "i_ServiceBay is unavailable, or a building already exists on it."
     end
 
     if (DoesConstructorExist(team, time) == false) then
         return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < TECH_CENTER_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Service Bay.";
+    end
+end
+
+function BuildFieldBunker1(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (IsPathAvailable("i_Field_Bunker_1") == false) then
+        return false, "i_Field_Bunker_1 is unavailable, or a building already exists on it."
     end
 
     if (DoesFactoryExist(team, time) == false) then
@@ -492,6 +567,14 @@ function BuildFieldBunker1(team, time)
 end
 
 function BuildFieldGunTower1(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
     if (DoesRelayBunkerExist(team, time) == false) then
         return false, "I don't have a Relay Bunker yet.";
     end
@@ -502,10 +585,6 @@ function BuildFieldGunTower1(team, time)
 
     if (IsPathAvailable("i_Field_GunTower_1") == false) then
         return false, "i_Field_GunTower_1 is unavailable, or a building already exists on it."
-    end
-
-    if (DoesConstructorExist(team, time) == false) then
-        return false, "I don't have a Constructor yet.";
     end
 
     if (AIPUtil.GetPower(team, false) <= 0) then
@@ -520,6 +599,14 @@ function BuildFieldGunTower1(team, time)
 end
 
 function BuildFieldRocketTower1(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
     if (DoesRelayBunkerExist(team, time) == false) then
         return false, "I don't have a Relay Bunker yet.";
     end
@@ -536,10 +623,6 @@ function BuildFieldRocketTower1(team, time)
         return false, "i_Field_RocketTower_1 is unavailable, or a building already exists on it."
     end
 
-    if (DoesConstructorExist(team, time) == false) then
-        return false, "I don't have a Constructor yet.";
-    end
-
     if (AIPUtil.GetPower(team, false) <= 0) then
         return false, "I don't have enough Power for a Rocket Tower.";
     end
@@ -552,12 +635,16 @@ function BuildFieldRocketTower1(team, time)
 end
 
 function BuildFieldBunker2(team, time)
-    if (IsPathAvailable("i_Field_Bunker_2") == false) then
-        return false, "i_Field_Bunker_2 is unavailable, or a building already exists on it."
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
     end
 
     if (DoesConstructorExist(team, time) == false) then
         return false, "I don't have a Constructor yet.";
+    end
+
+    if (IsPathAvailable("i_Field_Bunker_2") == false) then
+        return false, "i_Field_Bunker_2 is unavailable, or a building already exists on it."
     end
 
     if (DoesFactoryExist(team, time) == false) then
@@ -576,6 +663,14 @@ function BuildFieldBunker2(team, time)
 end
 
 function BuildFieldGunTower2(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
     if (DoesRelayBunkerExist(team, time) == false) then
         return false, "I don't have a Relay Bunker yet.";
     end
@@ -586,10 +681,6 @@ function BuildFieldGunTower2(team, time)
 
     if (IsPathAvailable("i_Field_GunTower_2") == false) then
         return false, "i_Field_GunTower_2 is unavailable, or a building already exists on it."
-    end
-
-    if (DoesConstructorExist(team, time) == false) then
-        return false, "I don't have a Constructor yet.";
     end
 
     if (AIPUtil.GetPower(team, false) <= 0) then
@@ -603,7 +694,47 @@ function BuildFieldGunTower2(team, time)
     return true, "Tasking a Constructor to build a Gun Tower at i_Field_GunTower_2...";
 end
 
+function BuildFieldRocketTower2(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_2") == false) then
+        return false, "Path: i_Field_Bunker_2 hasn't got a building on it, so I can't build a Rocket Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_Field_RocketTower_2") == false) then
+        return false, "i_Field_RocketTower_2 is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Rocket Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < RCKT_TOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Rocket Tower.";
+    end
+
+    return true, "Tasking a Constructor to build a Rocket Tower at i_Field_RocketTower_2...";
+end
+
 function BuildLandingPad(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
     if (DoesLandingPadExist(team, time)) then
         return false, "I already have a Landing Pad.";
     end
@@ -707,6 +838,22 @@ function Attack3Condition(team, time)
 end
 
 function Attack4Condition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any Extractors yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    return true, "Sending tanks to attack.";
+end
+
+function Attack5Condition(team, time)
     if (ExtractorCount(team, time) <= 0) then
         return false, "I don't have any deployed Scavengers yet.";
     end

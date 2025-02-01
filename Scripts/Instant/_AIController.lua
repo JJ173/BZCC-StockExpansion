@@ -8,18 +8,17 @@ AIController =
     Team = 0,
     Race = "", -- Set to ISDF by default as a fallback.
 
-    Recycler = 0,
-    Factory = 0,
-    Armory = 0,
-    ServiceBay = 0,
-    Tech = 0,
-
     Pools = {},
 
     Commander = nil,
 
     -- Check Recycler Deployment. Once done, we can start our dispatch.
     RecyclerDeployed = false,
+
+    -- Check to see if we have an Armory.
+    HasArmory = false,
+    HasServiceBay = false,
+    HasTechCenter = false,
 
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     AssaultUnits = {},
@@ -59,9 +58,6 @@ function AIController:New(Team, Race, Pools, Name)
     o.AIPString = "";
     o.AICommanderEnabled = false;
     o.Recycler = nil;
-    o.Factory = nil;
-    o.Armory = nil;
-    o.ServiceBay = nil;
     o.Commander = nil;
     o.AssaultUnits = {};
     o.TurretsToDispatch = {};
@@ -69,6 +65,7 @@ function AIController:New(Team, Race, Pools, Name)
     o.AntiAirToDispatch = {};
     o.MinionsToDispatch = {};
     o.RecyclerDeployed = false;
+    o.HasArmory = false;
     o.Name = Name or "";
 
     setmetatable(o, { __index = self });
@@ -156,12 +153,24 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
         self.AssaultUnits[#self.AssaultUnits + 1] = handle;
+    elseif (objClass == "CLASS_ARMORY") then
+        self.HasArmory = true;
+    elseif (objClass == "CLASS_SUPPLYDEPOT") then
+        self.HasServiceBay = true;
+    elseif (objClass == "CLASS_TECHCENTER") then
+        self.HasTechCenter = true;
     end
 end
 
 function AIController:DeleteObject(handle, objClass, objCfg)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
+    elseif (objClass == "CLASS_ARMORY") then
+        self.HasArmory = false;
+    elseif (objClass == "CLASS_SUPPLYDEPOT") then
+        self.HasServiceBay = false;
+    elseif (objClass == "CLASS_TECHCENTER") then
+        self.HasTechCenter = false;
     end
 end
 
@@ -240,7 +249,7 @@ function AIController:DispatchAntiAir(missionTurnCount)
     -- Send the anti-air to the right path.
     for i = 1, #self.AntiAirToDispatch do
         -- Grab the anti-air.
-        local dispatch = self.MinionsToDispatch[i];
+        local dispatch = self.AntiAirToDispatch[i];
 
         -- Common function to check if the unit is available.
         if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
@@ -248,7 +257,7 @@ function AIController:DispatchAntiAir(missionTurnCount)
         end
 
         -- Send the Anti-Air to the path based on the increment.
-        local path = "patrol_" .. i;
+        local path = "anti-air_" .. i;
 
         -- Send the unit to Patrol.
         Patrol(dispatch.Handle, path);
@@ -306,7 +315,7 @@ function AIController:TurretShot(handle, missionTurnCount)
         local commandVector = GetCurrentCommandWhere(handle);
 
         -- Have the unit stop.
-        Defend(handle, 0);
+        Stop(handle, 0);
 
         -- Check to see how far the turret was from the original path it was going to.
         if (commandVector == nil or GetDistance(handle, commandVector) < 40) then

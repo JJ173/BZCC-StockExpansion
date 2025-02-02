@@ -171,6 +171,8 @@ function AIController:DeleteObject(handle, objClass, objCfg)
         self.HasServiceBay = false;
     elseif (objClass == "CLASS_TECHCENTER") then
         self.HasTechCenter = false;
+    elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
+        TableRemoveByHandle(self.AssaultUnits, handle);
     end
 end
 

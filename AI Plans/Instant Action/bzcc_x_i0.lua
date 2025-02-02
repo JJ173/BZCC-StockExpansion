@@ -502,7 +502,7 @@ function BuildServiceBay(team, time)
     end
 
     if (AIPUtil.GetScrap(team, false) < SBAY_SCRAP_COST) then
-        return false, "I don't have enough scrap for an Service Bay.";
+        return false, "I don't have enough scrap for a Service Bay.";
     end
 
     return true, "Tasking a Constructor to build a Service Bay...";
@@ -534,8 +534,10 @@ function BuildTechCenter(team, time)
     end
 
     if (AIPUtil.GetScrap(team, false) < TECH_CENTER_SCRAP_COST) then
-        return false, "I don't have enough scrap for an Service Bay.";
+        return false, "I don't have enough scrap for a Tech Center.";
     end
+
+    return true, "Tasking a Constructor to build a Tech Center..."
 end
 
 function BuildFieldBunker1(team, time)

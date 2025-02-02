@@ -477,6 +477,10 @@ function BuildRelayBunker(team, time)
         return false, "I don't have a Factory yet.";
     end
 
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
+    end
+
     if (AIPUtil.GetScrap(team, false) < BUNKER_SCRAP_COST) then
         return false, "I don't have enough scrap for a Relay Bunker.";
     end
@@ -499,6 +503,10 @@ function BuildServiceBay(team, time)
 
     if (DoesFactoryExist(team, time) == false) then
         return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
     end
 
     if (AIPUtil.GetScrap(team, false) < SBAY_SCRAP_COST) then

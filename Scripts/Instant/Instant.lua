@@ -113,7 +113,33 @@ local _CPUNames =
 local IntroFunctions = {};
 
 -- Debug only.
-local debug = false;
+local debug = true;
+
+-- ODFs to Preload.
+local PreloadODFs = {
+    "ivrecy",
+    "fvrecy",
+    "ivrecycpu",
+    "fvrecycpu",
+    "ivrecy_x",
+    "fvrecy_x",
+    "ivrecy_c",
+    "fvrecy_c",
+    "ibcarrier_xm",
+    "fbcarrier_xm",
+    "ivpdrop_x"
+}
+
+-- Audio to Preload.
+local PreloadAudios = {
+    "IA_Intro.wav",
+    "IA_Pilot_1.wav",
+    "IA_Pilot_2.wav",
+    "IA_Pilot_3.wav",
+    "IA_Carrier_1.wav",
+    "IA_Carrier_2.wav",
+    "dropdoor.wav"
+}
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
@@ -130,27 +156,26 @@ function InitialSetup()
     WantBotKillMessages();
 
     -- Preload ODFs to save time when they spawn.
-    PreloadODF("ivrecy");
-    PreloadODF("fvrecy");
-    PreloadODF("ivrecycpu");
-    PreloadODF("fvrecycpu");
-    PreloadODF("ivrecy_x");
-    PreloadODF("fvrecy_x");
-    PreloadODF("ivrecy_c");
-    PreloadODF("fvrecy_c");
-    PreloadODF("ibcarrier_xm");
-    PreloadODF("fbcarrier_xm");
-    PreloadODF("ivpdrop_x");
+    for i = 1, #PreloadODFs do
+        PreloadODF(PreloadODFs[i]);
+    end
 
     -- Preload Audio handles here as well.
+    for i = 1, #PreloadAudios do
+        PreloadAudioMessage(PreloadAudios[i]);
+    end
 end
 
 function Save()
-    return _Session;
+    return _Session, _AIController:Save();
 end
 
-function Load(Session)
+function Load(Session, AIController)
     _Session = Session;
+
+    if (_Session.m_AIController ~= nil) then
+        _Session.m_AIController:Load(AIController);
+    end
 end
 
 function AddObject(handle)
@@ -179,7 +204,8 @@ function AddObject(handle)
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session.m_TurnCounter);
+            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session
+            .m_TurnCounter);
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
@@ -205,7 +231,7 @@ function DeleteObject(handle)
     if (GetTeamNum(handle) == _Session.m_CompTeam) then
         -- Remove the objects from the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle));
+            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle), GetBase(handle));
         end
     end
 end
@@ -232,17 +258,9 @@ function Start()
     _Session.m_CPUTeamRace = string.char(IFace_GetInteger("options.instant.hisrace"));
     _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
     _Session.m_Difficulty = GetInstantDifficulty();
-
-    if (debug) then
-        BuildObject("ibrecy_x", 0, "RecyclerEnemy");
-    end
 end
 
 function Update()
-    if (debug) then
-        return;
-    end
-
     -- Subtitles.
     _Subtitles.Run();
 
@@ -254,6 +272,14 @@ function Update()
 
     if (_Session.m_StartDone == false) then
         _Session.m_StartDone = true;
+
+        -- If we are in debug mode, launch cheats.
+        if (debug) then
+            IFace_ConsoleCmd("game.cheat bzbody");
+            IFace_ConsoleCmd("game.cheat bztnt");
+            IFace_ConsoleCmd("game.cheat bzradar");
+            IFace_ConsoleCmd("game.cheat bzfree");
+        end
 
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
@@ -730,7 +756,7 @@ IntroFunctions[8] = function()
     if (_Session.m_IntroEnemiesSpawned == false) then
         -- Difficulty Check
         for i = 1, _Session.m_Difficulty + 1 do
-            local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_x", _Session.m_CompTeam, "intro_attacker_" .. i);
+            local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i);
 
             -- So they don't retreat.
             SetSkill(enemy, 3);

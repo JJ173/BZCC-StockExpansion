@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "ivhtank_gh_b1"
+
+scrapValue = 20 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 33 // Original Scrap Cost (75) / 2 = 32.5, round up to 33.
+
+/////// PROVIDES ///////////////////
+provideName1 = "ivhtank_c_b1"
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
+[HoverCraftClass]
+
+[AssaultHoverClass]

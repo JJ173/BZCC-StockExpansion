@@ -190,16 +190,23 @@ end
 function AIController:DeleteObject(handle, objClass, objCfg, objBase)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
+    elseif (objClass == "CLASS_TURRETTANK") then
+        TableRemoveByHandle(self.TurretsToDispatch, handle);
+    elseif (objBase == "Patrol") then
+        TableRemoveByHandle(self.PatrolsToDispatch, handle);
+    elseif (objBase == "AntiAir") then
+        self.AntiAirCount = self.AntiAirCount - 1;
+        TableRemoveByHandle(self.AntiAirToDispatch, handle);
+    elseif (objBase == "Minion" or objBase == "AssaultService") then
+        TableRemoveByHandle(self.MinionsToDispatch, handle);
+    elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
+        TableRemoveByHandle(self.AssaultUnits, handle);
     elseif (objClass == "CLASS_ARMORY") then
         self.HasArmory = false;
     elseif (objClass == "CLASS_SUPPLYDEPOT") then
         self.HasServiceBay = false;
     elseif (objClass == "CLASS_TECHCENTER") then
         self.HasTechCenter = false;
-    elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
-        TableRemoveByHandle(self.AssaultUnits, handle);
-    elseif (objBase == "AntiAir") then
-        self.AntiAirCount = self.AntiAirCount - 1;
     end
 end
 
@@ -353,6 +360,9 @@ function AIController:ProcessIdleUnits(missionTurnCount)
         elseif (idleUnit.Base == "Patrol") then
             self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
         end
+
+        -- Remove the idle unit from the idle table.
+        TableRemoveByHandle(self.MinionsToDispatch, idleUnit);
     end
 end
 

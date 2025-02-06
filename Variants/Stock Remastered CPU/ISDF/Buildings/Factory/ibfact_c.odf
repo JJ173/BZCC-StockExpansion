@@ -19,12 +19,20 @@ buildItem2 = "ivhmbike_c"
 buildLabel = "Missile Scouts"
 buildItem1 = "ivmisl_c"
 buildItem2 = "ivmisl_p"
+buildItem3 = "ivhmisl_c_a"
+buildItem4 = "ivhmisl_c_b"
 
 [BuildGroup3]
 buildLabel = "Tanks"
 buildItem1 = "ivtank_c"
 buildItem2 = "ivtank_p"
 buildItem3 = "ivtank_d"
+buildItem4 = "ivhtank_c_a1"
+buildItem5 = "ivhtank_c_a2"
+buildItem6 = "ivhtank_c_a3"
+buildItem7 = "ivhtank_c_b1"
+buildItem8 = "ivhtank_c_b2"
+buildItem9 = "ivhtank_c_c1"
 
 [BuildGroup4]
 buildLabel = "Rocket Tanks"
@@ -37,5 +45,10 @@ buildItem4 = "ivlrckt_c"
 buildLabel = "Walkers"
 buildItem1 = "ivwalk_c"
 buildItem2 = "ivhwalk_c"
+
+[BuildGroup9]
+buildLabel = "Artillery"
+buildItem1 = "ivartl_c_a"
+buildItem2 = "ivartl_c_b"
 
 [Lod1]

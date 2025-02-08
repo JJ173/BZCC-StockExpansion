@@ -31,7 +31,6 @@ AIController =
     PatrolsToDispatch = {},
     AntiAirToDispatch = {},
     MinionsToDispatch = {},
-    ServiceTrucksToDispatch = {},
 
     Carrier = nil,
     LandingPad = nil,
@@ -331,15 +330,12 @@ function AIController:DispatchMinions(missionTurnCount)
         -- If this minion is a Service Truck, send it to follow. Else, send a tank to defend.
         if (dispatch.Base == "Minion") then
             Defend2(dispatch.Handle, assaultUnitToDefend);
-
-            -- Remove the minion from the right table.
-            TableRemoveByHandle(self.MinionsToDispatch, dispatch);
         elseif (dispatch.Base == "AssaultService") then
             Follow(dispatch.Handle, assaultUnitToDefend);
-
-            -- Remove the service truck from the right table.
-            TableRemoveByHandle(self.ServiceTrucksToDispatch, dispatch);
         end
+
+        -- Remove the minion from the right table.
+        TableRemoveByHandle(self.MinionsToDispatch, dispatch);
     end
 end
 
@@ -362,7 +358,7 @@ function AIController:ProcessIdleUnits(missionTurnCount)
         end
 
         -- Remove the idle unit from the idle table.
-        TableRemoveByHandle(self.MinionsToDispatch, idleUnit);
+        TableRemoveByHandle(self.IdleQueue, idleUnit);
     end
 end
 
@@ -413,6 +409,11 @@ function CreateDispatchUnit(handle, missionTurn, objBase)
 end
 
 function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
+    -- Make sure this unit isn't nil. 
+    if (dispatchUnit == nil) then
+        return false;
+    end
+
     -- If the unit is not idle, ignore it.
     if (IsIdle(dispatchUnit.Handle) == false) then
         return false;

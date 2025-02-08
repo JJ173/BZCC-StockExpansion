@@ -1,7 +1,0 @@
-[GameObjectClass]
-geometryName = NULL
-classLabel = "ipdrop"
-animCount = 0
-canCollide = 0
-canDetect = 0
-canInteract = 0

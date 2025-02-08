@@ -1,0 +1,29 @@
+[GameObjectClass]
+classLabel = "bcrhino"
+
+geometryName = "rhino_skel.fbx"
+geometryScale = 0.45
+
+animName1 = "idle"
+animFile1 = "rhino_idle.fbx"
+
+animName2 = "walk"
+animFile2 = "rhino_walk.fbx"
+
+animName3 = "run"
+animFile3 = "rhino_walk.fbx"
+
+animName4 = "curious"
+animFile4 = "rhino_growl.fbx"
+
+animName5 = "attack"
+animFile5 = "rhino_eat.fbx"
+
+animName6 = "death"
+animFile6 = "rhino_death.fbx"
+
+unitName = "Ice Rhino Calf"
+
+[CraftClass]
+
+[LandCreature]

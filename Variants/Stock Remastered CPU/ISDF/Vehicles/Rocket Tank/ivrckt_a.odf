@@ -5,8 +5,6 @@ classLabel = "ivrckt_c"
 buildTime = 7.5 // Halved to stop these units from taking up too much time when being built.
 scrapCost = 0
 
-unitName = "Rocket Tank (AA)"
-
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
 [CraftClass]

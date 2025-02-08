@@ -537,6 +537,102 @@ function BuildRelayBunker(team, time)
     return true, "Tasking a Constructor to build a Relay Bunker at main base...";
 end
 
+function BuildBaseBunker1(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (IsPathAvailable("i_Base_Bunker_1") == false) then
+        return false, "i_Base_Bunker_1 is unavailable, or a building already exists on it."
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Comm Bunker.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < BUNKER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Comm Bunker.";
+    end
+
+    return true, "Tasking a Constructor to build a Relay Bunker at i_Base_Bunker_1...";
+end
+
+function BuildGunTower1(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Base_Bunker_1") == false) then
+        return false, "Path: i_Base_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_GunTower_1") == false) then
+        return false, "i_GunTower_1 is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Gun Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUNTOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Gun Tower.";
+    end
+
+    return true, "Tasking a Constructor to build a Gun Tower at i_GunTower_1...";
+end
+
+function BuildGunTower2(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Base_Bunker_1") == false) then
+        return false, "Path: i_Base_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_GunTower_2") == false) then
+        return false, "i_GunTower_2 is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for a Gun Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUNTOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Gun Tower.";
+    end
+
+    return true, "Tasking a Constructor to build a Gun Tower at i_GunTower_2...";
+end
+
 function BuildServiceBay(team, time)
     if (ExtractorCount(team, time) < 1) then
         return false, "I don't have enough deployed Scavengers yet.";
@@ -674,6 +770,10 @@ function BuildFieldBunker1(team, time)
         return false, "I don't have a Factory yet.";
     end
 
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
+    end
+
     if (AIPUtil.GetPower(team, false) <= 0) then
         return false, "I don't have enough Power for a Comm Bunker.";
     end
@@ -753,6 +853,86 @@ function BuildFieldRocketTower1(team, time)
     return true, "Tasking a Constructor to build a Rocket Tower at i_Field_RocketTower_1...";
 end
 
+function BuildFieldAssaultTower1A(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (DoesTechCenterExist(team, time) == false) then
+        return false, "I don't have a Tech Center yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_1") == false) then
+        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build an Assault Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_Field_AssualtTower_1_A") == false) then
+        return false, "i_Field_AssualtTower_1_A is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 1) then
+        return false, "I don't have enough Power for an Assault Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < ASS_TOWER_COST) then
+        return false, "I don't have enough scrap for an Assault Tower.";
+    end
+
+    return true, "Tasking a Constructor to build an Assault Tower at i_Field_AssualtTower_1_A...";
+end
+
+function BuildFieldAssaultTower1B(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (DoesTechCenterExist(team, time) == false) then
+        return false, "I don't have a Tech Center yet.";
+    end
+
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_1") == false) then
+        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build an Assault Tower next to it.";
+    end
+
+    if (IsPathAvailable("i_Field_AssualtTower_1_B") == false) then
+        return false, "i_Field_AssualtTower_1_B is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 1) then
+        return false, "I don't have enough Power for an Assault Tower.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < ASS_TOWER_COST) then
+        return false, "I don't have enough scrap for an Assault Tower.";
+    end
+
+    return true, "Tasking a Constructor to build an Assault Tower at i_Field_AssualtTower_1_B...";
+end
+
 function BuildFieldBunker2(team, time)
     if (ExtractorCount(team, time) < 1) then
         return false, "I don't have enough deployed Scavengers yet.";
@@ -768,6 +948,10 @@ function BuildFieldBunker2(team, time)
 
     if (DoesFactoryExist(team, time) == false) then
         return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesArmoryExist(team, time) == false) then
+        return false, "I don't have an Armory so I can't build any Rocket Tanks.";
     end
 
     if (AIPUtil.GetPower(team, false) <= 0) then
@@ -795,7 +979,7 @@ function BuildFieldGunTower2(team, time)
     end
 
     if (AIPUtil.PathBuildingExists("i_Field_Bunker_2") == false) then
-        return false, "Path: i_Field_Bunker_1 hasn't got a building on it, so I can't build a Gun Tower next to it.";
+        return false, "Path: i_Field_Bunker_2 hasn't got a building on it, so I can't build a Gun Tower next to it.";
     end
 
     if (IsPathAvailable("i_Field_GunTower_2") == false) then
@@ -910,8 +1094,8 @@ function BuildFieldAssaultTower2B(team, time)
         return false, "I don't have a Tech Center yet.";
     end
 
-    if (AIPUtil.PathBuildingExists("i_Field_AssualtTower_2_B") == false) then
-        return false, "Path: i_Field_AssualtTower_2_B hasn't got a building on it, so I can't build an Assault Tower next to it.";
+    if (AIPUtil.PathBuildingExists("i_Field_Bunker_2") == false) then
+        return false, "Path: i_Field_Bunker_2 hasn't got a building on it, so I can't build an Assault Tower next to it.";
     end
 
     if (IsPathAvailable("i_Field_AssualtTower_2_B") == false) then

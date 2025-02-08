@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "bcrhino"
+geometryName = "sRhino_skel.fbx"
+geometryScale = 0.45;
+
+unitName = "Sand Rhino Calf"
+
+[CraftClass]
+
+[LandCreature]

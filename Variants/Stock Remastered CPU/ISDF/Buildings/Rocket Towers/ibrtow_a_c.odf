@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ibrtow_gh_a"
+classLabel = "ibrtowghacpu"
 upgradeName = "ibhrtow_a_c_upgrade"
 
 [BuildingClass]

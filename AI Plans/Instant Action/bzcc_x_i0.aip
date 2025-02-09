@@ -8,10 +8,10 @@ baseLoc = "RecyclerEnemy"
 
 // --------------------------------
 // >>> Base Building Directions <<<
-//baseDir = 0  // South
-//baseDir = 1  // West
-//baseDir = 2  // North
-//baseDir = 3  // East
+// baseDir = 0  // South
+// baseDir = 1  // West
+// baseDir = 2  // North
+// baseDir = 3  // East
 // --------------------------------
 
 [IdleDispatcher]
@@ -102,7 +102,7 @@ planCondition = "Lua"
 buildType1 = "ivcons_c"
 buildCount1 = 2
 buildType2 = "ivcons_g"
-buildCount2 = 1
+buildCount2 = 2
 LuaFunction = "BuildConstructorCondition"
 
 [Plan9]
@@ -156,25 +156,17 @@ buildLoc1 = "i_Plate_2"
 LuaFunction = "BuildPath2BasePlate"
 
 [Plan14]
-planType = "Upgrade"
-planPriority = 870
-planCondition = "Lua"
-unitType = "ibscav_c"
-LuaFunction = "UpgradeFirstPoolCondition"
-ContinueEvenIfFail = true
-
-[Plan15]
 planType = "BaseBuildMinimums"
-planPriority = 860
+planPriority = 870
 planCondition = "Lua"
 buildType1 = "ibpgen_c"
 buildCount1 = 1
 buildLoc1 = "i_Power_1"
 LuaFunction = "BuildPower1"
 
-[Plan16]
+[Plan15]
 planType = "BaseBuildMinimums"
-planPriority = 850
+planPriority = 860
 planCondition = "Lua"
 buildType1 = "ibfact_c"
 buildCount1 = 1
@@ -182,18 +174,18 @@ buildLoc1 = "i_Factory"
 buildHeading = 1
 LuaFunction = "BuildFactory"
 
-[Plan17]
+[Plan16]
 planType = "BuildMinimums"
-planPriority = 840
+planPriority = 850
 buildType1 = "ivmisl_p"
 buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "BuildMissileScoutCondition"
 ContinueEvenIfFail = true
 
-[Plan18]
+[Plan17]
 planType = "Attacker"
-planPriority = 830
+planPriority = 840
 planCondition = "Lua"
 targetType1 = "VIRTUAL_CLASS_POWERPLANT"
 targetType2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
@@ -207,18 +199,18 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan19]
+[Plan18]
 planType = "BaseBuildMinimums"
-planPriority = 820
+planPriority = 830
 planCondition = "Lua"
 buildType1 = "ibarmo_c"
 buildCount1 = 1
 buildLoc1 = "i_Armory"
 LuaFunction = "BuildArmory"
 
-[Plan20]
+[Plan19]
 planType = "Attacker"
-planPriority = 810
+planPriority = 820
 planCondition = "Lua"
 targetType1 = "VIRTUAL_CLASS_TURRET"
 targetType2 = "VIRTUAL_CLASS_GUNTOWER"
@@ -232,9 +224,9 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan21]
+[Plan20]
 planType = "BaseBuildMinimums"
-planPriority = 800
+planPriority = 810
 planCondition = "Lua"
 buildType1 = "ibcbun_c"
 buildCount1 = 1
@@ -242,27 +234,27 @@ buildLoc1 = "i_Bunker"
 LuaFunction = "BuildRelayBunker"
 ContinueEvenIfFail = true
 
-[Plan22]
+[Plan21]
 planType = "BuildMinimums"
-planPriority = 790
+planPriority = 800
 buildType1 = "ivrckt_a"
 buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "BuildRocketTanks"
 ContinueEvenIfFail = true
 
-[Plan23]
+[Plan22]
 planType = "BuildMinimums"
-planPriority = 780
+planPriority = 790
 buildType1 = "ivtank_p"
 buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "BuildTankCondition"
 ContinueEvenIfFail = true
 
-[Plan24]
+[Plan23]
 planType = "Attacker"
-planPriority = 770
+planPriority = 780
 planCondition = "Lua"
 targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
 targetType2 = "VIRTUAL_CLASS_SCAVENGER"
@@ -280,9 +272,9 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan25]
+[Plan24]
 planType = "Attacker"
-planPriority = 760
+planPriority = 770
 planCondition = "Lua"
 targetType1 = "DefendUnit"
 targetType2 = "VIRTUAL_CLASS_GUNTOWER"
@@ -299,14 +291,23 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan26]
+[Plan25]
 planType = "BaseBuildMinimums"
-planPriority = 750
+planPriority = 760
 planCondition = "Lua"
 buildType1 = "ibpgen_c"
 buildCount1 = 1
 buildLoc1 = "i_Power_2"
 LuaFunction = "BuildPower2"
+
+[Plan26]
+planType = "BaseBuildMinimums"
+planPriority = 750
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_3"
+LuaFunction = "BuildPath3BasePlate"
 
 [Plan27]
 planType = "BaseBuildMinimums"
@@ -314,30 +315,21 @@ planPriority = 740
 planCondition = "Lua"
 buildType1 = "ibplate_c"
 buildCount1 = 1
-buildLoc1 = "i_Plate_3"
-LuaFunction = "BuildPath3BasePlate"
+buildLoc1 = "i_Plate_4"
+LuaFunction = "BuildPath4BasePlate"
 
 [Plan28]
 planType = "BaseBuildMinimums"
 planPriority = 730
-planCondition = "Lua"
-buildType1 = "ibplate_c"
-buildCount1 = 1
-buildLoc1 = "i_Plate_4"
-LuaFunction = "BuildPath4BasePlate"
-
-[Plan29]
-planType = "BaseBuildMinimums"
-planPriority = 720
 planCondition = "Lua"
 buildType1 = "iblandingpad_c"
 buildCount1 = 1
 buildLoc1 = "i_LandingPad"
 LuaFunction = "BuildLandingPad"
 
-[Plan30]
+[Plan29]
 planType = "BaseBuildMinimums"
-planPriority = 710
+planPriority = 720
 planCondition = "Lua"
 buildType1 = "ibsbay_c"
 buildCount1 = 1
@@ -345,22 +337,33 @@ buildLoc1 = "i_ServiceBay"
 buildHeading = 2
 LuaFunction = "BuildServiceBay"
 
-[Plan31]
+[Plan30]
 planType = "Upgrade"
-planPriority = 700
+planPriority = 710
 planCondition = "Lua"
 unitType = "ibpgen_c"
 LuaFunction = "UpgradeFirstPowerCondition"
+ContinueEvenIfFail = true
+
+[Plan31]
+planType = "BaseBuildMinimums"
+planPriority = 700
+planCondition = "Lua"
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Base_Bunker_1"
+LuaFunction = "BuildBaseBunker1"
+consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
 [Plan32]
 planType = "BaseBuildMinimums"
 planPriority = 690
 planCondition = "Lua"
-buildType1 = "ibcbun_c"
+buildType1 = "ibgtow_c"
 buildCount1 = 1
-buildLoc1 = "i_Base_Bunker_1"
-LuaFunction = "BuildBaseBunker1"
+buildLoc1 = "i_GunTower_1"
+LuaFunction = "BuildGunTower1"
 consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
@@ -370,25 +373,14 @@ planPriority = 680
 planCondition = "Lua"
 buildType1 = "ibgtow_c"
 buildCount1 = 1
-buildLoc1 = "i_GunTower_1"
-LuaFunction = "BuildGunTower1"
+buildLoc1 = "i_GunTower_2"
+LuaFunction = "BuildGunTower2"
 consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
 [Plan34]
 planType = "BaseBuildMinimums"
 planPriority = 670
-planCondition = "Lua"
-buildType1 = "ibgtow_c"
-buildCount1 = 1
-buildLoc1 = "i_GunTower_2"
-LuaFunction = "BuildGunTower2"
-consClass = "ivcons_g"
-ContinueEvenIfFail = true
-
-[Plan35]
-planType = "BaseBuildMinimums"
-planPriority = 660
 planCondition = "Lua"
 buildType1 = "ibcbun_c"
 buildCount1 = 1
@@ -397,9 +389,9 @@ LuaFunction = "BuildFieldBunker1"
 consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
-[Plan36]
+[Plan35]
 planType = "BaseBuildMinimums"
-planPriority = 650
+planPriority = 660
 planCondition = "Lua"
 buildType1 = "ibgtow_c"
 buildCount1 = 1
@@ -408,9 +400,9 @@ LuaFunction = "BuildFieldGunTower1"
 consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
-[Plan37]
+[Plan36]
 planType = "BaseBuildMinimums"
-planPriority = 640
+planPriority = 650
 planCondition = "Lua"
 buildType1 = "ibrtow_b_c"
 buildCount1 = 1
@@ -419,9 +411,9 @@ LuaFunction = "BuildFieldRocketTower1"
 consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
-[Plan38]
+[Plan37]
 planType = "Attacker"
-planPriority = 630
+planPriority = 640
 planCondition = "Lua"
 targetType1 = "VIRTUAL_CLASS_GUNTOWER"
 targetType2 = "VIRTUAL_CLASS_FACTORY"
@@ -437,24 +429,31 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
+[Plan38]
+planType = "BuildLoop"
+planPriority = 630
+planCondition = "Lua"
+buildType1 = "ivtank_d"
+buildCount1 = 1
+LuaFunction = "BuildAssaultDefenders"
+ContinueEvenIfFail = true
+
 [Plan39]
 planType = "BuildMinimums"
 planPriority = 620
 planCondition = "Lua"
-buildType1 = "ivtank_d"
+buildType1 = "ivserv_c"
 buildCount1 = 3
-LuaFunction = "BuildAssaultDefenders"
+LuaFunction = "BuildServiceTrucks"
 ContinueEvenIfFail = true
 
 [Plan40]
-planType = "BuildMinimums"
+planType = "BuildLoop"
 planPriority = 610
 planCondition = "Lua"
-buildType1 = "ivserv_c"
-buildCount1 = 2
-buildType2 = "ivserv_d"
-buildCount2 = 2
-LuaFunction = "BuildServiceTrucks"
+buildType1 = "ivserv_d"
+buildCount1 = 1
+LuaFunction = "BuildAssaultServicers"
 ContinueEvenIfFail = true
 
 [Plan41]
@@ -520,6 +519,7 @@ targetType5 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "ivhtank_c_a1"
 attackType2 = "ivhtank_c_a1"
 attackType3 = "ivhmisl_c_a"
+attackType4 = "ivhmisl_c_a"
 maxAttacks = 5
 AttackAnything = true
 buildIfNoIdle = true
@@ -530,13 +530,12 @@ ContinueEvenIfFail = true
 planType = "Attacker"
 planPriority = 540
 planCondition = "Lua"
-targetType1 = "VIRTUAL_CLASS_GUNTOWER"
-targetType2 = "VIRTUAL_CLASS_POWERPLANT"
-targetType3 = "VIRTUAL_CLASS_FACTORY"
-targetType4 = "VIRTUAL_CLASS_ARMORY"
-targetType5 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
-attackType1 = "ivartl_c_a"
-attackType2 = "ivartl_c_a"
+targetType1 = "VIRTUAL_CLASS_POWERPLANT"
+targetType2 = "VIRTUAL_CLASS_FACTORY"
+targetType3 = "VIRTUAL_CLASS_ARMORY"
+targetType4 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "ivartl_c_b"
 maxAttacks = 99
 AttackAnything = true
 buildIfNoIdle = true
@@ -544,14 +543,21 @@ LuaFunction = "ArtilleryAttackCondition"
 ContinueEvenIfFail = true
 
 [Plan48]
-planType = "BaseBuildMinimums"
+planType = "Attacker"
 planPriority = 530
 planCondition = "Lua"
-buildType1 = "ibatow_c_b2"
-buildCount1 = 1
-buildLoc1 = "i_Field_AssualtTower_1_A"
-LuaFunction = "BuildFieldAssaultTower1A"
-consClass = "ivcons_g"
+targetType1 = "AntiAir"
+targetType1 = "Defender"
+targetType2 = "VIRTUAL_CLASS_POWERPLANT"
+targetType3 = "VIRTUAL_CLASS_FACTORY"
+targetType4 = "VIRTUAL_CLASS_RECYCLER"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "ivartl_c_b"
+maxAttacks = 99
+AttackAnything = true
+buildIfNoIdle = true
+LuaFunction = "ArtilleryAttackCondition"
+ContinueEvenIfFail = true
 
 [Plan49]
 planType = "BaseBuildMinimums"
@@ -559,8 +565,8 @@ planPriority = 520
 planCondition = "Lua"
 buildType1 = "ibatow_c_b2"
 buildCount1 = 1
-buildLoc1 = "i_Field_AssualtTower_1_B"
-LuaFunction = "BuildFieldAssaultTower1B"
+buildLoc1 = "i_Field_AssualtTower_1_A"
+LuaFunction = "BuildFieldAssaultTower1A"
 consClass = "ivcons_g"
 
 [Plan50]
@@ -569,8 +575,8 @@ planPriority = 510
 planCondition = "Lua"
 buildType1 = "ibatow_c_b2"
 buildCount1 = 1
-buildLoc1 = "i_Field_AssualtTower_2_A"
-LuaFunction = "BuildFieldAssaultTower2A"
+buildLoc1 = "i_Field_AssualtTower_1_B"
+LuaFunction = "BuildFieldAssaultTower1B"
 consClass = "ivcons_g"
 
 [Plan51]
@@ -579,40 +585,177 @@ planPriority = 500
 planCondition = "Lua"
 buildType1 = "ibatow_c_b2"
 buildCount1 = 1
+buildLoc1 = "i_Field_AssualtTower_2_A"
+LuaFunction = "BuildFieldAssaultTower2A"
+consClass = "ivcons_g"
+
+[Plan52]
+planType = "BaseBuildMinimums"
+planPriority = 490
+planCondition = "Lua"
+buildType1 = "ibatow_c_b2"
+buildCount1 = 1
 buildLoc1 = "i_Field_AssualtTower_2_B"
 LuaFunction = "BuildFieldAssaultTower2B"
 consClass = "ivcons_g"
 
-[Plan52]
+[Plan53]
 planType = "Upgrade"
-planPriority = 490
+planPriority = 480
 planCondition = "Lua"
 unitType = "ibpgen_c2"
 LuaFunction = "UpgradeSecondPowerCondition"
 ContinueEvenIfFail = true
 
-[Plan53]
+[Plan54]
 planType = "BaseBuildMinimums"
-planPriority = 480
+planPriority = 470
 planCondition = "Lua"
 buildType1 = "ibtrain_c"
 buildCount1 = 1
 buildLoc1 = "i_Training"
 LuaFunction = "BuildTrainingCenter"
 
-[Plan54]
+[Plan55]
 planType = "BaseBuildMinimums"
-planPriority = 470
+planPriority = 460
 planCondition = "Lua"
 buildType1 = "ibbomb_c"
 buildCount1 = 1
 buildLoc1 = "i_BomberBay"
 LuaFunction = "BuildBomberBay"
 
-[Plan55]
+[Plan56]
 planType = "BuildMinimums"
-planPriority = 460
+planPriority = 450
 planCondition = "Lua"
 buildType1 = "ivbomb_c"
 buildCount1 = 1
 LuaFunction = "BuildBomber"
+
+[Plan57]
+planType = "BaseBuildMinimums"
+planPriority = 430
+planCondition = "Lua"
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_GunTower_3"
+LuaFunction = "BuildGunTower3"
+
+[Plan58]
+planType = "BaseBuildMinimums"
+planPriority = 420
+planCondition = "Lua"
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_GunTower_4"
+LuaFunction = "BuildGunTower4"
+
+[Plan59]
+planType = "BaseBuildMinimums"
+planPriority = 410
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_5"
+LuaFunction = "BuildPath5BasePlate"
+
+[Plan60]
+planType = "BaseBuildMinimums"
+planPriority = 400
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_6"
+LuaFunction = "BuildPath6BasePlate"
+
+[Plan61]
+planType = "BaseBuildMinimums"
+planPriority = 390
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_7"
+LuaFunction = "BuildPath7BasePlate"
+
+[Plan62]
+planType = "BaseBuildMinimums"
+planPriority = 380
+planCondition = "Lua"
+buildType1 = "ibplate_c"
+buildCount1 = 1
+buildLoc1 = "i_Plate_8"
+LuaFunction = "BuildPath8BasePlate"
+
+[Plan63]
+planType = "Attacker"
+planPriority = 380
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_GUNTOWER"
+targetType2 = "VIRTUAL_CLASS_POWERPLANT"
+targetType3 = "VIRTUAL_CLASS_FACTORY"
+targetType4 = "VIRTUAL_CLASS_ARMORY"
+targetType5 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "ivwalk_c"
+attackType2 = "ivwalk_c"
+attackType3 = "ivwalk_c"
+maxAttacks = 99
+AttackAnything = true
+buildIfNoIdle = true
+LuaFunction = "HeavyAttack2Condition"
+ContinueEvenIfFail = true
+
+[Plan64]
+planType = "BaseBuildMinimums"
+planPriority = 370
+planCondition = "Lua"
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Base_Bunker_2"
+LuaFunction = "BuildBaseBunker2"
+
+[Plan65]
+planType = "BaseBuildMinimums"
+planPriority = 360
+planCondition = "Lua"
+buildType1 = "ibatow_c_a2"
+buildCount1 = 1
+buildLoc1 = "i_Base_AssaultTower_1"
+LuaFunction = "BuildBaseAssaultTower1"
+
+[Plan66]
+planType = "BaseBuildMinimums"
+planPriority = 350
+planCondition = "Lua"
+buildType1 = "ibartl_c_b"
+buildCount1 = 1
+buildLoc1 = "i_Base_Artillery_1"
+LuaFunction = "BuildBaseArtilleryTower1"
+
+[Plan67]
+planType = "BaseBuildMinimums"
+planPriority = 340
+planCondition = "Lua"
+buildType1 = "ibcbun_c"
+buildCount1 = 1
+buildLoc1 = "i_Base_Bunker_3"
+LuaFunction = "BuildBaseBunker3"
+
+[Plan68]
+planType = "BaseBuildMinimums"
+planPriority = 330
+planCondition = "Lua"
+buildType1 = "ibatow_c_a2"
+buildCount1 = 1
+buildLoc1 = "i_Base_AssaultTower_2"
+LuaFunction = "BuildBaseAssaultTower2"
+
+[Plan69]
+planType = "BaseBuildMinimums"
+planPriority = 320
+planCondition = "Lua"
+buildType1 = "ibartl_c_b"
+buildCount1 = 1
+buildLoc1 = "i_Base_Artillery_2"
+LuaFunction = "BuildBaseArtilleryTower2"

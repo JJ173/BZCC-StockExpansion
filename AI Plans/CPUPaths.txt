@@ -30,16 +30,15 @@ ISDF Base Paths:
 - i_Base_AntiAir_2
 
 // Group base defences requiring a bunker together.
-- i_Base_Artillery_1
 - i_Base_Bunker_1
 
 - i_Base_Bunker_2
 - i_Base_AssaultTower_1
+- i_Base_Artillery_1
 
 - i_Base_Bunker_3
-
-- i_Base_Bunker_4
 - i_Base_Artillery_2
+- i_Base_AssaultTower_2
 
 // Group Bunkers and Gun Towers by Number.
 - i_Field_Bunker_1

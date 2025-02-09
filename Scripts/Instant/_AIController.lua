@@ -1,4 +1,5 @@
 local _Dispatch = require("_Dispatch");
+local _AssaultUnit = require("_AssaultUnit");
 
 AIController =
 {
@@ -126,10 +127,11 @@ function AIController:Run(missionTurnCount)
     if (self.RecyclerDeployed) then
         -- Check to see if any units are idle and redistribute them as necessary.
         if (self.IdleQueueCooldown < missionTurnCount) then
+            if (#self.IdleQueue > 0) then
+                self:ProcessIdleUnits(missionTurnCount);
+            end
+
             self.IdleQueueCooldown = missionTurnCount + SecondsToTurns(2);
-        end
-        if (#self.IdleQueue > 0) then
-            self:ProcessIdleUnits(missionTurnCount);
         end
 
         -- Run each dispatcher.
@@ -176,7 +178,7 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     elseif (objBase == "Minion" or objBase == "AssaultService") then
         self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
-        self.AssaultUnits[#self.AssaultUnits + 1] = handle;
+        self.AssaultUnits[#self.AssaultUnits + 1] = CreateAssaultUnit(handle);
     elseif (objClass == "CLASS_ARMORY") then
         self.HasArmory = true;
     elseif (objClass == "CLASS_SUPPLYDEPOT") then
@@ -186,20 +188,22 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     end
 end
 
+-- TODO: Revisit this as I don't think I am removing dispatched units correctly if they are killed before
+-- before they dispatch, hence the nil references.
 function AIController:DeleteObject(handle, objClass, objCfg, objBase)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
     elseif (objClass == "CLASS_TURRETTANK") then
-        TableRemoveByHandle(self.TurretsToDispatch, handle);
+        RemoveDispatchFromTable(handle, self.TurretsToDispatch);
     elseif (objBase == "Patrol") then
-        TableRemoveByHandle(self.PatrolsToDispatch, handle);
+        RemoveDispatchFromTable(handle, self.PatrolsToDispatch);
     elseif (objBase == "AntiAir") then
         self.AntiAirCount = self.AntiAirCount - 1;
-        TableRemoveByHandle(self.AntiAirToDispatch, handle);
+        RemoveDispatchFromTable(handle, self.AntiAirToDispatch);
     elseif (objBase == "Minion" or objBase == "AssaultService") then
-        TableRemoveByHandle(self.MinionsToDispatch, handle);
+        RemoveDispatchFromTable(handle, self.MinionsToDispatch);
     elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
-        TableRemoveByHandle(self.AssaultUnits, handle);
+        RemoveDispatchFromTable(handle, self.AssaultUnits);
     elseif (objClass == "CLASS_ARMORY") then
         self.HasArmory = false;
     elseif (objClass == "CLASS_SUPPLYDEPOT") then
@@ -324,14 +328,31 @@ function AIController:DispatchMinions(missionTurnCount)
         -- Add this unit to the Idle Queue.
         self.IdleQueue[#self.IdleQueue + 1] = dispatch;
 
-        -- Get a random assault unit to defend.
-        local assaultUnitToDefend = self.AssaultUnits[GetRandomInt(1, #self.AssaultUnits)];
+        -- Create tables of potential candidates for dispatch.
+        local assaultUnitToDefend = {};
+        local assaultUnitsToService = {};
+
+        -- Filter through any Assault Units that already have a defender / servicer and ignore them.
+        for k, v in pairs(self.AssaultUnits) do
+            if (v.DefenderHandle == 0) then
+                assaultUnitToDefend[#assaultUnitToDefend + 1] = v;
+            end
+
+            if (v.HealerHandle == 0) then
+                assaultUnitsToService[#assaultUnitsToService + 1] = v;
+            end
+        end
 
         -- If this minion is a Service Truck, send it to follow. Else, send a tank to defend.
         if (dispatch.Base == "Minion") then
-            Defend2(dispatch.Handle, assaultUnitToDefend);
+            -- Grab a random unit to defend.
+            local unitToDefend = assaultUnitToDefend[GetRandomInt(1, #assaultUnitToDefend)];
+            unitToDefend.DefenderHandle = dispatch.Handle;
+            Defend2(dispatch.Handle, unitToDefend);
         elseif (dispatch.Base == "AssaultService") then
-            Follow(dispatch.Handle, assaultUnitToDefend);
+            local unitToService = assaultUnitsToService[GetRandomInt(1, #assaultUnitsToService)];
+            unitToService.HealerHandle = dispatch.Handle;
+            Follow(dispatch.Handle, unitToService);
         end
 
         -- Remove the minion from the right table.
@@ -408,12 +429,15 @@ function CreateDispatchUnit(handle, missionTurn, objBase)
     return _Dispatch:New(handle, missionTurn, objBase);
 end
 
-function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
-    -- Make sure this unit isn't nil. 
-    if (dispatchUnit == nil) then
-        return false;
-    end
+function CreateAssaultUnit(handle)
+    return _Assault:New(handle);
+end
 
+function RemoveDispatchFromTable(dispatch, table)
+    -- Check the current table to see which dispatch object this handle belongs to and remove it.
+end
+
+function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
     -- If the unit is not idle, ignore it.
     if (IsIdle(dispatchUnit.Handle) == false) then
         return false;

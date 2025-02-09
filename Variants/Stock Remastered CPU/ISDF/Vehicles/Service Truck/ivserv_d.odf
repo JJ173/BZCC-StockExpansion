@@ -2,6 +2,11 @@
 baseName = "AssaultService"
 classLabel = "ivserv_c"
 
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName3 = "AssaultServicer"
+////////////////////////////////////
+
 [CraftClass]
 CanAIPForceIdle = false
 DoIdleDispatch = false

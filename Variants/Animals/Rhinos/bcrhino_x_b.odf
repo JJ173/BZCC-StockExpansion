@@ -4,6 +4,8 @@ classLabel = "bcrhino"
 geometryName = "rhino_skel.fbx"
 geometryScale = 0.45
 
+animCount = 6
+
 animName1 = "idle"
 animFile1 = "rhino_idle.fbx"
 

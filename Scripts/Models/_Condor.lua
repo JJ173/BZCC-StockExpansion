@@ -10,14 +10,14 @@ Condor =
     -- Checks to see if this unit already has a unit defending it.
     Type = "",
 
+    -- Total of units we should spawn depending on type.
+    UnitTotal = 0,
+
     -- Checks to see if this unit already has a unit servicing it.
     LandingPad = 0,
 
     -- Flags so we don't double logic.
-    CondorBuilt = false,
-    CondorReplaced = false,
-    CondorUnitsBuilt = false,
-    CondorDoorsOpen = false,
+    CondorState = 0,
 
     -- So we know we can delete it from other scripts.
     ReadyToDelete = false,
@@ -26,22 +26,17 @@ Condor =
     DelayTime = 0
 }
 
--- These ar etables of units that are built depending on the type.
-local ScavReinforcements = {};
-local TurretReinforcements = {};
-local LightReinforcements = {};
-local ScrapReinforcements = {};
+-- Store the units here so we know when to move them.
+local CondorUnits = {};
 
--- Testing
-local units = nil;
-
-function Condor:New(Handle, Team, Type, LandingPad)
+function Condor:New(Handle, Team, Type, LandingPad, UnitTotal)
     local o = {}
 
     o.Handle = Handle or 0;
     o.Team = Team or 0;
     o.Type = Type or "";
     o.LandingPad = LandingPad or 0;
+    o.UnitTotal = UnitTotal or 0;
 
     setmetatable(o, { __index = self });
 
@@ -49,6 +44,11 @@ function Condor:New(Handle, Team, Type, LandingPad)
 end
 
 function Condor:Run(missionTurnCount)
+    -- So we don't run once we've complete.
+    if (self.ReadyToDelete) then
+        return;
+    end
+
     -- Do some safety checks first. Do not run this if the Landing Pad is missing.
     if (self.LandingPad == 0) then
         return print(
@@ -64,7 +64,7 @@ function Condor:Run(missionTurnCount)
 
     -- Spawn the Condor at the Landing Pad.
     if (self.DelayTime < missionTurnCount) then
-        if (self.CondorBuilt == false) then
+        if (self.CondorState == 0) then
             local landingPos = GetPosition(self.LandingPad);
             landingPos.y = landingPos.y + 2;
             self.Handle = BuildObject("ivdrop_land_x", self.Team, BuildDirectionalMatrix(landingPos));
@@ -80,43 +80,110 @@ function Condor:Run(missionTurnCount)
             self.DelayTime = missionTurnCount + SecondsToTurns(14);
 
             -- So we don't loop.
-            self.CondorBuilt = true;
-        elseif (self.CondorReplaced == false) then
-            self.Handle = ReplaceObject(self.Handle, "ivpdrop_x");
+            self.CondorState = self.CondorState + 1;
+        elseif (self.CondorState == 1) then
+            self.Handle = ReplaceObject(self.Handle, "ivpdrop");
 
             -- Tiny delay before building units.
             self.DelayTime = missionTurnCount + SecondsToTurns(2);
 
-            self.CondorReplaced = true;
-        elseif (self.CondorUnitsBuilt == false) then
+            -- So we don't loop.
+            self.CondorState = self.CondorState + 1;
+        elseif (self.CondorState == 2) then
             MaskEmitter(self.Handle, 0);
             SetAnimation(self.Handle, "deploy", 1);
 
-            -- Handle what units are built.
+            -- Starting point for spawns
+            local posXDiscrim = 8;
+            local posZDiscrim = 5;
 
-            -- Just for debugging.
             local pos = GetPosition(self.LandingPad);
             pos.y = pos.y + 5;
-            units = BuildObject("ivscav_x", self.Team, BuildDirectionalMatrix(pos));
+            local originalPos = pos;
+
+            -- Handle what units are built.
+            for i = 1, self.UnitTotal do
+                if (i == 2) then
+                    pos.z = pos.z - posZDiscrim;
+                    pos.x = pos.x + posXDiscrim;
+                elseif (i == 3) then
+                    pos.z = pos.z - posZDiscrim;
+                    pos.x = pos.x - posXDiscrim;
+                end
+
+
+                if (self.Type == "TurretDropship") then
+                    CondorUnits[#CondorUnits + 1] = BuildObject("ivturr_xm", self.Team, BuildDirectionalMatrix(pos));
+                elseif (self.Type == "LightDropship") then
+                    if (i == 1) then
+                        CondorUnits[#CondorUnits + 1] = BuildObject("ivscout_xm", self.Team, BuildDirectionalMatrix(pos));
+                    else
+                        CondorUnits[#CondorUnits + 1] = BuildObject("ivmisl_xm", self.Team, BuildDirectionalMatrix(pos));
+                    end
+                elseif (self.Type == "ScrapDropship") then
+                    CondorUnits[#CondorUnits + 1] = BuildObject("ivscrap_c", self.Team, BuildDirectionalMatrix(pos));
+                elseif (self.Type == "Scavenger") then
+                    CondorUnits[#CondorUnits + 1] = BuildObject("ivscav_xm", self.Team, BuildDirectionalMatrix(pos));
+                end
+
+                pos = originalPos;
+            end
 
             -- Small delay for sound.
             self.DelayTime = missionTurnCount + SecondsToTurns(2.5);
 
-            self.CondorUnitsBuilt = true;
-        elseif (self.CondorDoorsOpen == false) then
+            -- So we don't loop.
+            self.CondorState = self.CondorState + 1;
+        elseif (self.CondorState == 3) then
             -- Calculate the drop-off for the units to move to.
             local dropOff = GetPosition(self.LandingPad) + (GetFront(self.LandingPad) * 75);
 
-            -- Build a nav just so we can see where it's going.
-            local testNav = BuildObject("ibnav", 1, dropOff);
-            SetObjectiveName(testNav, "Drop-off");
-            SetObjectiveOn(testNav);
-        
-            Goto(units, dropOff, 0);
+            -- Send the units out of the dropship.
+            if (#CondorUnits > 0) then
+                for i = 1, #CondorUnits do
+                    local unit = CondorUnits[i];
+
+                    if (i == 1) then
+                        Goto(unit, dropOff, 0);
+                    else
+                        Follow(unit, CondorUnits[1], 0);
+                    end
+                end
+            end
 
             -- Play the door sound effect.
             StartSoundEffect("dropdoor.wav", self.Handle);
-            self.CondorDoorsOpen = true;
+
+            -- So we don't loop.
+            self.CondorState = self.CondorState + 1;
+        elseif (self.CondorState == 4) then
+            -- Check to make sure that all of the units are clear of the dropship.
+            local distCheck = CountUnitsNearObject(self.Handle, 20, self.Team, nil);
+
+            -- This should only include the dropship and the landing pad.
+            if (distCheck == 2) then
+                -- Start the take-off sequence.
+                SetAnimation(self.Handle, "takeoff", 1);
+
+                -- Show the engine FX.
+                StartEmitter(self.Handle, 1);
+                StartEmitter(self.Handle, 2);
+
+                -- Engine sound.
+                StartSoundEffect("dropleav.wav", self.Handle);
+
+                -- Tiny delay before building units.
+                self.DelayTime = missionTurnCount + SecondsToTurns(15);
+
+                -- So we don't loop.
+                self.CondorState = self.CondorState + 1;
+            end
+        elseif (self.CondorState == 5) then
+            -- Remove the Dropship.
+            RemoveObject(self.Handle);
+
+            -- Script is complete. Ready to delete.
+            self.ReadyToDelete = true;
         end
     end
 end

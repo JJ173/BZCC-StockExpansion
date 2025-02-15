@@ -2,8 +2,8 @@
 baseName = "ScrapDropship"
 geometryName = "soundcube.xsi"
 classLabel = "I76Sign"
-buildTime = 20.0
-scrapCost = 75
+buildTime = 1.0
+scrapCost = 0
 scrapValue = 0
 maxHealth = 0
 maxAmmo = 0

@@ -310,7 +310,13 @@ function AddObject(handle)
             -- Add this to the queue.
             _Session.m_CarrierItemsToRemove = dropshipRequestItem;
 
-            local condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad);
+            local condorModel;
+
+            if (objBase == "ScrapDropship") then
+                condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+            else
+                condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+            end
 
             -- For deletion later on.
             if (condorModel ~= nil) then

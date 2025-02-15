@@ -20,3 +20,11 @@ classLabel = "ibarmo_x"
 [ArmoryGroup6]
 
 [ArmoryGroup7]
+
+[ArmoryGroup8]
+buildLabel = "Supplies"
+buildItem1 = "apserv"
+buildItem2 = "aprepa"
+buildItem3 = "apammo"
+buildItem4 = "aprktbomb_r_gh"
+buildItem5 = "apslug_r_gh"

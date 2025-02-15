@@ -1,4 +1,5 @@
 [GameObjectClass]
+baseName = "TurretDropship"
 geometryName = "soundcube.xsi"
 classLabel = "I76Sign"
 buildTime = 20.0
@@ -9,7 +10,7 @@ maxAmmo = 0
 canCollide = 0
 canDetect = 0
 canInteract = 0
-unitName = "Condor (T)"
+unitName = "Turrets"
 
 // This is used to stop the spam of abilities. I want to simulate a cooldown in Lua.
 isSingle = true

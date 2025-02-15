@@ -13,6 +13,7 @@ require("_AICmd");
 -- Models
 local _AIController = require("_AIController");
 local _Pool = require("_Pool");
+local _Condor = require("_Condor");
 
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
@@ -67,6 +68,12 @@ local _Session = {
     m_PlayerCarrier = nil,
     m_CPUCarrier = nil,
 
+    m_PlayerLandingPad = nil,
+    m_CPULandingPad = nil,
+
+    m_PlayerDropship = nil,
+    m_CPUDropship = nil,
+
     m_DropshipTakeOffDialogPlayed = false,
     m_DropshipTakeoffCheck = false,
     m_Dropship1Takeoff = false,
@@ -90,6 +97,13 @@ local _Session = {
     m_AIController = nil,
 
     m_Pools = {},
+
+    -- This keeps track of how long it has been since the player built a carrier object.
+    -- Idea is to remove them after 10 minutes.
+    m_Condors = {},
+    m_CarrierItemsToRemove = {},
+
+    m_CarrierObjectCheckDelay = 0
 }
 
 -- Potential Supporter Names for CPU.
@@ -200,8 +214,8 @@ local ISDFBaseLayout =
     { "ibatow_c_b2",    "i_Field_AssualtTower_2_A" },
     { "ibatow_c_b2",    "i_Field_AssualtTower_2_B" },
 
-    { "ibrtow_b_c",    "i_Field_RocketTower_1" },
-    { "ibrtow_b_c",    "i_Field_RocketTower_2" },
+    { "ibrtow_b_c",     "i_Field_RocketTower_1" },
+    { "ibrtow_b_c",     "i_Field_RocketTower_2" },
 }
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -245,6 +259,8 @@ function AddObject(handle)
     local classLabel = GetClassLabel(handle);
     local teamNum = GetTeamNum(handle);
     local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH");
+    local objCfg = GetCfg(handle);
+    local objBase = GetBase(handle);
 
     if (classLabel == "CLASS_DEPOSIT") then
         -- Grab the distance between this pool and the enemy position.
@@ -265,14 +281,41 @@ function AddObject(handle)
             _Session.m_EnemyRecycler = handle;
         end
 
+
+        if (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm") then
+            _Session.m_CPULandingPad = handle;
+        end
+
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, GetCfg(handle), GetBase(handle), _Session
-                .m_TurnCounter);
+            _Session.m_AIController:AddObject(handle, classLabel, objCfg, objBase, _Session.m_TurnCounter);
         end
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
+        end
+
+        if (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm") then
+            _Session.m_PlayerLandingPad = handle;
+        end
+
+        if (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
+            -- Create an object to track the time of deletion.
+            local dropshipRequestItem =
+            {
+                ItemHandle = handle,
+                TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
+            };
+
+            -- Add this to the queue.
+            _Session.m_CarrierItemsToRemove = dropshipRequestItem;
+
+            local condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad);
+
+            -- For deletion later on.
+            if (condorModel ~= nil) then
+                _Session.m_Condors[#_Session.m_Condors + 1] = condorModel;
+            end
         end
 
         if (_Session.m_MyGoal == 0) then
@@ -544,6 +587,27 @@ function Update()
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions();
 
+        -- Checks to see if we have any dropships that need sending.
+        if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
+            CarrierCleaner();
+        end
+
+        -- This will take care of the dropships landing on the map.
+        if (#_Session.m_Condors > 0) then
+            for i = 1, #_Session.m_Condors do
+                local condor = _Session.m_Condors[i];
+
+                -- If it's not nil, run the logic.
+                if (condor ~= nil) then
+                    if (condor.ReadyToDelete == false) then
+                        condor:Run(_Session.m_TurnCounter);
+                    else
+                        _Session.m_Condors[i] = nil;
+                    end
+                end
+            end
+        end
+
         -- Run the AI Controller instance for the CPU team.
         _Session.m_AIController:Run(_Session.m_TurnCounter);
     end
@@ -708,6 +772,28 @@ function BuildPlayerRecycler(pos)
     end
 
     SetScrap(_Session.m_StratTeam, 40);
+end
+
+---------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------- Carrier Brain Logic ---------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+function CarrierCleaner()
+    -- Check all objects that are in the Carrier Object table, if their deletion time is over the session time, delete them.
+    for i = 1, #_Session.m_CarrierItemsToRemove do
+        local condorObj = _Session.m_CarrierItemsToRemove[i];
+
+        -- Check the time.
+        if (condorObj.TimeToDelete <= _Session.m_TurnCounter) then
+            -- Clean-up.
+            RemoveObject(condorObj.ItemHandle);
+
+            -- Remove it from the table so it's no longer valid.
+            _Session.m_CarrierItemsToRemove[i] = nil;
+        end
+    end
+
+    -- Set a small timer to delay this function so we don't run each framae.
+    _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1);
 end
 
 ---------------------------------------------------------------------------------------------------------------------------------------

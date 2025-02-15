@@ -1,6 +1,10 @@
 [GameObjectClass]
 classLabel = "ibatowghb2cpu"
 
+/////// PROVIDES ///////////////////
+provideName1 = "ibatow_c_b2"
+////////////////////////////////////
+
 [BuildingClass]
 
 [CraftClass]

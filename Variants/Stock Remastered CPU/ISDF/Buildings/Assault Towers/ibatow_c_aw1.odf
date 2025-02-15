@@ -1,6 +1,10 @@
 [GameObjectClass]
 classLabel = "ibatow_gh_aw1"
-upgradeName = "ibatow_gh_aw2_upgrade"
+upgradeName = "ibatow_c_aw2_upgrade"
+
+/////// PROVIDES ///////////////////
+provideName1 = "ibatow_c_aw1"
+////////////////////////////////////
 
 [BuildingClass]
 

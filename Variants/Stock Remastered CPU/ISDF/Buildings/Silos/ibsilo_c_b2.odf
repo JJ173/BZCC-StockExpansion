@@ -1,6 +1,10 @@
 [GameObjectClass]
 classLabel = "ibsilo_gh_b2"
 
+/////// PROVIDES ///////////////////
+provideName1 = "ibsilo_c_b2"
+////////////////////////////////////
+
 [BuildingClass]
 
 [SiloClass]

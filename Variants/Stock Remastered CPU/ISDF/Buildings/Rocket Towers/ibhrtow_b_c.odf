@@ -1,6 +1,10 @@
 [GameObjectClass]
 classLabel = "ibhrtowghbcpu"
 
+/////// PROVIDES ///////////////////
+provideName1 = "ibrtow_c_b"
+////////////////////////////////////
+
 [BuildingClass]
 
 [CraftClass]

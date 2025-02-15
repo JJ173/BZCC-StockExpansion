@@ -2,6 +2,10 @@
 classLabel = "ibrtow_gh_w2"
 upgradeName = "ibhrtow_w2_c_upgrade"
 
+/////// PROVIDES ///////////////////
+provideName1 = "ibrtow_c_w2"
+////////////////////////////////////
+
 [BuildingClass]
 
 [CraftClass]

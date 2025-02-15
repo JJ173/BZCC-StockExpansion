@@ -1,12 +1,14 @@
 [GameObjectClass]
-classLabel = "ibatow_gh_aw4"
+classLabel = "ivscrap_gh"
 
 /////// PROVIDES ///////////////////
-provideName1 = "ibatow_c_aw4"
+provideName1 = "ivscrap_c"
 ////////////////////////////////////
-
-[BuildingClass]
 
 [CraftClass]
 
-[TurretCraftClass]
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ScavengerHClass]

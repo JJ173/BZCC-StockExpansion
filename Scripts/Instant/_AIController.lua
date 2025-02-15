@@ -188,8 +188,6 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     end
 end
 
--- TODO: Revisit this as I don't think I am removing dispatched units correctly if they are killed before
--- before they dispatch, hence the nil references.
 function AIController:DeleteObject(handle, objClass, objCfg, objBase)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
@@ -259,7 +257,7 @@ function AIController:DispatchTurrets(missionTurnCount)
         Goto(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
 
         -- Remove the turret from the  list of units to be dispatched.
-        TableRemoveByHandle(self.TurretsToDispatch, dispatch);
+        RemoveDispatchFromTable(self.TurretsToDispatch, dispatch.Handle);
     end
 end
 
@@ -283,7 +281,7 @@ function AIController:DispatchPatrols(missionTurnCount)
         Patrol(dispatch.Handle, path);
 
         -- Remove the patrol unit from the list of units to be dispatched.
-        TableRemoveByHandle(self.PatrolsToDispatch, dispatch);
+        RemoveDispatchFromTable(self.PatrolsToDispatch, dispatch.Handle);
     end
 end
 
@@ -305,7 +303,7 @@ function AIController:DispatchAntiAir(missionTurnCount)
         Patrol(dispatch.Handle, path);
 
         -- Remove the patrol unit from the list of units to be dispatched.
-        TableRemoveByHandle(self.AntiAirToDispatch, dispatch);
+        RemoveDispatchFromTable(self.AntiAirToDispatch, dispatch.Handle);
     end
 end
 
@@ -356,7 +354,7 @@ function AIController:DispatchMinions(missionTurnCount)
         end
 
         -- Remove the minion from the right table.
-        TableRemoveByHandle(self.MinionsToDispatch, dispatch);
+        RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
     end
 end
 
@@ -379,7 +377,7 @@ function AIController:ProcessIdleUnits(missionTurnCount)
         end
 
         -- Remove the idle unit from the idle table.
-        TableRemoveByHandle(self.IdleQueue, idleUnit);
+        RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
     end
 end
 
@@ -430,11 +428,17 @@ function CreateDispatchUnit(handle, missionTurn, objBase)
 end
 
 function CreateAssaultUnit(handle)
-    return _Assault:New(handle);
+    return _AssaultUnit:New(handle);
 end
 
-function RemoveDispatchFromTable(dispatch, table)
+function RemoveDispatchFromTable(table, dispatchUnit)
     -- Check the current table to see which dispatch object this handle belongs to and remove it.
+    for i, v in pairs(table) do
+        if (v.id == dispatchUnit) then
+            table[i] = nil;
+            break;
+        end
+    end
 end
 
 function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)

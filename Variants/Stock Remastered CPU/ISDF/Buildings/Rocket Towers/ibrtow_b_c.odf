@@ -2,6 +2,10 @@
 classLabel = "ibrtowghbcpu"
 upgradeName = "ibhrtow_b_c_upgrade"
 
+/////// PROVIDES ///////////////////
+provideName1 = "ibrtow_c_b"
+////////////////////////////////////
+
 [BuildingClass]
 
 [CraftClass]

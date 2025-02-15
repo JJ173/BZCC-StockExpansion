@@ -6,13 +6,48 @@ classLabel = "ibfact_x"
 [BuildingClass]
 
 [FactoryClass]
-buildItem1 = "ivmbike_xm"
-buildItem2 = "ivmisl_xm"
-buildItem3 = "ivtank_xm"
-buildItem4 = "ivrckt_xm"
 buildItem5 = "ivatank_xm"
-buildItem6 = "ivwalk_xm"
 buildItem7 = "ivapc_xm"
 buildItem8 = "ivbomb_xm"
+
+[BuildGroup1]
+buildLabel = "Mortar Bikes"
+buildItem1 = "ivmbike_xm"
+buildItem2 = "ivhmbike_gh"
+
+[BuildGroup2]
+buildLabel = "Missile Scouts"
+buildItem1 = "ivmisl_xm"
+buildItem2 = "ivhmisl_gh_a"
+buildItem3 = "ivhmisl_gh_b"
+
+[BuildGroup3]
+buildLabel = "Tanks"
+buildItem1 = "ivtank_xm"
+buildItem2 = "ivhtank_gh_a1"
+buildItem3 = "ivhtank_gh_a2"
+buildItem4 = "ivhtank_gh_a3"
+buildItem5 = "ivhtank_gh_b1"
+buildItem6 = "ivhtank_gh_b2"
+buildItem7 = "ivhtank_gh_c1"
+
+[BuildGroup4]
+buildLabel = "Rocket Tanks"
+buildItem1 = "ivlrckt_gh"
+buildItem2 = "ivrckt_xm"
+buildItem3 = "ivhrckt_gh"
+
+[BuildGroup6]
+buildLabel = "Walkers"
+buildItem1 = "ivwalk_xm"
+buildItem2 = "ivhwalk_gh"
+
+[BuildGroup9]
+buildLabel = "Advanced Units"
+buildItem1 = "ivintc"
+buildItem2 = "ivartl_gh_a"
+buildItem3 = "ivartl_gh_b"
+buildItem4 = "ivcomm_gh"
+buildEmptyItem4 = true
 
 [Lod1]

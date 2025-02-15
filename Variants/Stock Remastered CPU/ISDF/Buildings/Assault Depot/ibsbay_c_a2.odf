@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ibsbay_gh_a2"
+limitClass1 = "ibsbay_c_a2"
+
+/////// PROVIDES ///////////////////
+provideName1 = "ibsbay_c_a2"
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]

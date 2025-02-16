@@ -1,0 +1,15 @@
+// According to Cyber, the Scavengers seem smarter in VSR,
+// so I have applied the logic here as well. Full credit to
+// to the VSR team (Feared_1, GeneralBlackDragon).
+
+[GameObjectClass]
+classLabel = "fvscav_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "fbscav_xm"

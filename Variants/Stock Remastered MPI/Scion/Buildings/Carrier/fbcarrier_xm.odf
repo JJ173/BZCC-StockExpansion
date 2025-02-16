@@ -1,0 +1,55 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+geometryName = "ark_sub.fbx"
+classLabel = "fbforg_x"
+animCount = 0
+unitName = "ARK II"
+collisionRadius = 0.1
+
+powerCost = 0
+heatSignature = 0.0
+imageSignature = 0.0
+radarSignature = 0.0
+collisionRadius = 0.0
+
+isStealth = true
+ownsTerrain = false
+categoryTypeOverride = 4
+
+requireCount = 0
+provideCount = 0
+
+useCollisionMeshForPathing = true
+
+[PoweredBuildingClass]
+panelIcon = "icon_ark_sub.tga"
+
+[BuildingClass]
+soundAmbient = "carrier.wav"
+
+[FactoryClass]
+buildItem1 = "scavenger_dropship"
+buildItem2 = "defense_dropship"
+buildItem3 = "light_dropship"
+buildItem4 = "scrap_dropship"
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+
+selectWaitMsg = ""
+selectUser1Msg = ""
+selectReadyMsg = ""
+selectUser2Msg = ""
+
+reloadMsg = ""
+rescueMsg = ""
+
+DropoffConfig = "CarrierDropoff"
+
+[RecyclerClass]
+scrapHold = 0 // Shouldn't have any scrap.
+scrapDelay = 0 // Shouldn't generate scrap either.
+ScrapDropPoint = false // Stop Scavengers dropping scrap (or attempting to) here.
+
+[Lod1]

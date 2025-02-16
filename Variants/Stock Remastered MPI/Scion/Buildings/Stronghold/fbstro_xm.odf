@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "fbstro_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[ArmoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+
+[Lod1]

@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvserv_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]

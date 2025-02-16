@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fbantm_x"
+upgradeName = "fbover_xm"
+
+categoryTypeOverride = 4
+
+[PoweredBuildingClass]
+panelIcon = "icon_base_sat.tga"
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

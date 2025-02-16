@@ -23,11 +23,11 @@ Condor =
     ReadyToDelete = false,
 
     -- Delays for animations and such.
-    DelayTime = 0
-}
+    DelayTime = 0,
 
--- Store the units here so we know when to move them.
-local CondorUnits = {};
+    -- Store the units here so we know when to move them.
+    CondorUnits = {},
+}
 
 function Condor:New(Handle, Team, Type, LandingPad, UnitTotal)
     local o = {}
@@ -35,8 +35,11 @@ function Condor:New(Handle, Team, Type, LandingPad, UnitTotal)
     o.Handle = Handle or 0;
     o.Team = Team or 0;
     o.Type = Type or "";
-    o.LandingPad = LandingPad or 0;
     o.UnitTotal = UnitTotal or 0;
+    o.LandingPad = LandingPad or 0;
+    o.ReadyToDelete = false;
+    o.DelayTime = 0;
+    o.CondorUnits = {};
 
     setmetatable(o, { __index = self });
 
@@ -113,17 +116,17 @@ function Condor:Run(missionTurnCount)
 
 
                 if (self.Type == "TurretDropship") then
-                    CondorUnits[#CondorUnits + 1] = BuildObject("ivturr_xm", self.Team, BuildDirectionalMatrix(pos));
+                    self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivturr_xm", self.Team, BuildDirectionalMatrix(pos));
                 elseif (self.Type == "LightDropship") then
                     if (i == 1) then
-                        CondorUnits[#CondorUnits + 1] = BuildObject("ivscout_xm", self.Team, BuildDirectionalMatrix(pos));
+                        self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivscout_xm", self.Team, BuildDirectionalMatrix(pos));
                     else
-                        CondorUnits[#CondorUnits + 1] = BuildObject("ivmisl_xm", self.Team, BuildDirectionalMatrix(pos));
+                        self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivmisl_xm", self.Team, BuildDirectionalMatrix(pos));
                     end
                 elseif (self.Type == "ScrapDropship") then
-                    CondorUnits[#CondorUnits + 1] = BuildObject("ivscrap_c", self.Team, BuildDirectionalMatrix(pos));
+                    self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivscrap_c", self.Team, BuildDirectionalMatrix(pos));
                 elseif (self.Type == "Scavenger") then
-                    CondorUnits[#CondorUnits + 1] = BuildObject("ivscav_xm", self.Team, BuildDirectionalMatrix(pos));
+                    self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivscav_xm", self.Team, BuildDirectionalMatrix(pos));
                 end
 
                 pos = originalPos;
@@ -139,14 +142,14 @@ function Condor:Run(missionTurnCount)
             local dropOff = GetPosition(self.LandingPad) + (GetFront(self.LandingPad) * 75);
 
             -- Send the units out of the dropship.
-            if (#CondorUnits > 0) then
-                for i = 1, #CondorUnits do
-                    local unit = CondorUnits[i];
+            if (#self.CondorUnits > 0) then
+                for i = 1, #self.CondorUnits do
+                    local unit = self.CondorUnits[i];
 
                     if (i == 1) then
                         Goto(unit, dropOff, 0);
                     else
-                        Follow(unit, CondorUnits[1], 0);
+                        Follow(unit, self.CondorUnits[1], 0);
                     end
                 end
             end

@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fvarch_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fbrecy_x"
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvscav_xm"
+buildItem2 = "fvscout_xm"
+buildItem3 = "fvturr_xm"
+buildItem5 = "fvcons_xm"
+buildItem6 = "fvserv_xm"
+
+[RecyclerClass]
+
+[PoweredBuildingClass]

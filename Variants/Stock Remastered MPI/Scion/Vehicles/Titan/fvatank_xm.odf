@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "fvatank_x"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

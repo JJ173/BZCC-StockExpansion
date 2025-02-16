@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "fbkiln_x"
+upgradeName = "fbforg_xm"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent_xm"
+buildItem2 = "fvarch_xm"
+buildItem3 = "fvtank_xm"
+buildItem4 = "fvartl_xm"
+buildItem5 = "fvwalk_xm"
+buildItem6 = "fvatank_xm"
+
+[Lod1]

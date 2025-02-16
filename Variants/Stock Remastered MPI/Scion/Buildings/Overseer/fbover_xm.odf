@@ -1,13 +1,13 @@
 [GameObjectClass]
-classLabel = "ibcbun_x"
+classLabel = "fbover_x"
 
 categoryTypeOverride = 4
+
+[PoweredBuildingClass]
+panelIcon = "icon_base_sat.tga"
 
 [BuildingClass]
 
 [CommBunkerClass]
-
-[PoweredBuildingClass]
-panelIcon = "icon_base_sat.tga"
 
 [Lod1]

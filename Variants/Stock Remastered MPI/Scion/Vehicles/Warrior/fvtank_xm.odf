@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fvtank_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

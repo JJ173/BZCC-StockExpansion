@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fvartl_x"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[ArtilleryClass]
+
+[DeployableClass]

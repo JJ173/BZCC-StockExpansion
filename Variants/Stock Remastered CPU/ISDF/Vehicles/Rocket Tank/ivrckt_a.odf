@@ -7,6 +7,14 @@ scrapCost = 0
 
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ivrckt"
+provideName2 = "VIRTUAL_CLASS_ROCKETTANK"
+provideName3 = "DefendUnit"
+provideName4 = "AntiAir"
+////////////////////////////////////
+
 [CraftClass]
 CanAIPForceIdle = false
 DoIdleDispatch = false

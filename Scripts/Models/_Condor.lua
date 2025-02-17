@@ -114,7 +114,6 @@ function Condor:Run(missionTurnCount)
                     pos.x = pos.x - posXDiscrim;
                 end
 
-
                 if (self.Type == "TurretDropship") then
                     self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivturr_xm", self.Team, BuildDirectionalMatrix(pos));
                 elseif (self.Type == "LightDropship") then

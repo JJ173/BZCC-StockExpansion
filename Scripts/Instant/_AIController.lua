@@ -33,6 +33,14 @@ AIController =
     AntiAirToDispatch = {},
     MinionsToDispatch = {},
 
+    -- This should handle weapons for the AI.
+    Cannons = {},
+    Missiles = {},
+    Guns = {},
+    Mines = {},
+    Specials = {},
+    Shields = {},
+
     Carrier = nil,
     LandingPad = nil,
 
@@ -41,6 +49,7 @@ AIController =
 
     -- Specific count for anti-air units so we know which paths to send them to.
     AntiAirCount = 0,
+    BasePatrolCount = 0,
 
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0,
@@ -58,23 +67,43 @@ local CMDR_RETREAT = 3;
 function AIController:New(Team, Race, Pools, Name)
     local o = {}
 
+    o.AIPString = "";
+    o.AICommanderEnabled = false;
     o.Team = Team or 0;
     o.Race = Race or nil;
     o.Pools = Pools or {};
-
-    o.AIPString = "";
-    o.AICommanderEnabled = false;
-    o.Recycler = nil;
     o.Commander = nil;
+    o.RecyclerDeployed = false;
+
+    o.HasArmory = false;
+    o.HasServiceBay = false;
+    o.HasTechCenter = false;
+
     o.AssaultUnits = {};
+    o.IdleQueue = {};
+
     o.TurretsToDispatch = {};
     o.PatrolsToDispatch = {};
     o.AntiAirToDispatch = {};
     o.MinionsToDispatch = {};
-    o.IdleQueue = {};
-    o.RecyclerDeployed = false;
-    o.HasArmory = false;
+
+    o.Cannons = {};
+    o.Missiles = {};
+    o.Guns = {};
+    o.Mines = {};
+    o.Specials = {};
+    o.Shields = {};
+
+    o.Carrier = nil;
+    o.LandingPad = nil;
+
     o.Name = Name or "";
+
+    o.AntiAirCount = 0;
+    o.BasePatrolCount = 0;
+    o.TauntCooldown = 0;
+    o.IdleQueueCooldown = 0;
+    o.DispatchCooldown = 0;
 
     setmetatable(o, { __index = self });
 
@@ -170,7 +199,11 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         self.Carrier = handle;
     elseif (objClass == "CLASS_TURRETTANK") then
         self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
-    elseif (objBase == "Patrol") then
+    elseif (objBase == "Patrol" or objBase == "BasePatrol") then
+        if (objBase == "BasePatrol") then
+            self.BasePatrolCount = self.BasePatrolCount + 1;
+        end
+
         self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
     elseif (objBase == "AntiAir") then
         self.AntiAirCount = self.AntiAirCount + 1;
@@ -192,16 +225,20 @@ function AIController:DeleteObject(handle, objClass, objCfg, objBase)
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
     elseif (objClass == "CLASS_TURRETTANK") then
-        RemoveDispatchFromTable(handle, self.TurretsToDispatch);
-    elseif (objBase == "Patrol") then
-        RemoveDispatchFromTable(handle, self.PatrolsToDispatch);
+        RemoveDispatchFromTable(self.TurretsToDispatch, handle);
+    elseif (objBase == "Patrol" or objBase == "BasePatrol") then
+        if (objBase == "BasePatrol") then
+            self.BasePatrolCount = self.BasePatrolCount - 1;
+        end
+
+        RemoveDispatchFromTable(self.PatrolsToDispatch, handle);
     elseif (objBase == "AntiAir") then
         self.AntiAirCount = self.AntiAirCount - 1;
-        RemoveDispatchFromTable(handle, self.AntiAirToDispatch);
+        RemoveDispatchFromTable(self.AntiAirToDispatch, handle);
     elseif (objBase == "Minion" or objBase == "AssaultService") then
-        RemoveDispatchFromTable(handle, self.MinionsToDispatch);
+        RemoveDispatchFromTable(self.MinionsToDispatch, handle);
     elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
-        RemoveDispatchFromTable(handle, self.AssaultUnits);
+        RemoveDispatchFromTable(self.AssaultUnits, handle);
     elseif (objClass == "CLASS_ARMORY") then
         self.HasArmory = false;
     elseif (objClass == "CLASS_SUPPLYDEPOT") then
@@ -274,8 +311,15 @@ function AIController:DispatchPatrols(missionTurnCount)
         -- Add this unit to the Idle Queue.
         self.IdleQueue[#self.IdleQueue + 1] = dispatch;
 
-        -- Grab a random path.
-        local path = "patrol_" .. GetRandomInt(1, 2);
+        local path = '';
+
+        if (dispatch.objBase == "BasePatrol") then
+            -- Grab a random path.
+            path = "BasePatrol" .. self.BasePatrolCount;
+        else
+            -- Grab a random path.
+            path = "patrol_" .. GetRandomInt(1, 2);
+        end
 
         -- Send the unit to Patrol.
         Patrol(dispatch.Handle, path);
@@ -434,7 +478,7 @@ end
 function RemoveDispatchFromTable(table, dispatchUnit)
     -- Check the current table to see which dispatch object this handle belongs to and remove it.
     for i, v in pairs(table) do
-        if (v.id == dispatchUnit) then
+        if (v.Handle == dispatchUnit) then
             table[i] = nil;
             break;
         end

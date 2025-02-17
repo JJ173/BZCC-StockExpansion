@@ -1103,7 +1103,7 @@ function BuildBomberBay(team, time)
         return false, "I don't have enough scrap for a Bomber Bay.";
     end
 
-    return true, "Tasking a Constructor to build a Bomber Bay..."
+    return true, "Tasking a Constructor to build a Bomber Bay...";
 end
 
 function BuildLandingPad(team, time)
@@ -1132,6 +1132,38 @@ function BuildLandingPad(team, time)
     end
 
     return true, "Tasking a Constructor to build a Landing Pad...";
+end
+
+function BuildAssaultDepot(team, time)
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesAssaultDepotExist(team, time)) then
+        return false, "I already have an Assault Depot.";
+    end
+
+    if (IsPathAvailable("i_Assault_Depot") == false) then
+        return false, "i_Assault_Depot is unavailable, or a building already exists on it.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I should prioritise the Factory first.";
+    end
+
+    if (DoesTechCenterExist(team, time) == false) then
+        return false, "I don't have a Tech Center yet.";
+    end
+
+    if (AIPUtil.GetPower(team, false) <= 0) then
+        return false, "I don't have enough Power for an Assault Depot.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUNTOWER_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Assault Depot.";
+    end
+
+    return true, "Tasking a Constructor to build an Assault Depot...";
 end
 
 -- CHECKPOINT 1 BUILD CONDITIONS
@@ -1661,6 +1693,56 @@ function ArtilleryAttackCondition(team, time)
     return true, "Sending artillery units to attack."
 end
 
+function APCAttackCondition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesTrainingExist(team, time) == false) then
+        return false, "I don't have a Training Facility yet.";
+    end
+
+    return true, "Sending APC units to attack.";
+end
+
+function BomberAttack1Condition(team, time)
+    if (DoesBomberBayExist(team, time) == false) then
+        return false, "I don't have a Bomber Bay yet.";
+    end
+
+    if (DoesBomberExist(team, time)) then
+        return false, "I don't have a Bomber yet.";
+    end
+
+    -- Check to see if the player has anti-air.
+    if (AIPUtil.CountUnits(team, "AntiAir", "enemy", true) <= 0) then
+        return false, "Player doesn't have AntiAir which means I can attack more important structures";
+    end
+
+    return true, "Tasking Bomber to attack enemy Extractors";
+end
+
+function BomberAttack2Condition(team, time)
+    if (DoesBomberBayExist(team, time) == false) then
+        return false, "I don't have a Bomber Bay yet.";
+    end
+
+    if (DoesBomberExist(team, time)) then
+        return false, "I don't have a Bomber yet.";
+    end
+
+    -- Check to see if the player has anti-air.
+    if (AIPUtil.CountUnits(team, "AntiAir", "enemy", true) > 0) then
+        return false, "Player has AntiAir. Plan is too risky, attack something outside of the base.";
+    end
+
+    return true, "Tasking Bomber to attack enemy base.";
+end
+
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
 
 function IsCommanderOptionEnabled(team, time)
@@ -1727,4 +1809,12 @@ end
 
 function DoesBomberBayExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_BOMBERBAY", "sameteam", true) > 0;
+end
+
+function DoesAssaultDepotExist(team, time)
+    return AIPUtil.CountUnits(team, "ibsbay_c_a2", "sameteam", true) > 0;
+end
+
+function HasReachedGHHoverAssaultLimit(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_HOVERASSAULTCRAFT", "sameteam", true) >= 2;
 end

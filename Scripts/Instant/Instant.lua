@@ -308,7 +308,7 @@ function AddObject(handle)
             };
 
             -- Add this to the queue.
-            _Session.m_CarrierItemsToRemove = dropshipRequestItem;
+            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
 
             local condorModel;
 

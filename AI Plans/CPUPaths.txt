@@ -29,6 +29,8 @@ ISDF Base Paths:
 - i_Base_AntiAir_1
 - i_Base_AntiAir_2
 
+- i_Assault_Depot
+
 // Group base defences requiring a bunker together.
 - i_Base_Bunker_1
 
@@ -58,3 +60,5 @@ ISDF Field Paths:
 - Patrol2
 - Patrol3
 
+- BasePatrol1
+- BasePatrol2

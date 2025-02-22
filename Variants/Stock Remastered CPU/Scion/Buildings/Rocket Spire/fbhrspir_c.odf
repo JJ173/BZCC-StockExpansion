@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fbhrspir_gh"
+
+/////// PROVIDES ///////////////////
+provideName1 = "fbhrspir_c"
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

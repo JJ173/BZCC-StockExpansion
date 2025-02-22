@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbartl_c_b"
+scrapCost = 20
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

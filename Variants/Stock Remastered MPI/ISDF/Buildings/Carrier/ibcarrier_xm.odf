@@ -14,7 +14,7 @@ collisionRadius = 0.0
 
 isStealth = true
 ownsTerrain = false
-categoryTypeOverride = 4
+categoryTypeOverride = 5
 
 requireCount = 0
 provideCount = 0

@@ -120,7 +120,8 @@ local _CPUNames =
     "VTrider",
     "Ultraken",
     "Darkvale",
-    "Econchump"
+    "Econchump",
+    "Sev"
 }
 
 -- Functions Table
@@ -216,6 +217,8 @@ local ISDFBaseLayout =
 
     { "ibrtow_b_c",     "i_Field_RocketTower_1" },
     { "ibrtow_b_c",     "i_Field_RocketTower_2" },
+
+    { "ibsbay_c_a2",    "i_Assault_Depot" }
 }
 
 ---------------------------------------------------------------------------------------------------------------------------------------

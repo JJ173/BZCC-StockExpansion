@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fbartl_gh_a"
+upgradeName = "fbartl_c_b_upgrade"
+
+/////// PROVIDES ///////////////////
+provideName1 = "fbartl_c_a"
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

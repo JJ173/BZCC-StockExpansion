@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fbaspir_gh"
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

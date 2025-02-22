@@ -8,6 +8,6 @@ classLabel = "fvrecy_x"
 [TrackedDeployableClass]
 
 [DeployBuildingClass]
-deployName = "fbrecy_r"
+deployName = "fbrecy_c"
 
 [RecyclerVehicleClass]

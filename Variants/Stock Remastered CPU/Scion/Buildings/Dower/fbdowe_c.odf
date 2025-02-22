@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fbdowe_x"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[SupplyDepotClass]
+
+[Lod1]

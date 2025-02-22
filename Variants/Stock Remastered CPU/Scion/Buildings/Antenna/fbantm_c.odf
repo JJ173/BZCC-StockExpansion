@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbantm_x"
+upgradeName = "fbover_c"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

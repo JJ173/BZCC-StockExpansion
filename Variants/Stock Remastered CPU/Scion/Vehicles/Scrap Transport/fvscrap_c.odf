@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fvscrap_gh"
+
+/////// PROVIDES ///////////////////
+provideName1 = "fvscrap_c"
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ScavengerHClass]

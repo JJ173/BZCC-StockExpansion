@@ -11,12 +11,12 @@ AssaultUnit =
     HealerHandle = 0,
 }
 
-function AssaultUnit:New(Handle, DefenderHandle, HasServiceTruck)
+function AssaultUnit:New(Handle, DefenderHandle, HealerHandle)
     local o = {}
 
     o.Handle = Handle or 0;
     o.HasDefendUnit = DefenderHandle or 0;
-    o.HasServiceTruck = HasServiceTruck or 0;
+    o.HealerHandle = HealerHandle or 0;
 
     setmetatable(o, { __index = self });
 

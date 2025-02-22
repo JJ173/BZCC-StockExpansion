@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "fvcons_c"
+
+scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 20 // Scrap cost is reduced by 50%.
+
+[CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbspir_c"
+buildItem2 = "fbaspir_c"
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[BuildGroup3]
+buildLabel = "Rocket Spires"
+buildItem1 = "fblrspir_c"
+buildItem2 = "fbrspir_c"
+buildItem3 = "fbhrspir_c"
+
+[BuildGroup4]
+buildLabel = "Artillery Spires"
+buildItem1 = "fbartl_c_a"
+buildItem2 = "fbartl_c_b"

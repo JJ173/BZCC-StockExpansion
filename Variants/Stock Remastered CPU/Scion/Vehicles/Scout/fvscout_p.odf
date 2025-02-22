@@ -1,0 +1,15 @@
+[GameObjectClass]
+baseName = "Patrol"
+classLabel = "fvscout_c"
+
+buildTime = 5 // Halved to stop these units from taking up too much time when being built.
+scrapCost = 0 // Original Scrap Cost (50).
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+unitName = "Patrol"
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[HoverCraftClass]

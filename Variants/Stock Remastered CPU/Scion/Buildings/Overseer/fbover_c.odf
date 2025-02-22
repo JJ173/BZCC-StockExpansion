@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fbover_x"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[Lod1]

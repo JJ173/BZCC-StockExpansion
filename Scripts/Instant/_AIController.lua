@@ -119,42 +119,31 @@ function AIController:Load(aiController)
 end
 
 function AIController:Setup(CPUTeamNumber)
-    -- Keep track of the team number.
     self.Team = CPUTeamNumber;
 
-    -- For the pool positions, we need to work out which one is the base pool for the CPU and the Human, and remove them.
     table.sort(self.Pools, Compare);
 
-    -- Check any options.
     self.AIPString = IFace_GetString("options.instant.string0");
     self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
 
-    -- If the Commander is enabled, build one.
     if (self.AICommanderEnabled == 1) then
         self.Commander = BuildObject(self.Race .. "vcmdr_s", self.Team, GetPositionNear("RecyclerEnemy", 30, 60));
         SetObjectiveName(self.Commander, self.Name);
     end
 
-    -- Give them scrap.
     SetScrap(CPUTeamNumber, 40);
 
-    -- Start the plans.
     self:SetPlan(AIPType0);
 end
 
 function AIController:Run(missionTurnCount)
-    -- Handle the taunts from the CPU Team here.
     if (self.TauntCooldown < missionTurnCount) then
-        -- Run a random taunt.
         DoTaunt(TAUNTS_Random);
 
-        -- Cooldown so we don't call this every frame.
         self.TauntCooldown = missionTurnCount + SecondsToTurns(90);
     end
 
-    -- Only do this when the Recycler is deployed.
     if (self.RecyclerDeployed) then
-        -- Check to see if any units are idle and redistribute them as necessary.
         if (self.IdleQueueCooldown < missionTurnCount) then
             if (#self.IdleQueue > 0) then
                 self:ProcessIdleUnits(missionTurnCount);
@@ -163,7 +152,6 @@ function AIController:Run(missionTurnCount)
             self.IdleQueueCooldown = missionTurnCount + SecondsToTurns(2);
         end
 
-        -- Run each dispatcher.
         if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
                 self:DispatchTurrets(missionTurnCount);
@@ -184,7 +172,6 @@ function AIController:Run(missionTurnCount)
             self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5);
         end
 
-        -- Handle the Commander.
         self:CommanderBrain();
     end
 end
@@ -261,120 +248,110 @@ function AIController:SetPlan(type)
         AIPString = StockAIPNameBase;
     end
 
-    -- First pass, try to find an AIP that is designed to use Provides for enemy team, thus it only cares about CPU Race. This makes adding races much easier.
     local AIPFile = AIPString .. self.Race .. type;
 
-    -- Run the plans.
     SetAIP(AIPFile .. '.aip', self.Team);
 
-    -- Leave this for now, but it might be fun to turn this to a timed thing like G66 (Thanks Natty, forever the inspiration).
     DoTaunt(TAUNTS_Random);
 end
 
 function AIController:DispatchTurrets(missionTurnCount)
-    -- For any turrets that need dispatching, let's send them around the map.
     for i = 1, #self.TurretsToDispatch do
-        -- Grab the turret.
         local dispatch = self.TurretsToDispatch[i];
 
-        -- Common function to check if the unit is available.
+        if (dispatch == nil) then
+            print("WARNING, TURRET DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+            break;
+        end
+
         if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
-        -- Check to see if we have a target before we move the turret as it could be engaging after being shot.
         if (GetTarget(dispatch.Handle) ~= nil) then
             break;
         end
 
-        -- Get a random pool, but don't use the first or last in the list as these are likely base pools.
         local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
 
-        -- Send the unit to defend near the pool.
         Goto(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
 
-        -- Remove the turret from the  list of units to be dispatched.
         RemoveDispatchFromTable(self.TurretsToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchPatrols(missionTurnCount)
     for i = 1, #self.PatrolsToDispatch do
-        -- Grab the Patrol unit.
         local dispatch = self.PatrolsToDispatch[i];
 
-        -- Common function to check if the unit is available.
+        if (dispatch == nil) then
+            print("WARNING, PATROL DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+            break;
+        end
+
         if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
-        -- Add this unit to the Idle Queue.
         self.IdleQueue[#self.IdleQueue + 1] = dispatch;
 
         local path = '';
 
-        if (dispatch.objBase == "BasePatrol") then
-            -- Grab a random path.
+        if (dispatch.Base == "BasePatrol") then
             path = "BasePatrol" .. self.BasePatrolCount;
         else
-            -- Grab a random path.
             path = "patrol_" .. GetRandomInt(1, 2);
         end
 
-        -- Send the unit to Patrol.
         Patrol(dispatch.Handle, path);
 
-        -- Remove the patrol unit from the list of units to be dispatched.
         RemoveDispatchFromTable(self.PatrolsToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchAntiAir(missionTurnCount)
-    -- Send the anti-air to the right path.
     for i = 1, #self.AntiAirToDispatch do
-        -- Grab the anti-air.
         local dispatch = self.AntiAirToDispatch[i];
 
-        -- Common function to check if the unit is available.
+        if (dispatch == nil) then
+            print("WARNING, ANTI-AIR DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+            break;
+        end
+
         if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
-        -- Send the Anti-Air to the path based on the increment.
         local path = "anti-air_" .. self.AntiAirCount;
 
-        -- Send the unit to Patrol.
         Patrol(dispatch.Handle, path);
 
-        -- Remove the patrol unit from the list of units to be dispatched.
         RemoveDispatchFromTable(self.AntiAirToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchMinions(missionTurnCount)
-    -- For any turrets that need dispatching, let's send them around the map.
     for i = 1, #self.MinionsToDispatch do
-        -- Grab the minion.
         local dispatch = self.MinionsToDispatch[i];
 
-        -- Common function to check if the unit is available.
+        if (dispatch == nil) then
+            print("WARNING, MINION DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+            break;
+        end
+
         if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
             break;
         end
 
-        -- Check to see if any assault units exist yet, otherwise don't dispatch.
         if (#self.AssaultUnits <= 0) then
             break;
         end
 
-        -- Add this unit to the Idle Queue.
         self.IdleQueue[#self.IdleQueue + 1] = dispatch;
 
-        -- Create tables of potential candidates for dispatch.
         local assaultUnitToDefend = {};
         local assaultUnitsToService = {};
 
-        -- Filter through any Assault Units that already have a defender / servicer and ignore them.
         for k, v in pairs(self.AssaultUnits) do
             if (v.DefenderHandle == 0) then
                 assaultUnitToDefend[#assaultUnitToDefend + 1] = v;
@@ -385,34 +362,37 @@ function AIController:DispatchMinions(missionTurnCount)
             end
         end
 
-        -- If this minion is a Service Truck, send it to follow. Else, send a tank to defend.
-        if (dispatch.Base == "Minion") then
-            -- Grab a random unit to defend.
+        if (dispatch.Base == "Minion" and #assaultUnitToDefend > 0) then
             local unitToDefend = assaultUnitToDefend[GetRandomInt(1, #assaultUnitToDefend)];
-            unitToDefend.DefenderHandle = dispatch.Handle;
-            Defend2(dispatch.Handle, unitToDefend);
-        elseif (dispatch.Base == "AssaultService") then
-            local unitToService = assaultUnitsToService[GetRandomInt(1, #assaultUnitsToService)];
-            unitToService.HealerHandle = dispatch.Handle;
-            Follow(dispatch.Handle, unitToService);
-        end
 
-        -- Remove the minion from the right table.
-        RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
+            unitToDefend.DefenderHandle = dispatch.Handle;
+            Defend2(dispatch.Handle, unitToDefend.Handle);
+
+            RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
+        elseif (dispatch.Base == "AssaultService" and #assaultUnitsToService > 0) then
+            local unitToService = assaultUnitsToService[GetRandomInt(1, #assaultUnitsToService)];
+
+            unitToService.HealerHandle = dispatch.Handle;
+            Follow(dispatch.Handle, unitToService.Handle);
+
+            RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
+        end
     end
 end
 
 function AIController:ProcessIdleUnits(missionTurnCount)
     for i = 1, #self.IdleQueue do
-        -- Grab the idle unit.
         local idleUnit = self.IdleQueue[i];
 
-        -- Let's first check that this unit is indeed idle.
-        if (IsIdle(idleUnit.Handle) == false) then
-            return false;
+        if (idleUnit == nil) then
+            print("WARNING, IDLE DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+            break;
         end
 
-        -- Check the base of the unit to see where it needs to be added.
+        if (IsDispatchUnitAvailable(idleUnit, missionTurnCount) == false) then
+            break;
+        end
+
         if (idleUnit.Base == "Minion" or idleUnit.Base == "AssaultService") then
             ReturnIdleUnitToBase(idleUnit);
             self.MinionsToDispatch[#self.MinionsToDispatch + 1] = idleUnit;
@@ -420,7 +400,6 @@ function AIController:ProcessIdleUnits(missionTurnCount)
             self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
         end
 
-        -- Remove the idle unit from the idle table.
         RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
     end
 end
@@ -435,25 +414,20 @@ end
 
 function AIController:TurretShot(handle, missionTurnCount)
     if (GetCurrentCommand(handle) ~= CMD_DEFEND) then
-        -- Grab the vector that the turret was moving to so we can check later if it needs to be repositioned.
         local commandVector = GetCurrentCommandWhere(handle);
 
-        -- Have the unit stop.
         Stop(handle, 0);
 
-        -- Check to see how far the turret was from the original path it was going to.
         if (commandVector == nil or GetDistance(handle, commandVector) < 40) then
             return;
         end
 
-        -- Re-add the turret to the dispatch list.
         self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
     end
 end
 
 function AIController:ScavengerShot(handle)
     if (IsIdle(handle)) then
-        -- Make the Scavenger retreat.
         Goto(handle, GetPositionNear("RecyclerEnemy", 40, 60), 0);
     end
 end
@@ -476,7 +450,6 @@ function CreateAssaultUnit(handle)
 end
 
 function RemoveDispatchFromTable(table, dispatchUnit)
-    -- Check the current table to see which dispatch object this handle belongs to and remove it.
     for i, v in pairs(table) do
         if (v.Handle == dispatchUnit) then
             table[i] = nil;
@@ -486,17 +459,14 @@ function RemoveDispatchFromTable(table, dispatchUnit)
 end
 
 function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
-    -- If the unit is not idle, ignore it.
     if (IsIdle(dispatchUnit.Handle) == false) then
         return false;
     end
 
-    -- Don't process this unit if it's built in the same turn.
     if (dispatchUnit.BuiltTime == missionTurnCount) then
         return false;
     end
 
-    -- Check to see if the dispatch cooldown has passed.
     if (dispatchUnit.DispatchDelay >= missionTurnCount) then
         return false;
     end
@@ -505,12 +475,9 @@ function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)
 end
 
 function ReturnIdleUnitToBase(idleUnit)
-    -- If this unit is outside of the base perimeter, send it back to the base and prepare for redispatch.
     if (GetDistance(idleUnit.Handle, "RecyclerEnemy") > 400) then
-        -- Grab a vector position near the base.
         local returnPos = GetPositionNear("RecyclerEnemy", 60, 80);
 
-        -- Return to base.
         Goto(idleUnit.Handle, returnPos);
     end
 end

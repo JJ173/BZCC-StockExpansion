@@ -1743,6 +1743,34 @@ function BomberAttack2Condition(team, time)
     return true, "Tasking Bomber to attack enemy base.";
 end
 
+function EnforcerAttackCondition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (DoesAssaultDepotExist(team, time) == false) then
+        return false, "I don't have an Assault Depot yet.";
+    end
+
+    if (DoesRelayBunkerExist(team, time) == false) then
+        return false, "I don't have a Relay Bunker yet.";
+    end
+
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay yet.";
+    end
+
+    if (HasReachedGHHoverAssaultLimit(team, time)) then
+        return false, "I have reached the GH Hover Assault Limit";
+    end
+
+    return true, "Tasking Enforcers to attack.";
+end
+
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
 
 function IsCommanderOptionEnabled(team, time)

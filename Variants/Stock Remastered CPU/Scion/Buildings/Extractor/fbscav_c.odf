@@ -1,0 +1,7 @@
+[GameObjectClass]
+classLabel = "fbscav_x"
+upgradeName = "fbscup_c"
+
+[BuildingClass]
+
+[ExtractorClass]

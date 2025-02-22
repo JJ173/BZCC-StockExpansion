@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "fbrspir_gh"
+
+upgradeName = "fbhrspir_c_upgrade"
+
+/////// PROVIDES ///////////////////
+provideName1 = "fbrspir_c"
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

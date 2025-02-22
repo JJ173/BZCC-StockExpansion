@@ -1,0 +1,24 @@
+[GameObjectClass]
+baseName = "AssaultService"
+classLabel = "fvserv_c"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName3 = "AssaultServicer"
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]
+
+[Lod1]

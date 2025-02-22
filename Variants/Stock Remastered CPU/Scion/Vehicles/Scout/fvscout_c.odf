@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "fvscout_x"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 23 // Original Scrap Cost (45) / 2 = 22.5, round up to 23.
+
+[CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

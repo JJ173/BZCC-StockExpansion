@@ -6,21 +6,28 @@ classLabel = "ibrecy_x"
 [BuildingClass]
 
 [FactoryClass]
-buildItem2 = "ivscout_c"
 buildItem3 = "ivturr_c"
-buildItem6 = "ivserv_c"
+buildItem8 = "ivmlay_c"
 
 [BuildGroup1]
 buildLabel = "Scavengers"
 buildItem1 = "ivscav_c"
 buildItem2 = "ivhscav_c"
 
+[BuildGroup2]
+buildLabel = "Scouts"
+buildItem1 = "ivscout_c"
+buildItem2 = "ivscout_p"
+
 [BuildGroup5]
 buildLabel = "Constructors"
 buildItem1 = "ivcons_c"
 buildItem2 = "ivcons_g"
 
-[BuildGroup5]
+[BuildGroup6]
+buildLabel = "Service Trucks"
+buildItem1 = "ivserv_c"
+buildItem2 = "ivserv_d"
 
 [RecyclerClass]
 

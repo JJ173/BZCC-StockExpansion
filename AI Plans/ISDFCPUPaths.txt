@@ -55,7 +55,7 @@ ISDF Base Paths:
 - i_Field_AssualtTower_2_B
 - i_Field_RocketTower_2
 
-ISDF Field Paths:
+Field Paths:
 - Patrol1
 - Patrol2
 - Patrol3

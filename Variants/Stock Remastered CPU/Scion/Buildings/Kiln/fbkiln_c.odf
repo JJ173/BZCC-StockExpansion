@@ -7,11 +7,30 @@ upgradeName = "fbforg_c"
 [BuildingClass]
 
 [FactoryClass]
-buildItem1 = "fvsent_c"
 buildItem2 = "fvarch_c"
-buildItem3 = "fvtank_c"
 buildItem4 = "fvartl_c"
 buildItem5 = "fvwalk_c"
 buildItem6 = "fvatank_c"
+
+[BuildGroup1]
+buildLabel = "Sentries"
+buildItem1 = "fvsent_c"
+buildItem2 = "fvsent_d"
+buildItem3 = "fvsent_p"
+
+[BuildGroup3]
+buildLabel = "Warriors"
+buildItem1 = "fvtank_c"
+buildItem2 = "fvhtank_c"
+buildItem3 = "fvhtank_c_s"
+buildItem4 = "fvtank_bp"
+buildItem5 = "fvtank_p"
+
+[BuildGroup7]
+buildLabel = "Advanced Units"
+buildItem1 = "fvpscout_c"
+buildItem2 = "fvgship_c"
+buildItem3 = "fvsav_c"
+buildItem4 = "fvburn_c"
 
 [Lod1]

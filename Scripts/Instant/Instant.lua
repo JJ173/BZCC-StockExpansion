@@ -221,6 +221,11 @@ local ISDFBaseLayout =
     { "ibsbay_c_a2",    "i_Assault_Depot" }
 }
 
+local ScionBaseLayout =
+{
+    { "fbrecy_c",       "RecyclerEnemy" },
+}
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -382,9 +387,12 @@ function Update()
                 for i = 1, #ISDFBaseLayout do
                     -- Grab each table line.
                     local baseBuilding = ISDFBaseLayout[i];
-
-                    print(baseBuilding);
-
+                    BuildObject(baseBuilding[1], 0, baseBuilding[2]);
+                end
+            elseif (_Session.m_CPUTeamRace == 'f') then
+                for i = 1, #ScionBaseLayout do
+                    -- Grab each table line.
+                    local baseBuilding = ScionBaseLayout[i];
                     BuildObject(baseBuilding[1], 0, baseBuilding[2]);
                 end
             end

@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "fvpscout_gh"
+
+scrapValue = 5 // Scrap value for the CPU is reduced by half so it drops less loose.
+scrapCost = 28 // Original Scrap Cost (55) / 2 = 27.5, round up to 28.
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

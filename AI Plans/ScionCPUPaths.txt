@@ -1,0 +1,38 @@
+Scion Base Paths:
+- F_Forge
+- F_Overseer
+- F_Dower
+- F_Stronghold
+
+- F_BaseJammer_1
+- F_BaseJammer_2
+
+- F_BaseSpire_1
+- F_BaseSpire_2
+- F_BaseSpire_3
+
+- F_Base_AntiAir_1
+- F_Base_AntiAir_2
+- F_Base_AntiAir_3
+
+- F_Base_Artillery_1
+- F_Base_Artillery_2
+
+- F_Base_AssaultSpire_1
+- F_Base_AssaultSpire_2
+- F_Base_AssaultSpire_3
+
+- F_Field_AssaultSpire_1
+- F_Field_AssaultSpire_2
+- F_Field_AssaultSpire_3
+
+- F_Field_RocketTower_1
+- F_Field_RocketTower_2
+
+Field Paths:
+- Patrol1
+- Patrol2
+- Patrol3
+
+- BasePatrol1
+- BasePatrol2

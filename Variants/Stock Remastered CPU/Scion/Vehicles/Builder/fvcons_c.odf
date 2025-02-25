@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvcons_c"
+classLabel = "fvcons_x"
 
 scrapValue = 10 // Scrap value for the CPU is reduced by half so it drops less loose.
 scrapCost = 20 // Scrap cost is reduced by 50%.

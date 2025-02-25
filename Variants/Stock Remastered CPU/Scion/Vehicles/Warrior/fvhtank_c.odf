@@ -1,0 +1,22 @@
+[GameObjectClass]
+classLabel = "fvhtank_gh"
+
+scrapValue = 13
+scrapCost = 33 // Original Scrap Cost (65) / 2 = 32.5, round up to 33.
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "fvhtank_c"
+provideName2 = "VIRTUAL_CLASS_MORPHTANK"
+provideName3 = "VIRTUAL_CLASS_TANK"
+provideName4 = "DefendUnit"
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

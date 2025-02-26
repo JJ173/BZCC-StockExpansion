@@ -1,0 +1,167 @@
+[Start]
+scrapCount = 40
+scavClass = "fvscav_c"
+consClass = "fvcons_c"
+CheckProvides = true
+DLLCanSwitch = false
+baseLoc = "RecyclerEnemy"
+
+// --------------------------------
+// >>> Base Building Directions <<<
+// baseDir = 0  // South
+// baseDir = 1  // West
+// baseDir = 2  // North
+// baseDir = 3  // East
+// --------------------------------
+
+[IdleDispatcher]
+ScavIdleSeconds = 20
+UnitIdleSeconds = 999999
+CraftTeamIsPilotTeam = true
+
+[Cheat]
+moneyAmount = 2
+moneyDelay = 1
+
+[Plan1]
+planType = "Service"
+planPriority = 1000
+planCondition = "Exists"
+planConditionClass = "fvserv_c"
+planConditionCount = 1
+planCompare = ">="
+planConditionClassProvided = true 
+serviceUnit = "fvserv_c"
+MinWreckAmmo = 0.3
+MinWreckHealth = 0.3
+MaxWreckAmmo = 1.0
+MaxWreckHealth = 1.0
+MinWreckDist = 1.0
+MaxWreckDist = 300.0 // Distance from service bay to unit to begin servicing
+RepairTime = 60.0 // Max time a servicer will spend on a unit
+unitType1 = "fbrecy_c"
+unitType2 = "fbkiln_c"
+unitType3 = "fbforg_c"
+unitType4 = "defender"
+unitType5 = "base"
+unitType6 = "fvserv_c"
+
+[Plan2] // Build the Commander (Scout) if the option is enabled.
+planType = "BuildMinimums"
+planPriority = 990
+planCondition = "Lua"
+buildType1 = "fvcmdr_s"
+buildCount1 = 1
+LuaFunction = "BuildScoutCommander"
+
+[Plan3] // Build the Commander (Tank) if the option is enabled.
+planType = "BuildMinimums"
+planPriority = 980
+planCondition = "Lua"
+buildType1 = "fvcmdr_t"
+buildCount1 = 1
+LuaFunction = "BuildTankCommander"
+
+[Plan4] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
+planType = "CollectPool"
+planPriority = 970
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan5]
+planType = "CollectPool"
+planPriority = 960
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan6]
+planType = "BuildLoop"
+planPriority = 950
+planCondition = "Lua"
+buildType1 = "fvhscav_c"
+buildCount1 = 3
+LuaFunction = "BuildScavengerCondition"
+ContinueEvenIfFail = true
+
+[Plan7] // Collect Loose First.
+planType = "CollectField"
+planPriority = 940
+planCondition = "Lua"
+scavClass = "fvhscav_c"
+LuaFunction = "CollectFieldCondition"
+
+[Plan8]
+planType = "BuildMinimums"
+planPriority = 930
+planCondition = "Lua"
+buildType1 = "fvcons_c"
+buildCount1 = 2
+buildType2 = "fvcons_g"
+buildCount2 = 2
+LuaFunction = "BuildConstructorCondition"
+
+[Plan9]
+planType = "BuildMinimums"
+planPriority = 920
+buildType1 = "fvturr_c"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "BuildTurretCondition"
+
+[Plan10]
+planType = "BuildMinimums"
+planPriority = 910
+buildType1 = "fvscout_p"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "BuildScoutCondition"
+ContinueEvenIfFail = true
+
+[Plan11]
+planType = "Attacker"
+planPriority = 900
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+targetType3 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvscout_c"
+attackType2 = "fvscout_c"
+attackType3 = "fvscout_c"
+LuaFunction = "Attack1Condition"
+maxAttacks = 4
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 890
+planCondition = "Lua"
+buildType1 = "fbkiln_c"
+buildCount1 = 1
+buildLoc1 = "F_Forge"
+buildHeading = 1
+LuaFunction = "BuildKiln"
+
+[Plan13]
+planType = "BuildMinimums"
+planPriority = 880
+buildType1 = "fvsent_p"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "BuildSentryCondition"
+ContinueEvenIfFail = true
+
+[Plan14]
+planType = "BaseBuildMinimums"
+planPriority = 870
+planCondition = "Lua"
+buildType1 = "fbantm_c"
+buildCount1 = 1
+buildLoc1 = "F_Overseer"
+buildHeading = 1
+LuaFunction = "BuildAntenna"

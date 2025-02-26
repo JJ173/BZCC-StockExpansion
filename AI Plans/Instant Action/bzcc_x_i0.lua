@@ -52,6 +52,14 @@ function CollectPoolCondition(team, time)
     return true, "Tasking a Scavenger to collect a pool.";
 end
 
+function DoesLooseScrapExist(team, time)
+    return AIPUtil.CountUnits(team, "resource", "friendly", true) > 0;
+end
+
+function DoesScrapPoolExist(team, time)
+    return AIPUtil.CountUnits(team, "biometal", "friendly", true) > 0;
+end
+
 -- BUILD PLAN CONDITIONS [UNITS]
 function BuildScavengerCondition(team, time)
     if (DoesRecyclerExist(team, time) == false) then
@@ -1516,10 +1524,6 @@ function ExtractorCount(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_EXTRACTOR", "sameteam", true);
 end
 
-function UpgradedExtractorCount(team, time)
-    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_EXTRACTOR_Upgraded", "sameteam", true);
-end
-
 function ConstructorCount(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_CONSTRUCTIONRIG", "sameteam", true);
 end
@@ -1817,14 +1821,6 @@ end
 
 function DoesConstructorExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_CONSTRUCTIONRIG", "sameteam", true) > 0;
-end
-
-function DoesLooseScrapExist(team, time)
-    return AIPUtil.CountUnits(team, "resource", "friendly", true) > 0;
-end
-
-function DoesScrapPoolExist(team, time)
-    return AIPUtil.CountUnits(team, "biometal", "friendly", true) > 0;
 end
 
 function DoesLandingPadExist(team, time)

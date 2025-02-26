@@ -167,7 +167,7 @@ local ISDFBaseLayout =
 
     { "ibpgen_c3",      "i_Power_1" },
     { "ibpgen_c3",      "i_Power_2" },
-    { "ibpgen_c3",      "i_Power_3" },
+    --{ "ibpgen_c3",      "i_Power_3" },
 
     { "ibcbun_c",       "i_Bunker" },
     { "ibcbun_c",       "i_Base_Bunker_1" },

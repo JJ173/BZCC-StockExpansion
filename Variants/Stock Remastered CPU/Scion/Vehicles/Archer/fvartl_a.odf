@@ -1,0 +1,24 @@
+[GameObjectClass]
+baseName = "AntiAir"
+classLabel = "fvartl_c"
+
+buildTime = 10.0 // Halved to stop these units from taking up too much time when being built.
+scrapCost = 0
+
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+///// WEAPONS //////////////////////
+weaponHard1 = "HP_MORTAR_1"
+weaponName1 = "gpopgun"
+weaponAssault1 = 0
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[HoverCraftClass]
+
+[ArtilleryClass]
+
+[DeployableClass]

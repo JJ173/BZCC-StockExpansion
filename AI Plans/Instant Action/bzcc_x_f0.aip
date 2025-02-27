@@ -126,8 +126,9 @@ planType = "Attacker"
 planPriority = 900
 planCondition = "Lua"
 targetType1 = "DefendUnit"
-targetType2 = "VIRTUAL_CLASS_SCAVENGER"
-targetType3 = "VIRTUAL_CLASS_RECYCLER"
+targetType2 = "VIRTUAL_CLASS_EXTRACTOR"
+targetType3 = "VIRTUAL_CLASS_SCAVENGER"
+targetType4 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "fvscout_c"
 attackType2 = "fvscout_c"
 attackType3 = "fvscout_c"
@@ -165,3 +166,102 @@ buildCount1 = 1
 buildLoc1 = "F_Overseer"
 buildHeading = 1
 LuaFunction = "BuildAntenna"
+
+[Plan15]
+planType = "Upgrade"
+planPriority = 860
+planCondition = "Lua"
+unitType = "fbkiln_c"
+LuaFunction = "UpgradeKilnCondition"
+ContinueEvenIfFail = true
+
+[Plan16]
+planType = "BaseBuildMinimums"
+planPriority = 850
+planCondition = "Lua"
+buildType1 = "fbspir_c"
+buildCount1 = 1
+buildLoc1 = "F_BaseSpire_1"
+buildHeading = 1
+LuaFunction = "BuildGunSpire1"
+consClass = "fvcons_g"
+
+[Plan17]
+planType = "Attacker"
+planPriority = 840
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+targetType3 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvsent_c"
+attackType2 = "fvsent_c"
+attackType3 = "fvscout_c"
+LuaFunction = "Attack2Condition"
+maxAttacks = 3
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan18]
+planType = "Attacker"
+planPriority = 830
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_TURRET"
+targetType2 = "VIRTUAL_CLASS_GUNTOWER"
+attackType1 = "fvarch_c"
+attackType2 = "fvarch_c"
+attackType3 = "fvarch_c"
+LuaFunction = "Attack3Condition"
+maxAttacks = 5
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan19]
+planType = "Upgrade"
+planPriority = 820
+planCondition = "Lua"
+unitType = "fbantm_c"
+LuaFunction = "UpgradeAntennaCondition"
+ContinueEvenIfFail = true
+
+[Plan20]
+planType = "BaseBuildMinimums"
+planPriority = 810
+planCondition = "Lua"
+buildType1 = "fbspir_c"
+buildCount1 = 1
+buildLoc1 = "F_BaseSpire_2"
+buildHeading = 1
+LuaFunction = "BuildGunSpire2"
+consClass = "fvcons_g"
+
+[Plan21]
+planType = "BuildMinimums"
+planPriority = 800
+buildType1 = "fvtank_p"
+buildCount1 = 2
+buildType2 = "fvtank_bp"
+buildCount2 = 2
+planCondition = "Lua"
+LuaFunction = "BuildTankCondition"
+ContinueEvenIfFail = true
+
+[Plan22]
+planType = "BaseBuildMinimums"
+planPriority = 820
+planCondition = "Lua"
+buildType1 = "fbdowe_c"
+buildCount1 = 1
+buildLoc1 = "F_Dower"
+buildHeading = 1
+LuaFunction = "BuildDower"
+
+[Plan23]
+planType = "BuildMinimums"
+planPriority = 810
+buildType1 = "fvartl_a"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "BuildArcherCondition"
+ContinueEvenIfFail = true

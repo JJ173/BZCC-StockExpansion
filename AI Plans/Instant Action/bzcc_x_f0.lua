@@ -1,11 +1,16 @@
 -- CONST VARIABLES FOR SCRAP COST OF UNITS.
 local ANTENNA_SCRAP_COST = 60;
+local ARCHER_SCRAP_COST = 33;
 local CONST_SCRAP_COST = 20;
+local FORGE_SCRAP_COST = 60;
+local GUN_SPIRE_COST = 75;
 local KILN_SCRAP_COST = 60;
+local OVERSEER_SCRAP_COST = 80;
 local SCAV_SCRAP_COST = 10;
 local SENTRY_SCRAP_COST = 25;
 local SCOUT_SCRAP_COST = 23;
 local TURRET_SCRAP_COST = 20;
+local WARRIOR_SCRAP_COST = 28;
 
 function InitAIPLua(team)
     AIPUtil.print(team, "Starting Lua Conditions for Scion AIP bzcc_x_f0");
@@ -129,6 +134,22 @@ function BuildSentryCondition(team, time)
     return true, "Tasking Kiln/Forge to build a Sentry."
 end
 
+function BuildTankCondition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesForgeExist(team, time) == false) then
+        return false, "I don't have a Forge so I can't build any Warriors.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < WARRIOR_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Warrior.";
+    end
+
+    return true, "Tasking Factory to build a Warrior.";
+end
+
 function BuildScoutCommander(team, time)
     if (IsCommanderOptionEnabled(team, time) == false) then
         return false, "Commander option is disabled for this game.";
@@ -161,7 +182,62 @@ function BuildTankCommander(team, time)
     return true, "I can replace the Commander in a Tank unit. Tasking Factory to build.";
 end
 
+function BuildArcherCondition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (DoesForgeExist(team, time) == false) then
+        return false, "I don't have a Forge so I can't build any Archers.";
+    end
+
+    if (DoesOverseerExist(team, time) == false) then
+        return false, "I don't have an Overseer so I can't build any Archers.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < ARCHER_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Archer.";
+    end
+
+    return true, "Tasking Factory to build an Archer.";
+end
+
 -- UPGRADE CONDITIONS
+function UpgradeKilnCondition(team, time)
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < FORGE_SCRAP_COST) then
+        return false, "I don't have enough scrap to upgrade the Kiln.";
+    end
+
+    return true, "Tasking Constructor to upgrade the Kiln.";
+end
+
+function UpgradeAntennaCondition(team, time)
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Antenna yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < OVERSEER_SCRAP_COST) then
+        return false, "I don't have enough scrap to upgrade the Antenna.";
+    end
+
+    return true, "Tasking Constructor to upgrade the Antenna.";
+end
 
 -- BUILD PLAN CONDITIONS [BUILDINGS]
 function BuildKiln(team, time)
@@ -186,7 +262,11 @@ end
 
 function BuildAntenna(team, time)
     if (DoesFactoryExist(team, time) == false) then
-        return false, "I don't have a Factory yet.";
+        return false, "I don't have a Kiln yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
     end
 
     if (ExtractorCount(team, time) < 1) then
@@ -197,8 +277,28 @@ function BuildAntenna(team, time)
         return false, "F_Overseer is unavailable, or a building already exists on it."
     end
 
+    if (AIPUtil.GetScrap(team, false) < ANTENNA_SCRAP_COST) then
+        return false, "I don't have enough scrap for an Antenna.";
+    end
+
+    return true, "Tasking a Constructor to build an Antenna...";
+end
+
+function BuildDower(team, time)
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Kiln yet.";
+    end
+
     if (DoesConstructorExist(team, time) == false) then
         return false, "I don't have a Constructor yet.";
+    end
+
+    if (ExtractorCount(team, time) < 1) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (IsPathAvailable("F_Overseer") == false) then
+        return false, "F_Overseer is unavailable, or a building already exists on it."
     end
 
     if (AIPUtil.GetScrap(team, false) < ANTENNA_SCRAP_COST) then
@@ -206,6 +306,46 @@ function BuildAntenna(team, time)
     end
 
     return true, "Tasking a Constructor to build an Antenna...";
+end
+
+function BuildGunSpire1(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (IsPathAvailable("F_BaseSpire_1") == false) then
+        return false, "F_BaseSpire_1 is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUN_SPIRE_COST) then
+        return false, "I don't have enough scrap for a Gun Spire.";
+    end
+
+    return true, "Tasking a Constructor to build a Gun Spire at F_BaseSpire_1...";
+end
+
+function BuildGunSpire2(team, time)
+    if (ExtractorCount(team, time) < 2) then
+        return false, "I don't have enough deployed Scavengers yet.";
+    end
+
+    if (DoesConstructorExist(team, time) == false) then
+        return false, "I don't have a Constructor yet.";
+    end
+
+    if (IsPathAvailable("F_BaseSpire_2") == false) then
+        return false, "F_BaseSpire_2 is unavailable, or a building already exists on it."
+    end
+
+    if (AIPUtil.GetScrap(team, false) < GUN_SPIRE_COST) then
+        return false, "I don't have enough scrap for a Gun Spire.";
+    end
+
+    return true, "Tasking a Constructor to build a Gun Spire at F_BaseSpire_2...";
 end
 
 -- COUNT FUNCTIONS TO CHECK IF A NUMBER OF GAME OBJECT EXISTS.
@@ -228,6 +368,42 @@ function Attack1Condition(team, time)
     end
 
     return true, "First attack is being sent.";
+end
+
+function Attack2Condition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any Extractors yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Kiln/Forge yet.";
+    end
+
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) > 0) then
+        return false, "Enemy defenses are too strong.";
+    end
+
+    return true, "Second attack is being sent.";
+end
+
+function Attack3Condition(team, time)
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any Extractors yet.";
+    end
+
+    if (DoesFactoryExist(team, time) == false) then
+        return false, "I don't have a Kiln/Forge yet.";
+    end
+
+    if (DoesAntennaExist(team, time) == false) then
+        return false, "I don't have an Antenna yet.";
+    end
+
+    if (AIPUtil.CountUnits(team, "VIRTUAL_CLASS_GUNTOWER", 'enemy', true) <= 0 and AIPUtil.CountUnits(team, "VIRTUAL_CLASS_TURRET", 'enemy', true) <= 0) then
+        return false, "Enemy doesn't have any defenses to target.";
+    end
+
+    return true, "Enemies has Gun Towers / Turrets. I'll send some Lancers to attack.";
 end
 
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
@@ -255,4 +431,16 @@ end
 
 function DoesFactoryExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_FACTORY", "sameteam", true) > 0;
+end
+
+function DoesForgeExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_FORGE", "sameteam", true) > 0;
+end
+
+function DoesAntennaExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_ANTENNA_MOUND", "sameteam", true) > 0;
+end
+
+function DoesOverseerExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_OVERSEER_ARRAY", "sameteam", true) > 0;
 end

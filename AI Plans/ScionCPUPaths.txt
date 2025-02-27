@@ -25,6 +25,7 @@ Scion Base Paths:
 - F_Field_AssaultSpire_1
 - F_Field_AssaultSpire_2
 - F_Field_AssaultSpire_3
+- F_Field_AssaultSpire_4
 
 - F_Field_RocketTower_1
 - F_Field_RocketTower_2

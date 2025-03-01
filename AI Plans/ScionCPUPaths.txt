@@ -1,3 +1,10 @@
+Spawn Paths:
+- RecyclerEnemy
+- TurretEnemy1
+- TurretEnemy2
+
+- CarrierEnemy
+
 Scion Base Paths:
 - F_Forge
 - F_Overseer
@@ -29,6 +36,7 @@ Scion Base Paths:
 
 - F_Field_RocketTower_1
 - F_Field_RocketTower_2
+- F_Field_RocketTower_3
 
 Field Paths:
 - Patrol1

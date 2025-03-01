@@ -131,7 +131,7 @@ local IntroFunctions = {};
 local debug = true;
 local debug_base = false;
 local debug_base_built = false;
-local debug_stop_script = false;
+local debug_stop_script = true;
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -167,7 +167,7 @@ local ISDFBaseLayout =
 
     { "ibpgen_c3",      "i_Power_1" },
     { "ibpgen_c3",      "i_Power_2" },
-    --{ "ibpgen_c3",      "i_Power_3" },
+    { "ibpgen_c3",      "i_Power_3" },
 
     { "ibcbun_c",       "i_Bunker" },
     { "ibcbun_c",       "i_Base_Bunker_1" },
@@ -223,7 +223,39 @@ local ISDFBaseLayout =
 
 local ScionBaseLayout =
 {
-    { "fbrecy_c",       "RecyclerEnemy" },
+    { "fbrecy_c",   "RecyclerEnemy" },
+
+    { "fbforg_c",   "F_Forge" },
+    { "fbover_c",   "F_Overseer" },
+    { "fbdowe_c",   "F_Dower" },
+    { "fbstro_c",   "F_Stronghold" },
+
+    { "fbjamm_c",   "F_BaseJammer_1" },
+    { "fbjamm_c",   "F_BaseJammer_2" },
+
+    { "fbspir_c",   "F_BaseSpire_1" },
+    { "fbspir_c",   "F_BaseSpire_2" },
+    { "fbspir_c",   "F_BaseSpire_3" },
+
+    { "fbrspir_c",  "F_Base_AntiAir_1" },
+    { "fbrspir_c",  "F_Base_AntiAir_2" },
+    { "fbrspir_c",  "F_Base_AntiAir_3" },
+
+    { "fbartl_c_b", "F_Base_Artillery_1" },
+    { "fbartl_c_b", "F_Base_Artillery_2" },
+
+    { "fbaspir_c",  "F_Base_AssaultSpire_1" },
+    { "fbaspir_c",  "F_Base_AssaultSpire_2" },
+    { "fbaspir_c",  "F_Base_AssaultSpire_3" },
+
+    { "fbaspir_c",  "F_Field_AssaultSpire_1" },
+    { "fbaspir_c",  "F_Field_AssaultSpire_2" },
+    { "fbaspir_c",  "F_Field_AssaultSpire_3" },
+    { "fbaspir_c",  "F_Field_AssaultSpire_4" },
+
+    { "fbrspir_c",  "F_Field_RocketTower_1" },
+    { "fbrspir_c",  "F_Field_RocketTower_2" },
+    { "fbrspir_c",  "F_Field_RocketTower_3" }
 }
 
 ---------------------------------------------------------------------------------------------------------------------------------------

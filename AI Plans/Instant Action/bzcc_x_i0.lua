@@ -212,8 +212,8 @@ function BuildAssaultServicers(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
-        return false, "I don't have a Factory so I can't build any Tanks.";
+    if (DoesServiceBayExist(team, time) == false) then
+        return false, "I don't have a Service Bay so I can't build any Trucks.";
     end
 
     local assaultCount = AssaultUnitCount(team, time);

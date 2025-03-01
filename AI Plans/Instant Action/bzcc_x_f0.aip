@@ -125,10 +125,9 @@ ContinueEvenIfFail = true
 planType = "Attacker"
 planPriority = 900
 planCondition = "Lua"
-targetType1 = "DefendUnit"
-targetType2 = "VIRTUAL_CLASS_EXTRACTOR"
-targetType3 = "VIRTUAL_CLASS_SCAVENGER"
-targetType4 = "VIRTUAL_CLASS_RECYCLER"
+targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+targetType3 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "fvscout_c"
 attackType2 = "fvscout_c"
 attackType3 = "fvscout_c"
@@ -164,7 +163,6 @@ planCondition = "Lua"
 buildType1 = "fbantm_c"
 buildCount1 = 1
 buildLoc1 = "F_Overseer"
-buildHeading = 1
 LuaFunction = "BuildAntenna"
 
 [Plan15]
@@ -182,7 +180,6 @@ planCondition = "Lua"
 buildType1 = "fbspir_c"
 buildCount1 = 1
 buildLoc1 = "F_BaseSpire_1"
-buildHeading = 1
 LuaFunction = "BuildGunSpire1"
 consClass = "fvcons_g"
 
@@ -191,8 +188,10 @@ planType = "Attacker"
 planPriority = 840
 planCondition = "Lua"
 targetType1 = "DefendUnit"
-targetType2 = "VIRTUAL_CLASS_SCAVENGER"
-targetType3 = "VIRTUAL_CLASS_RECYCLER"
+targetType2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+targetType3 = "VIRTUAL_CLASS_FACTORY"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
 attackType1 = "fvsent_c"
 attackType2 = "fvsent_c"
 attackType3 = "fvscout_c"
@@ -211,7 +210,7 @@ targetType2 = "VIRTUAL_CLASS_GUNTOWER"
 attackType1 = "fvarch_c"
 attackType2 = "fvarch_c"
 attackType3 = "fvarch_c"
-LuaFunction = "Attack3Condition"
+LuaFunction = "LancerAttackCondition"
 maxAttacks = 5
 AttackAnything = true
 buildIfNoIdle = true
@@ -232,7 +231,6 @@ planCondition = "Lua"
 buildType1 = "fbspir_c"
 buildCount1 = 1
 buildLoc1 = "F_BaseSpire_2"
-buildHeading = 1
 LuaFunction = "BuildGunSpire2"
 consClass = "fvcons_g"
 
@@ -249,19 +247,421 @@ ContinueEvenIfFail = true
 
 [Plan22]
 planType = "BaseBuildMinimums"
-planPriority = 820
+planPriority = 790
 planCondition = "Lua"
 buildType1 = "fbdowe_c"
 buildCount1 = 1
 buildLoc1 = "F_Dower"
-buildHeading = 1
 LuaFunction = "BuildDower"
 
 [Plan23]
 planType = "BuildMinimums"
-planPriority = 810
+planPriority = 780
 buildType1 = "fvartl_a"
 buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "BuildArcherCondition"
+ContinueEvenIfFail = true
+
+[Plan24] // Thin out any threats with artillery.
+planType = "Attacker"
+planPriority = 770
+planCondition = "Lua"
+targetType1 = "Defender"
+targetType2 = "Assault"
+targetType3 = "VIRTUAL_CLASS_POWERPLANT"
+attackType1 = "fvartl_c"
+attackType2 = "fvartl_c"
+attackType3 = "fvartl_c"
+LuaFunction = "ArcherAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan25]
+planType = "Attacker"
+planPriority = 760
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+targetType3 = "VIRTUAL_CLASS_FACTORY"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvtank_c"
+attackType2 = "fvtank_c"
+attackType3 = "fvtank_c"
+attackType4 = "fvarch_c"
+LuaFunction = "Attack5Condition"
+maxAttacks = 4
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan26]
+planType = "BaseBuildMinimums"
+planPriority = 750
+planCondition = "Lua"
+buildType1 = "fbstro_c"
+buildCount1 = 1
+buildLoc1 = "F_Stronghold"
+LuaFunction = "BuildStronghold"
+
+[Plan27]
+planType = "BuildMinimums"
+planPriority = 740
+planCondition = "Lua"
+buildType1 = "fvserv_c"
+buildCount1 = 3
+LuaFunction = "BuildServiceTrucks"
+ContinueEvenIfFail = true
+
+[Plan28]
+planType = "BuildLoop"
+planPriority = 730
+planCondition = "Lua"
+buildType1 = "fvsent_d"
+buildCount1 = 1
+LuaFunction = "BuildAssaultDefenders"
+ContinueEvenIfFail = true
+
+[Plan29]
+planType = "BuildLoop"
+planPriority = 720
+planCondition = "Lua"
+buildType1 = "fvserv_d"
+buildCount1 = 1
+LuaFunction = "BuildAssaultServicers"
+ContinueEvenIfFail = true
+
+[Plan30]
+planType = "BaseBuildMinimums"
+planPriority = 710
+planCondition = "Lua"
+buildType1 = "fbjamm_c"
+buildCount1 = 1
+buildLoc1 = "F_BaseJammer_1"
+LuaFunction = "BuildJammer1"
+
+[Plan31]
+planType = "BaseBuildMinimums"
+planPriority = 700
+planCondition = "Lua"
+buildType1 = "fbspir_c"
+buildCount1 = 1
+buildLoc1 = "F_BaseSpire_3"
+LuaFunction = "BuildGunSpire3"
+consClass = "fvcons_g"
+
+[Plan32]
+planType = "BaseBuildMinimums"
+planPriority = 690
+planCondition = "Lua"
+buildType1 = "fblandingpad_xm"
+buildCount1 = 1
+buildLoc1 = "i_LandingPad"
+LuaFunction = "BuildLandingPad"
+
+[Plan33]
+planType = "BaseBuildMinimums"
+planPriority = 680
+planCondition = "Lua"
+buildType1 = "fbjamm_c"
+buildCount1 = 1
+buildLoc1 = "F_BaseJammer_2"
+LuaFunction = "BuildJammer2"
+
+[Plan34]
+planType = "BaseBuildMinimums"
+planPriority = 670
+planCondition = "Lua"
+buildType1 = "fbrspir_gh"
+buildCount1 = 1
+buildLoc1 = "F_Base_AntiAir_1"
+LuaFunction = "BuildBaseAntiAir1"
+consClass = "fvcons_g"
+
+[Plan35]
+planType = "Attacker"
+planPriority = 660
+planCondition = "Lua"
+targetType1 = "Defender"
+targetType2 = "AntiAir"
+targetType3 = "VIRTUAL_CLASS_POWERPLANT"
+targetType4 = "VIRTUAL_CLASS_FACTORY"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvwalk_c"
+attackType2 = "fvwalk_c"
+attackType3 = "fvwalk_c"
+LuaFunction = "Attack6Condition"
+maxAttacks = 5
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan36]
+planType = "BaseBuildMinimums"
+planPriority = 650
+planCondition = "Lua"
+buildType1 = "fbrspir_gh"
+buildCount1 = 1
+buildLoc1 = "F_Base_AntiAir_2"
+LuaFunction = "BuildBaseAntiAir2"
+consClass = "fvcons_g"
+
+[Plan37]
+planType = "Attacker"
+planPriority = 640
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "Defender"
+targetType3 = "AntiAir"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_FACTORY"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvsav_c"
+LuaFunction = "FuryAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan38]
+planType = "BaseBuildMinimums"
+planPriority = 630
+planCondition = "Lua"
+buildType1 = "fbrspir_gh"
+buildCount1 = 1
+buildLoc1 = "F_Base_AntiAir_3"
+LuaFunction = "BuildBaseAntiAir3"
+consClass = "fvcons_g"
+
+[Plan39]
+planType = "BaseBuildMinimums"
+planPriority = 620
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Base_AssaultSpire_1"
+LuaFunction = "BuildBaseAssaultSpire1"
+consClass = "fvcons_g"
+
+[Plan40]
+planType = "BaseBuildMinimums"
+planPriority = 610
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Base_AssaultSpire_2"
+LuaFunction = "BuildBaseAssaultSpire2"
+consClass = "fvcons_g"
+
+[Plan41]
+planType = "BaseBuildMinimums"
+planPriority = 600
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Base_AssaultSpire_3"
+LuaFunction = "BuildBaseAssaultSpire3"
+consClass = "fvcons_g"
+
+[Plan42]
+planType = "BaseBuildMinimums"
+planPriority = 590
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_AssaultSpire_1"
+LuaFunction = "BuildFieldAssaultSpire1"
+consClass = "fvcons_g"
+
+[Plan43]
+planType = "BaseBuildMinimums"
+planPriority = 580
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_AssaultSpire_2"
+LuaFunction = "BuildFieldAssaultSpire2"
+consClass = "fvcons_g"
+
+[Plan44]
+planType = "BaseBuildMinimums"
+planPriority = 570
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_AssaultSpire_3"
+LuaFunction = "BuildFieldAssaultSpire3"
+consClass = "fvcons_g"
+
+[Plan45]
+planType = "BaseBuildMinimums"
+planPriority = 560
+planCondition = "Lua"
+buildType1 = "fbaspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_AssaultSpire_4"
+LuaFunction = "BuildFieldAssaultSpire4"
+consClass = "fvcons_g"
+
+[Plan46]
+planType = "Attacker"
+planPriority = 550
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "Defender"
+targetType3 = "AntiAir"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_FACTORY"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvatank_c"
+attackType2 = "fvatank_c"
+attackType3 = "fvgship_c"
+attackType4 = "fvgship_c"
+LuaFunction = "LateAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan47]
+planType = "Attacker"
+planPriority = 540
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "Defender"
+targetType3 = "AntiAir"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_FACTORY"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvsav_c"
+LuaFunction = "FurySecondAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan48]
+planType = "BaseBuildMinimums"
+planPriority = 530
+planCondition = "Lua"
+buildType1 = "fbartl_c_b"
+buildCount1 = 1
+buildLoc1 = "F_Base_Artillery_1"
+LuaFunction = "BuildBaseArtillery1"
+consClass = "fvcons_g"
+
+[Plan49]
+planType = "BaseBuildMinimums"
+planPriority = 520
+planCondition = "Lua"
+buildType1 = "fbartl_c_b"
+buildCount1 = 1
+buildLoc1 = "F_Base_Artillery_2"
+LuaFunction = "BuildBaseArtillery2"
+consClass = "fvcons_g"
+
+[Plan50]
+planType = "Attacker"
+planPriority = 510
+planCondition = "Lua"
+targetType1 = "DefendUnit"
+targetType2 = "Defender"
+targetType3 = "AntiAir"
+targetType4 = "VIRTUAL_CLASS_POWERPLANT"
+targetType5 = "VIRTUAL_CLASS_FACTORY"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvhtank_c"
+attackType2 = "fvhtank_c"
+attackType3 = "fvhtank_c"
+attackType4 = "fvsent_c"
+attackType5 = "fvsent_c"
+LuaFunction = "LateAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan51]
+planType = "BaseBuildMinimums"
+planPriority = 500
+planCondition = "Lua"
+buildType1 = "fbrspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_RocketTower_1"
+LuaFunction = "BuildFieldRocketTower1"
+consClass = "fvcons_g"
+
+[Plan52]
+planType = "BaseBuildMinimums"
+planPriority = 490
+planCondition = "Lua"
+buildType1 = "fbrspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_RocketTower_2"
+LuaFunction = "BuildFieldRocketTower2"
+consClass = "fvcons_g"
+
+[Plan53]
+planType = "BaseBuildMinimums"
+planPriority = 480
+planCondition = "Lua"
+buildType1 = "fbrspir_c"
+buildCount1 = 1
+buildLoc1 = "F_Field_RocketTower_3"
+LuaFunction = "BuildFieldRocketTower3"
+consClass = "fvcons_g"
+
+[Plan54]
+planType = "Attacker"
+planPriority = 470
+planCondition = "Lua"
+targetType1 = "Defender"
+targetType2 = "AntiAir"
+targetType3 = "VIRTUAL_CLASS_POWERPLANT"
+targetType4 = "VIRTUAL_CLASS_FACTORY"
+targetType5 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvwalk_c"
+attackType2 = "fvwalk_c"
+attackType3 = "fvburn_c"
+attackType4 = "fvburn_c"
+LuaFunction = "LateAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan55]
+planType = "Attacker"
+planPriority = 460
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+targetType3 = "VIRTUAL_CLASS_POWERPLANT"
+targetType4 = "VIRTUAL_CLASS_CONSTRUCTOR"
+targetType5 = "VIRTUAL_CLASS_FACTORY"
+targetType6 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvburn_c"
+attackType2 = "fvburn_c"
+LuaFunction = "LateAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan56]
+planType = "Attacker"
+planPriority = 470
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_POWERPLANT"
+targetType2 = "VIRTUAL_CLASS_FACTORY"
+targetType3 = "VIRTUAL_CLASS_RECYCLER"
+attackType1 = "fvartl_c"
+attackType2 = "fvartl_c"
+LuaFunction = "LateAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
 ContinueEvenIfFail = true

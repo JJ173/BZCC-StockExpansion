@@ -6,7 +6,7 @@ binarySave [1] =
 false
 msn_filename = dunesi.bzn
 seq_count [1] =
-958
+1056
 saveType [1] =
 0
 g_TerrainName = dunesi
@@ -23,27 +23,27 @@ true
 objAddr = 00000001
 transform [1] =
   right.x [1] =
--9.99437988e-01
+-9.99438226e-01
   right.y [1] =
--6.86797313e-04
+8.57305449e-10
   right.z [1] =
-3.33789140e-02
+3.33864056e-02
   up.x [1] =
--1.65297301e-04
+2.10154118e-04
   up.y [1] =
-9.99874353e-01
+9.99975920e-01
   up.z [1] =
-1.56234438e-02
+6.29104069e-03
   front.x [1] =
--3.33856642e-02
+-3.33855860e-02
   front.y [1] =
-1.56094041e-02
+6.29444374e-03
   front.z [1] =
--9.99313235e-01
+-9.99414206e-01
   posit.x [1] =
 -6.36590195e+01
   posit.y [1] =
-8.48726845e+00
+8.48411083e+00
   posit.z [1] =
 5.65523987e+02
 abandoned [1] =
@@ -61,38 +61,38 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-5.72595117e+03
+5.72449658e+03
  mass_inv [1] =
-1.74643472e-04
+1.74687855e-04
  v_mag [1] =
-1.27576268e-03
+8.51591449e-06
  v_mag_inv [1] =
-7.83844849e+02
+1.17427203e+05
  I [1] =
-3.92654805e+04
+3.92424258e+04
  k_i [1] =
-2.54676615e-05
+2.54826246e-05
  v [1] =
   x [1] =
-2.13361901e-07
+-1.78963688e-09
   y [1] =
--1.27569819e-03
+-8.51548339e-06
   z [1] =
--1.28360771e-05
+-8.56715374e-08
  omega [1] =
   x [1] =
--1.41086457e-02
+6.04698458e-10
   y [1] =
--4.57695359e-03
+0.00000000e+00
   z [1] =
--2.43783440e-03
+-2.91433570e-16
  Accel [1] =
   x [1] =
-1.45384456e-06
+0.00000000e+00
   y [1] =
--9.86171141e-03
+3.28626015e-14
   z [1] =
--1.31500317e-04
+0.00000000e+00
 name = Scout
 saveFlags [1] =
 108
@@ -318,7 +318,7 @@ false
 objAddr = 00000004
 transform [1] =
   right.x [1] =
--9.42896068e-01
+-9.42896187e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -334,7 +334,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.42891955e-01
+-9.42892075e-01
   posit.x [1] =
 -3.05390015e+02
   posit.y [1] =
@@ -405,7 +405,7 @@ independence [1] =
 [GameObject]
 objClass = mopalm02
 seqno [1] =
-800016
+800015
 team [1] =
 0
 isUser [1] =
@@ -413,11 +413,11 @@ false
 objAddr = 00000005
 transform [1] =
   right.x [1] =
--9.66490149e-01
+9.99995708e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.56686598e-01
+0.00000000e+00
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -425,11 +425,106 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.56685495e-01
+0.00000000e+00
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--9.66485918e-01
+9.99991357e-01
+  posit.x [1] =
+-4.21183990e+02
+  posit.y [1] =
+4.89439011e+00
+  posit.z [1] =
+-6.03556030e+02
+saveClass = 
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+3.80354100e+06
+ mass_inv [1] =
+2.62912891e-07
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+1.29895526e+09
+ k_i [1] =
+7.69849462e-10
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Tree
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+3
+groupNumber [1] =
+0
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+false
+independence [1] =
+1
+[GameObject]
+objClass = mopalm02
+seqno [1] =
+800016
+team [1] =
+0
+isUser [1] =
+false
+objAddr = 00000006
+transform [1] =
+  right.x [1] =
+-9.66490269e-01
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+2.56686717e-01
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+9.99995649e-01
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+-2.56685615e-01
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+-9.66486037e-01
   posit.x [1] =
 -3.05018005e+02
   posit.y [1] =
@@ -505,7 +600,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000006
+objAddr = 00000007
 transform [1] =
   right.x [1] =
 7.84398079e-01
@@ -600,7 +695,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000007
+objAddr = 00000008
 transform [1] =
   right.x [1] =
 6.73054874e-01
@@ -695,14 +790,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000008
+objAddr = 00000009
 transform [1] =
   right.x [1] =
 9.96027887e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-8.89939591e-02
+8.89939666e-02
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -710,7 +805,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--8.89935717e-02
+-8.89935791e-02
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -790,14 +885,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000009
+objAddr = 0000000A
 transform [1] =
   right.x [1] =
 -9.78685558e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.05343246e-01
+2.05343217e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -805,7 +900,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.05342352e-01
+-2.05342323e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -885,7 +980,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000A
+objAddr = 0000000B
 transform [1] =
   right.x [1] =
 6.12749994e-01
@@ -980,7 +1075,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000B
+objAddr = 0000000C
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -1075,7 +1170,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000C
+objAddr = 0000000D
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -1170,7 +1265,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000D
+objAddr = 0000000E
 transform [1] =
   right.x [1] =
 9.99995768e-01
@@ -1265,14 +1360,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000E
+objAddr = 0000000F
 transform [1] =
   right.x [1] =
 9.99995708e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-1.45462051e-04
+1.45462080e-04
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -1280,7 +1375,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.45461425e-04
+-1.45461454e-04
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -1360,14 +1455,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000000F
+objAddr = 00000010
 transform [1] =
   right.x [1] =
 9.99985635e-01
   right.y [1] =
 4.50202171e-03
   right.z [1] =
-8.05185482e-05
+8.05185773e-05
   up.x [1] =
 -4.49820794e-03
   up.y [1] =
@@ -1375,7 +1470,7 @@ transform [1] =
   up.z [1] =
 -2.69899629e-02
   front.x [1] =
--2.01997464e-04
+-2.01997493e-04
   front.y [1] =
 2.69892141e-02
   front.z [1] =
@@ -1455,14 +1550,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000010
+objAddr = 00000011
 transform [1] =
   right.x [1] =
 9.99897778e-01
   right.y [1] =
 -1.39985085e-02
   right.z [1] =
--3.54319489e-08
+-3.54328584e-08
   up.x [1] =
 1.39985047e-02
   up.y [1] =
@@ -1470,7 +1565,7 @@ transform [1] =
   up.z [1] =
 -4.99912538e-04
   front.x [1] =
-7.03345813e-06
+7.03345904e-06
   front.y [1] =
 4.99860907e-04
   front.z [1] =
@@ -1550,7 +1645,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000011
+objAddr = 00000012
 transform [1] =
   right.x [1] =
 9.99904513e-01
@@ -1645,7 +1740,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000012
+objAddr = 00000013
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -1740,14 +1835,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000013
+objAddr = 00000014
 transform [1] =
   right.x [1] =
 -4.55369681e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-8.90297711e-01
+8.90297592e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -1755,7 +1850,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--8.90293837e-01
+-8.90293717e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -1835,10 +1930,10 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000014
+objAddr = 00000015
 transform [1] =
   right.x [1] =
--5.95361650e-01
+-5.95361829e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -1854,7 +1949,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--5.95359087e-01
+-5.95359266e-01
   posit.x [1] =
 1.14042999e+02
   posit.y [1] =
@@ -1930,10 +2025,10 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000015
+objAddr = 00000016
 transform [1] =
   right.x [1] =
-1.62219316e-01
+1.62219346e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -1949,7 +2044,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-1.62218615e-01
+1.62218645e-01
   posit.x [1] =
 2.23651993e+02
   posit.y [1] =
@@ -2025,14 +2120,14 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000016
+objAddr = 00000017
 transform [1] =
   right.x [1] =
 9.91722286e-01
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-1.28367767e-01
+1.28367782e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -2040,7 +2135,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.28367215e-01
+-1.28367230e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -2120,10 +2215,10 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000017
+objAddr = 00000018
 transform [1] =
   right.x [1] =
--2.92624682e-01
+-2.92624623e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -2139,7 +2234,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--2.92623401e-01
+-2.92623341e-01
   posit.x [1] =
 1.95363998e+01
   posit.y [1] =
@@ -2215,10 +2310,10 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000018
+objAddr = 00000019
 transform [1] =
   right.x [1] =
-8.95197451e-01
+8.95197511e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -2234,7 +2329,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-8.95193577e-01
+8.95193636e-01
   posit.x [1] =
 -1.42702999e+01
   posit.y [1] =
@@ -2310,10 +2405,10 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000019
+objAddr = 0000001A
 transform [1] =
   right.x [1] =
--2.11761191e-01
+-2.11761162e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -2329,7 +2424,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--2.11760268e-01
+-2.11760238e-01
   posit.x [1] =
 -3.06009007e+00
   posit.y [1] =
@@ -2405,7 +2500,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001A
+objAddr = 0000001B
 transform [1] =
   right.x [1] =
 9.99995768e-01
@@ -2500,7 +2595,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001B
+objAddr = 0000001C
 transform [1] =
   right.x [1] =
 9.99995768e-01
@@ -2595,7 +2690,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001C
+objAddr = 0000001D
 transform [1] =
   right.x [1] =
 9.99995768e-01
@@ -2690,7 +2785,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001D
+objAddr = 0000001E
 transform [1] =
   right.x [1] =
 -9.53716218e-01
@@ -2785,7 +2880,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001E
+objAddr = 0000001F
 transform [1] =
   right.x [1] =
 9.06532526e-01
@@ -2880,7 +2975,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000001F
+objAddr = 00000020
 transform [1] =
   right.x [1] =
 9.99644816e-01
@@ -2975,7 +3070,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000020
+objAddr = 00000021
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -3070,7 +3165,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000021
+objAddr = 00000022
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -3141,7 +3236,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -3165,7 +3260,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000022
+objAddr = 00000023
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -3260,7 +3355,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000023
+objAddr = 00000024
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -3331,7 +3426,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -3355,7 +3450,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000024
+objAddr = 00000025
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3426,7 +3521,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -3450,7 +3545,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000025
+objAddr = 00000026
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3521,7 +3616,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -3545,7 +3640,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000026
+objAddr = 00000027
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3639,7 +3734,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000027
+objAddr = 00000028
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3733,7 +3828,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000028
+objAddr = 00000029
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3827,7 +3922,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000029
+objAddr = 0000002A
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -3921,7 +4016,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002A
+objAddr = 0000002B
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4015,7 +4110,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002B
+objAddr = 0000002C
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4109,7 +4204,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002C
+objAddr = 0000002D
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4203,7 +4298,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002D
+objAddr = 0000002E
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4297,7 +4392,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002E
+objAddr = 0000002F
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4391,7 +4486,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000002F
+objAddr = 00000030
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4485,7 +4580,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000030
+objAddr = 00000031
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4579,7 +4674,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000031
+objAddr = 00000032
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4673,7 +4768,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000032
+objAddr = 00000033
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4767,7 +4862,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000033
+objAddr = 00000034
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4861,7 +4956,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000034
+objAddr = 00000035
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -4955,7 +5050,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000035
+objAddr = 00000036
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5049,7 +5144,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000036
+objAddr = 00000037
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5143,7 +5238,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000037
+objAddr = 00000038
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5237,7 +5332,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000038
+objAddr = 00000039
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5331,7 +5426,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000039
+objAddr = 0000003A
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5425,7 +5520,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003A
+objAddr = 0000003B
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5519,7 +5614,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003B
+objAddr = 0000003C
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5613,7 +5708,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003C
+objAddr = 0000003D
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5707,7 +5802,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003D
+objAddr = 0000003E
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5801,7 +5896,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003E
+objAddr = 0000003F
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5895,7 +5990,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000003F
+objAddr = 00000040
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -5989,7 +6084,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000040
+objAddr = 00000041
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -6083,7 +6178,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000041
+objAddr = 00000042
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -6177,7 +6272,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000042
+objAddr = 00000043
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -6271,7 +6366,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000043
+objAddr = 00000044
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -6365,7 +6460,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000044
+objAddr = 00000045
 transform [1] =
   right.x [1] =
 9.99995708e-01
@@ -6400,7 +6495,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000045
+objAddr = 00000046
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6495,7 +6590,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000046
+objAddr = 00000047
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6590,7 +6685,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000047
+objAddr = 00000048
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6661,7 +6756,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -6685,7 +6780,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000048
+objAddr = 00000049
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6780,7 +6875,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 00000049
+objAddr = 0000004A
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6851,7 +6946,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-2
+3
 groupNumber [1] =
 0
 undefaicmd =
@@ -6875,7 +6970,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000004A
+objAddr = 0000004B
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -6970,7 +7065,7 @@ team [1] =
 0
 isUser [1] =
 false
-objAddr = 0000004B
+objAddr = 0000004C
 transform [1] =
   right.x [1] =
 1.00000000e+00
@@ -7066,7 +7161,7 @@ team [1] =
 label = intro_drop_2
 isUser [1] =
 false
-objAddr = 0000004C
+objAddr = 0000004D
 transform [1] =
   right.x [1] =
 0.00000000e+00
@@ -7097,17 +7192,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-1.68608040e+07
+1.68608020e+07
  mass_inv [1] =
-5.93091514e-08
+5.93091585e-08
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-1.63538534e+10
+1.63538514e+10
  k_i [1] =
-6.11476703e-11
+6.11476772e-11
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7162,7 +7257,7 @@ team [1] =
 label = intro_drop_1
 isUser [1] =
 false
-objAddr = 0000004D
+objAddr = 0000004E
 transform [1] =
   right.x [1] =
 -9.99995768e-01
@@ -7193,17 +7288,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-1.68608040e+07
+1.68608020e+07
  mass_inv [1] =
-5.93091514e-08
+5.93091585e-08
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-1.63538534e+10
+1.63538514e+10
  k_i [1] =
-6.11476703e-11
+6.11476772e-11
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7264,7 +7359,7 @@ team [1] =
 label = turret1
 isUser [1] =
 false
-objAddr = 0000004E
+objAddr = 0000004F
 transform [1] =
   right.x [1] =
 -1.00000000e+00
@@ -7310,17 +7405,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-7.20821289e+03
+7.20821143e+03
  mass_inv [1] =
-1.38730640e-04
+1.38730669e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.39524492e+04
+5.39524375e+04
  k_i [1] =
-1.85348399e-05
+1.85348435e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7375,7 +7470,7 @@ team [1] =
 label = turret2
 isUser [1] =
 false
-objAddr = 0000004F
+objAddr = 00000050
 transform [1] =
   right.x [1] =
 -1.00000000e+00
@@ -7421,17 +7516,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-7.20821289e+03
+7.20821143e+03
  mass_inv [1] =
-1.38730640e-04
+1.38730669e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.39524492e+04
+5.39524375e+04
  k_i [1] =
-1.85348399e-05
+1.85348435e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7477,102 +7572,6 @@ aiProcess [1] =
 true
 independence [1] =
 1
-[GameObject]
-objClass = mopalm02
-seqno [1] =
-15
-team [1] =
-0
-label = unnamed_mopalm02
-isUser [1] =
-false
-objAddr = 00000050
-transform [1] =
-  right.x [1] =
-9.99995708e-01
-  right.y [1] =
-0.00000000e+00
-  right.z [1] =
-0.00000000e+00
-  up.x [1] =
-0.00000000e+00
-  up.y [1] =
-9.99995649e-01
-  up.z [1] =
-0.00000000e+00
-  front.x [1] =
-0.00000000e+00
-  front.y [1] =
-0.00000000e+00
-  front.z [1] =
-9.99991357e-01
-  posit.x [1] =
--4.21183990e+02
-  posit.y [1] =
-4.89439011e+00
-  posit.z [1] =
--6.03556030e+02
-saveClass = 
-illumination [1] =
-1.00000000e+00
-euler =
- mass [1] =
-3.80354100e+06
- mass_inv [1] =
-2.62912891e-07
- v_mag [1] =
-0.00000000e+00
- v_mag_inv [1] =
-1.00000002e+30
- I [1] =
-1.29895526e+09
- k_i [1] =
-7.69849462e-10
- v [1] =
-  x [1] =
-0.00000000e+00
-  y [1] =
-0.00000000e+00
-  z [1] =
-0.00000000e+00
- omega [1] =
-  x [1] =
-0.00000000e+00
-  y [1] =
-0.00000000e+00
-  z [1] =
-0.00000000e+00
- Accel [1] =
-  x [1] =
-0.00000000e+00
-  y [1] =
-0.00000000e+00
-  z [1] =
-0.00000000e+00
-name = Tree
-saveFlags [1] =
-108
-isVisible [1] =
-65535
-EffectsMask [1] =
-65535
-isSeen [1] =
-2
-groupNumber [1] =
-0
-undefaicmd =
-priority [1] =
-0
-what = 00000000
-who [1] =
-0
-where = 00000000
-param [1] =
-0
-aiProcess [1] =
-false
-independence [1] =
-1
 groupTargets = 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 dllName = luamission.dll
 [AiMission]
@@ -7581,7 +7580,7 @@ size [1] =
 0
 [AiPaths]
 count [1] =
-89
+90
 name = AiPath
 sObject = 00000051
 size [1] =
@@ -8922,6 +8921,19 @@ points [1] =
 -1.77268723e+02
   z [1] =
 -8.15294312e+02
+pathType = 00000000
+name = AiPath
+sObject = 000000AA
+size [1] =
+21
+label = F_Field_RocketTower_3
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.32149658e+02
+  z [1] =
+-3.99756287e+02
 pathType = 00000000
 hasEntered [1] =
 false

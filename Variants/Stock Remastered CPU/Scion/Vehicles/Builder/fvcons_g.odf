@@ -14,7 +14,7 @@ CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the uni
 [ConstructionRigClass]
 buildItem1 = "fbspir_c"
 buildItem2 = "fbaspir_c"
-buildItem5 = ""
+buildItem5 = "fbjamm_c"
 buildItem6 = ""
 buildItem7 = ""
 buildItem8 = ""

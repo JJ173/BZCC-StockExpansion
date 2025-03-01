@@ -24,9 +24,6 @@ AIController =
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     AssaultUnits = {},
 
-    -- Store dispatched units here to perform idle checks. If they are idle, we can redistribute them.
-    IdleQueue = {},
-
     -- Store units to dispatch here.
     TurretsToDispatch = {},
     PatrolsToDispatch = {},
@@ -53,8 +50,6 @@ AIController =
 
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0,
-
-    IdleQueueCooldown = 0,
     DispatchCooldown = 0,
 };
 
@@ -80,7 +75,6 @@ function AIController:New(Team, Race, Pools, Name)
     o.HasTechCenter = false;
 
     o.AssaultUnits = {};
-    o.IdleQueue = {};
 
     o.TurretsToDispatch = {};
     o.PatrolsToDispatch = {};
@@ -102,7 +96,6 @@ function AIController:New(Team, Race, Pools, Name)
     o.AntiAirCount = 0;
     o.BasePatrolCount = 0;
     o.TauntCooldown = 0;
-    o.IdleQueueCooldown = 0;
     o.DispatchCooldown = 0;
 
     setmetatable(o, { __index = self });
@@ -139,19 +132,10 @@ end
 function AIController:Run(missionTurnCount)
     if (self.TauntCooldown < missionTurnCount) then
         DoTaunt(TAUNTS_Random);
-
         self.TauntCooldown = missionTurnCount + SecondsToTurns(90);
     end
 
     if (self.RecyclerDeployed) then
-        if (self.IdleQueueCooldown < missionTurnCount) then
-            if (#self.IdleQueue > 0) then
-                self:ProcessIdleUnits(missionTurnCount);
-            end
-
-            self.IdleQueueCooldown = missionTurnCount + SecondsToTurns(2);
-        end
-
         if (self.DispatchCooldown < missionTurnCount) then
             if (#self.TurretsToDispatch > 0) then
                 self:DispatchTurrets(missionTurnCount);
@@ -251,7 +235,6 @@ function AIController:SetPlan(type)
     local AIPFile = AIPString .. self.Race .. type;
 
     SetAIP(AIPFile .. '.aip', self.Team);
-
     DoTaunt(TAUNTS_Random);
 end
 
@@ -293,8 +276,6 @@ function AIController:DispatchPatrols(missionTurnCount)
             break;
         end
 
-        self.IdleQueue[#self.IdleQueue + 1] = dispatch;
-
         local path = '';
 
         if (dispatch.Base == "BasePatrol") then
@@ -324,7 +305,11 @@ function AIController:DispatchAntiAir(missionTurnCount)
 
         local path = "anti-air_" .. self.AntiAirCount;
 
-        Patrol(dispatch.Handle, path);
+        if (self.Race == 'i') then
+            Patrol(dispatch.Handle, path);
+        else
+            Goto(dispatch.Handle, path);
+        end
 
         RemoveDispatchFromTable(self.AntiAirToDispatch, dispatch.Handle);
     end
@@ -346,8 +331,6 @@ function AIController:DispatchMinions(missionTurnCount)
         if (#self.AssaultUnits <= 0) then
             break;
         end
-
-        self.IdleQueue[#self.IdleQueue + 1] = dispatch;
 
         local assaultUnitToDefend = {};
         local assaultUnitsToService = {};
@@ -377,30 +360,6 @@ function AIController:DispatchMinions(missionTurnCount)
 
             RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
         end
-    end
-end
-
-function AIController:ProcessIdleUnits(missionTurnCount)
-    for i = 1, #self.IdleQueue do
-        local idleUnit = self.IdleQueue[i];
-
-        if (idleUnit == nil) then
-            print("WARNING, IDLE DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
-            break;
-        end
-
-        if (IsDispatchUnitAvailable(idleUnit, missionTurnCount) == false) then
-            break;
-        end
-
-        if (idleUnit.Base == "Minion" or idleUnit.Base == "AssaultService") then
-            ReturnIdleUnitToBase(idleUnit);
-            self.MinionsToDispatch[#self.MinionsToDispatch + 1] = idleUnit;
-        elseif (idleUnit.Base == "Patrol") then
-            self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
-        end
-
-        RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
     end
 end
 
@@ -477,7 +436,6 @@ end
 function ReturnIdleUnitToBase(idleUnit)
     if (GetDistance(idleUnit.Handle, "RecyclerEnemy") > 400) then
         local returnPos = GetPositionNear("RecyclerEnemy", 60, 80);
-
         Goto(idleUnit.Handle, returnPos);
     end
 end

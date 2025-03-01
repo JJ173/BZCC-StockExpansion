@@ -1,3 +1,10 @@
+Spawn Paths:
+- RecyclerEnemy
+- TurretEnemy1
+- TurretEnemy2
+
+- CarrierEnemy
+
 ISDF Base Paths:
 - i_Power_1
 - i_Power_2

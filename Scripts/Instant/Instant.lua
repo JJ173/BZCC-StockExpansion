@@ -129,7 +129,7 @@ local IntroFunctions = {};
 
 -- Debug only.
 local debug = true;
-local debug_base = false;
+local debug_base = true;
 local debug_base_built = false;
 local debug_stop_script = true;
 
@@ -163,62 +163,62 @@ local PreloadAudios = {
 local ISDFBaseLayout =
 {
     { "ibrecy_c",       "RecyclerEnemy" },
-    { "ibfact_c",       "i_Factory" },
+    -- { "ibfact_c",       "i_Factory" },
 
-    { "ibpgen_c3",      "i_Power_1" },
-    { "ibpgen_c3",      "i_Power_2" },
-    { "ibpgen_c3",      "i_Power_3" },
+    -- { "ibpgen_c3",      "i_Power_1" },
+    -- { "ibpgen_c3",      "i_Power_2" },
+    -- { "ibpgen_c3",      "i_Power_3" },
 
-    { "ibcbun_c",       "i_Bunker" },
-    { "ibcbun_c",       "i_Base_Bunker_1" },
-    { "ibcbun_c",       "i_Base_Bunker_2" },
-    { "ibcbun_c",       "i_Base_Bunker_3" },
+    -- { "ibcbun_c",       "i_Bunker" },
+    -- { "ibcbun_c",       "i_Base_Bunker_1" },
+    -- { "ibcbun_c",       "i_Base_Bunker_2" },
+    -- { "ibcbun_c",       "i_Base_Bunker_3" },
 
-    { "ibsbay_c",       "i_ServiceBay" },
-    { "ibarmo_c",       "i_Armory" },
-    { "ibtcen_c",       "i_Tech" },
-    { "ibtrain_c",      "i_Training" },
-    { "ibbomb_c",       "i_BomberBay" },
-    { "iblandingpad_c", "i_LandingPad" },
+    -- { "ibsbay_c",       "i_ServiceBay" },
+    -- { "ibarmo_c",       "i_Armory" },
+    -- { "ibtcen_c",       "i_Tech" },
+    -- { "ibtrain_c",      "i_Training" },
+    -- { "ibbomb_c",       "i_BomberBay" },
+    -- { "iblandingpad_c", "i_LandingPad" },
 
-    { "ibplate_c",      "i_Plate_1" },
-    { "ibplate_c",      "i_Plate_2" },
-    { "ibplate_c",      "i_Plate_3" },
-    { "ibplate_c",      "i_Plate_4" },
-    { "ibplate_c",      "i_Plate_5" },
-    { "ibplate_c",      "i_Plate_6" },
-    { "ibplate_c",      "i_Plate_7" },
-    { "ibplate_c",      "i_Plate_8" },
+    -- { "ibplate_c",      "i_Plate_1" },
+    -- { "ibplate_c",      "i_Plate_2" },
+    -- { "ibplate_c",      "i_Plate_3" },
+    -- { "ibplate_c",      "i_Plate_4" },
+    -- { "ibplate_c",      "i_Plate_5" },
+    -- { "ibplate_c",      "i_Plate_6" },
+    -- { "ibplate_c",      "i_Plate_7" },
+    -- { "ibplate_c",      "i_Plate_8" },
 
-    { "ibgtow_c",       "i_GunTower_1" },
-    { "ibgtow_c",       "i_GunTower_2" },
-    { "ibgtow_c",       "i_GunTower_3" },
-    { "ibgtow_c",       "i_GunTower_4" },
+    -- { "ibgtow_c",       "i_GunTower_1" },
+    -- { "ibgtow_c",       "i_GunTower_2" },
+    -- { "ibgtow_c",       "i_GunTower_3" },
+    -- { "ibgtow_c",       "i_GunTower_4" },
 
-    { "ibhrtow_b_c",    "i_Base_AntiAir_1" },
-    { "ibhrtow_b_c",    "i_Base_AntiAir_2" },
+    -- { "ibhrtow_b_c",    "i_Base_AntiAir_1" },
+    -- { "ibhrtow_b_c",    "i_Base_AntiAir_2" },
 
-    { "ibatow_c_a2",    "i_Base_AssaultTower_1" },
-    { "ibatow_c_a2",    "i_Base_AssaultTower_2" },
+    -- { "ibatow_c_a2",    "i_Base_AssaultTower_1" },
+    -- { "ibatow_c_a2",    "i_Base_AssaultTower_2" },
 
-    { "ibartl_c_b",     "i_Base_Artillery_1" },
-    { "ibartl_c_b",     "i_Base_Artillery_2" },
+    -- { "ibartl_c_b",     "i_Base_Artillery_1" },
+    -- { "ibartl_c_b",     "i_Base_Artillery_2" },
 
-    { "ibcbun_c",       "i_Field_Bunker_1" },
-    { "ibcbun_c",       "i_Field_Bunker_2" },
+    -- { "ibcbun_c",       "i_Field_Bunker_1" },
+    -- { "ibcbun_c",       "i_Field_Bunker_2" },
 
-    { "ibgtow_c",       "i_Field_GunTower_1" },
-    { "ibgtow_c",       "i_Field_GunTower_2" },
+    -- { "ibgtow_c",       "i_Field_GunTower_1" },
+    -- { "ibgtow_c",       "i_Field_GunTower_2" },
 
-    { "ibatow_c_b2",    "i_Field_AssualtTower_1_A" },
-    { "ibatow_c_b2",    "i_Field_AssualtTower_1_B" },
-    { "ibatow_c_b2",    "i_Field_AssualtTower_2_A" },
-    { "ibatow_c_b2",    "i_Field_AssualtTower_2_B" },
+    -- { "ibatow_c_b2",    "i_Field_AssualtTower_1_A" },
+    -- { "ibatow_c_b2",    "i_Field_AssualtTower_1_B" },
+    -- { "ibatow_c_b2",    "i_Field_AssualtTower_2_A" },
+    -- { "ibatow_c_b2",    "i_Field_AssualtTower_2_B" },
 
-    { "ibrtow_b_c",     "i_Field_RocketTower_1" },
-    { "ibrtow_b_c",     "i_Field_RocketTower_2" },
+    -- { "ibrtow_b_c",     "i_Field_RocketTower_1" },
+    -- { "ibrtow_b_c",     "i_Field_RocketTower_2" },
 
-    { "ibsbay_c_a2",    "i_Assault_Depot" }
+    -- { "ibsbay_c_a2",    "i_Assault_Depot" }
 }
 
 local ScionBaseLayout =

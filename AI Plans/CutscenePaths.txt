@@ -12,8 +12,8 @@ ISDF Intro Cutscene Paths:
 HANDLES:
 - intro_drop_1
 - intro_drop_2
-- turret_1
-- turret_2
+- turret1
+- turret2
 
 Player should and both intro turrets should be placed in the first Condor, 
 and the Recycler spawn point should be placed in front of the second.

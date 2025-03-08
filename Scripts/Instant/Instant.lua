@@ -162,7 +162,7 @@ local PreloadAudios = {
 -- Debugging. This will control the enemy base for testing layouts.
 local ISDFBaseLayout =
 {
-    { "ibrecy_c",       "RecyclerEnemy" },
+    { "ivrecy_c",       "RecyclerEnemy" },
     { "ibfact_c",       "i_Factory" },
 
     { "ibpgen_c3",      "i_Power_1" },
@@ -223,7 +223,7 @@ local ISDFBaseLayout =
 
 local ScionBaseLayout =
 {
-    { "fbrecy_c",   "RecyclerEnemy" },
+    { "fvrecy_c",   "RecyclerEnemy" },
 
     { "fbforg_c",   "F_Forge" },
     { "fbover_c",   "F_Overseer" },
@@ -428,6 +428,9 @@ function Update()
                     BuildObject(baseBuilding[1], 0, baseBuilding[2]);
                 end
             end
+
+            -- To deploy the CPU Recycler so I can see where the base will face.
+            SetAIP('debug.aip', 0);
 
             -- So we don't spawn infinite bases.
             debug_base_built = true;

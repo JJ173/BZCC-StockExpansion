@@ -1,0 +1,32 @@
+ISDF Intro Cutscene Paths:
+- turret_1_go
+- turret_2_go
+
+- Recycler
+- recycler_go
+
+- intro_attacker_1
+- intro_attacker_2
+- intro_attacker_3
+
+HANDLES:
+- intro_drop_1
+- intro_drop_2
+- turret_1
+- turret_2
+
+Player should and both intro turrets should be placed in the first Condor, 
+and the Recycler spawn point should be placed in front of the second.
+
+Intro Breakdown:
+- Player and 2 Turrets are in Condor 1
+- Recycler is in Condor 2
+
+- Both Condors land. Player has to wait roughly ten seconds for the pilot to open the doors.
+- Recycler is spawned in Condor 2, and moves out to the appropriate place.
+- Condor 1 doors open. Player and turrets need to dismount the ship.
+
+- Enemies are spawned as an initial attack sequence to simulate a "Hot drop". 
+- 3 Scouts are spawned at: intro_attack_1, intro_attack_2, intro_attack_3.
+
+Condors leave.

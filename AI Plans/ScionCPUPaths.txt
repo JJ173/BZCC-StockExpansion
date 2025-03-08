@@ -41,7 +41,6 @@ Scion Base Paths:
 Field Paths:
 - Patrol1
 - Patrol2
-- Patrol3
 
 - BasePatrol1
 - BasePatrol2

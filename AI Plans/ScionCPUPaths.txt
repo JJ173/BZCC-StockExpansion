@@ -44,3 +44,6 @@ Field Paths:
 
 - BasePatrol1
 - BasePatrol2
+
+- anti-air_1
+- anti-air_2

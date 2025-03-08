@@ -129,7 +129,7 @@ local IntroFunctions = {};
 
 -- Debug only.
 local debug = true;
-local debug_base = true;
+local debug_base = false;
 local debug_base_built = false;
 local debug_stop_script = true;
 

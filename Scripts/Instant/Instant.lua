@@ -131,7 +131,7 @@ local IntroFunctions = {};
 local debug = true;
 local debug_base = false;
 local debug_base_built = false;
-local debug_stop_script = true;
+local debug_stop_script = false;
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -218,7 +218,7 @@ local ISDFBaseLayout =
     { "ibrtow_b_c",     "i_Field_RocketTower_1" },
     { "ibrtow_b_c",     "i_Field_RocketTower_2" },
 
-    { "ibsbay_c_a2",    "i_Assault_Depot" }
+    --{ "ibsbay_c_a2",    "i_Assault_Depot" }
 }
 
 local ScionBaseLayout =

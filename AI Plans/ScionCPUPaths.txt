@@ -39,8 +39,8 @@ Scion Base Paths:
 - F_Field_RocketTower_3
 
 Field Paths:
-- Patrol1
-- Patrol2
+- patrol_1
+- patrol_2
 
 - BasePatrol1
 - BasePatrol2

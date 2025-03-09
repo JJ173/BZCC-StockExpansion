@@ -63,8 +63,8 @@ ISDF Base Paths:
 - i_Field_RocketTower_2
 
 Field Paths:
-- Patrol1
-- Patrol2
+- patrol_1
+- patrol_2
 
 - BasePatrol1
 - BasePatrol2

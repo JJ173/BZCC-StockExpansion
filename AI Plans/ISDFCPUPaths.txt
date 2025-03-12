@@ -46,8 +46,8 @@ ISDF Base Paths:
 - i_Base_Artillery_1
 
 - i_Base_Bunker_3
-- i_Base_Artillery_2
 - i_Base_AssaultTower_2
+- i_Base_Artillery_2
 
 // Group Bunkers and Gun Towers by Number.
 - i_Field_Bunker_1

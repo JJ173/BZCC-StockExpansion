@@ -1,0 +1,2 @@
+-- Required Instant.
+require("Instant");

@@ -660,19 +660,19 @@ LuaFunction = "BuildBomber"
 planType = "BaseBuildMinimums"
 planPriority = 420
 planCondition = "Lua"
-buildType1 = "ibgtow_c"
+buildType1 = "ibcbun_c"
 buildCount1 = 1
-buildLoc1 = "i_GunTower_3"
-LuaFunction = "BuildGunTower3"
+buildLoc1 = "i_Base_Bunker_2"
+LuaFunction = "BuildBaseBunker2"
 
 [Plan60]
 planType = "BaseBuildMinimums"
 planPriority = 410
 planCondition = "Lua"
-buildType1 = "ibgtow_c"
+buildType1 = "ibplate_c"
 buildCount1 = 1
-buildLoc1 = "i_GunTower_4"
-LuaFunction = "BuildGunTower4"
+buildLoc1 = "i_Plate_5"
+LuaFunction = "BuildPath5BasePlate"
 
 [Plan61]
 planType = "BaseBuildMinimums"
@@ -680,8 +680,8 @@ planPriority = 400
 planCondition = "Lua"
 buildType1 = "ibplate_c"
 buildCount1 = 1
-buildLoc1 = "i_Plate_5"
-LuaFunction = "BuildPath5BasePlate"
+buildLoc1 = "i_Plate_6"
+LuaFunction = "BuildPath6BasePlate"
 
 [Plan62]
 planType = "BaseBuildMinimums"
@@ -689,8 +689,8 @@ planPriority = 390
 planCondition = "Lua"
 buildType1 = "ibplate_c"
 buildCount1 = 1
-buildLoc1 = "i_Plate_6"
-LuaFunction = "BuildPath6BasePlate"
+buildLoc1 = "i_Plate_7"
+LuaFunction = "BuildPath7BasePlate"
 
 [Plan63]
 planType = "BaseBuildMinimums"
@@ -698,21 +698,12 @@ planPriority = 380
 planCondition = "Lua"
 buildType1 = "ibplate_c"
 buildCount1 = 1
-buildLoc1 = "i_Plate_7"
-LuaFunction = "BuildPath7BasePlate"
-
-[Plan64]
-planType = "BaseBuildMinimums"
-planPriority = 370
-planCondition = "Lua"
-buildType1 = "ibplate_c"
-buildCount1 = 1
 buildLoc1 = "i_Plate_8"
 LuaFunction = "BuildPath8BasePlate"
 
-[Plan65]
+[Plan64]
 planType = "Attacker"
-planPriority = 360
+planPriority = 370
 planCondition = "Lua"
 targetType1 = "assault"
 targetType2 = "AntiAir"
@@ -731,14 +722,23 @@ buildIfNoIdle = true
 LuaFunction = "HeavyAttack2Condition"
 ContinueEvenIfFail = true
 
+[Plan65]
+planType = "BaseBuildMinimums"
+planPriority = 360
+planCondition = "Lua"
+buildType1 = "ibgtow_c"
+buildCount1 = 1
+buildLoc1 = "i_GunTower_3"
+LuaFunction = "BuildGunTower3"
+
 [Plan66]
 planType = "BaseBuildMinimums"
 planPriority = 350
 planCondition = "Lua"
-buildType1 = "ibcbun_c"
+buildType1 = "ibgtow_c"
 buildCount1 = 1
-buildLoc1 = "i_Base_Bunker_2"
-LuaFunction = "BuildBaseBunker2"
+buildLoc1 = "i_GunTower_4"
+LuaFunction = "BuildGunTower4"
 
 [Plan67]
 planType = "BaseBuildMinimums"

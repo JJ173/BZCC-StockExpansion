@@ -130,33 +130,44 @@ function AIController:Setup(CPUTeamNumber)
 end
 
 function AIController:Run(missionTurnCount)
-    if (self.TauntCooldown < missionTurnCount) then
-        DoTaunt(TAUNTS_Random);
-        self.TauntCooldown = missionTurnCount + SecondsToTurns(90);
+    if not missionTurnCount then
+        print("ERROR: missionTurnCount is nil in AIController:Run")
+        return
     end
 
-    if (self.RecyclerDeployed) then
-        if (self.DispatchCooldown < missionTurnCount) then
-            if (#self.TurretsToDispatch > 0) then
-                self:DispatchTurrets(missionTurnCount);
-            end
-
-            if (#self.PatrolsToDispatch > 0) then
-                self:DispatchPatrols(missionTurnCount);
-            end
-
-            if (#self.AntiAirToDispatch > 0) then
-                self:DispatchAntiAir(missionTurnCount);
-            end
-
-            if (#self.MinionsToDispatch > 0) then
-                self:DispatchMinions(missionTurnCount);
-            end
-
-            self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5);
+    local success, err = pcall(function()
+        if (self.TauntCooldown < missionTurnCount) then
+            DoTaunt(TAUNTS_Random)
+            self.TauntCooldown = missionTurnCount + SecondsToTurns(90)
         end
 
-        self:CommanderBrain();
+        if (self.RecyclerDeployed) then
+            if (self.DispatchCooldown < missionTurnCount) then
+                if (#self.TurretsToDispatch > 0) then
+                    self:DispatchTurrets(missionTurnCount)
+                end
+
+                if (#self.PatrolsToDispatch > 0) then
+                    self:DispatchPatrols(missionTurnCount)
+                end
+
+                if (#self.AntiAirToDispatch > 0) then
+                    self:DispatchAntiAir(missionTurnCount)
+                end
+
+                if (#self.MinionsToDispatch > 0) then
+                    self:DispatchMinions(missionTurnCount)
+                end
+
+                self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5)
+            end
+
+            self:CommanderBrain()
+        end
+    end)
+
+    if not success then
+        print("ERROR in AIController:Run: " .. tostring(err))
     end
 end
 
@@ -364,11 +375,46 @@ function AIController:DispatchMinions(missionTurnCount)
 end
 
 function AIController:CarrierBrain()
+    if not self.Carrier then return end
 
+    -- if not self.Carrier then return end
+
+    -- -- Basic carrier behavior
+    -- if IsIdle(self.Carrier) then
+    --     -- If carrier is idle, have it patrol between resource points
+    --     local pool = self.Pools[GetRandomInt(1, #self.Pools)]
+    --     if pool then
+    --         Goto(self.Carrier, GetPositionNear(pool.Position, 30, 50))
+    --     end
+    -- end
 end
 
 function AIController:CommanderBrain()
+    if (not self.Commander or not self.AICommanderEnabled) then return end
 
+    -- Basic commander behavior
+    if (IsIdle(self.Commander)) then
+        -- Check for nearby threats
+        local nearestEnemy = GetNearestEnemy(self.Commander, true, false, 200);
+        if (nearestEnemy) then
+            -- If enemy is nearby, engage or retreat based on health
+            local health = GetHealth(self.Commander);
+            if (health < 0.3) then
+                -- Retreat if low health
+                local retreatPos = GetPositionNear("RecyclerEnemy", 40, 60);
+                Goto(self.Commander, retreatPos);
+            else
+                -- Engage if healthy
+                Attack(self.Commander, nearestEnemy);
+            end
+        else
+            -- Patrol if no immediate threats. Don't patrol into the enemy base.
+            local patrolPoint = self.Pools[GetRandomInt(1, #self.Pools - 1)];
+            if (patrolPoint) then
+                Goto(self.Commander, GetPositionNear(patrolPoint.Position, 30, 50));
+            end
+        end
+    end
 end
 
 function AIController:TurretShot(handle, missionTurnCount)
@@ -392,7 +438,30 @@ function AIController:ScavengerShot(handle)
 end
 
 function AIController:AssignWeapons(handle)
+    if (not handle) then return end
 
+    local objClass = GetClassLabel(handle);
+    if (not objClass) then return end
+
+    -- Assign appropriate weapons based on unit class
+    if (objClass == "CLASS_ASSAULTTANK") then
+        -- Assign primary weapon
+        if (self.Cannons[1]) then
+            SetWeapon(handle, 0, self.Cannons[1]);
+        end
+        -- Assign secondary weapon if available
+        if (self.Missiles[1]) then
+            SetWeapon(handle, 1, self.Missiles[1]);
+        end
+    elseif (objClass == "CLASS_WALKER") then
+        -- Assign walker-specific weapons
+        if (self.Guns[1]) then
+            SetWeapon(handle, 0, self.Guns[1]);
+        end
+        if (self.Specials[1]) then
+            SetWeapon(handle, 1, self.Specials[1]);
+        end
+    end
 end
 
 -- Local utilities.

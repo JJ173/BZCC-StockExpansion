@@ -218,7 +218,7 @@ local ISDFBaseLayout =
     -- { "ibrtow_b_c",     "i_Field_RocketTower_1" },
     -- { "ibrtow_b_c",     "i_Field_RocketTower_2" },
 
-    --{ "ibsbay_c_a2",    "i_Assault_Depot" }
+    -- { "ibsbay_c_a2",    "i_Assault_Depot" }
 }
 
 local ScionBaseLayout =

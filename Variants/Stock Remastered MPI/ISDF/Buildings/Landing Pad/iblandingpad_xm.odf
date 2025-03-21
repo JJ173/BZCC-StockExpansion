@@ -14,7 +14,7 @@ buildRequire = "F"
 [BuildingClass]
 tunnelCount = 1
 tunnel01X0 = 3
-tunnel01Z0 = 0
+tunnel01Z0 = 1
 tunnel01DX = 2
-tunnel01DZ = 8
+tunnel01DZ = 6
 tunnel01Edge = "twtw"

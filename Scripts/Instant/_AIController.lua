@@ -393,7 +393,7 @@ function AIController:CommanderBrain()
     if (not self.Commander or not self.AICommanderEnabled) then return end
 
     -- Basic commander behavior
-    if (IsIdle(self.Commander)) then
+    if (GetCurrentCommand(self.Commander) == CMD_NONE) then
         -- Check for nearby threats
         local nearestEnemy = GetNearestEnemy(self.Commander, true, false, 200);
         if (nearestEnemy) then

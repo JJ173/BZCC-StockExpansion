@@ -2,13 +2,13 @@ local _Skins = {};
 
 local skinData = {
     {
-        "Puss Puss",      -- User Steam Name
+        "GrizzlyOne95",      -- User Steam Name
         "ivtank",            -- Units to replace
         "ivtank_grizzlyone_" -- Skin to use.
     }
 }
 
-function ApplySkinToHandle(playerName, playerHandle)
+function ApplySkinToHandle(playerName, emptyCraftHandle, team)
     -- Do a loop to find which table has the correct Steam ID.
     for i = 1, #skinData do
         -- Check to see if the steam ID matches.
@@ -22,18 +22,22 @@ function ApplySkinToHandle(playerName, playerHandle)
             if (playerName == name) then
                 local unitODF = skinDataSubset[2];
                 local skin = skinDataSubset[3];
-                local ODF = GetCfg(playerHandle);
+                local ODF = GetCfg(emptyCraftHandle);
 
                 if (ODF:find(unitODF)) then
                     -- Check to see if this is the ST variant or not.
                     local lastCharacter = string.sub(unitODF, string.len(unitODF));
+                    local unit = nil;
 
                     -- Used for the ST variant as the values may be different between this and the normal units.
                     if (lastCharacter == "s") then
-                        ReplaceObject(playerHandle, skin .. "s");
+                        unit = ReplaceObject(emptyCraftHandle, skin .. "s");
                     else
-                        ReplaceObject(playerHandle, skin .. "x");
+                        unit = ReplaceObject(emptyCraftHandle, skin .. "x");
                     end
+
+                    SetAsUser(unit, team);
+                    AddPilotByHandle(unit);
                 end
             end
         end

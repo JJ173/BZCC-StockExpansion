@@ -124,7 +124,7 @@ function Condor:Run(missionTurnCount)
                     end
                 elseif (self.Type == "ScrapDropship") then
                     self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivscrap_c", self.Team, BuildDirectionalMatrix(pos));
-                elseif (self.Type == "Scavenger") then
+                elseif (self.Type == "ScavengerDropship") then
                     self.CondorUnits[#self.CondorUnits + 1] = BuildObject("ivscav_xm", self.Team, BuildDirectionalMatrix(pos));
                 end
 

@@ -129,9 +129,9 @@ local IntroFunctions = {};
 
 -- Debug only.
 local debug = true;
-local debug_base = true;
+local debug_base = false;
 local debug_base_built = false;
-local debug_stop_script = true;
+local debug_stop_script = false;
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -644,18 +644,15 @@ function Update()
             CarrierCleaner();
         end
 
-        -- This will take care of the dropships landing on the map.
         if (#_Session.m_Condors > 0) then
-            for i = 1, #_Session.m_Condors do
-                local condor = _Session.m_Condors[i];
-
-                -- If it's not nil, run the logic.
-                if (condor ~= nil) then
-                    if (condor.ReadyToDelete == false) then
-                        condor:Run(_Session.m_TurnCounter);
-                    else
-                        _Session.m_Condors[i] = nil;
-                    end
+            if (_Session.m_PlayerCondor == nil) then
+                _Session.m_PlayerCondor = _Session.m_Condors[1];
+            else
+                if (_Session.m_PlayerCondor.ReadyToDelete == false) then
+                    _Session.m_PlayerCondor:Run(_Session.m_TurnCounter);
+                else
+                    _Session.m_Condors[1] = nil;
+                    _Session.m_PlayerCondor = nil;
                 end
             end
         end
@@ -705,20 +702,14 @@ function ObjectSniped(DeadObjectHandle, KillersHandle)
     return PlayerDied(DeadObjectHandle, true);
 end
 
--- function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
---     if (IsPlayer(pilotHandle)) then
---         -- Check their name.
---         local name = GetPlayerName(pilotHandle);
+function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
+    if (IsPlayer(pilotHandle)) then
+        -- Apply the skin to the unit.
+        ApplySkinToHandle(GetPlayerName(pilotHandle), emptyCraftHandle, GetTeamNum(pilotHandle));
+    end
 
---         -- Just for testing.
---         print(name);
-
---         -- Apply the skin to the unit.
---         ApplySkinToHandle(name, emptyCraftHandle);
---     end
-
---     return PREGETIN_ALLOW;
--- end
+    return PREGETIN_ALLOW;
+end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (OrdnanceTeam ~= _Session.m_CompTeam) then

@@ -59,7 +59,25 @@ local CMDR_ATTACK = 1;
 local CMDR_DEFEND = 2;
 local CMDR_RETREAT = 3;
 
-function AIController:New(Team, Race, Pools, Name)
+-- Potential Supporter Names for CPU.
+local _CPUNames =
+{
+    "SIR BRAMBLEY",
+    "GrizzlyOne95",
+    "BlackDragon",
+    "Spymaster",
+    "Autarch Katherlyn",
+    "blue_banana",
+    "Zorn",
+    "Gravey",
+    "VTrider",
+    "Ultraken",
+    "Darkvale",
+    "Econchump",
+    "Sev"
+}
+
+function AIController:New(Team, Race, Pools)
     local o = {}
 
     o.AIPString = "";
@@ -116,8 +134,12 @@ function AIController:Setup(CPUTeamNumber)
 
     table.sort(self.Pools, Compare);
 
+    local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
+    SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
+
     self.AIPString = IFace_GetString("options.instant.string0");
     self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
+    self.Name = chosenCPUName;
 
     if (self.AICommanderEnabled == 1) then
         self.Commander = BuildObject(self.Race .. "vcmdr_s", self.Team, GetPositionNear("RecyclerEnemy", 30, 60));
@@ -125,6 +147,7 @@ function AIController:Setup(CPUTeamNumber)
     end
 
     SetScrap(CPUTeamNumber, 40);
+    DoTaunt(TAUNTS_GameStart);
 
     self:SetPlan(AIPType0);
 end

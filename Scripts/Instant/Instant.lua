@@ -106,26 +106,12 @@ local _Session = {
     m_CarrierObjectCheckDelay = 0
 }
 
--- Potential Supporter Names for CPU.
-local _CPUNames =
-{
-    "SIR BRAMBLEY",
-    "GrizzlyOne95",
-    "BlackDragon",
-    "Spymaster",
-    "Autarch Katherlyn",
-    "blue_banana",
-    "Zorn",
-    "Gravey",
-    "VTrider",
-    "Ultraken",
-    "Darkvale",
-    "Econchump",
-    "Sev"
-}
+local CHAR_RACE_ISDF = 'i';
+local CHAR_RACE_SCION = 'f';
 
 -- Functions Table
-local IntroFunctions = {};
+local ISDFIntroFunctions = {};
+local ScionIntroFunctions = {};
 
 -- Debug only.
 local debug = true;
@@ -462,42 +448,30 @@ function Update()
         local customCPURecycler = IFace_GetString("options.instant.string2");
 
         if (customCPURecycler ~= nil) then
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
-                customCPURecycler, "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, customCPURecycler, "*vrecy", "RecyclerEnemy");
         else
-            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
-                "*vrecy", "RecyclerEnemy");
+            _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x", "*vrecy", "RecyclerEnemy");
         end
 
         -- Spawn CPU vehicles.
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
         BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
 
-        local cRACE_ISDF = string.char(RACE_ISDF);
-        local cRACE_SCION = string.char(RACE_SCION);
+        CHAR_RACE_ISDF = string.char(RACE_ISDF);
+        CHAR_RACE_SCION = string.char(RACE_SCION);
 
         -- Checks for team colour differences.
-        if (_Session.m_CPUTeamRace == cRACE_ISDF and _Session.m_HumanTeamRace == cRACE_ISDF) then
+        if (_Session.m_CPUTeamRace == CHAR_RACE_ISDF and _Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
             SetTeamColor(_Session.m_CompTeam, 0, 127, 255); -- Blue like in the campaign.
-        elseif (_Session.m_CPUTeamRace == cRACE_SCION and _Session.m_HumanTeamRace == cRACE_SCION) then
+        elseif (_Session.m_CPUTeamRace == CHAR_RACE_SCION and _Session.m_HumanTeamRace == CHAR_RACE_SCION) then
             SetTeamColor(_Session.m_CompTeam, 85, 255, 85); -- Green (Rebels) like in the campaign.
         end
 
-        -- Pick a random name for the CPU.
-        local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
-
-        -- Set the CPU Taunt Name.
-        SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
-
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools,
-            chosenCPUName);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
 
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
-
-        -- Random taunt from the AI on game start.
-        DoTaunt(TAUNTS_GameStart);
 
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1");
@@ -531,20 +505,16 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr", GetPositionNear(recPos, 40.0, 60.0));
 
             -- Grab the position of the Carrier path for spawning.
             local carrierPath = GetPosition("Carrier");
             local carrierEnemyPath = GetPosition("CarrierEnemy");
 
             -- Spawn Carriers for both teams.
-            BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam,
-                SetVector(carrierPath.x, 800, carrierPath.z));
-            BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam,
-                SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
+            BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam, SetVector(carrierPath.x, 800, carrierPath.z));
+            BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam, SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
@@ -567,70 +537,74 @@ function Update()
                 Deploy(_Session.m_Player);
             end
         elseif (_Session.m_IntroCutsceneEnabled == 1 and _Session.m_IntroDone == false) then
-            IntroFunctions[_Session.m_IntroState]();
+            if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
+                ISDFIntroFunctions[_Session.m_IntroState]();
 
-            -- Check to see that the dropship is clear.
-            if (_Session.m_DropshipTakeoffCheck) then
-                if (_Session.m_Dropship1Takeoff == false) then
-                    local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
+                -- Check to see that the dropship is clear.
+                if (_Session.m_DropshipTakeoffCheck) then
+                    if (_Session.m_Dropship1Takeoff == false) then
+                        local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
 
-                    if (distCheck1 == 1) then
-                        -- Start the take-off sequence.
-                        SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
+                        if (distCheck1 == 1) then
+                            -- Start the take-off sequence.
+                            SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
 
-                        -- Engine sound.
-                        StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
+                            -- Engine sound.
+                            StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
 
-                        -- Set the timer for when we remove the dropship.
-                        _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+                            -- Set the timer for when we remove the dropship.
+                            _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                            -- So we don't loop.
+                            _Session.m_Dropship1Takeoff = true;
+                        end
+                    elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
+                        -- Remove the Dropship.
+                        RemoveObject(_Session.m_IntroShip1);
+
+                        -- Mark this as done.
+                        _Session.m_Dropship1Remove = true;
+                    end
+
+                    if (_Session.m_Dropship2Takeoff == false) then
+                        local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
+
+                        if (distCheck2 == 1) then
+                            -- Start the take-off sequence.
+                            SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
+
+                            -- Engine sound.
+                            StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
+
+                            -- Set the timer for when we remove the dropship.
+                            _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
+
+                            -- So we don't loop.
+                            _Session.m_Dropship2Takeoff = true;
+                        end
+                    elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
+                        -- Remove the Dropship.
+                        RemoveObject(_Session.m_IntroShip2);
+
+                        -- Mark this as done.
+                        _Session.m_Dropship2Remove = true;
+                    end
+
+                    if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
+                        -- "Condor": "We are returning to base."
+                        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
 
                         -- So we don't loop.
-                        _Session.m_Dropship1Takeoff = true;
+                        _Session.m_DropshipTakeOffDialogPlayed = true;
                     end
-                elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
-                    -- Remove the Dropship.
-                    RemoveObject(_Session.m_IntroShip1);
 
-                    -- Mark this as done.
-                    _Session.m_Dropship1Remove = true;
-                end
-
-                if (_Session.m_Dropship2Takeoff == false) then
-                    local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
-
-                    if (distCheck2 == 1) then
-                        -- Start the take-off sequence.
-                        SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
-
-                        -- Engine sound.
-                        StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
-
-                        -- Set the timer for when we remove the dropship.
-                        _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
-
-                        -- So we don't loop.
-                        _Session.m_Dropship2Takeoff = true;
+                    -- This means this method is no longer needed.
+                    if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
+                        _Session.m_DropshipTakeoffCheck = false;
                     end
-                elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
-                    -- Remove the Dropship.
-                    RemoveObject(_Session.m_IntroShip2);
-
-                    -- Mark this as done.
-                    _Session.m_Dropship2Remove = true;
                 end
-
-                if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
-                    -- "Condor": "We are returning to base."
-                    _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
-
-                    -- So we don't loop.
-                    _Session.m_DropshipTakeOffDialogPlayed = true;
-                end
-
-                -- This means this method is no longer needed.
-                if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
-                    _Session.m_DropshipTakeoffCheck = false;
-                end
+            elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
+                ScionIntroFunctions[_Session.m_IntroState]();
             end
         end
     end
@@ -640,19 +614,21 @@ function Update()
         GameConditions();
 
         -- Checks to see if we have any dropships that need sending.
-        if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
-            CarrierCleaner();
-        end
+        if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
+            if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
+                CarrierCleaner();
+            end
 
-        if (#_Session.m_Condors > 0) then
-            if (_Session.m_PlayerCondor == nil) then
-                _Session.m_PlayerCondor = _Session.m_Condors[1];
-            else
-                if (_Session.m_PlayerCondor.ReadyToDelete == false) then
-                    _Session.m_PlayerCondor:Run(_Session.m_TurnCounter);
+            if (#_Session.m_Condors > 0) then
+                if (_Session.m_PlayerCondor == nil) then
+                    _Session.m_PlayerCondor = _Session.m_Condors[1];
                 else
-                    _Session.m_Condors[1] = nil;
-                    _Session.m_PlayerCondor = nil;
+                    if (_Session.m_PlayerCondor.ReadyToDelete == false) then
+                        _Session.m_PlayerCondor:Run(_Session.m_TurnCounter);
+                    else
+                        _Session.m_Condors[1] = nil;
+                        _Session.m_PlayerCondor = nil;
+                    end
                 end
             end
         end
@@ -843,7 +819,7 @@ end
 --------------------------------------------------------- Intro Related Logic ---------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-IntroFunctions[1] = function()
+ISDFIntroFunctions[1] = function()
     -- Stop the music before we play the new intro music.
     _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
     IFace_SetInteger("options.audio.music", 0);
@@ -867,7 +843,7 @@ IntroFunctions[1] = function()
     _Session.m_IntroState = _Session.m_IntroState + 1;
 end
 
-IntroFunctions[2] = function()
+ISDFIntroFunctions[2] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- "Condor": "We are approaching the dropzone..."
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav", false);
@@ -880,7 +856,7 @@ IntroFunctions[2] = function()
     end
 end
 
-IntroFunctions[3] = function()
+ISDFIntroFunctions[3] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Wait 0.4 seconds.
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.2);
@@ -893,7 +869,7 @@ IntroFunctions[3] = function()
     end
 end
 
-IntroFunctions[4] = function()
+ISDFIntroFunctions[4] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Stop the Earthquake.
         StopEarthQuake();
@@ -906,7 +882,7 @@ IntroFunctions[4] = function()
     end
 end
 
-IntroFunctions[5] = function()
+ISDFIntroFunctions[5] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- "Condor": "Wait for the green light..."
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav", false);
@@ -919,7 +895,7 @@ IntroFunctions[5] = function()
     end
 end
 
-IntroFunctions[6] = function()
+ISDFIntroFunctions[6] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Start the animation.
         SetAnimation(_Session.m_IntroShip1, "deploy", 1);
@@ -948,7 +924,7 @@ IntroFunctions[6] = function()
     end
 end
 
-IntroFunctions[7] = function()
+ISDFIntroFunctions[7] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Open the door with sound.
         StartSoundEffect("dropdoor.wav", _Session.m_IntroShip1);
@@ -964,7 +940,7 @@ IntroFunctions[7] = function()
     end
 end
 
-IntroFunctions[8] = function()
+ISDFIntroFunctions[8] = function()
     if (_Session.m_IntroEnemiesSpawned == false) then
         -- Difficulty Check
         for i = 1, _Session.m_Difficulty + 1 do
@@ -1004,7 +980,7 @@ IntroFunctions[8] = function()
     end
 end
 
-IntroFunctions[9] = function()
+ISDFIntroFunctions[9] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Sky One "Commander this is Sky One..."
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav", false);
@@ -1014,7 +990,7 @@ IntroFunctions[9] = function()
     end
 end
 
-IntroFunctions[10] = function()
+ISDFIntroFunctions[10] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
         -- Sky One "Commander this is Sky One..."
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav", false);
@@ -1024,7 +1000,7 @@ IntroFunctions[10] = function()
     end
 end
 
-IntroFunctions[11] = function()
+ISDFIntroFunctions[11] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         -- Decrease the volume of the sound effect.
         _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02;

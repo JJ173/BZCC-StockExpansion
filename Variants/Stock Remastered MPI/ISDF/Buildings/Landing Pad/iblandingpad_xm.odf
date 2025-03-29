@@ -3,13 +3,25 @@ geometryName = "iblandingpad00.fbx"
 classLabel = "ibplate_gh_b"
 scrapCost = 60
 unitName = "Landing Pad"
-
-limitClass1 = "LandingPad"
-limitClass1Count = 1
-limitClass1Text = "Only One Allowed"
+maxHealth = 7500
+ownsTerrain = 1
+AllowUndergroundSpawn = 1
+UseCollisionMeshForPathing = 1
+isAssault = 1
 
 buildSupport = "A"
 buildRequire = "F"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName3 = "LandingPad"
+///////////// //////////////////////
+
+/////// LIMITS /////////////////////
+limitClass1 = "LandingPad"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+///////////// //////////////////////
 
 [BuildingClass]
 tunnelCount = 1

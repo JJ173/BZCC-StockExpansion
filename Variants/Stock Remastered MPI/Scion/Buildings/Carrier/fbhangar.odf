@@ -1,0 +1,57 @@
+[GameObjectClass]
+geometryName = "fbhangar00.fbx"
+classLabel = "powered"
+scrapCost = 0
+scrapValue = 0
+maxHealth = 0
+maxAmmo = 0
+unitName = "Hangar"
+heatSignature = 0.8
+imageSignature = 8.0
+radarSignature = 1.0
+collisionRadius = 1.0
+ownsTerrain = true
+
+armorClass = H
+
+canDetect = false
+canInteract = false
+canTarget = false
+ScanTeamLimit = 3
+hitType = 4
+powerCost = 0
+
+BuildRequire = "N"
+BuildSupport = "N"
+
+lightHard1 = "hp_light_1"
+lightName1 = "omnitealARK"
+
+lightHard2 = "hp_light_2"
+lightName2 = "omnitealARK"
+
+lightHard3 = "hp_light_3"
+lightName3 = "omnitealARK"
+
+lightHard4 = "hp_light_4"
+lightName4 = "omnitealARK"
+
+lightHard5 = "hp_light_5"
+lightName5 = "omnitealARK"
+
+lightHard6 = "hp_light_6"
+lightName6 = "omnitealARK"
+
+[BuildingClass]
+justTerrain = true
+//justFlat = true
+
+[PoweredBuildingClass]
+powerTap1 = "hp_tap_1"
+powerName1 = "fbportb_ark"
+powerTap2 = "hp_tap_2"
+powerName2 = "fbark2holo"
+powerTap3 = "hp_tap_3"
+powerName3 = "fbstro_ark"
+PoweredByTaps = false
+detectRange = 0

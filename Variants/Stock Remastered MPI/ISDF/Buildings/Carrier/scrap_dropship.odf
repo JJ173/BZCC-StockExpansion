@@ -1,8 +1,8 @@
 [GameObjectClass]
 baseName = "ScrapDropship"
-geometryName = "soundcube.xsi"
+geometryName = "NULL"
 classLabel = "I76Sign"
-buildTime = 1.0
+buildTime = 15.0
 scrapCost = 0
 scrapValue = 0
 maxHealth = 0

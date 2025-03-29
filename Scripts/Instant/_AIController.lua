@@ -135,7 +135,7 @@ function AIController:Setup(CPUTeamNumber)
     table.sort(self.Pools, Compare);
 
     local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
-    SetTauntCPUTeamName(chosenCPUName, _Session.m_TurnCounter);
+    SetTauntCPUTeamName(chosenCPUName);
 
     self.AIPString = IFace_GetString("options.instant.string0");
     self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");

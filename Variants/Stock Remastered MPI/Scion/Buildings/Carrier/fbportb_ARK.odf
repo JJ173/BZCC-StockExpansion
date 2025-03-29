@@ -1,0 +1,146 @@
+[GameObjectClass] // Version with no baseplate
+baseName = "fbport"
+geometryName = "fbportB00_ARK.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "fbportB00_ARK.fbx"
+RunAnimation = "loop"
+RunAnimIsLooped = true
+classLabel = "powered"
+maxHealth = 0 // Invincible.
+ownsTerrain = true
+powerCost = 0
+
+// Portal Fx.
+EffectHard1 = "hp_hand_1"
+EffectName1 = "fbportb_ARK.render"
+
+// Tower 1.
+EffectHard5 = "hp_light_1"
+EffectName5 = "fbportb_ARK.OmniLightYellow"
+EffectHard6 = "hp_light_2"
+EffectName6 = "fbportb_ARK.OmniLightYellow"
+EffectHard7 = "hp_light_3"
+EffectName7 = "fbportb_ARK.OmniLightYellow"
+EffectHard8 = "hp_light_4"
+EffectName8 = "fbportb_ARK.OmniLightYellow"
+EffectHard9 = "hp_light_5"
+EffectName9 = "fbportb_ARK.OmniLightYellow"
+EffectHard10 = "hp_light_6"
+EffectName10 = "fbportb_ARK.OmniLightYellow"
+
+// Tower 2.
+EffectHard11 = "hp_light_9"
+EffectName11 = "fbportb_ARK.OmniLightYellow"
+EffectHard12 = "hp_light_10"
+EffectName12 = "fbportb_ARK.OmniLightYellow"
+EffectHard13 = "hp_light_11"
+EffectName13 = "fbportb_ARK.OmniLightYellow"
+EffectHard14 = "hp_light_12"
+EffectName14 = "fbportb_ARK.OmniLightYellow"
+EffectHard15 = "hp_light_13"
+EffectName15 = "fbportb_ARK.OmniLightYellow"
+EffectHard16 = "hp_light_14"
+EffectName16 = "fbportb_ARK.OmniLightYellow"
+
+// Real Lights.
+lightHard1 = "hp_light_7"
+lightName1 = "spotyellow"
+lightHard2 = "hp_light_8"
+lightName2 = "spotyellow"
+lightHard3 = "hp_light_15"
+lightName3 = "spotyellow"
+lightHard4 = "hp_light_16"
+lightName4 = "spotyellow"
+lightHard5 = "hp_com_1"
+lightName5 = "omniteal2"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 4
+renderName1 = "fbportb_ARK.light"
+renderName2 = "fbportb_ARK.shock1"
+renderName3 = "fbportb_ARK.shock2"
+renderName4 = "fbportb_ARK.twirl"
+
+[Light]
+//simulateBase = "sim_null"
+//lifeTime = 1.0
+renderBase = "draw_light"
+startColor = "255 255 127 2500"
+finishColor = "255 255 127 2500"
+startRadius = 60.0
+finishRadius = 60.0
+//animateTime = 1.0
+attenuateConstant = 1.0
+attenuateLinear = 0.0
+attenuateQuadratic = 15.0
+lensFlare = false
+
+[Shock1]
+//simulateBase = "sim_smoke"
+//lifeTime = 0.5
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 127 63"
+finishColor = "255 255 127 63"
+startRadius = 20 // 31.0
+finishRadius = 20 // 31.0
+animateTime = 0.5
+latitudeBands = 64
+longitudeSegments = 128
+InitialPitch = 0.0
+InitialYaw = 0.0
+InitialRoll = 0.0
+AddPitch = 10.0
+AddYaw = 10.0
+AddRoll = 10.0
+
+[Shock2]
+//simulateBase = "sim_smoke"
+//lifeTime = 0.5
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 127 63"
+finishColor = "255 255 127 63"
+startRadius = 20 // 31.0
+finishRadius = 20 // 31.0
+animateTime = 0.5
+latitudeBands = 64
+longitudeSegments = 128
+InitialPitch = 0.0
+InitialYaw = 0.0
+InitialRoll = 0.0
+AddPitch = -10.0
+AddYaw = -10.0
+AddRoll = -10.0
+
+[Twirl]
+renderBase = "draw_twirl"
+textureName = "plasma.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 127 255"
+finishColor = "255 255 127 255"
+startRadius = 31.0
+finishRadius = 31.0
+//animateTime = 0.1
+rotationRate = 5.0
+BottomInteractsWithTerrain = false
+
+[OmniLightYellow]
+renderBase = "draw_light"
+startColor = "255 255 0 600"
+finishColor = "255 255 0 600"
+startRadius = 25.0
+finishRadius = 25.0
+//animateTime = 1.5
+attenuateConstant = 1.0
+attenuateLinear = 0.0
+attenuateQuadratic = 15.0
+lensFlare = true

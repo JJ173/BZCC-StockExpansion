@@ -1,5 +1,5 @@
 [GameObjectClass]
-baseName = "ScavengerDropship"
+baseName = "LightDropship"
 geometryName = "NULL"
 classLabel = "I76Sign"
 buildTime = 15.0
@@ -10,7 +10,7 @@ maxAmmo = 0
 canCollide = 0
 canDetect = 0
 canInteract = 0
-unitName = "Scavengers"
+unitName = "Light Units"
 
 // This is used to stop the spam of abilities. I want to simulate a cooldown in Lua.
 isSingle = true
@@ -20,9 +20,9 @@ needGroup = false
 
 /////// REQUIREMENTS ///////////////
 requireCount = 2
-requireName1 = "ibcarrier_xm"
+requireName1 = "Carrier"
 requireText1 = "Carrier Required"
-requireName2 = "iblandingpad_xm"
+requireName2 = "LandingPad"
 requireText2 = "Landing Pad Required"
 ////////////////////////////////////
 

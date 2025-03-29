@@ -20,9 +20,9 @@ needGroup = false
 
 /////// REQUIREMENTS ///////////////
 requireCount = 2
-requireName1 = "ibcarrier_xm"
+requireName1 = "Carrier"
 requireText1 = "Carrier Required"
-requireName2 = "iblandingpad_xm"
+requireName2 = "LandingPad"
 requireText2 = "Landing Pad Required"
 ////////////////////////////////////
 

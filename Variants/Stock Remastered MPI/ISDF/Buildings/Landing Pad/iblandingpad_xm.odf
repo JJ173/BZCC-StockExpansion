@@ -1,7 +1,10 @@
 [GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+baseName = "iblandingpad_xm"
 geometryName = "iblandingpad00.fbx"
 classLabel = "ibplate_gh_b"
 scrapCost = 60
+scrapValue = 20
 unitName = "Landing Pad"
 maxHealth = 7500
 ownsTerrain = 1
@@ -13,15 +16,15 @@ buildSupport = "A"
 buildRequire = "F"
 
 /////// PROVIDES ///////////////////
-provideCount = 3
-provideName3 = "LandingPad"
-///////////// //////////////////////
+provideName1 = "iblandingpad_xm"
+provideName2 = "LandingPad"
+////////////////////////////////////
 
 /////// LIMITS /////////////////////
 limitClass1 = "LandingPad"
 limitClass1Count = 1
 limitClass1Text = "Only One Allowed"
-///////////// //////////////////////
+////////////////////////////////////
 
 [BuildingClass]
 tunnelCount = 1

@@ -1,120 +1,77 @@
-[GameObjectClass] // Scion Portal. Model by General BlackDragon.
+[GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
-baseName = "fbport"
+baseName = "fbport_xm"
 geometryName = "fbport00.xsi"
-classLabel = "turret" //"powered" //"teleportal"
-RequirePowerMask = 4 // Lung Power
+classLabel = "powered"
 powerCost = 0
 scrapCost = 60
 scrapValue = 20
 unitName = "Portal"
-maxHealth = 6000
-addHealth = 25
-//the DLL sets the current ammo to 0 when it teleports
-//so, Ammo = full, Teleports, ammo = 0, addammo makes it go up, when it's full again, teleports
-maxAmmo = 0  // zero = instant,anything greater will be set as the delay until ammo if full.
-addAmmo = 0  // DLL sets ammo as zero so unless maxammo = o then you'll need to add ammo to reactivate portal.
-aiName = "GunTowerFriend"
-aiName2 = "GunTowerEnemy"
-heatSignature = 0.8
-imageSignature = 8.0
+maxHealth = 7500
+heatSignature = 2.0
+imageSignature = 1.0
 radarSignature = 1.0
+ownsTerrain = 1
+AllowUndergroundSpawn = 1
+UseCollisionMeshForPathing = 1
 isAssault = 1
-isSingle = 0
-isLimited = 0
-needLimit = 0
+
 armorClass = H
 collisionRadius = 0.01
-CanAcceptPowerups = false
-ownsTerrain = 1
-buildSupport = "F"
+
+buildSupport = "A"
 buildRequire = "F"
-AlwaysShowAmmo = true
 
 PositionOffset1 = "0.000000 5.000000 0.000000" // Teleport Exit Location.
 PositionOffset2 = "0.000000 0.000000 50.000000" // Goto Destination after AI unit Exits.
 
-GameObjectClassServiceMask = 9
-GameObjectClassServiceMatch = 9
-GameObjectClassServiceProvides = 9
-
-limitClass1 = "fblandingpad_xm"
-limitClass1Count = 1
-limitClass1Text = "Max Portals Reached"
-
 /////// REQUIREMENTS ///////////////
-requireCount = 2
-requireName1 = "fbantm"
-requireText1 = "Build Antenna"
-requireName2 = "fbdowe"
-requireText2 = "Build Dower"
+requireCount = 0
 ////////////////////////////////////
 
 /////// PROVIDES ///////////////////
-provideCount = 3
-provideName1 = "fbport"
-provideName2 = "VIRTUAL_CLASS_TECHCENTER"
-provideName3 = "base"
+provideCount = 2
+provideName1 = "fbport_xm"
+provideName2 = "LandingPad"
 ////////////////////////////////////
 
-/////// WEAPONS ///////////////////
-weaponMask = 00000
-weaponHard1 = "hp_hand_1"
-weaponName1 = ""
-weaponAssault1 = 1
-weaponGroup1 = 0
-weaponHard2 = hp_hand_1
-weaponName2 = ""
-weaponAssault2 = 1
-weaponGroup2 = 1
-weaponHard3 = hp_hand_1
-weaponName3 = ""
-weaponAssault3 = 1
-weaponGroup3 = 2
-weaponHard4 = hp_hand_1
-weaponName4 = ""
-weaponAssault4 = 1
-weaponGroup4 = 3
+/////// LIMITS /////////////////////
+limitClass1 = "LandingPad"
+limitClass1Count = 1
+limitClass1Text = "Max Portals Reached"
 ////////////////////////////////////
 
 // Portal Fx.
-effectsMask = 65520 // Start out OFF.
 EffectHard1 = "hp_hand_1"
-EffectName1 = "PortalFx_F0Start.render"
-EffectHard2 = "hp_hand_1"
-EffectName2 = "PortalFx_F0.render"
-EffectHard3 = "hp_hand_1"
-EffectName3 = "PortalFx_F0End.render"
-EffectHard4 = "hp_hand_1"
-EffectName4 = "PortalFx_F1End.render"
+EffectName1 = "fbportb_ARK.render"
 
 // Tower 1.
 EffectHard5 = "hp_light_1"
-EffectName5 = "fbport_xm.OmniLightYellow"
+EffectName5 = "fbportb_ARK.OmniLightYellow"
 EffectHard6 = "hp_light_2"
-EffectName6 = "fbport_xm.OmniLightYellow"
+EffectName6 = "fbportb_ARK.OmniLightYellow"
 EffectHard7 = "hp_light_3"
-EffectName7 = "fbport_xm.OmniLightYellow"
+EffectName7 = "fbportb_ARK.OmniLightYellow"
 EffectHard8 = "hp_light_4"
-EffectName8 = "fbport_xm.OmniLightYellow"
+EffectName8 = "fbportb_ARK.OmniLightYellow"
 EffectHard9 = "hp_light_5"
-EffectName9 = "fbport_xm.OmniLightYellow"
+EffectName9 = "fbportb_ARK.OmniLightYellow"
 EffectHard10 = "hp_light_6"
-EffectName10 = "fbport_xm.OmniLightYellow"
+EffectName10 = "fbportb_ARK.OmniLightYellow"
 
 // Tower 2.
 EffectHard11 = "hp_light_9"
-EffectName11 = "fbport_xm.OmniLightYellow"
+EffectName11 = "fbportb_ARK.OmniLightYellow"
 EffectHard12 = "hp_light_10"
-EffectName12 = "fbport_xm.OmniLightYellow"
+EffectName12 = "fbportb_ARK.OmniLightYellow"
 EffectHard13 = "hp_light_11"
-EffectName13 = "fbport_xm.OmniLightYellow"
+EffectName13 = "fbportb_ARK.OmniLightYellow"
 EffectHard14 = "hp_light_12"
-EffectName14 = "fbport_xm.OmniLightYellow"
+EffectName14 = "fbportb_ARK.OmniLightYellow"
 EffectHard15 = "hp_light_13"
-EffectName15 = "fbport_xm.OmniLightYellow"
+EffectName15 = "fbportb_ARK.OmniLightYellow"
 EffectHard16 = "hp_light_14"
-EffectName16 = "fbport_xm.OmniLightYellow"
+EffectName16 = "fbportb_ARK.OmniLightYellow"
 
 // Real Lights.
 lightHard1 = "hp_light_7"
@@ -125,63 +82,8 @@ lightHard3 = "hp_light_15"
 lightName3 = "spotyellow"
 lightHard4 = "hp_light_16"
 lightName4 = "spotyellow"
-lightHard5 = "hp_light_17"
-lightName5 = "o_yellow_nf"
-
-[EntityClass]
-AllowHQShadows = true
-
-[TeleportalClass]
-soundActivate = "portalx.wav"
-soundDectivate = NULL
-
-PortalEffect = "PortalFx_F" // Effect # is added to the end, as well as a Start and End versions.
-InEffect = 2
-OutEffect = 2
-OnEffect = 1
-
-VehInEffect = 1
-VehOutEffect = 1
-
-TeleporterChannel = 2
-ShowChannel = false
-CanEnter = false
-CanExit = true
-MatchType = 0 // 0 = Closest, 1 = Cycle, 2 = Random.
-MatchTypeUsesChannels = true
-FxOnVehicle = false
-TeleportColorFade = "0 255 127 255"
-ContinuousFx = true
-ContinuousFxRange = 200.0f
-TeleportFilter = 3 // Pilots + Craft
-// Teleport Filter options: 
-// All         = 0
-// Craft       = 1
-// Pilots      = 2
-// Powerups    = 4
-// Weapons     = 8 (Torpedoes, Mines)
-// Other       = 16
-ExitForwardOnly = false
-ExitVelocity = 0
-ExitKickAI = true
-ExitUsesCenter = true
-EnterGotoIsExit = false // If true, AI ordered to goto this portal will goto the exit position offset instead of the object.
-EnterRange = 31.0f
-TeleportTeamFilter = 0
-DestinationMinRange = 0.0
-DestinationMaxRange = 0.0
-DestinationTeamFilter = 3
-// 0 = All Teams, 1 = same team only, 2 = allies only, 3 = Same Team + Allies, 4 = Enemies only, 5 = Same Team + Enemies, 6 = Allies + Enemies.
-// Team Filter options: 
-// All Teams        = 0
-// Same Team Only   = 1
-// Allies           = 2
-// Enemies          = 4
-// 
-// Add the values to get the desired result. Same Team + Allies is 3, Enemies + Allies is 6.
-
-[PoweredBuildingClass]
-CanAlliesUse = false
+lightHard5 = "hp_com_1"
+lightName5 = "omniteal2"
 
 [BuildingClass]
 tunnelCount = 7
@@ -228,22 +130,6 @@ tunnel07Z0 = 5
 tunnel07DX = 3
 tunnel07DZ = 3
 tunnel07Edge = "fttf"
-
-[CraftClass]
-rangeScan = 210.0
-periodScan = 0.0
-velocJam = 0.0
-weaponPitch = 1.5
-steerFactor = 1.0
-engageRange = 210
-
-[TurretCraftClass]
-powerTap1 = "HP_TAP_1"
-powerTap2 = "HP_TAP_2"
-powerName = "fblung"
-
-omegaTurret = 0.0
-detectRange = 500
 
 [OmniLightYellow]
 renderBase = "draw_light"

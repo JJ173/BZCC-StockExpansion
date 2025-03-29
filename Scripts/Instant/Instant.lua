@@ -102,6 +102,7 @@ local _Session = {
     -- Idea is to remove them after 10 minutes.
     m_Condors = {},
     m_CarrierItemsToRemove = {},
+    m_PortalUnits = {},
 
     m_CarrierObjectCheckDelay = 0
 }
@@ -305,10 +306,7 @@ function AddObject(handle)
     if (teamNum == _Session.m_CompTeam) then
         if (isRecyclerVehicle) then
             _Session.m_EnemyRecycler = handle;
-        end
-
-
-        if (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm") then
+        elseif (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm" or objCfg == _Session.m_CPUTeamRace .. "bport_xm") then
             _Session.m_CPULandingPad = handle;
         end
 
@@ -319,34 +317,29 @@ function AddObject(handle)
     elseif (teamNum == _Session.m_StratTeam) then
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
-        end
-
-        if (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm") then
+        elseif (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm" or objCfg == _Session.m_HumanTeamRace .. "bport_xm") then
             _Session.m_PlayerLandingPad = handle;
-        end
+        elseif (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
+            if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
+                local dropshipRequestItem =
+                {
+                    ItemHandle = handle,
+                    TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
+                };
 
-        if (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
-            -- Create an object to track the time of deletion.
-            local dropshipRequestItem =
-            {
-                ItemHandle = handle,
-                TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
-            };
+                _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
 
-            -- Add this to the queue.
-            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
+                local condorModel;
 
-            local condorModel;
+                if (objBase == "ScrapDropship") then
+                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+                else
+                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+                end
 
-            if (objBase == "ScrapDropship") then
-                condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
-            else
-                condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
-            end
-
-            -- For deletion later on.
-            if (condorModel ~= nil) then
-                _Session.m_Condors[#_Session.m_Condors + 1] = condorModel;
+                if (condorModel ~= nil) then
+                    _Session.m_Condors[#_Session.m_Condors + 1] = condorModel;
+                end
             end
         end
 
@@ -507,9 +500,9 @@ function Update()
             local recPos = GetPosition(_Session.m_Recycler);
 
             -- Create a couple of turrets.
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
                 GetPositionNear(recPos, 40.0, 60.0));
-            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_x", "*vturr",
+            BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
                 GetPositionNear(recPos, 40.0, 60.0));
 
             -- Grab the position of the Carrier path for spawning.
@@ -534,9 +527,7 @@ function Update()
                 RespawnPlayer(true);
             end
         end
-    end
-
-    if (_Session.m_StartDone) then
+    else
         if (_Session.m_RTSModeEnabled == 1) then
             -- Basically force the player into a deployed state.
             if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then

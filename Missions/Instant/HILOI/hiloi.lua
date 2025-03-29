@@ -1,2 +1,0 @@
--- Required Instant.
-require("Instant");

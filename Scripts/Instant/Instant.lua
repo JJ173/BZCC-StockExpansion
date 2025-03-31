@@ -14,6 +14,7 @@ require("_AICmd");
 local _AIController = require("_AIController");
 local _Pool = require("_Pool");
 local _Condor = require("_Condor");
+local _Portal = require("_Portal");
 
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
@@ -102,7 +103,7 @@ local _Session = {
     -- Idea is to remove them after 10 minutes.
     m_Condors = {},
     m_CarrierItemsToRemove = {},
-    m_PortalUnits = {},
+    m_Portals = {},
 
     m_CarrierObjectCheckDelay = 0
 }
@@ -320,15 +321,15 @@ function AddObject(handle)
         elseif (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm" or objCfg == _Session.m_HumanTeamRace .. "bport_xm") then
             _Session.m_PlayerLandingPad = handle;
         elseif (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
+            local dropshipRequestItem =
+            {
+                ItemHandle = handle,
+                TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
+            };
+
+            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
+
             if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-                local dropshipRequestItem =
-                {
-                    ItemHandle = handle,
-                    TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
-                };
-
-                _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
-
                 local condorModel;
 
                 if (objBase == "ScrapDropship") then
@@ -339,6 +340,18 @@ function AddObject(handle)
 
                 if (condorModel ~= nil) then
                     _Session.m_Condors[#_Session.m_Condors + 1] = condorModel;
+                end
+            elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
+                local portalModel;
+
+                if (objBase == "ScrapDropship") then
+                    portalModel = _Portal:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+                else
+                    portalModel = _Portal:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+                end
+
+                if (portalModel ~= nil) then
+                    _Session.m_Portals[#_Session.m_Portals + 1] = portalModel;
                 end
             end
         end
@@ -610,19 +623,22 @@ function Update()
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions();
 
-        -- Checks to see if we have any dropships that need sending.
-        if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-            if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
-                local condorObj = _Session.m_CarrierItemsToRemove[1];
+        -- Run the AI Controller instance for the CPU team.
+        _Session.m_AIController:Run(_Session.m_TurnCounter);
 
-                if (condorObj.TimeToDelete < _Session.m_TurnCounter) then
-                    RemoveObject(condorObj.ItemHandle);
-                    table.remove(_Session.m_CarrierItemsToRemove, 1);
-                end
+        if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
+            local condorObj = _Session.m_CarrierItemsToRemove[1];
 
-                _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1);
+            if (condorObj.TimeToDelete < _Session.m_TurnCounter) then
+                RemoveObject(condorObj.ItemHandle);
+                table.remove(_Session.m_CarrierItemsToRemove, 1);
             end
 
+            _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1);
+        end
+
+        -- Checks to see if we have any dropships that need sending.
+        if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
             if (#_Session.m_Condors > 0) then
                 if (_Session.m_PlayerCondor == nil) then
                     _Session.m_PlayerCondor = _Session.m_Condors[1];
@@ -635,10 +651,20 @@ function Update()
                     end
                 end
             end
+        elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
+            if (#_Session.m_Portals > 0) then
+                if (_Session.m_PlayerPortal == nil) then
+                    _Session.m_PlayerPortal = _Session.m_Portals[1];
+                else
+                    if (_Session.m_PlayerPortal.ReadyToDelete == false) then
+                        _Session.m_PlayerPortal:Run(_Session.m_TurnCounter);
+                    else
+                        table.remove(_Session.m_Portals, 1);
+                        _Session.m_PlayerPortal = nil;
+                    end
+                end
+            end
         end
-
-        -- Run the AI Controller instance for the CPU team.
-        _Session.m_AIController:Run(_Session.m_TurnCounter);
     end
 end
 

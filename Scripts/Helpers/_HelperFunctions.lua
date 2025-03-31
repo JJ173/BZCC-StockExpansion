@@ -54,6 +54,7 @@ function IsPlayerInBuilding(totalPlayers)
 end
 
 -- Credit to Rhade for this.
+-- TODO: This is a bit of a hack, find a better way to do this.
 function TableRemoveByHandle(table, handle)
     local length = #table;
 
@@ -98,6 +99,27 @@ end
 
 function ReplaceCharacter(pos, str, r)
     return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
+end
+
+-- Teleports In (spawns) an ODF at a Portal Handle dest.
+function TeleportIn(odf, team, dest, offset)
+    local pos = nil;
+
+    if (type(dest) == "string") then
+        pos = GetPosition(dest);
+    elseif (IsAround(dest)) then
+        pos = GetTransform(dest);
+        pos.posit = pos.posit + pos.front * offset;
+        pos.posit.y = pos.posit.y + 20;
+    else
+        return nil;
+    end
+
+    BuildObject("teleportin", 0, pos);
+    pos = GetPositionNear(pos, 3.0, 5.0);
+    local h = BuildObject(odf, team, pos);
+
+    return h;
 end
 
 return _HelperFunctions;

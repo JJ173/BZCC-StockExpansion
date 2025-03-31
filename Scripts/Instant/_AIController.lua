@@ -503,7 +503,7 @@ end
 function RemoveDispatchFromTable(table, dispatchUnit)
     for i, v in pairs(table) do
         if (v.Handle == dispatchUnit) then
-            table[i] = nil;
+            table.remove(table, i);
             break;
         end
     end

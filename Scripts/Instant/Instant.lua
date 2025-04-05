@@ -119,7 +119,7 @@ local ScionIntroFunctions = {};
 local debug = true;
 local debug_base = false;
 local debug_base_built = false;
-local debug_stop_script = false;
+local debug_stop_script = true;
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -345,9 +345,9 @@ function AddObject(handle)
                 local portalModel;
 
                 if (objBase == "ScrapDropship") then
-                    portalModel = _Portal:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 2);
                 else
-                    portalModel = _Portal:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 3);
                 end
 
                 if (portalModel ~= nil) then

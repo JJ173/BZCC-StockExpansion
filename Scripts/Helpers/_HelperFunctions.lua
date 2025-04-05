@@ -102,24 +102,14 @@ function ReplaceCharacter(pos, str, r)
 end
 
 -- Teleports In (spawns) an ODF at a Portal Handle dest.
-function TeleportIn(odf, team, dest, offset)
-    local pos = nil;
+function TeleportIn(odf, team, dest)
+    local pos = GetPosition(dest);
 
-    if (type(dest) == "string") then
-        pos = GetPosition(dest);
-    elseif (IsAround(dest)) then
-        pos = GetTransform(dest);
-        pos.posit = pos.posit + pos.front * offset;
-        pos.posit.y = pos.posit.y + 20;
-    else
-        return nil;
-    end
+    local randPos = GetPositionNear(pos, 3, 5)
+    randPos.y = pos.y + 10;
 
-    BuildObject("teleportin", 0, pos);
-    pos = GetPositionNear(pos, 3.0, 5.0);
-    local h = BuildObject(odf, team, pos);
-
-    return h;
+    BuildObject("teleportin", 0, randPos);
+    return BuildObject(odf, team, randPos);
 end
 
 return _HelperFunctions;

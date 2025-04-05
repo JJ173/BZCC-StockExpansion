@@ -8,9 +8,24 @@ classLabel = "fbforg_x"
 [FactoryClass]
 buildItem1 = "fvsent_xm"
 buildItem2 = "fvarch_xm"
-buildItem3 = "fvtank_xm"
 buildItem4 = "fvartl_xm"
 buildItem5 = "fvwalk_xm"
 buildItem6 = "fvatank_xm"
+
+[BuildGroup3]
+buildLabel = "Warriors"
+buildItem1 = "fvtank_xm"
+buildItem2 = "fvhtank_gh"
+buildItem3 = "fvhtank_gh_s"
+
+[BuildGroup7]
+buildLabel = "Advanced Units"
+buildItem1 = "fvpscout_gh"
+buildItem2 = "fvgship_gh"
+buildItem3 = "fvsav_gh"
+buildEmptyItem3 = true
+buildItem4 = "fvburn_gh"
+buildItem5 = "fvcomm_gh"
+buildEmptyItem5 = true
 
 [Lod1]

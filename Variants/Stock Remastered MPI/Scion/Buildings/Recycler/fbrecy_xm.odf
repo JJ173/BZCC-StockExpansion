@@ -10,6 +10,16 @@ buildItem3 = "fvturr_xm"
 buildItem5 = "fvcons_xm"
 buildItem6 = "fvserv_xm"
 
+[BuildGroup1]
+buildLabel = "Scavengers"
+buildItem1 = "fvscav_xm"
+buildItem2 = "fvhscav_gh"
+
+[BuildGroup5]
+buildlabel = "Constructors"
+buildItem1 = "fvcons_xm"
+buildItem2 = "fvcons_gh_c2"
+
 [RecyclerClass]
 
 [PoweredBuildingClass]

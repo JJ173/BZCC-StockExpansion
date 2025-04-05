@@ -3,6 +3,7 @@ TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZ
 baseName = "fbport_xm"
 geometryName = "fbport00.xsi"
 classLabel = "powered"
+RequirePowerMask = 4 // Lung Power
 powerCost = 0
 scrapCost = 60
 scrapValue = 20
@@ -22,9 +23,6 @@ collisionRadius = 0.01
 buildSupport = "A"
 buildRequire = "F"
 
-PositionOffset1 = "0.000000 5.000000 0.000000" // Teleport Exit Location.
-PositionOffset2 = "0.000000 0.000000 50.000000" // Goto Destination after AI unit Exits.
-
 /////// REQUIREMENTS ///////////////
 requireCount = 0
 ////////////////////////////////////
@@ -43,35 +41,48 @@ limitClass1Text = "Max Portals Reached"
 
 // Portal Fx.
 EffectHard1 = "hp_hand_1"
-EffectName1 = "fbportb_ARK.render"
+EffectName1 = "PortalFx_F0.render"
+EffectFlags1 = 2147483583 // only when powered.
 
 // Tower 1.
 EffectHard5 = "hp_light_1"
 EffectName5 = "fbportb_ARK.OmniLightYellow"
+EffectFlags5 = 2147483583 // only when powered.
 EffectHard6 = "hp_light_2"
 EffectName6 = "fbportb_ARK.OmniLightYellow"
+EffectFlags6 = 2147483583 // only when powered.
 EffectHard7 = "hp_light_3"
 EffectName7 = "fbportb_ARK.OmniLightYellow"
+EffectFlags7 = 2147483583 // only when powered.
 EffectHard8 = "hp_light_4"
 EffectName8 = "fbportb_ARK.OmniLightYellow"
+EffectFlags8 = 2147483583 // only when powered.
 EffectHard9 = "hp_light_5"
 EffectName9 = "fbportb_ARK.OmniLightYellow"
+EffectFlags9 = 2147483583 // only when powered.
 EffectHard10 = "hp_light_6"
 EffectName10 = "fbportb_ARK.OmniLightYellow"
+EffectFlags10 = 2147483583 // only when powered.
 
 // Tower 2.
 EffectHard11 = "hp_light_9"
 EffectName11 = "fbportb_ARK.OmniLightYellow"
+EffectFlags11 = 2147483583 // only when powered.
 EffectHard12 = "hp_light_10"
 EffectName12 = "fbportb_ARK.OmniLightYellow"
+EffectFlags12 = 2147483583 // only when powered.
 EffectHard13 = "hp_light_11"
 EffectName13 = "fbportb_ARK.OmniLightYellow"
+EffectFlags13 = 2147483583 // only when powered.
 EffectHard14 = "hp_light_12"
 EffectName14 = "fbportb_ARK.OmniLightYellow"
+EffectFlags14 = 2147483583 // only when powered.
 EffectHard15 = "hp_light_13"
 EffectName15 = "fbportb_ARK.OmniLightYellow"
+EffectFlags15 = 2147483583 // only when powered.
 EffectHard16 = "hp_light_14"
 EffectName16 = "fbportb_ARK.OmniLightYellow"
+EffectFlags16 = 2147483583 // only when powered.
 
 // Real Lights.
 lightHard1 = "hp_light_7"
@@ -130,6 +141,11 @@ tunnel07Z0 = 5
 tunnel07DX = 3
 tunnel07DZ = 3
 tunnel07Edge = "fttf"
+
+[PoweredBuildingClass]
+powerTap1 = "HP_TAP_1"
+powerTap2 = "HP_TAP_2"
+powerName = "fblung"
 
 [OmniLightYellow]
 renderBase = "draw_light"

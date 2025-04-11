@@ -13,17 +13,45 @@ DoIdleDispatch = false
 [DeployableClass]
 
 [ConstructionRigClass]
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+
+[BuildGroup1]
+buildLabel = "Base"
 buildItem1 = "ibpgen_c"
 buildItem2 = "ibfact_c"
 buildItem3 = "ibcbun_c"
 buildItem4 = "ibarmo_c"
+buildItem5 = "ibsbay_c"
 buildItem6 = "ibgtow_c"
 buildItem7 = "ibtrain_c"
 buildItem8 = "ibtcen_c"
 buildItem9 = "ibbomb_c"
-buildItem10 = "iblandingpad_c"
+
+[BuildGroup2]
+buildLabel = "Assault Towers"
+buildItem1 = "ibatow_c_b1"
+buildItem2 = "ibatow_c_b2"
+buildItem3 = "ibatow_c_a1"
+buildItem4 = "ibatow_c_a2"
+
+[BuildGroup3]
+buildLabel = "Anti-Air"
+buildItem1 = "ibrtow_b_c"
+buildItem2 = "ibrtow_a_c"
+buildItem3 = "ibhrtow_b_c"
+buildItem4 = "ibhrtow_a_c"
+
+[BuildGroup4]
+buildLabel = "Artillery"
+buildItem1 = "ibartl_c_a"
+buildItem2 = "ibartl_c_b"
 
 [BuildGroup5]
-buildLabel = "Service Bays"
-buildItem1 = "ibsbay_c"
-buildItem2 = "ibsbay_c_2"
+buildLabel = "More Buildings"
+buildItem1 = "ibsbay_c_2"
+buildItem2 = "iblandingpad_c"
+
+// Todo, add silos for scrap storage in the base.

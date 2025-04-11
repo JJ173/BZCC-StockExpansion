@@ -117,8 +117,9 @@ local ScionIntroFunctions = {};
 
 -- Debug only.
 local debug = true;
-local debug_base = false;
+local debug_base = true;
 local debug_base_built = false;
+local debug_contoller = false;
 local debug_stop_script = true;
 
 -- ODFs to Preload.
@@ -291,14 +292,7 @@ function AddObject(handle)
     local objBase = GetBase(handle);
 
     if (classLabel == "CLASS_DEPOSIT") then
-        -- Grab the distance between this pool and the enemy position.
-        local dist = GetDistance(handle, "RecyclerEnemy");
-        -- Grab the position so we can store it in the model.
-        local pos = GetPosition(handle);
-        -- Create a new model for this pool.
-        local newPoolModel = _Pool:New(handle, pos, dist);
-        -- Grab the position vector and store it.
-        _Session.m_Pools[#_Session.m_Pools + 1] = newPoolModel;
+        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool:New(handle, GetPosition(handle), GetDistance(handle, "RecyclerEnemy"));
     end
 
     -- Max out skills.
@@ -405,6 +399,9 @@ function Start()
 end
 
 function Update()
+    -- Keep track of our turn counter.
+    _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
+
     if (debug_stop_script) then
         if (debug_base and debug_base_built == false) then
             if (_Session.m_CPUTeamRace == 'i') then
@@ -421,11 +418,26 @@ function Update()
                 end
             end
 
+            -- If we are in debug mode, set the CPU Team to 0.
+            _Session.m_CompTeam = 0;
+
             -- To deploy the CPU Recycler so I can see where the base will face.
-            SetAIP('debug.aip', 0);
+            SetAIP('debug.aip', _Session.m_CompTeam);
+
+            if (debug_contoller) then
+                -- Create the CPU team model to keep track of what's in the world.
+                _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+
+                -- Setup the AI Controller.
+                _Session.m_AIController:Setup(_Session.m_CompTeam);
+            end
 
             -- So we don't spawn infinite bases.
             debug_base_built = true;
+        end
+
+        if (debug_contoller and _Session.m_AIController ~= nil) then
+            _Session.m_AIController:Run(_Session.m_TurnCounter);
         end
 
         return;
@@ -436,9 +448,6 @@ function Update()
 
     -- Keep track of our player.
     _Session.m_Player = GetPlayerHandle(1);
-
-    -- Keep track of our turn counter.
-    _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
 
     if (_Session.m_StartDone == false) then
         _Session.m_StartDone = true;

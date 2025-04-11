@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "fbport_xm"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[OmniLightYellow]

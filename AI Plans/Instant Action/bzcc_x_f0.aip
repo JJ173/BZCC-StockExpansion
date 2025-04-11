@@ -181,7 +181,6 @@ buildType1 = "fbspir_c"
 buildCount1 = 1
 buildLoc1 = "F_BaseSpire_1"
 LuaFunction = "BuildGunSpire1"
-consClass = "fvcons_g"
 
 [Plan17]
 planType = "Attacker"
@@ -232,7 +231,6 @@ buildType1 = "fbspir_c"
 buildCount1 = 1
 buildLoc1 = "F_BaseSpire_2"
 LuaFunction = "BuildGunSpire2"
-consClass = "fvcons_g"
 
 [Plan21]
 planType = "BuildMinimums"
@@ -351,13 +349,12 @@ buildType1 = "fbspir_c"
 buildCount1 = 1
 buildLoc1 = "F_BaseSpire_3"
 LuaFunction = "BuildGunSpire3"
-consClass = "fvcons_g"
 
 [Plan32]
 planType = "BaseBuildMinimums"
 planPriority = 690
 planCondition = "Lua"
-buildType1 = "fblandingpad_xm"
+buildType1 = "fbport_c"
 buildCount1 = 1
 buildLoc1 = "i_LandingPad"
 LuaFunction = "BuildLandingPad"
@@ -379,7 +376,6 @@ buildType1 = "fbrspir_gh"
 buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_1"
 LuaFunction = "BuildBaseAntiAir1"
-consClass = "fvcons_g"
 
 [Plan35]
 planType = "Attacker"
@@ -407,7 +403,6 @@ buildType1 = "fbrspir_gh"
 buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_2"
 LuaFunction = "BuildBaseAntiAir2"
-consClass = "fvcons_g"
 
 [Plan37]
 planType = "Attacker"
@@ -434,7 +429,6 @@ buildType1 = "fbrspir_gh"
 buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_3"
 LuaFunction = "BuildBaseAntiAir3"
-consClass = "fvcons_g"
 
 [Plan39]
 planType = "BaseBuildMinimums"
@@ -444,7 +438,6 @@ buildType1 = "fbaspir_c"
 buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_1"
 LuaFunction = "BuildBaseAssaultSpire1"
-consClass = "fvcons_g"
 
 [Plan40]
 planType = "BaseBuildMinimums"
@@ -454,7 +447,6 @@ buildType1 = "fbaspir_c"
 buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_2"
 LuaFunction = "BuildBaseAssaultSpire2"
-consClass = "fvcons_g"
 
 [Plan41]
 planType = "BaseBuildMinimums"
@@ -464,7 +456,6 @@ buildType1 = "fbaspir_c"
 buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_3"
 LuaFunction = "BuildBaseAssaultSpire3"
-consClass = "fvcons_g"
 
 [Plan42]
 planType = "BaseBuildMinimums"
@@ -551,7 +542,6 @@ buildType1 = "fbartl_c_b"
 buildCount1 = 1
 buildLoc1 = "F_Base_Artillery_1"
 LuaFunction = "BuildBaseArtillery1"
-consClass = "fvcons_g"
 
 [Plan49]
 planType = "BaseBuildMinimums"
@@ -561,7 +551,6 @@ buildType1 = "fbartl_c_b"
 buildCount1 = 1
 buildLoc1 = "F_Base_Artillery_2"
 LuaFunction = "BuildBaseArtillery2"
-consClass = "fvcons_g"
 
 [Plan50]
 planType = "Attacker"

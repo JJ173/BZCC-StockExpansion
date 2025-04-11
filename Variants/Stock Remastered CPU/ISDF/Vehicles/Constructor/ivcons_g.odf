@@ -10,51 +10,7 @@ classLabel = "ivcons_c"
 [DeployableClass]
 
 [ConstructionRigClass]
-buildItem1 = "ibcbun_c"
-buildItem9 = ""
-
-[BuildGroup2]
-buildLabel = "Gun Towers"
-buildItem1 = "ibgtow_c"
-buildItem2 = "ibgtow_c_w1"
-buildItem3 = "ibgtow_c_w2"
-
-[BuildGroup3]
-buildLabel = "Short Defenders"
-buildItem1 = "ibatow_c_b1"
-buildItem2 = "ibatow_c_b2"
-buildItem3 = "ibatow_c_bw1"
-buildItem4 = "ibatow_c_bw2"
-
-[BuildGroup4]
-buildLabel = "Tall Defenders"
-buildItem1 = "ibatow_c_a1"
-buildItem2 = "ibatow_c_a2"
-buildItem3 = "ibatow_c_aw1"
-buildItem4 = "ibatow_c_aw2"
-
-[BuildGroup5]
-buildLabel = "Short walls"
-buildItem1 = "ibwseg_c"
-buildItem2 = "ibwstr_c"
-buildItem3 = "ibwtseg_c"
-buildItem4 = "ibwxseg_c"
 
 [BuildGroup6]
-buildLabel = "Tall Walls"
-buildItem1 = "ibwseg_gh_a"
-buildItem2 = "ibwstr_gh_a"
-buildItem3 = "ibwtseg_gh_a"
-buildItem4 = "ibwxseg_gh_a"
 
-[BuildGroup7]
-buildLabel = "Anti-Aircraft"
-buildItem1 = "ibrtow_b_c"
-buildItem2 = "ibrtow_a_c"
-buildItem3 = "ibhrtow_b_c"
-buildItem4 = "ibhrtow_a_c"
-
-[BuildGroup8]
-buildLabel = "Artillery"
-buildItem1 = "ibartl_c_a"
-buildItem2 = "ibartl_c_b"
+[BuildGroup10]

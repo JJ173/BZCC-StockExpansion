@@ -351,7 +351,6 @@ buildType1 = "ibcbun_c"
 buildCount1 = 1
 buildLoc1 = "i_Base_Bunker_1"
 LuaFunction = "BuildBaseBunker1"
-consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
 [Plan32]
@@ -362,7 +361,6 @@ buildType1 = "ibgtow_c"
 buildCount1 = 1
 buildLoc1 = "i_GunTower_1"
 LuaFunction = "BuildGunTower1"
-consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
 [Plan33]
@@ -373,7 +371,6 @@ buildType1 = "ibgtow_c"
 buildCount1 = 1
 buildLoc1 = "i_GunTower_2"
 LuaFunction = "BuildGunTower2"
-consClass = "ivcons_g"
 ContinueEvenIfFail = true
 
 [Plan34]
@@ -503,6 +500,7 @@ planCondition = "Lua"
 buildType1 = "ibtcen_c"
 buildCount1 = 1
 buildLoc1 = "i_Tech"
+buildHeading = 1
 LuaFunction = "BuildTechCenter"
 
 [Plan46]
@@ -620,6 +618,7 @@ planCondition = "Lua"
 buildType1 = "ibtrain_c"
 buildCount1 = 1
 buildLoc1 = "i_Training"
+buildHeading = 1
 LuaFunction = "BuildTrainingCenter"
 
 [Plan56]

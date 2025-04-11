@@ -23,6 +23,7 @@ AIController =
 
     -- Split down the models for the CPU so we don't have to iterate through huge lists.
     AssaultUnits = {},
+    IdleQueue = {},
 
     -- Store units to dispatch here.
     TurretsToDispatch = {},
@@ -51,6 +52,7 @@ AIController =
     -- Cooldowns for different functions so we don't run them per frame.
     TauntCooldown = 0,
     DispatchCooldown = 0,
+    IdleQueueCooldown = 0
 };
 
 -- States for the AI Commander.
@@ -93,6 +95,7 @@ function AIController:New(Team, Race, Pools)
     o.HasTechCenter = false;
 
     o.AssaultUnits = {};
+    o.IdleQueue = {};
 
     o.TurretsToDispatch = {};
     o.PatrolsToDispatch = {};
@@ -115,6 +118,7 @@ function AIController:New(Team, Race, Pools)
     o.BasePatrolCount = 0;
     o.TauntCooldown = 0;
     o.DispatchCooldown = 0;
+    o.IdleQueueCooldown = 0;
 
     setmetatable(o, { __index = self });
 
@@ -165,22 +169,19 @@ function AIController:Run(missionTurnCount)
         end
 
         if (self.RecyclerDeployed) then
+            if (self.IdleQueueCooldown < missionTurnCount) then
+                if (#self.IdleQueue > 0) then
+                    self:ProcessIdleUnits();
+                end
+
+                self.IdleQueueCooldown = missionTurnCount + SecondsToTurns(2);
+            end
+
             if (self.DispatchCooldown < missionTurnCount) then
-                if (#self.TurretsToDispatch > 0) then
-                    self:DispatchTurrets(missionTurnCount)
-                end
-
-                if (#self.PatrolsToDispatch > 0) then
-                    self:DispatchPatrols(missionTurnCount)
-                end
-
-                if (#self.AntiAirToDispatch > 0) then
-                    self:DispatchAntiAir(missionTurnCount)
-                end
-
-                if (#self.MinionsToDispatch > 0) then
-                    self:DispatchMinions(missionTurnCount)
-                end
+                self:DispatchTurrets(missionTurnCount)
+                self:DispatchPatrols(missionTurnCount)
+                self:DispatchAntiAir(missionTurnCount)
+                self:DispatchMinions(missionTurnCount)
 
                 self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5)
             end
@@ -195,6 +196,8 @@ function AIController:Run(missionTurnCount)
 end
 
 function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCount)
+    print('Running AIController:AddObject ', objClass .. ' ', objCfg .. ' ', objBase .. ' ', missionTurnCount);
+
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
@@ -227,6 +230,8 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
 end
 
 function AIController:DeleteObject(handle, objClass, objCfg, objBase)
+    print('Running AIController:DeleteObject ', objClass .. ' ', objCfg .. ' ', objBase);
+
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
     elseif (objClass == "CLASS_TURRETTANK") then
@@ -273,99 +278,179 @@ function AIController:SetPlan(type)
 end
 
 function AIController:DispatchTurrets(missionTurnCount)
-    for i = 1, #self.TurretsToDispatch do
+    -- Input validation
+    if (not missionTurnCount) then
+        print("ERROR: missionTurnCount is nil in DispatchTurrets");
+        return;
+    end
+
+    -- Early exit if no turrets to dispatch
+    if (#self.TurretsToDispatch == 0) then
+        return;
+    end
+
+    -- Cache table length to avoid repeated calculations
+    local numTurrets = #self.TurretsToDispatch;
+
+    for i = 1, numTurrets do
         local dispatch = self.TurretsToDispatch[i];
 
-        if (dispatch == nil) then
-            print("WARNING, TURRET DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+        -- Validate dispatch object
+        if (not dispatch) then
+            print("WARNING: Turret dispatch object at index " .. i .. " is nil");
             break;
         end
 
-        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
+        -- Check if unit is available for dispatch
+        if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
             break;
         end
 
-        if (GetTarget(dispatch.Handle) ~= nil) then
+        -- Check if unit already has a target
+        if (GetTarget(dispatch.Handle)) then
             break;
         end
 
-        local poolOfChoice = self.Pools[GetRandomInt(2, #self.Pools - 1)].Position;
+        -- Select a random pool (avoiding first and last pool)
+        local poolIndex = GetRandomInt(2, #self.Pools - 1);
+        local selectedPool = self.Pools[poolIndex];
 
-        Goto(dispatch.Handle, GetPositionNear(poolOfChoice, 40, 60));
+        -- Validate selected pool
+        if (not selectedPool or not selectedPool.Position) then
+            print("WARNING: Invalid pool selected for turret dispatch");
+            break;
+        end
 
+        -- Calculate target position
+        local targetPos = GetPositionNear(selectedPool.Position, 40, 60);
+
+        -- Send turret to position
+        Goto(dispatch.Handle, targetPos);
+
+        -- Remove from dispatch table
         RemoveDispatchFromTable(self.TurretsToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchPatrols(missionTurnCount)
-    for i = 1, #self.PatrolsToDispatch do
+    -- Input validation
+    if (not missionTurnCount) then
+        print("ERROR: missionTurnCount is nil in DispatchPatrols");
+        return;
+    end
+
+    -- Early exit if no patrols to dispatch
+    if (#self.PatrolsToDispatch == 0) then
+        return;
+    end
+
+    -- Cache table length to avoid repeated calculations
+    local numPatrols = #self.PatrolsToDispatch;
+
+    for i = 1, numPatrols do
         local dispatch = self.PatrolsToDispatch[i];
 
-        if (dispatch == nil) then
-            print("WARNING, PATROL DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+        -- Validate dispatch object
+        if (not dispatch) then
+            print("WARNING: Patrol dispatch object at index " .. i .. " is nil");
             break;
         end
 
-        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
+        -- Check if unit is available for dispatch
+        if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
             break;
         end
 
-        local path = '';
+        -- Determine patrol path based on unit type
+        local path = (dispatch.Base == "BasePatrol")
+            and "BasePatrol" .. self.BasePatrolCount
+            or "patrol_" .. GetRandomInt(1, 2);
 
-        if (dispatch.Base == "BasePatrol") then
-            path = "BasePatrol" .. self.BasePatrolCount;
-        else
-            path = "patrol_" .. GetRandomInt(1, 2);
-        end
-
+        -- Send unit on patrol
         Patrol(dispatch.Handle, path);
 
+        -- Add to idle queue for future processing
+        self.IdleQueue[#self.IdleQueue + 1] = dispatch;
+
+        -- Remove from dispatch table
         RemoveDispatchFromTable(self.PatrolsToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchAntiAir(missionTurnCount)
-    for i = 1, #self.AntiAirToDispatch do
+    -- Input validation
+    if (not missionTurnCount) then
+        print("ERROR: missionTurnCount is nil in DispatchAntiAir");
+        return;
+    end
+
+    -- Early exit if no anti-air units to dispatch
+    if (#self.AntiAirToDispatch == 0) then
+        return;
+    end
+
+    -- Cache table length to avoid repeated calculations
+    local numAntiAir = #self.AntiAirToDispatch;
+
+    for i = 1, numAntiAir do
         local dispatch = self.AntiAirToDispatch[i];
 
-        if (dispatch == nil) then
-            print("WARNING, ANTI-AIR DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+        -- Validate dispatch object
+        if (not dispatch) then
+            print("WARNING: Anti-air dispatch object at index " .. i .. " is nil");
             break;
         end
 
-        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
+        -- Check if unit is available for dispatch
+        if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
             break;
         end
 
+        -- Determine patrol path
         local path = "anti-air_" .. self.AntiAirCount;
 
+        -- Send unit to position based on race
         if (self.Race == 'i') then
             Patrol(dispatch.Handle, path);
         else
             Goto(dispatch.Handle, path);
         end
 
+        -- Remove from dispatch table
         RemoveDispatchFromTable(self.AntiAirToDispatch, dispatch.Handle);
     end
 end
 
 function AIController:DispatchMinions(missionTurnCount)
-    for i = 1, #self.MinionsToDispatch do
+    -- Input validation
+    if (not missionTurnCount) then
+        print("ERROR: missionTurnCount is nil in DispatchMinions");
+        return;
+    end
+
+    -- Early exit if no minions to dispatch or no assault units to support
+    if (#self.MinionsToDispatch == 0 or #self.AssaultUnits == 0) then
+        return;
+    end
+
+    -- Cache table length to avoid repeated calculations
+    local numMinions = #self.MinionsToDispatch;
+
+    for i = 1, numMinions do
         local dispatch = self.MinionsToDispatch[i];
 
-        if (dispatch == nil) then
-            print("WARNING, MINION DISPATCH OBJECT AT INDEX " .. i .. " IS EMPTY! FIX!");
+        -- Validate dispatch object
+        if (not dispatch) then
+            print("WARNING: Minion dispatch object at index " .. i .. " is nil");
             break;
         end
 
-        if (IsDispatchUnitAvailable(dispatch, missionTurnCount) == false) then
+        -- Check if unit is available for dispatch
+        if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
             break;
         end
 
-        if (#self.AssaultUnits <= 0) then
-            break;
-        end
-
+        -- Collect units that need support
         local assaultUnitToDefend = {};
         local assaultUnitsToService = {};
 
@@ -379,19 +464,19 @@ function AIController:DispatchMinions(missionTurnCount)
             end
         end
 
+        -- Add to idle queue for future processing
+        self.IdleQueue[#self.IdleQueue + 1] = dispatch;
+
+        -- Handle minion assignment based on type
         if (dispatch.Base == "Minion" and #assaultUnitToDefend > 0) then
             local unitToDefend = assaultUnitToDefend[GetRandomInt(1, #assaultUnitToDefend)];
-
             unitToDefend.DefenderHandle = dispatch.Handle;
             Defend2(dispatch.Handle, unitToDefend.Handle);
-
             RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
         elseif (dispatch.Base == "AssaultService" and #assaultUnitsToService > 0) then
             local unitToService = assaultUnitsToService[GetRandomInt(1, #assaultUnitsToService)];
-
             unitToService.HealerHandle = dispatch.Handle;
             Follow(dispatch.Handle, unitToService.Handle);
-
             RemoveDispatchFromTable(self.MinionsToDispatch, dispatch.Handle);
         end
     end
@@ -454,6 +539,29 @@ function AIController:TurretShot(handle, missionTurnCount)
     end
 end
 
+function AIController:ProcessIdleUnits()
+    for i = 1, #self.IdleQueue do
+        -- Grab the idle unit.
+        local idleUnit = self.IdleQueue[i];
+
+        -- Let's first check that this unit is indeed idle.
+        if (IsIdle(idleUnit.Handle) == false) then
+            return false;
+        end
+
+        -- Check the base of the unit to see where it needs to be added.
+        if (idleUnit.Base == "Minion" or idleUnit.Base == "AssaultService") then
+            ReturnIdleUnitToBase(idleUnit);
+            self.MinionsToDispatch[#self.MinionsToDispatch + 1] = idleUnit;
+        elseif (idleUnit.Base == "Patrol") then
+            self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
+        end
+
+        -- Remove the idle unit from the idle table.
+        RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
+    end
+end
+
 function AIController:ScavengerShot(handle)
     if (IsIdle(handle)) then
         Goto(handle, GetPositionNear("RecyclerEnemy", 40, 60), 0);
@@ -500,13 +608,24 @@ function CreateAssaultUnit(handle)
     return _AssaultUnit:New(handle);
 end
 
-function RemoveDispatchFromTable(table, dispatchUnit)
-    for i, v in pairs(table) do
+function RemoveDispatchFromTable(dispatchTable, dispatchUnit)
+    -- Input validation
+    if (not dispatchTable or not dispatchUnit) then
+        return false;
+    end
+
+    -- Use ipairs for better performance with sequential arrays
+    for i, v in ipairs(dispatchTable) do
         if (v.Handle == dispatchUnit) then
-            table.remove(table, i);
-            break;
+            -- Move the last element to the current position and remove the last element
+            -- This is more efficient than table.remove() and maintains array integrity
+            dispatchTable[i] = dispatchTable[#dispatchTable];
+            dispatchTable[#dispatchTable] = nil;
+            return true;
         end
     end
+
+    return false;
 end
 
 function IsDispatchUnitAvailable(dispatchUnit, missionTurnCount)

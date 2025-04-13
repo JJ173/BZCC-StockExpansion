@@ -1,2 +1,3 @@
 Condor Pilot
-Wait for the green light...
+Ground contact confirmed. Systems nominal. 
+Depressurization complete. Doors opening in three... two... one.

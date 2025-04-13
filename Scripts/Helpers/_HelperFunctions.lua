@@ -101,6 +101,56 @@ function ReplaceCharacter(pos, str, r)
     return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
 end
 
+function FindInTable(table, value)
+    for i, v in ipairs(table) do
+        if (v == value) then
+            return i;
+        end
+    end
+end
+
+function GetDifficulty()
+    if IsNetworkOn() then
+        -- return ???? MP difficulty setting, possibly from ivar?
+    else
+        return GetVarItemInt("options.play.difficulty");
+    end
+end
+
+-- Teleports Handle h to Handle dest, with optional offset.
+function Teleport(h, dest, offset)
+    if (not IsAround(h)) then
+        return false;
+    end
+
+    BuildObject("teleportin", 0, GetPosition(h));
+
+    local pos = nil;
+
+    if (type(dest) == "string") then
+        pos = BuildDirectionalMatrix(GetPosition(dest), nil);
+    elseif (IsAround(dest)) then
+        pos = GetTransform(dest);
+    else
+        return nil;
+    end
+
+    pos.posit = pos.posit + pos.front * offset;
+    pos.posit.y = pos.posit.y + 5;
+
+    BuildObject("teleportout", 0, pos);
+
+    SetTransform(h, pos);
+    SetVelocity(h, Length(GetVelocity(h)) * pos.front);
+
+    if (h == GetPlayerHandle(1)) then
+        SetColorFade(1.0, 1.0, 32767);
+        StartSoundEffect("teleport.wav", nil);
+    end
+
+    return true;
+end
+
 -- Teleports In (spawns) an ODF at a Portal Handle dest.
 function TeleportIn(odf, team, dest)
     local pos = GetPosition(dest);
@@ -110,6 +160,12 @@ function TeleportIn(odf, team, dest)
 
     BuildObject("teleportin", 0, randPos);
     return BuildObject(odf, team, randPos);
+end
+
+-- Teleports Out (despawns) an ODF at a Portal Handle dest.
+function TeleportOut(h)
+    BuildObject("teleportout", 0, BuildDirectionalMatrix(GetPosition(h)));
+    RemoveObject(h);
 end
 
 return _HelperFunctions;

@@ -168,6 +168,7 @@ function AIController:Run(missionTurnCount)
             self.TauntCooldown = missionTurnCount + SecondsToTurns(90)
         end
 
+        
         if (self.RecyclerDeployed) then
             if (self.IdleQueueCooldown < missionTurnCount) then
                 if (#self.IdleQueue > 0) then
@@ -178,15 +179,15 @@ function AIController:Run(missionTurnCount)
             end
 
             if (self.DispatchCooldown < missionTurnCount) then
-                self:DispatchTurrets(missionTurnCount)
-                self:DispatchPatrols(missionTurnCount)
-                self:DispatchAntiAir(missionTurnCount)
-                self:DispatchMinions(missionTurnCount)
+                self:DispatchTurrets(missionTurnCount);
+                self:DispatchPatrols(missionTurnCount);
+                self:DispatchAntiAir(missionTurnCount);
+                self:DispatchMinions(missionTurnCount);
 
                 self.DispatchCooldown = missionTurnCount + SecondsToTurns(1.5)
             end
 
-            self:CommanderBrain()
+            self:CommanderBrain();
         end
     end)
 
@@ -278,6 +279,8 @@ function AIController:SetPlan(type)
 end
 
 function AIController:DispatchTurrets(missionTurnCount)
+    print("Dispatching turrets");
+
     -- Input validation
     if (not missionTurnCount) then
         print("ERROR: missionTurnCount is nil in DispatchTurrets");
@@ -286,6 +289,7 @@ function AIController:DispatchTurrets(missionTurnCount)
 
     -- Early exit if no turrets to dispatch
     if (#self.TurretsToDispatch == 0) then
+        print("WARNING: No turrets to dispatch");
         return;
     end
 
@@ -303,11 +307,13 @@ function AIController:DispatchTurrets(missionTurnCount)
 
         -- Check if unit is available for dispatch
         if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
+            print("WARNING: Turret dispatch object at index " .. i .. " is not available");
             break;
         end
 
         -- Check if unit already has a target
-        if (GetTarget(dispatch.Handle)) then
+        if (GetTarget(dispatch.Handle) ~= nil) then
+            print("WARNING: Turret dispatch object at index " .. i .. " already has a target");
             break;
         end
 
@@ -333,6 +339,8 @@ function AIController:DispatchTurrets(missionTurnCount)
 end
 
 function AIController:DispatchPatrols(missionTurnCount)
+    print("Dispatching patrols");
+
     -- Input validation
     if (not missionTurnCount) then
         print("ERROR: missionTurnCount is nil in DispatchPatrols");
@@ -341,6 +349,7 @@ function AIController:DispatchPatrols(missionTurnCount)
 
     -- Early exit if no patrols to dispatch
     if (#self.PatrolsToDispatch == 0) then
+        print("WARNING: No patrols to dispatch");
         return;
     end
 
@@ -358,6 +367,7 @@ function AIController:DispatchPatrols(missionTurnCount)
 
         -- Check if unit is available for dispatch
         if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
+            print("WARNING: Patrol dispatch object at index " .. i .. " is not available");
             break;
         end
 
@@ -378,6 +388,8 @@ function AIController:DispatchPatrols(missionTurnCount)
 end
 
 function AIController:DispatchAntiAir(missionTurnCount)
+    print("Dispatching anti-air");
+
     -- Input validation
     if (not missionTurnCount) then
         print("ERROR: missionTurnCount is nil in DispatchAntiAir");
@@ -422,6 +434,8 @@ function AIController:DispatchAntiAir(missionTurnCount)
 end
 
 function AIController:DispatchMinions(missionTurnCount)
+    print("Dispatching minions");
+
     -- Input validation
     if (not missionTurnCount) then
         print("ERROR: missionTurnCount is nil in DispatchMinions");
@@ -540,6 +554,8 @@ function AIController:TurretShot(handle, missionTurnCount)
 end
 
 function AIController:ProcessIdleUnits()
+    print("Processing idle units");
+
     for i = 1, #self.IdleQueue do
         -- Grab the idle unit.
         local idleUnit = self.IdleQueue[i];

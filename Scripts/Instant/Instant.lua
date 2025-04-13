@@ -39,17 +39,22 @@ local _Session = {
     m_MyForce = 0,
     m_CompForce = 0,
     m_Difficulty = 0,
-
+    
+    m_IntroForcePlayerTeleportDelay = 0,
     m_IntroState = 1,
     m_IntroDelay = 0,
     m_IntroAudio = 0,
     m_IntroMusic = 0,
     m_IntroMusicVolume = 1,
-
+    m_SetIntroMusicVolume = false,
     m_IntroEnemiesSpawned = false,
     m_IntroEnemy1 = nil,
     m_IntroEnemy2 = nil,
     m_IntroEnemy3 = nil,
+
+    m_IntroMatriarchTeleported = false,
+    m_IntroTurret1Teleported = false,
+    m_IntroTurret2Teleported = false,
 
     m_CustomAIPStr = nil,
 
@@ -59,6 +64,12 @@ local _Session = {
 
     m_IntroShip1 = nil,
     m_IntroShip2 = nil,
+
+    m_IntroScionTurret1 = nil,
+    m_IntroScionTurret2 = nil,
+    m_ScionIntroHangar = nil,
+    m_ScionIntroMatriarch = nil,
+    m_ScionIntroPlayer = nil,
 
     m_IntroTurret1 = nil,
     m_IntroTurret2 = nil,
@@ -116,11 +127,11 @@ local ISDFIntroFunctions = {};
 local ScionIntroFunctions = {};
 
 -- Debug only.
-local debug = true;
-local debug_base = true;
+local debug = false;
+local debug_base = false;
 local debug_base_built = false;
 local debug_contoller = false;
-local debug_stop_script = true;
+local debug_stop_script = false;
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -247,13 +258,22 @@ local ScionBaseLayout =
     -- { "fbrspir_c",  "F_Field_RocketTower_3" }
 }
 
+-- Planet assortment for different map names.
+local MireMaps = {
+
+}
+
+local BaneMaps = {
+    "dunesi.trn"
+}
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 function InitialSetup()
     -- This is to stop music for the intro.
-    AllowRandomTracks(false);
+    AllowRandomTracks(true);
 
     -- Do not auto group units.
     SetAutoGroupUnits(false);
@@ -292,7 +312,14 @@ function AddObject(handle)
     local objBase = GetBase(handle);
 
     if (classLabel == "CLASS_DEPOSIT") then
-        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool:New(handle, GetPosition(handle), GetDistance(handle, "RecyclerEnemy"));
+        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool:New(handle, GetPosition(handle),
+            GetDistance(handle, "RecyclerEnemy"));
+    end
+
+    if (_Session.m_IntroDone == false) then
+        if (objCfg == "fbportb_ark") then
+            _Session.m_ScionIntroPortal = handle;
+        end
     end
 
     -- Max out skills.
@@ -426,7 +453,8 @@ function Update()
 
             if (debug_contoller) then
                 -- Create the CPU team model to keep track of what's in the world.
-                _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+                _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session
+                    .m_Pools);
 
                 -- Setup the AI Controller.
                 _Session.m_AIController:Setup(_Session.m_CompTeam);
@@ -434,10 +462,6 @@ function Update()
 
             -- So we don't spawn infinite bases.
             debug_base_built = true;
-        end
-
-        if (debug_contoller and _Session.m_AIController ~= nil) then
-            _Session.m_AIController:Run(_Session.m_TurnCounter);
         end
 
         return;
@@ -494,6 +518,13 @@ function Update()
         _Session.m_IntroShip1 = GetHandle("intro_drop_1");
         _Session.m_IntroShip2 = GetHandle("intro_drop_2");
 
+        -- Grab all Scion intro units.
+        _Session.m_ScionIntroHangar = GetHandle("scion_intro_hangar");
+        _Session.m_ScionIntroMatriarch = GetHandle("intro_matriarch");
+        _Session.m_ScionIntroPlayer = GetHandle("scion_player_scout");
+        _Session.m_ScionIntroTurret1 = GetHandle("intro_turret_1_scion");
+        _Session.m_ScionIntroTurret2 = GetHandle("intro_turret_2_scion");
+
         -- Grab the turrets.
         _Session.m_IntroTurret1 = GetHandle("turret1");
         _Session.m_IntroTurret2 = GetHandle("turret2");
@@ -508,13 +539,6 @@ function Update()
             -- Do not allow the intro to play.
             DisableIntro();
 
-            -- Remove the dropships.
-            RemoveObject(_Session.m_IntroShip1);
-            RemoveObject(_Session.m_IntroShip2);
-
-            RemoveObject(_Session.m_IntroTurret1);
-            RemoveObject(_Session.m_IntroTurret2);
-
             -- Create the Recycler.
             BuildPlayerRecycler("Recycler");
 
@@ -527,15 +551,7 @@ function Update()
             BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
                 GetPositionNear(recPos, 40.0, 60.0));
 
-            -- Grab the position of the Carrier path for spawning.
-            local carrierPath = GetPosition("Carrier");
-            local carrierEnemyPath = GetPosition("CarrierEnemy");
-
-            -- Spawn Carriers for both teams.
-            BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam,
-                SetVector(carrierPath.x, 800, carrierPath.z));
-            BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam,
-                SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
+            BuildCarriers();
 
             -- Reset the player and give them the RTS Vehicle.
             RemoveObject(_Session.m_Player);
@@ -569,7 +585,8 @@ function Update()
                             SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
 
                             -- Engine sound.
-                            StartSoundEffect("dropleav.wav", _Session.m_IntroShip1);
+                            local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip1);
+                            SetVolume(engineSound, 0.3);
 
                             -- Set the timer for when we remove the dropship.
                             _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
@@ -593,7 +610,8 @@ function Update()
                             SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
 
                             -- Engine sound.
-                            StartSoundEffect("dropleav.wav", _Session.m_IntroShip2);
+                            local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip2);
+                            SetVolume(engineSound, 0.3);
 
                             -- Set the timer for when we remove the dropship.
                             _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
@@ -628,12 +646,13 @@ function Update()
         end
     end
 
+    if (_Session.m_AIController ~= nil) then
+        _Session.m_AIController:Run(_Session.m_TurnCounter);
+    end
+
     if (_Session.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions();
-
-        -- Run the AI Controller instance for the CPU team.
-        _Session.m_AIController:Run(_Session.m_TurnCounter);
 
         if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
             local condorObj = _Session.m_CarrierItemsToRemove[1];
@@ -745,6 +764,8 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 function DisableIntro()
+    RemoveScionIntroUnits();
+    RemoveISDFIntroUnits();
     _Session.m_IntroDone = true;
 end
 
@@ -832,13 +853,42 @@ function BuildPlayerRecycler(pos)
     SetScrap(_Session.m_StratTeam, 40);
 end
 
+function BuildCarriers()
+    -- Grab the position of the Carrier path for spawning.
+    local carrierPath = GetPosition("Carrier");
+    local carrierEnemyPath = GetPosition("CarrierEnemy");
+
+    -- Spawn Carriers for both teams.
+    BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam,
+        SetVector(carrierPath.x, 800, carrierPath.z));
+    BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam,
+        SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
+end
+
+function RemoveISDFIntroUnits()
+    RemoveObject(_Session.m_IntroShip1);
+    RemoveObject(_Session.m_IntroShip2);
+    RemoveObject(_Session.m_IntroTurret1);
+    RemoveObject(_Session.m_IntroTurret2);
+end
+
+function RemoveScionIntroUnits()
+    RemoveObject(_Session.m_ScionIntroHangar);
+    RemoveObject(_Session.m_ScionIntroMatriarch);
+    RemoveObject(_Session.m_ScionIntroPlayer);
+    RemoveObject(_Session.m_ScionIntroTurret1);
+    RemoveObject(_Session.m_ScionIntroTurret2);
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------- Intro Related Logic ---------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 ISDFIntroFunctions[1] = function()
+    RemoveScionIntroUnits();
+
     SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
-    StartEarthQuake(1);
+    StartEarthQuake(5);
 
     _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
     IFace_SetInteger("options.audio.music", 0);
@@ -851,6 +901,11 @@ ISDFIntroFunctions[1] = function()
 end
 
 ISDFIntroFunctions[2] = function()
+    if (_Session.m_SetIntroMusicVolume == false) then
+        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume);
+        _Session.m_SetIntroMusicVolume = true;
+    end
+
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav", false);
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(10);
@@ -880,7 +935,7 @@ end
 ISDFIntroFunctions[5] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav", false);
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(5);
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(6);
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
@@ -897,7 +952,9 @@ ISDFIntroFunctions[6] = function()
 
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5);
 
+        SetVerbose(_Session.m_Recycler, false);
         Goto(_Session.m_Recycler, "recycler_go", 0);
+        SetVerbose(_Session.m_Recycler, true);
         Goto(_Session.m_IntroTurret1, "turret_1_go", 1);
         Goto(_Session.m_IntroTurret2, "turret_2_go", 1);
 
@@ -917,6 +974,204 @@ ISDFIntroFunctions[7] = function()
 end
 
 ISDFIntroFunctions[8] = function()
+    CheckIntroEnemiesKilled();
+end
+
+ISDFIntroFunctions[9] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        SetGroup(_Session.m_IntroTurret1, 1);
+        SetGroup(_Session.m_IntroTurret2, 1);
+        Defend(_Session.m_IntroTurret1, 0);
+        Defend(_Session.m_IntroTurret2, 0);
+
+        BuildCarriers();
+
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ISDFIntroFunctions[10] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ISDFIntroFunctions[11] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02;
+
+        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume);
+
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.3);
+
+        if (_Session.m_IntroMusicVolume <= 0) then
+            StopAudio(_Session.m_IntroMusic);
+
+            IFace_SetInteger("options.audio.music", _Session.m_MusicOptionValue);
+
+            _Session.m_IntroDone = true;
+        end
+    end
+end
+
+ScionIntroFunctions[1] = function()
+    RemoveISDFIntroUnits();
+
+    -- Start a small earthquake.
+    StartEarthQuake(1);
+
+    -- Temp so the player can't control the intro units.
+    Stop(_Session.m_ScionIntroMatriarch, 1);
+    Stop(_Session.m_ScionIntroTurret1, 1);
+    Stop(_Session.m_ScionIntroTurret2, 1);
+
+    -- Attempt to mask the emitters on the portal.
+    MaskEmitter(_Session.m_ScionIntroPortal, 0);
+
+    RemoveObject(_Session.m_Player);
+    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+    SetAsUser(_Session.m_ScionIntroPlayer, _Session.m_PlayerTeam);
+
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
+    _Session.m_IntroState = _Session.m_IntroState + 1;
+end
+
+ScionIntroFunctions[2] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_1.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[3] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_2.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[4] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        local mapName = GetMapTRNFilename();
+
+        if (FindInTable(MireMaps, mapName)) then
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav", false);
+        elseif (FindInTable(BaneMaps, mapName)) then
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav", false);
+        end
+
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[5] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[6] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_4.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[7] = function()
+    StartEmitter(_Session.m_ScionIntroPortal, 1);
+
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(1);
+    _Session.m_IntroState = _Session.m_IntroState + 1;
+end
+
+ScionIntroFunctions[8] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        Follow(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal, 1);
+        Follow(_Session.m_ScionIntroTurret1, _Session.m_ScionIntroPortal, 1);
+        Follow(_Session.m_ScionIntroTurret2, _Session.m_ScionIntroPortal, 1);
+
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[9] = function()
+    if (GetDistance(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal) < 20 and _Session.m_IntroMatriarchTeleported == false) then
+        local recyOdf = nil;
+        local customHumanRecycler = IFace_GetString("options.instant.string1");
+
+        if (customHumanRecycler ~= nil) then
+            recyOdf = ReplaceCharacter(1, customHumanRecycler, "f");
+        else
+            recyOdf = ReplaceCharacter(1, "vrecy", "f");
+        end
+
+        TeleportOut(_Session.m_ScionIntroMatriarch);
+
+        _Session.m_PlayerRecycler = TeleportIn(recyOdf, _Session.m_StratTeam, "Recycler");
+        SetBestGroup(_Session.m_PlayerRecycler);
+        SetScrap(_Session.m_StratTeam, 40);
+
+        _Session.m_IntroMatriarchTeleported = true;
+    end
+
+    if (GetDistance(_Session.m_ScionIntroTurret1, _Session.m_ScionIntroPortal) < 30 and _Session.m_IntroTurret1Teleported == false) then
+        TeleportOut(_Session.m_ScionIntroTurret1);
+        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"));
+        _Session.m_IntroTurret1Teleported = true;
+    end
+
+    if (GetDistance(_Session.m_ScionIntroTurret2, _Session.m_ScionIntroPortal) < 30 and _Session.m_IntroTurret2Teleported == false) then
+        TeleportOut(_Session.m_ScionIntroTurret2);
+        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"));
+        _Session.m_IntroTurret2Teleported = true;
+    end
+
+    if (_Session.m_IntroMatriarchTeleported == true and _Session.m_IntroTurret1Teleported == true and _Session.m_IntroTurret2Teleported == true) then
+        _Session.m_IntroForcePlayerTeleportDelay = _Session.m_TurnCounter + SecondsToTurns(25);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[10] = function()
+    -- Teleport the player to the Recycler.
+    if (_Session.m_IntroForcePlayerTeleportDelay < _Session.m_TurnCounter or GetDistance(_Session.m_Player, _Session.m_ScionIntroPortal) < 20) then
+        Teleport(_Session.m_Player, "Recycler", 50);
+
+        -- Remove the intro stuff.
+        RemoveObject(_Session.m_ScionIntroHangar);
+
+        -- Stop the earthquake.
+        StopEarthQuake();
+
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[11] = function()
+    -- Spawn and check if the enemies are dead.
+    CheckIntroEnemiesKilled();
+end
+
+ScionIntroFunctions[12] = function()
+    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
+        BuildCarriers();
+
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_1.wav", false);
+        _Session.m_IntroState = _Session.m_IntroState + 1;
+    end
+end
+
+ScionIntroFunctions[13] = function()
+    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_2.wav", false);
+        _Session.m_IntroDone = true;
+    end
+end
+
+function CheckIntroEnemiesKilled()
     if (_Session.m_IntroEnemiesSpawned == false) then
         for i = 1, _Session.m_Difficulty + 1 do
             local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i);
@@ -946,44 +1201,4 @@ ISDFIntroFunctions[8] = function()
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(3);
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
-end
-
-ISDFIntroFunctions[9] = function()
-    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav", false);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
-    end
-end
-
-ISDFIntroFunctions[10] = function()
-    if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav", false);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
-    end
-end
-
-ISDFIntroFunctions[11] = function()
-    if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02;
-
-        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume, false);
-
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.3);
-
-        if (_Session.m_IntroMusicVolume <= 0) then
-            StopAudio(_Session.m_IntroMusic);
-
-            IFace_SetInteger("options.audio.music", _Session.m_MusicOptionValue);
-
-            _Session.m_IntroDone = true;
-        end
-    end
-end
-
-ScionIntroFunctions[1] = function()
-    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
-
-    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
-
-    _Session.m_IntroState = _Session.m_IntroState + 1;
 end

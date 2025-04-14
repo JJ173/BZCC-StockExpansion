@@ -6,12 +6,12 @@ binarySave [1] =
 false
 msn_filename = circle.bzn
 seq_count [1] =
-1510
+1530
 saveType [1] =
 0
 g_TerrainName = iacirclebzcc
 size [1] =
-265
+274
 [GameObject]
 objClass = ivscout_x
 seqno [1] =
@@ -23,27 +23,27 @@ true
 objAddr = 00000001
 transform [1] =
   right.x [1] =
-9.99804020e-01
+9.99951422e-01
   right.y [1] =
-5.02478115e-10
+-6.40289766e-10
   right.z [1] =
--1.95682179e-02
+-9.42094065e-03
   up.x [1] =
-2.17983164e-04
+1.03075603e-04
   up.y [1] =
-9.99934733e-01
+9.99935806e-01
   up.z [1] =
-1.11372946e-02
+1.09405173e-02
   front.x [1] =
-1.95669979e-02
+9.42033622e-03
   front.y [1] =
--1.11393323e-02
+-1.09409569e-02
   front.z [1] =
-9.99738038e-01
+9.99887228e-01
   posit.x [1] =
--9.21675861e-02
+-9.21675488e-02
   posit.y [1] =
-8.34808197e+01
+8.34808426e+01
   posit.z [1] =
 -1.11093433e+03
 abandoned [1] =
@@ -65,34 +65,34 @@ euler =
  mass_inv [1] =
 1.74687855e-04
  v_mag [1] =
-1.20425511e-06
+8.89089461e-06
  v_mag_inv [1] =
-8.30388813e+05
+1.12474617e+05
  I [1] =
 3.92424258e+04
  k_i [1] =
 2.54826246e-05
  v [1] =
   x [1] =
--2.41691750e-10
+9.16403120e-10
   y [1] =
--1.20409311e-06
+8.88995328e-06
   z [1] =
-1.97494039e-08
+1.29365333e-07
  omega [1] =
   x [1] =
-6.10564577e-09
+0.00000000e+00
   y [1] =
-8.39858392e-37
+0.00000000e+00
   z [1] =
--1.45716759e-16
+0.00000000e+00
  Accel [1] =
   x [1] =
-4.17285762e-10
+7.25197680e-13
   y [1] =
--1.90043613e-06
+7.02295200e-09
   z [1] =
-2.13201474e-08
+7.69091457e-11
 name = Scout
 saveFlags [1] =
 108
@@ -103,7 +103,7 @@ EffectsMask [1] =
 isSeen [1] =
 2
 groupNumber [1] =
-1
+4
 undefaicmd =
 priority [1] =
 0
@@ -1212,7 +1212,7 @@ transform [1] =
   right.y [1] =
 1.14440418e-05
   right.z [1] =
-1.11023269e-16
+1.38779082e-16
   up.x [1] =
 -1.14440418e-05
   up.y [1] =
@@ -1220,7 +1220,7 @@ transform [1] =
   up.z [1] =
 7.62936133e-06
   front.x [1] =
-8.73106171e-11
+8.73105893e-11
   front.y [1] =
 -7.62932859e-06
   front.z [1] =
@@ -1497,7 +1497,7 @@ transform [1] =
   right.y [1] =
 8.79827067e-02
   right.z [1] =
--3.00464220e-03
+-3.00464593e-03
   up.x [1] =
 -8.75056237e-02
   up.y [1] =
@@ -1505,7 +1505,7 @@ transform [1] =
   up.z [1] =
 7.55396262e-02
   front.x [1] =
-9.63066705e-03
+9.63067077e-03
   front.y [1] =
 -7.49830902e-02
   front.z [1] =
@@ -1561,7 +1561,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -1656,7 +1656,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -1751,7 +1751,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -1846,7 +1846,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -1941,7 +1941,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -2036,7 +2036,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -2131,7 +2131,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -2416,7 +2416,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -2511,7 +2511,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -3081,7 +3081,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -3587,7 +3587,7 @@ transform [1] =
   right.y [1] =
 -1.62338659e-01
   right.z [1] =
-5.56117482e-03
+5.56116737e-03
   up.x [1] =
 1.59567460e-01
   up.y [1] =
@@ -3595,7 +3595,7 @@ transform [1] =
   up.z [1] =
 -2.20109627e-01
   front.x [1] =
-3.03806104e-02
+3.03806178e-02
   front.y [1] =
 2.18072876e-01
   front.z [1] =
@@ -4316,7 +4316,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -4442,7 +4442,7 @@ transform [1] =
   right.y [1] =
 -1.14440418e-05
   right.z [1] =
-1.11023269e-16
+1.38779082e-16
   up.x [1] =
 1.14440418e-05
   up.y [1] =
@@ -4450,7 +4450,7 @@ transform [1] =
   up.z [1] =
 -7.62936133e-06
   front.x [1] =
-8.73106171e-11
+8.73105893e-11
   front.y [1] =
 7.62932859e-06
   front.z [1] =
@@ -4537,7 +4537,7 @@ transform [1] =
   right.y [1] =
 -1.14440418e-05
   right.z [1] =
-1.11023269e-16
+1.38779082e-16
   up.x [1] =
 1.14440418e-05
   up.y [1] =
@@ -4545,7 +4545,7 @@ transform [1] =
   up.z [1] =
 -7.62936133e-06
   front.x [1] =
-8.73106171e-11
+8.73105893e-11
   front.y [1] =
 7.62932859e-06
   front.z [1] =
@@ -4601,7 +4601,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -4696,7 +4696,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -4791,7 +4791,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -4886,7 +4886,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -5266,7 +5266,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -5361,7 +5361,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -5646,7 +5646,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -5741,7 +5741,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -5836,7 +5836,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -6247,7 +6247,7 @@ transform [1] =
   right.y [1] =
 -1.14440418e-05
   right.z [1] =
-5.55116343e-17
+6.93895412e-17
   up.x [1] =
 1.14440418e-05
   up.y [1] =
@@ -6255,7 +6255,7 @@ transform [1] =
   up.z [1] =
 -3.81468067e-06
   front.x [1] =
-4.36553085e-11
+4.36552947e-11
   front.y [1] =
 3.81466430e-06
   front.z [1] =
@@ -6311,7 +6311,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -6342,7 +6342,7 @@ transform [1] =
   right.y [1] =
 1.98744494e-03
   right.z [1] =
--3.63801047e-12
+-4.54751297e-12
   up.x [1] =
 -1.98744121e-03
   up.y [1] =
@@ -6350,7 +6350,7 @@ transform [1] =
   up.z [1] =
 1.89588917e-03
   front.x [1] =
-3.76797902e-06
+3.76797993e-06
   front.y [1] =
 -1.89587730e-03
   front.z [1] =
@@ -6406,7 +6406,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -6501,7 +6501,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -6627,7 +6627,7 @@ transform [1] =
   right.y [1] =
 -8.71074423e-02
   right.z [1] =
--6.72914833e-03
+-6.72915205e-03
   up.x [1] =
 8.55929628e-02
   up.y [1] =
@@ -6635,7 +6635,7 @@ transform [1] =
   up.z [1] =
 -1.24729894e-01
   front.x [1] =
-1.75165813e-02
+1.75165851e-02
   front.y [1] =
 1.23676442e-01
   front.z [1] =
@@ -6976,7 +6976,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7071,7 +7071,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7166,7 +7166,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7261,7 +7261,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7356,7 +7356,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7451,7 +7451,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7546,7 +7546,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7641,7 +7641,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7736,7 +7736,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -7862,7 +7862,7 @@ transform [1] =
   right.y [1] =
 2.32512444e-01
   right.z [1] =
--8.93280841e-03
+-8.93280469e-03
   up.x [1] =
 -2.24770680e-01
   up.y [1] =
@@ -7870,7 +7870,7 @@ transform [1] =
   up.z [1] =
 2.22316980e-01
   front.x [1] =
-6.01660833e-02
+6.01660796e-02
   front.y [1] =
 -2.14206085e-01
   front.z [1] =
@@ -8021,7 +8021,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -8686,7 +8686,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -8907,7 +8907,7 @@ transform [1] =
   right.y [1] =
 -7.53739849e-02
   right.z [1] =
-4.38330717e-05
+4.38349343e-05
   up.x [1] =
 7.52361268e-02
   up.y [1] =
@@ -8915,7 +8915,7 @@ transform [1] =
   up.z [1] =
 -6.10363334e-02
   front.x [1] =
-4.55692457e-03
+4.55692271e-03
   front.y [1] =
 6.08657338e-02
   front.z [1] =
@@ -9161,7 +9161,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -9570,9 +9570,9 @@ transform [1] =
   right.x [1] =
 9.99861419e-01
   right.y [1] =
--1.31095611e-02
+-1.31095601e-02
   right.z [1] =
--9.83794406e-03
+-9.83794220e-03
   up.x [1] =
 1.19330548e-02
   up.y [1] =
@@ -9580,7 +9580,7 @@ transform [1] =
   up.z [1] =
 -1.11366324e-01
   front.x [1] =
-1.12359626e-02
+1.12359608e-02
   front.y [1] =
 1.11233495e-01
   front.z [1] =
@@ -9762,7 +9762,7 @@ transform [1] =
   right.y [1] =
 -1.97790638e-02
   right.z [1] =
--5.82081675e-11
+-7.27602076e-11
   up.x [1] =
 1.97790302e-02
   up.y [1] =
@@ -9770,7 +9770,7 @@ transform [1] =
   up.z [1] =
 1.82305765e-03
   front.x [1] =
--3.60583144e-05
+-3.60582999e-05
   front.y [1] =
 -1.82269316e-03
   front.z [1] =
@@ -9826,7 +9826,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -9857,7 +9857,7 @@ transform [1] =
   right.y [1] =
 1.53003454e-01
   right.z [1] =
--3.72532272e-09
+-4.65665329e-09
   up.x [1] =
 -1.52881995e-01
   up.y [1] =
@@ -9865,7 +9865,7 @@ transform [1] =
   up.z [1] =
 -3.98373865e-02
   front.x [1] =
--6.09525386e-03
+-6.09525293e-03
   front.y [1] =
 3.93681563e-02
   front.z [1] =
@@ -10111,7 +10111,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10396,7 +10396,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10491,7 +10491,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10586,7 +10586,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10681,7 +10681,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10776,7 +10776,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10871,7 +10871,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -10966,7 +10966,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -11377,7 +11377,7 @@ transform [1] =
   right.y [1] =
 5.14981803e-04
   right.z [1] =
-6.82126881e-13
+9.09502508e-13
   up.x [1] =
 -5.14978601e-04
   up.y [1] =
@@ -11385,7 +11385,7 @@ transform [1] =
   up.z [1] =
 3.52855725e-03
   front.x [1] =
-1.81714211e-06
+1.81714188e-06
   front.y [1] =
 -3.52854165e-03
   front.z [1] =
@@ -11441,7 +11441,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -11536,7 +11536,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -11567,7 +11567,7 @@ transform [1] =
   right.y [1] =
 6.48978204e-02
   right.z [1] =
--1.57502203e-04
+-1.57503135e-04
   up.x [1] =
 -6.47973716e-02
   up.y [1] =
@@ -11575,7 +11575,7 @@ transform [1] =
   up.z [1] =
 -5.80862015e-02
   front.x [1] =
--3.61276371e-03
+-3.61276278e-03
   front.y [1] =
 5.79737090e-02
   front.z [1] =
@@ -11821,7 +11821,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -12992,7 +12992,7 @@ transform [1] =
   right.y [1] =
 -1.14440418e-05
   right.z [1] =
-5.55116343e-17
+6.93895412e-17
   up.x [1] =
 1.14440418e-05
   up.y [1] =
@@ -13000,7 +13000,7 @@ transform [1] =
   up.z [1] =
 -3.81468067e-06
   front.x [1] =
-4.36553085e-11
+4.36552947e-11
   front.y [1] =
 3.81466430e-06
   front.z [1] =
@@ -13056,7 +13056,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -13341,7 +13341,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -13436,7 +13436,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -13562,7 +13562,7 @@ transform [1] =
   right.y [1] =
 1.17369175e-01
   right.z [1] =
-1.41173974e-03
+1.41173787e-03
   up.x [1] =
 -1.16766207e-01
   up.y [1] =
@@ -13570,7 +13570,7 @@ transform [1] =
   up.z [1] =
 -9.00497362e-02
   front.x [1] =
--1.19653642e-02
+-1.19653624e-02
   front.y [1] =
 8.92620161e-02
   front.z [1] =
@@ -13626,7 +13626,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -13657,7 +13657,7 @@ transform [1] =
   right.y [1] =
 1.10244204e-03
   right.z [1] =
--4.54751254e-13
+-5.68439068e-13
   up.x [1] =
 -1.10244204e-03
   up.y [1] =
@@ -13665,7 +13665,7 @@ transform [1] =
   up.z [1] =
 -2.09807316e-04
   front.x [1] =
--2.31299950e-07
+-2.31299836e-07
   front.y [1] =
 2.09806298e-04
   front.z [1] =
@@ -13721,7 +13721,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14101,7 +14101,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14196,7 +14196,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14291,7 +14291,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14386,7 +14386,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14417,7 +14417,7 @@ transform [1] =
   right.y [1] =
 -2.83317026e-02
   right.z [1] =
--4.65665340e-10
+-5.82081661e-10
   up.x [1] =
 2.83196792e-02
   up.y [1] =
@@ -14425,7 +14425,7 @@ transform [1] =
   up.z [1] =
 2.91277245e-02
   front.x [1] =
--8.25237541e-04
+-8.25237425e-04
   front.y [1] =
 -2.91159078e-02
   front.z [1] =
@@ -14481,7 +14481,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -14956,7 +14956,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -15051,7 +15051,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -15146,7 +15146,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -15241,7 +15241,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -16001,7 +16001,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -16096,7 +16096,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -16191,7 +16191,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -16286,7 +16286,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -16697,7 +16697,7 @@ transform [1] =
   right.y [1] =
 -1.59666330e-01
   right.z [1] =
-6.38637412e-03
+6.38638064e-03
   up.x [1] =
 1.59472689e-01
   up.y [1] =
@@ -16705,7 +16705,7 @@ transform [1] =
   up.z [1] =
 -1.02707043e-01
   front.x [1] =
-1.01284552e-02
+1.01284478e-02
   front.y [1] =
 1.02405302e-01
   front.z [1] =
@@ -16792,7 +16792,7 @@ transform [1] =
   right.y [1] =
 7.96098635e-03
   right.z [1] =
--5.45701592e-12
+-7.27602093e-12
   up.x [1] =
 -7.96098076e-03
   up.y [1] =
@@ -16800,7 +16800,7 @@ transform [1] =
   up.z [1] =
 -1.24354556e-03
   front.x [1] =
--9.89984346e-06
+-9.89984164e-06
   front.y [1] =
 1.24350074e-03
   front.z [1] =
@@ -19400,7 +19400,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19494,7 +19494,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19588,7 +19588,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19682,7 +19682,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19776,7 +19776,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19870,7 +19870,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -19964,7 +19964,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20058,7 +20058,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20152,7 +20152,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20246,7 +20246,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20531,7 +20531,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20626,7 +20626,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20721,7 +20721,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20816,7 +20816,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -20911,7 +20911,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-3
+2
 groupNumber [1] =
 1
 undefaicmd =
@@ -21108,13 +21108,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21222,13 +21222,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21336,13 +21336,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21450,13 +21450,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21564,13 +21564,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21678,13 +21678,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21792,13 +21792,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -21906,13 +21906,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22020,13 +22020,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22134,13 +22134,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22248,13 +22248,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22362,13 +22362,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22476,13 +22476,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22590,13 +22590,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22704,13 +22704,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22818,13 +22818,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -22932,13 +22932,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23046,13 +23046,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23160,13 +23160,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23274,13 +23274,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23388,13 +23388,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23502,13 +23502,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23616,13 +23616,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23730,13 +23730,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23844,13 +23844,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -23958,13 +23958,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24072,13 +24072,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24186,13 +24186,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24300,13 +24300,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24414,13 +24414,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24528,13 +24528,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24642,13 +24642,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24756,13 +24756,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24870,13 +24870,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -24984,13 +24984,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -25098,13 +25098,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -25212,13 +25212,13 @@ euler =
 0.00000000e+00
 name = Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -25358,13 +25358,13 @@ euler =
 0.00000000e+00
 name = Mega Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -25504,13 +25504,13 @@ euler =
 0.00000000e+00
 name = Mega Statue
 saveFlags [1] =
-68
+4
 isVisible [1] =
 65535
 EffectsMask [1] =
 65535
 isSeen [1] =
-67
+66
 groupNumber [1] =
 0
 curHealth [1] =
@@ -25544,7 +25544,7 @@ false
 objAddr = 00000106
 transform [1] =
   right.x [1] =
-9.99995649e-01
+9.99995768e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -25560,7 +25560,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-9.99991298e-01
+9.99991417e-01
   posit.x [1] =
 -9.53674316e-07
   posit.y [1] =
@@ -25644,7 +25644,7 @@ transform [1] =
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-9.99995649e-01
+9.99995768e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -25652,7 +25652,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--9.99991298e-01
+-9.99991417e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -25736,23 +25736,23 @@ false
 objAddr = 00000108
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995649e-01
   right.y [1] =
--5.65349999e-21
+-5.65191550e-21
   right.z [1] =
-1.10083316e-13
+1.10052450e-13
   up.x [1] =
-1.19149551e-26
+1.17129559e-26
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
-5.13564480e-08
+5.13562313e-08
   front.x [1] =
--1.10083316e-13
+-1.10051969e-13
   front.y [1] =
--5.13564480e-08
+-5.13560074e-08
   front.z [1] =
-1.00000000e+00
+9.99991298e-01
   posit.x [1] =
 4.07810736e+00
   posit.y [1] =
@@ -25847,23 +25847,23 @@ false
 objAddr = 00000109
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995649e-01
   right.y [1] =
--5.65349999e-21
+-5.65191550e-21
   right.z [1] =
-1.10083316e-13
+1.10052450e-13
   up.x [1] =
-1.19149551e-26
+1.17129559e-26
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
-5.13564480e-08
+5.13562313e-08
   front.x [1] =
--1.10083316e-13
+-1.10051969e-13
   front.y [1] =
--5.13564480e-08
+-5.13560074e-08
   front.z [1] =
-1.00000000e+00
+9.99991298e-01
   posit.x [1] =
 -4.09447336e+00
   posit.y [1] =
@@ -25946,6 +25946,970 @@ aiProcess [1] =
 true
 independence [1] =
 1
+[GameObject]
+objClass = fvrecy_x
+seqno [1] =
+5eb
+team [1] =
+17
+label = intro_matriarch
+isUser [1] =
+false
+objAddr = 0000010A
+transform [1] =
+  right.x [1] =
+9.99995649e-01
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+9.99995649e-01
+  posit.x [1] =
+9.28432495e+02
+  posit.y [1] =
+4.28672211e+02
+  posit.z [1] =
+-1.01677649e+03
+buildMatrix [1] =
+  right.x [1] =
+1.00000000e+00
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+1.00000000e+00
+  posit.x [1] =
+6.08000000e+02
+  posit.y [1] =
+4.24498962e+02
+  posit.z [1] =
+-1.12000000e+03
+state = 00000000
+deployTimer [1] =
+-1.00000002e+30
+abandoned [1] =
+0
+curAmmo [1] =
+0.00000000e+00
+maxAmmo [1] =
+0.00000000e+00
+addAmmo [1] =
+0.00000000e+00
+curPilot = 
+ejectRatio [1] =
+3.00000012e-01
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+5.00000000e+05
+ mass_inv [1] =
+1.99999999e-06
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+7.00883360e+07
+ k_i [1] =
+1.42677097e-08
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Matriarch
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+2
+groupNumber [1] =
+1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+true
+independence [1] =
+1
+[GameObject]
+objClass = fvturr_x
+seqno [1] =
+5ec
+team [1] =
+17
+label = intro_turret_1_scion
+isUser [1] =
+false
+objAddr = 0000010B
+transform [1] =
+  right.x [1] =
+1.00000000e+00
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+1.00000000e+00
+  posit.x [1] =
+9.11838562e+02
+  posit.y [1] =
+4.28735382e+02
+  posit.z [1] =
+-1.04009277e+03
+turretAligned [1] =
+false
+state = 02000000
+deployTimer [1] =
+-1.00000002e+30
+abandoned [1] =
+0
+curAmmo [1] =
+3.00000000e+03
+maxAmmo [1] =
+3.00000000e+03
+addAmmo [1] =
+5.00000000e+00
+curPilot = fspilo_x
+ejectRatio [1] =
+3.00000012e-01
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+9.09894531e+03
+ mass_inv [1] =
+1.09902845e-04
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+7.66656563e+04
+ k_i [1] =
+1.30436501e-05
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Guardian
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+2
+groupNumber [1] =
+2
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+true
+independence [1] =
+1
+[GameObject]
+objClass = fvturr_x
+seqno [1] =
+5ef
+team [1] =
+17
+label = intro_turret_2_scion
+isUser [1] =
+false
+objAddr = 0000010C
+transform [1] =
+  right.x [1] =
+1.00000000e+00
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+1.00000000e+00
+  posit.x [1] =
+9.43838501e+02
+  posit.y [1] =
+4.28735413e+02
+  posit.z [1] =
+-1.04009277e+03
+turretAligned [1] =
+false
+state = 02000000
+deployTimer [1] =
+-1.00000002e+30
+abandoned [1] =
+0
+curAmmo [1] =
+3.00000000e+03
+maxAmmo [1] =
+3.00000000e+03
+addAmmo [1] =
+5.00000000e+00
+curPilot = fspilo_x
+ejectRatio [1] =
+3.00000012e-01
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+9.09894531e+03
+ mass_inv [1] =
+1.09902845e-04
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+7.66656563e+04
+ k_i [1] =
+1.30436501e-05
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Guardian
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+2
+groupNumber [1] =
+2
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+true
+independence [1] =
+1
+[GameObject]
+objClass = fvscout_x
+seqno [1] =
+5f2
+team [1] =
+17
+label = scion_player_scout
+isUser [1] =
+false
+objAddr = 0000010D
+transform [1] =
+  right.x [1] =
+9.99995649e-01
+  right.y [1] =
+1.05305922e-07
+  right.z [1] =
+-2.91529089e-14
+  up.x [1] =
+-1.05305922e-07
+  up.y [1] =
+9.99995649e-01
+  up.z [1] =
+-5.08138100e-07
+  front.x [1] =
+-2.43571676e-14
+  front.y [1] =
+5.08135884e-07
+  front.z [1] =
+9.99991298e-01
+  posit.x [1] =
+9.28141235e+02
+  posit.y [1] =
+4.28570129e+02
+  posit.z [1] =
+-1.05324255e+03
+state = 00000000
+deployTimer [1] =
+-1.00000002e+30
+abandoned [1] =
+0
+curAmmo [1] =
+2.00000000e+03
+maxAmmo [1] =
+2.00000000e+03
+addAmmo [1] =
+2.00000000e+00
+curPilot = fspilo_x
+ejectRatio [1] =
+3.00000012e-01
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+2.00767517e+03
+ mass_inv [1] =
+4.98088542e-04
+ v_mag [1] =
+2.28815872e-04
+ v_mag_inv [1] =
+4.37032617e+03
+ I [1] =
+7.61818164e+03
+ k_i [1] =
+1.31264926e-04
+ v [1] =
+  x [1] =
+-1.31657046e-07
+  y [1] =
+2.28814941e-04
+  z [1] =
+-6.35291599e-07
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+2.27373675e-13
+  y [1] =
+1.34647970e-11
+  z [1] =
+-9.09494702e-13
+name = Scout
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+2
+groupNumber [1] =
+3
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+true
+independence [1] =
+1
+[GameObject]
+objClass = fbhangar
+seqno [1] =
+5f5
+team [1] =
+0
+label = scion_intro_hangar
+isUser [1] =
+false
+objAddr = 0000010E
+transform [1] =
+  right.x [1] =
+-1.00000000e+00
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+-1.00000000e+00
+  posit.x [1] =
+9.28000000e+02
+  posit.y [1] =
+4.30011078e+02
+  posit.z [1] =
+-9.91152588e+02
+powerHandle [3] =
+349177334
+350225911
+351274488
+scriptPowerOverride [1] =
+-1
+saveClass = 
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+8.89142080e+08
+ mass_inv [1] =
+1.12467968e-09
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+1.32471954e+13
+ k_i [1] =
+7.54876779e-14
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Hangar
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+0
+groupNumber [1] =
+-1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+false
+independence [1] =
+1
+[GameObject]
+objClass = fbportb_ark
+seqno [1] =
+8005f6
+team [1] =
+0
+isUser [1] =
+false
+objAddr = 0000010F
+transform [1] =
+  right.x [1] =
+-1.00000000e+00
+  right.y [1] =
+2.51214768e-15
+  right.z [1] =
+2.03052411e-15
+  up.x [1] =
+2.51214768e-15
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+2.51214831e-15
+  front.x [1] =
+-2.03052411e-15
+  front.y [1] =
+2.51214831e-15
+  front.z [1] =
+-1.00000000e+00
+  posit.x [1] =
+9.28000000e+02
+  posit.y [1] =
+4.28424072e+02
+  posit.z [1] =
+-9.47251343e+02
+scriptPowerOverride [1] =
+-1
+saveClass = 
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+1.93735000e+07
+ mass_inv [1] =
+5.16169010e-08
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+2.41651773e+10
+ k_i [1] =
+4.13818597e-11
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = 
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+0
+groupNumber [1] =
+-1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+false
+independence [1] =
+1
+[GameObject]
+objClass = fbark2holo
+seqno [1] =
+8005f7
+team [1] =
+0
+isUser [1] =
+false
+objAddr = 00000110
+transform [1] =
+  right.x [1] =
+-1.00000000e+00
+  right.y [1] =
+2.51214768e-15
+  right.z [1] =
+2.03052411e-15
+  up.x [1] =
+2.51214768e-15
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+2.51214831e-15
+  front.x [1] =
+-2.03052411e-15
+  front.y [1] =
+2.51214831e-15
+  front.z [1] =
+-1.00000000e+00
+  posit.x [1] =
+8.40474976e+02
+  posit.y [1] =
+4.31428070e+02
+  posit.z [1] =
+-1.04220459e+03
+scriptPowerOverride [1] =
+-1
+saveClass = 
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+8.65568750e+05
+ mass_inv [1] =
+1.15530975e-06
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+1.09469904e+08
+ k_i [1] =
+9.13493103e-09
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = 
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+0
+groupNumber [1] =
+-1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+false
+independence [1] =
+1
+[GameObject]
+objClass = fbstro_ark
+seqno [1] =
+8005f8
+team [1] =
+0
+isUser [1] =
+false
+objAddr = 00000111
+transform [1] =
+  right.x [1] =
+-1.00000000e+00
+  right.y [1] =
+2.51214768e-15
+  right.z [1] =
+2.03052411e-15
+  up.x [1] =
+2.51214768e-15
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+2.51214831e-15
+  front.x [1] =
+-2.03052411e-15
+  front.y [1] =
+2.51214831e-15
+  front.z [1] =
+-1.00000000e+00
+  posit.x [1] =
+1.01552502e+03
+  posit.y [1] =
+4.31428070e+02
+  posit.z [1] =
+-1.04220459e+03
+buildDoneTime [1] =
+0.00000000e+00
+buildActive [1] =
+false
+buildCount [1] =
+0
+navHandle [1] =
+352323065
+scriptPowerOverride [1] =
+-1
+saveClass = 
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+1.92870775e+06
+ mass_inv [1] =
+5.18481897e-07
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+4.26358880e+08
+ k_i [1] =
+2.34544184e-09
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Stronghold
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+0
+groupNumber [1] =
+-1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+true
+independence [1] =
+1
+[GameObject]
+objClass = ipdrop
+seqno [1] =
+5f9
+team [1] =
+0
+label = autonav
+isUser [1] =
+false
+objAddr = 00000112
+transform [1] =
+  right.x [1] =
+1.00000000e+00
+  right.y [1] =
+0.00000000e+00
+  right.z [1] =
+0.00000000e+00
+  up.x [1] =
+0.00000000e+00
+  up.y [1] =
+1.00000000e+00
+  up.z [1] =
+0.00000000e+00
+  front.x [1] =
+0.00000000e+00
+  front.y [1] =
+0.00000000e+00
+  front.z [1] =
+1.00000000e+00
+  posit.x [1] =
+1.01152679e+03
+  posit.y [1] =
+4.68524597e+02
+  posit.z [1] =
+-1.04863257e+03
+name = Stronghold Drop Off
+navSlot [1] =
+-1
+illumination [1] =
+1.00000000e+00
+euler =
+ mass [1] =
+2.70674487e+03
+ mass_inv [1] =
+3.69447458e-04
+ v_mag [1] =
+0.00000000e+00
+ v_mag_inv [1] =
+1.00000002e+30
+ I [1] =
+1.38510283e+04
+ k_i [1] =
+7.21968026e-05
+ v [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ omega [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+ Accel [1] =
+  x [1] =
+0.00000000e+00
+  y [1] =
+0.00000000e+00
+  z [1] =
+0.00000000e+00
+name = Stronghold Drop Off
+saveFlags [1] =
+108
+isVisible [1] =
+65535
+EffectsMask [1] =
+65535
+isSeen [1] =
+0
+groupNumber [1] =
+-1
+undefaicmd =
+priority [1] =
+0
+what = 00000000
+who [1] =
+0
+where = 00000000
+param [1] =
+0
+aiProcess [1] =
+false
+independence [1] =
+1
 groupTargets = 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 dllName = luamission.dll
 [AiMission]
@@ -25956,7 +26920,7 @@ size [1] =
 count [1] =
 95
 name = AiPath
-sObject = 0000010A
+sObject = 00000113
 size [1] =
 9
 label = edge_path
@@ -25973,7 +26937,7 @@ points [2] =
 2.29423999e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000010B
+sObject = 00000114
 size [1] =
 6
 label = stage3
@@ -25986,7 +26950,7 @@ points [1] =
 -1.45923965e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000010C
+sObject = 00000115
 size [1] =
 6
 label = stage4
@@ -25999,7 +26963,7 @@ points [1] =
 -1.26641248e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000010D
+sObject = 00000116
 size [1] =
 8
 label = Recycler
@@ -26012,7 +26976,7 @@ points [1] =
 -1.05720569e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000010E
+sObject = 00000117
 size [1] =
 6
 label = stage2
@@ -26025,7 +26989,7 @@ points [1] =
 -1.78607208e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000010F
+sObject = 00000118
 size [1] =
 6
 label = stage6
@@ -26038,7 +27002,7 @@ points [1] =
 1.76702362e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000110
+sObject = 00000119
 size [1] =
 6
 label = stage5
@@ -26051,7 +27015,7 @@ points [1] =
 -1.29544727e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000111
+sObject = 0000011A
 size [1] =
 6
 label = stage7
@@ -26064,7 +27028,7 @@ points [1] =
 1.46199020e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000112
+sObject = 0000011B
 size [1] =
 6
 label = stage1
@@ -26077,7 +27041,7 @@ points [1] =
 7.94793396e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000113
+sObject = 0000011C
 size [1] =
 12
 label = TurretEnemy1
@@ -26090,7 +27054,7 @@ points [1] =
 1.00632776e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000114
+sObject = 0000011D
 size [1] =
 13
 label = RecyclerEnemy
@@ -26103,7 +27067,7 @@ points [1] =
 1.11948938e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000115
+sObject = 0000011E
 size [1] =
 20
 label = mpic3_fvturr_ivturr_
@@ -26116,7 +27080,7 @@ points [1] =
 9.12868591e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000116
+sObject = 0000011F
 size [1] =
 20
 label = mpic4_fvturr_ivturr_
@@ -26129,7 +27093,7 @@ points [1] =
 8.77715881e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000117
+sObject = 00000120
 size [1] =
 12
 label = TurretEnemy2
@@ -26142,7 +27106,7 @@ points [1] =
 1.00712372e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000118
+sObject = 00000121
 size [1] =
 9
 label = i_Power_1
@@ -26155,7 +27119,7 @@ points [1] =
 1.16865906e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000119
+sObject = 00000122
 size [1] =
 9
 label = i_Power_2
@@ -26168,7 +27132,7 @@ points [1] =
 1.16772876e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011A
+sObject = 00000123
 size [1] =
 9
 label = i_Power_3
@@ -26181,7 +27145,7 @@ points [1] =
 1.16959607e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011B
+sObject = 00000124
 size [1] =
 9
 label = i_Plate_1
@@ -26194,7 +27158,7 @@ points [1] =
 1.07248816e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011C
+sObject = 00000125
 size [1] =
 9
 label = i_Plate_2
@@ -26207,7 +27171,7 @@ points [1] =
 1.07222229e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011D
+sObject = 00000126
 size [1] =
 9
 label = i_Plate_3
@@ -26220,7 +27184,7 @@ points [1] =
 1.16818323e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011E
+sObject = 00000127
 size [1] =
 9
 label = i_Plate_4
@@ -26233,7 +27197,7 @@ points [1] =
 1.16790393e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000011F
+sObject = 00000128
 size [1] =
 9
 label = i_Plate_5
@@ -26246,7 +27210,7 @@ points [1] =
 1.13640430e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000120
+sObject = 00000129
 size [1] =
 9
 label = i_Plate_6
@@ -26259,7 +27223,7 @@ points [1] =
 1.10437305e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000121
+sObject = 0000012A
 size [1] =
 9
 label = i_Plate_7
@@ -26272,7 +27236,7 @@ points [1] =
 1.07220630e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000122
+sObject = 0000012B
 size [1] =
 9
 label = i_Plate_8
@@ -26285,7 +27249,7 @@ points [1] =
 1.07220630e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000123
+sObject = 0000012C
 size [1] =
 8
 label = i_Armory
@@ -26298,7 +27262,7 @@ points [1] =
 1.13640173e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000124
+sObject = 0000012D
 size [1] =
 8
 label = i_Bunker
@@ -26311,7 +27275,7 @@ points [1] =
 1.10410474e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000125
+sObject = 0000012E
 size [1] =
 12
 label = i_ServiceBay
@@ -26324,7 +27288,7 @@ points [1] =
 1.05639001e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000126
+sObject = 0000012F
 size [1] =
 9
 label = i_Factory
@@ -26337,7 +27301,7 @@ points [1] =
 1.12018677e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000127
+sObject = 00000130
 size [1] =
 6
 label = i_Tech
@@ -26350,7 +27314,7 @@ points [1] =
 1.12001111e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000128
+sObject = 00000131
 size [1] =
 10
 label = i_Training
@@ -26363,7 +27327,7 @@ points [1] =
 1.12018555e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000129
+sObject = 00000132
 size [1] =
 11
 label = i_BomberBay
@@ -26376,7 +27340,7 @@ points [1] =
 1.18414905e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000012A
+sObject = 00000133
 size [1] =
 12
 label = i_LandingPad
@@ -26389,7 +27353,7 @@ points [1] =
 1.05632690e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000012B
+sObject = 00000134
 size [1] =
 15
 label = i_Base_Bunker_1
@@ -26402,7 +27366,7 @@ points [1] =
 8.80352783e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000012C
+sObject = 00000135
 size [1] =
 15
 label = i_Base_Bunker_2
@@ -26415,7 +27379,7 @@ points [1] =
 8.80586304e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000012D
+sObject = 00000136
 size [1] =
 12
 label = i_GunTower_1
@@ -26428,7 +27392,7 @@ points [1] =
 8.80227173e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000012E
+sObject = 00000137
 size [1] =
 12
 label = i_GunTower_2
@@ -26441,7 +27405,7 @@ points [1] =
 8.80227173e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000012F
+sObject = 00000138
 size [1] =
 12
 label = i_GunTower_3
@@ -26454,7 +27418,7 @@ points [1] =
 8.80748047e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000130
+sObject = 00000139
 size [1] =
 12
 label = i_GunTower_4
@@ -26467,7 +27431,7 @@ points [1] =
 8.80487610e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000131
+sObject = 0000013A
 size [1] =
 15
 label = i_Base_Bunker_3
@@ -26480,7 +27444,7 @@ points [1] =
 1.16901172e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000132
+sObject = 0000013B
 size [1] =
 16
 label = i_Base_AntiAir_1
@@ -26493,7 +27457,7 @@ points [1] =
 1.16786133e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000133
+sObject = 0000013C
 size [1] =
 16
 label = i_Base_AntiAir_2
@@ -26506,7 +27470,7 @@ points [1] =
 1.13726221e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000134
+sObject = 0000013D
 size [1] =
 21
 label = i_Base_AssaultTower_1
@@ -26519,7 +27483,7 @@ points [1] =
 9.12940979e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000135
+sObject = 0000013E
 size [1] =
 21
 label = i_Base_AssaultTower_2
@@ -26532,7 +27496,7 @@ points [1] =
 9.12272217e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000136
+sObject = 0000013F
 size [1] =
 18
 label = i_Base_Artillery_1
@@ -26545,7 +27509,7 @@ points [1] =
 1.20074585e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000137
+sObject = 00000140
 size [1] =
 18
 label = i_Base_Artillery_2
@@ -26558,7 +27522,7 @@ points [1] =
 1.20074585e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000138
+sObject = 00000141
 size [1] =
 15
 label = i_Assault_Depot
@@ -26571,7 +27535,7 @@ points [1] =
 1.07272913e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000139
+sObject = 00000142
 size [1] =
 16
 label = i_Field_Bunker_1
@@ -26584,7 +27548,7 @@ points [1] =
 -7.94056854e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000013A
+sObject = 00000143
 size [1] =
 18
 label = i_Field_GunTower_1
@@ -26597,7 +27561,7 @@ points [1] =
 -1.11338379e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000013B
+sObject = 00000144
 size [1] =
 24
 label = i_Field_AssualtTower_1_A
@@ -26610,7 +27574,7 @@ points [1] =
 -7.95645599e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000013C
+sObject = 00000145
 size [1] =
 24
 label = i_Field_AssualtTower_1_B
@@ -26623,7 +27587,7 @@ points [1] =
 -7.96269302e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000013D
+sObject = 00000146
 size [1] =
 21
 label = i_Field_RocketTower_1
@@ -26636,7 +27600,7 @@ points [1] =
 -4.83297195e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000013E
+sObject = 00000147
 size [1] =
 16
 label = i_Field_Bunker_2
@@ -26649,7 +27613,7 @@ points [1] =
 -1.11639923e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000013F
+sObject = 00000148
 size [1] =
 18
 label = i_Field_GunTower_2
@@ -26662,7 +27626,7 @@ points [1] =
 -1.42989319e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000140
+sObject = 00000149
 size [1] =
 24
 label = i_Field_AssualtTower_2_A
@@ -26675,7 +27639,7 @@ points [1] =
 -1.12071335e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000141
+sObject = 0000014A
 size [1] =
 24
 label = i_Field_AssualtTower_2_B
@@ -26688,7 +27652,7 @@ points [1] =
 -1.12071335e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000142
+sObject = 0000014B
 size [1] =
 21
 label = i_Field_RocketTower_2
@@ -26701,7 +27665,7 @@ points [1] =
 -8.18554153e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000143
+sObject = 0000014C
 size [1] =
 10
 label = anti-air_1
@@ -26714,7 +27678,7 @@ points [1] =
 8.47857971e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000144
+sObject = 0000014D
 size [1] =
 10
 label = anti-air_2
@@ -26727,7 +27691,7 @@ points [1] =
 8.44152954e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000145
+sObject = 0000014E
 size [1] =
 8
 label = patrol_1
@@ -26848,7 +27812,7 @@ points [28] =
 8.03121582e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000146
+sObject = 0000014F
 size [1] =
 8
 label = patrol_2
@@ -26949,7 +27913,7 @@ points [23] =
 7.94984863e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000147
+sObject = 00000150
 size [1] =
 11
 label = BasePatrol1
@@ -26966,7 +27930,7 @@ points [2] =
 9.13400391e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000148
+sObject = 00000151
 size [1] =
 11
 label = BasePatrol2
@@ -26983,7 +27947,7 @@ points [2] =
 7.97488953e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000149
+sObject = 00000152
 size [1] =
 12
 label = CarrierEnemy
@@ -26996,7 +27960,7 @@ points [1] =
 1.51759570e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000014A
+sObject = 00000153
 size [1] =
 7
 label = Carrier
@@ -27009,7 +27973,7 @@ points [1] =
 -1.51862158e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000014B
+sObject = 00000154
 size [1] =
 11
 label = recycler_go
@@ -27026,7 +27990,7 @@ points [2] =
 -1.01167670e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000014C
+sObject = 00000155
 size [1] =
 11
 label = turret_1_go
@@ -27047,7 +28011,7 @@ points [3] =
 -9.76704224e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000014D
+sObject = 00000156
 size [1] =
 11
 label = turret_2_go
@@ -27068,7 +28032,7 @@ points [3] =
 -1.00007507e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000014E
+sObject = 00000157
 size [1] =
 16
 label = intro_attacker_1
@@ -27081,7 +28045,7 @@ points [1] =
 -8.81945435e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000014F
+sObject = 00000158
 size [1] =
 16
 label = intro_attacker_2
@@ -27094,7 +28058,7 @@ points [1] =
 -9.22184937e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000150
+sObject = 00000159
 size [1] =
 16
 label = intro_attacker_3
@@ -27107,7 +28071,7 @@ points [1] =
 -8.56689453e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000151
+sObject = 0000015A
 size [1] =
 7
 label = F_Forge
@@ -27120,7 +28084,7 @@ points [1] =
 1.11995740e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000152
+sObject = 0000015B
 size [1] =
 10
 label = F_Overseer
@@ -27133,7 +28097,7 @@ points [1] =
 1.18437720e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000153
+sObject = 0000015C
 size [1] =
 7
 label = F_Dower
@@ -27146,7 +28110,7 @@ points [1] =
 1.05591541e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000154
+sObject = 0000015D
 size [1] =
 12
 label = F_Stronghold
@@ -27159,7 +28123,7 @@ points [1] =
 1.19981323e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000155
+sObject = 0000015E
 size [1] =
 14
 label = F_BaseJammer_1
@@ -27172,7 +28136,7 @@ points [1] =
 1.16789221e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000156
+sObject = 0000015F
 size [1] =
 14
 label = F_BaseJammer_2
@@ -27185,7 +28149,7 @@ points [1] =
 1.23173413e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000157
+sObject = 00000160
 size [1] =
 13
 label = F_BaseSpire_1
@@ -27198,7 +28162,7 @@ points [1] =
 9.76215515e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000158
+sObject = 00000161
 size [1] =
 13
 label = F_BaseSpire_2
@@ -27211,7 +28175,7 @@ points [1] =
 9.12606445e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000159
+sObject = 00000162
 size [1] =
 13
 label = F_BaseSpire_3
@@ -27224,7 +28188,7 @@ points [1] =
 9.11986450e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000015A
+sObject = 00000163
 size [1] =
 16
 label = F_Base_AntiAir_1
@@ -27237,7 +28201,7 @@ points [1] =
 1.10418555e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000015B
+sObject = 00000164
 size [1] =
 16
 label = F_Base_AntiAir_2
@@ -27250,7 +28214,7 @@ points [1] =
 1.07193604e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000015C
+sObject = 00000165
 size [1] =
 16
 label = F_Base_AntiAir_3
@@ -27263,7 +28227,7 @@ points [1] =
 1.23220227e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000015D
+sObject = 00000166
 size [1] =
 18
 label = F_Base_Artillery_1
@@ -27276,7 +28240,7 @@ points [1] =
 1.23240894e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000015E
+sObject = 00000167
 size [1] =
 18
 label = F_Base_Artillery_2
@@ -27289,7 +28253,7 @@ points [1] =
 1.23220227e+03
 pathType = 00000000
 name = AiPath
-sObject = 0000015F
+sObject = 00000168
 size [1] =
 21
 label = F_Base_AssaultSpire_1
@@ -27302,7 +28266,7 @@ points [1] =
 1.04020984e+03
 pathType = 00000000
 name = AiPath
-sObject = 00000160
+sObject = 00000169
 size [1] =
 21
 label = F_Base_AssaultSpire_2
@@ -27315,7 +28279,7 @@ points [1] =
 9.43964478e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000161
+sObject = 0000016A
 size [1] =
 21
 label = F_Base_AssaultSpire_3
@@ -27332,7 +28296,7 @@ points [2] =
 9.44584473e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000162
+sObject = 0000016B
 size [1] =
 22
 label = F_Field_AssaultSpire_1
@@ -27345,7 +28309,7 @@ points [1] =
 -8.03069229e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000163
+sObject = 0000016C
 size [1] =
 22
 label = F_Field_AssaultSpire_2
@@ -27358,7 +28322,7 @@ points [1] =
 -4.72996674e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000164
+sObject = 0000016D
 size [1] =
 22
 label = F_Field_AssaultSpire_3
@@ -27371,7 +28335,7 @@ points [1] =
 -1.11297913e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000165
+sObject = 0000016E
 size [1] =
 22
 label = F_Field_AssaultSpire_4
@@ -27384,7 +28348,7 @@ points [1] =
 -1.11877090e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000166
+sObject = 0000016F
 size [1] =
 21
 label = F_Field_RocketTower_3
@@ -27397,7 +28361,7 @@ points [1] =
 -1.10793808e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000167
+sObject = 00000170
 size [1] =
 21
 label = F_Field_RocketTower_1
@@ -27410,7 +28374,7 @@ points [1] =
 -1.53759460e+01
 pathType = 00000000
 name = AiPath
-sObject = 00000168
+sObject = 00000171
 size [1] =
 21
 label = F_Field_RocketTower_2

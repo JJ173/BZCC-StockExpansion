@@ -4,7 +4,7 @@ AI_Unit
 
 Publisher
 ---------------
-GrizzlyOne
+GrizzlyOne95
 
 Balance Councillor
 ---------------
@@ -13,6 +13,8 @@ Gravey
 Artwork
 ---------------
 SIR BRAMBLEY
+Zorn
+GrizzlyOne95
       
 Audio & Weapons
 ---------------
@@ -22,10 +24,15 @@ Scripting Assistance
 ---------------
 Rhade
 General BlackDragon
+Nielk1
 
 Ideas and Testing
 ---------------
 Spymaster
-GrizzlyOne
+GrizzlyOne95
 Autarch Katherlyn
 blue_banana
+Sev
+Econchump
+Zorn
+Darkvale

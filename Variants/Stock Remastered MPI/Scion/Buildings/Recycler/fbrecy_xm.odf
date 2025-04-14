@@ -9,6 +9,8 @@ buildItem2 = "fvscout_xm"
 buildItem3 = "fvturr_xm"
 buildItem5 = "fvcons_xm"
 buildItem6 = "fvserv_xm"
+buildItem8 = "fvscoutm_xm"
+buildEmptyItem = 8
 
 [BuildGroup1]
 buildLabel = "Scavengers"

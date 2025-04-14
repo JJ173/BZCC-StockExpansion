@@ -41,7 +41,7 @@ provideName1 = "MineLayer"
 /////// WEAPONS ////////////////////
 weaponMask = 00001
 weaponHard1 = "HP_SPECIAL_1"
-weaponName1 = "gproxmin_c"
+weaponName1 = "gproxmin"
 ////////////////////////////////////
 
 [CraftClass]

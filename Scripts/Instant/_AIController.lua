@@ -197,7 +197,7 @@ function AIController:Run(missionTurnCount)
 end
 
 function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCount)
-    print('Running AIController:AddObject ', objClass .. ' ', objCfg .. ' ', objBase .. ' ', missionTurnCount);
+    -- print('Running AIController:AddObject ', objClass .. ' ', objCfg .. ' ', objBase .. ' ', missionTurnCount);
 
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = handle;
@@ -231,7 +231,7 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
 end
 
 function AIController:DeleteObject(handle, objClass, objCfg, objBase)
-    print('Running AIController:DeleteObject ', objClass .. ' ', objCfg .. ' ', objBase);
+    -- print('Running AIController:DeleteObject ', objClass .. ' ', objCfg .. ' ', objBase);
 
     if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
         self.Commander = nil;
@@ -279,7 +279,7 @@ function AIController:SetPlan(type)
 end
 
 function AIController:DispatchTurrets(missionTurnCount)
-    print("Dispatching turrets");
+    --  print("Dispatching turrets");
 
     -- Input validation
     if (not missionTurnCount) then
@@ -289,7 +289,7 @@ function AIController:DispatchTurrets(missionTurnCount)
 
     -- Early exit if no turrets to dispatch
     if (#self.TurretsToDispatch == 0) then
-        print("WARNING: No turrets to dispatch");
+        --print("WARNING: No turrets to dispatch");
         return;
     end
 
@@ -307,13 +307,13 @@ function AIController:DispatchTurrets(missionTurnCount)
 
         -- Check if unit is available for dispatch
         if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
-            print("WARNING: Turret dispatch object at index " .. i .. " is not available");
+            --print("WARNING: Turret dispatch object at index " .. i .. " is not available");
             break;
         end
 
         -- Check if unit already has a target
         if (GetTarget(dispatch.Handle) ~= nil) then
-            print("WARNING: Turret dispatch object at index " .. i .. " already has a target");
+            --print("WARNING: Turret dispatch object at index " .. i .. " already has a target");
             break;
         end
 
@@ -339,7 +339,7 @@ function AIController:DispatchTurrets(missionTurnCount)
 end
 
 function AIController:DispatchPatrols(missionTurnCount)
-    print("Dispatching patrols");
+    -- print("Dispatching patrols");
 
     -- Input validation
     if (not missionTurnCount) then
@@ -349,7 +349,7 @@ function AIController:DispatchPatrols(missionTurnCount)
 
     -- Early exit if no patrols to dispatch
     if (#self.PatrolsToDispatch == 0) then
-        print("WARNING: No patrols to dispatch");
+        --print("WARNING: No patrols to dispatch");
         return;
     end
 
@@ -367,7 +367,7 @@ function AIController:DispatchPatrols(missionTurnCount)
 
         -- Check if unit is available for dispatch
         if (not IsDispatchUnitAvailable(dispatch, missionTurnCount)) then
-            print("WARNING: Patrol dispatch object at index " .. i .. " is not available");
+            -- print("WARNING: Patrol dispatch object at index " .. i .. " is not available");
             break;
         end
 
@@ -388,7 +388,7 @@ function AIController:DispatchPatrols(missionTurnCount)
 end
 
 function AIController:DispatchAntiAir(missionTurnCount)
-    print("Dispatching anti-air");
+    -- print("Dispatching anti-air");
 
     -- Input validation
     if (not missionTurnCount) then
@@ -434,7 +434,7 @@ function AIController:DispatchAntiAir(missionTurnCount)
 end
 
 function AIController:DispatchMinions(missionTurnCount)
-    print("Dispatching minions");
+    -- print("Dispatching minions");
 
     -- Input validation
     if (not missionTurnCount) then
@@ -554,7 +554,7 @@ function AIController:TurretShot(handle, missionTurnCount)
 end
 
 function AIController:ProcessIdleUnits()
-    print("Processing idle units");
+    -- print("Processing idle units");
 
     for i = 1, #self.IdleQueue do
         -- Grab the idle unit.

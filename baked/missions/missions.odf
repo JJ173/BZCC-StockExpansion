@@ -1,5 +1,5 @@
 [MissionInfo]
-countISDF = 18
+countISDF = 20
 
 [ISDF 1]
 missionTitle = "01: This is Not a Drill"
@@ -560,6 +560,56 @@ launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
 [ISDF 18]
+missionTitle = "S03: Crystals"
+missionInfo = "scion03.des"
+missionFile = "scion03_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 1
+techName1 = "Scion Stronghold"
+techInfo1 = "fbstro.inf"
+techGeom1 = "fbstro00.fbx"
+techView1 = 1
+
+mailCount = 1
+mailName1 = "Padisha Burns"
+mailInfo1 = "scion03_m1.des"
+mailGeom1 = ""
+mailWave1 = "mssgsc0301.wav"
+
+briefInfo = "scion03.brf"
+
+launchMessage = "loadsc03.wav"
+launchBackground = "mire_load.tga"
+
+[ISDF 19]
+missionTitle = "S04: Escort"
+missionInfo = "scion04.des"
+missionFile = "scion04_lua.bzn"
+planetName = "Rend"
+planetInfo = "rend.des"
+planetGeom = "rend.fbx"
+
+techCount = 1
+techName1 = "Scion Forge"
+techInfo1 = "fbforg.inf"
+techGeom1 = "fbforg00.fbx"
+techView1 = 1
+
+mailCount = 1
+mailName1 = "Padisha Burns"
+mailInfo1 = "scion04_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0401.wav"
+
+briefInfo = "scion04.brf"
+
+launchMessage = "loadsc04.wav"
+launchBackground = "rend_load.tga"
+
+[ISDF 20]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"

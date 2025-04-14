@@ -1,5 +1,5 @@
 [GameObjectClass] // Version with no baseplate
-baseName = "fbport"
+baseName = "fbport_xm"
 geometryName = "fbportB00_ARK.fbx"
 animCount = 1
 animName1 = "loop"

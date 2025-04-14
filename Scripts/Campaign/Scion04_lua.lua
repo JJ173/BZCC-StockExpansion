@@ -547,16 +547,6 @@ Functions[1] = function()
 end
 
 Functions[2] = function()
-    -- REMOVE THIS!
-    local position = GetPosition("tugshot_campath1");
-
-    SetPosition(Mission.m_Tug1, position);
-    SetPosition(Mission.m_Power, position);
-    SetPosition(Mission.m_MainPlayer, position);
-
-    -- State
-    Mission.m_MissionState = 5;
-
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Ok Cooke, we MUST get this power source to the data transfer machine.
         -- We have been unable to locate any scrap veins in the area, so you will have to make due with the units we have available.

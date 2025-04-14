@@ -145,7 +145,11 @@ local PreloadODFs = {
     "fvrecy_c",
     "ibcarrier_xm",
     "fbcarrier_xm",
-    "ivpdrop_x"
+    "ivpdrop_x",
+    "fbhangar",
+    "fbportb_ARK",
+    "fbstro_ARK",
+    "fbark2holo"
 }
 
 -- Audio to Preload.
@@ -154,8 +158,17 @@ local PreloadAudios = {
     "IA_Pilot_1.wav",
     "IA_Pilot_2.wav",
     "IA_Pilot_3.wav",
+    "IA_Pilot_4.wav",
     "IA_Carrier_1.wav",
     "IA_Carrier_2.wav",
+    "IA_Scion_Carrier_1.wav",
+    "IA_Scion_Carrier_2.wav",
+    "IA_Scion_Tech_1.wav",
+    "IA_Scion_Tech_2.wav",
+    "IA_Scion_Tech_3.wav",
+    "IA_Scion_Tech_3A.wav",
+    "IA_Scion_Tech_3B.wav",
+    "IA_Scion_Tech_4.wav",
     "dropdoor.wav"
 }
 
@@ -260,11 +273,23 @@ local ScionBaseLayout =
 
 -- Planet assortment for different map names.
 local MireMaps = {
-
+    "bridges.trn",
+    "mpicanyons.trn",
+    "iacirclebzcc.trn",
+    "iadustbzcc.trn",
+    "iaentrapbzcc.trn",
+    "iafirebzcc.trn",
+    "iafortbzcc.trn",
+    "iaghzonebzcc.trn"
 }
 
 local BaneMaps = {
-    "dunesi.trn"
+    "dunesi.trn",
+    "chill.trn",
+    "ground4.trn",
+    "ground0.trn",
+    "MPIIsland.trn",
+    "sea_battle.trn"
 }
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -1098,7 +1123,7 @@ ScionIntroFunctions[8] = function()
 end
 
 ScionIntroFunctions[9] = function()
-    if (GetDistance(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal) < 20 and _Session.m_IntroMatriarchTeleported == false) then
+    if (GetDistance(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal) < 25 and _Session.m_IntroMatriarchTeleported == false) then
         local recyOdf = nil;
         local customHumanRecycler = IFace_GetString("options.instant.string1");
 
@@ -1137,7 +1162,7 @@ end
 
 ScionIntroFunctions[10] = function()
     -- Teleport the player to the Recycler.
-    if (_Session.m_IntroForcePlayerTeleportDelay < _Session.m_TurnCounter or GetDistance(_Session.m_Player, _Session.m_ScionIntroPortal) < 20) then
+    if (_Session.m_IntroForcePlayerTeleportDelay < _Session.m_TurnCounter or GetDistance(_Session.m_Player, _Session.m_ScionIntroPortal) < 25) then
         Teleport(_Session.m_Player, "Recycler", 50);
 
         -- Remove the intro stuff.

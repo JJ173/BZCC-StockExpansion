@@ -34,6 +34,7 @@ General:
 - Subtitles added to all mission-critical dialogue. 
 - Immersion improved. Logic has been added to try and combat the odds of a player seeing an enemy/ally spawn in from nowhere (common BZ2/BZCC issue in Stock).
 - Cutscenes removed if mission is in cooperative mode. (MP doesn't support cutscene logic for clients, and would only fire for the host).
+- Updated logic that adds objectives to the player HUD. In SP mode, this will act as normal. In cooperative, it will add the objective text to the message/chat box.
 
 ISDF01 (This is not a Drill):
 - Removed unique FAF missile weapon which had more ammo but did significantly less damage.
@@ -329,6 +330,15 @@ Scion05 (An Unlikely Rescue):
 - Dialogue from Manson is no longer triggered randomly. He will only announce losses to his base when his buildings are destroyed.
 - Updated terrain so Braddock's treaded units can only use the bridge to attack the AAN.
 - Upon the destruction of the bridge, Braddock will only be able to use hover units to attack the AAN.
+
+- General QOL (Quality of Life) improvements.
+
+Scion06 (The AAN):
+- Added allied Royal Scion base controlled by Yelena. 
+- Added Major Manson to Royal Scion base.
+- Expanded map edge_path boundary so the whole map terrain is used.
+- Added pool locations from Scion05 map.
+- Redesigned Rebel Scion Hauler retreat path so that it now leaves the map, and will fail the mission if allowed to escape.
 
 - General QOL (Quality of Life) improvements.
 

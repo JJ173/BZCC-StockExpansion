@@ -42,7 +42,7 @@ local _Session = {
     m_MyForce = 0,
     m_CompForce = 0,
     m_Difficulty = 0,
-    
+
     m_IntroForcePlayerTeleportDelay = 0,
     m_IntroState = 1,
     m_IntroDelay = 0,

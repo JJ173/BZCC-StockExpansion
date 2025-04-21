@@ -1,5 +1,6 @@
 [MissionInfo]
-countISDF = 20
+countISDF = 18
+countScion = 22
 
 [ISDF 1]
 missionTitle = "01: This is Not a Drill"
@@ -535,6 +536,73 @@ launchMessage = "load16.wav"
 launchBackground = "core_load.tga"
 
 [ISDF 17]
+missionTitle = "17: Core"
+missionInfo = "isdf17.des"
+missionFile = "isdf17_lua.bzn"
+planetName = "Core"
+planetInfo = "core.des"
+planetGeom = "core.fbx"
+
+techCount = 1
+techName1 = "Core Robot"
+techInfo1 = "fc111100.inf"
+techGeom1 = "cc111100.fbx"
+
+mailCount = 2
+mailName1 = "General Braddock"
+mailInfo1 = "isdf17_m1.des"
+mailGeom1 = ""
+mailWave1 = "mes1701.wav"
+
+mailName2 = "Intercepted Transmission"
+mailInfo2 = "isdf17_m2.des"
+mailGeom2 = ""
+mailWave2 = "mes1702.wav"
+
+briefInfo = "isdf17.brf"
+
+successMovie = "isdf_dn.ogv"
+
+launchMessage = "load17.wav"
+launchBackground = "core_load.tga"
+
+[ISDF 18]
+missionTitle = "Congratulations"
+missionInfo = "isdf18.des"
+planetName = "Core"
+planetInfo = "core.des"
+planetGeom = "core.fbx"
+
+techCount = 0
+mailCount = 0
+
+briefInfo = "credits.brf"
+
+[SCION 15]
+missionTitle = "S01: Transformation"
+missionInfo = "scion01.des"
+missionFile = "scion01_lua.bzn"
+planetName = "Mire"
+planetInfo = "mire.des"
+planetGeom = "mire.fbx"
+
+techCount = 1
+techName1 = "Scion Matriarch"
+techInfo1 = "fvrecy.inf"
+techGeom1 = "fvrecy00.fbx"
+
+mailCount = 1
+mailName1 = "Yelena Shabayev"
+mailInfo1 = "scion01_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0101.wav"
+
+briefInfo = "scion01.brf"
+
+launchMessage = "loadsc01.wav"
+launchBackground = "mire_load.tga"
+
+[SCION 16]
 missionTitle = "S02: Ambush"
 missionInfo = "scion02.des"
 missionFile = "scion02_lua.bzn"
@@ -559,7 +627,7 @@ briefInfo = "scion02.brf"
 launchMessage = "loadsc02.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 18]
+[SCION 17]
 missionTitle = "S03: Crystals"
 missionInfo = "scion03.des"
 missionFile = "scion03_lua.bzn"
@@ -584,7 +652,7 @@ briefInfo = "scion03.brf"
 launchMessage = "loadsc03.wav"
 launchBackground = "mire_load.tga"
 
-[ISDF 19]
+[SCION 18]
 missionTitle = "S04: Escort"
 missionInfo = "scion04.des"
 missionFile = "scion04_lua.bzn"
@@ -609,7 +677,7 @@ briefInfo = "scion04.brf"
 launchMessage = "loadsc04.wav"
 launchBackground = "rend_load.tga"
 
-[ISDF 20]
+[SCION 19]
 missionTitle = "S05: An Unlikely Rescue"
 missionInfo = "scion05.des"
 missionFile = "scion05_lua.bzn"
@@ -640,3 +708,77 @@ briefInfo = "scion05.brf"
 
 launchMessage = "loadsc05.wav"
 launchBackground = "bane_load.tga"
+
+[SCION 20]
+missionTitle = "S06: The AAN"
+missionInfo = "scion06.des"
+missionFile = "scion06_lua.bzn"
+planetName = "Bane"
+planetInfo = "bane.des"
+planetGeom = "bane.fbx"
+
+techCount = 1
+techName1 = "Scion Titan"
+techInfo1 = "fvatank.inf"
+techGeom1 = "fvtitan_skel.fbx"
+
+mailCount = 1
+mailName1 = "Padisha Burns to John Cooke"
+mailInfo1 = "scion06_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0601.wav"
+
+briefInfo = "scion06.brf"
+
+launchMessage = "loadsc06.wav"
+launchBackground = "bane_load.tga"
+
+[SCION 21]
+missionTitle = "S07: Braddock"
+missionInfo = "scion07.des"
+missionFile = "scion07_lua.bzn"
+planetName = "Rend"
+planetInfo = "rend.des"
+planetGeom = "rend.fbx"
+
+techCount = 1
+techName1 = "Scion Mauler"
+techInfo1 = "fvwalk.inf"
+techGeom1 = "fvwalk_skel.fbx"
+
+mailCount = 3
+mailName1 = "Yelena Shabayev"
+mailInfo1 = "scion07_m1.des"
+mailGeom1 = ""
+mailWave1 = "messc0701.wav"
+mailName2 = "General Braddock"
+mailInfo2 = "scion07_m2.des"
+mailGeom2 = ""
+mailWave2 = "messc0702.wav"
+mailName3 = "Padisha Burns"
+mailInfo3 = "scion07_m3.des"
+mailGeom3 = ""
+mailWave3 = "messc0703.wav"
+mailName4 = "Padisha Burns"
+mailInfo4 = "scion07_m4.des"
+mailGeom4 = ""
+mailWave4 = "messc0704.wav"
+
+briefInfo = "scion07.brf"
+
+launchMessage = "loadsc07.wav"
+launchBackground = "rend_load.tga"
+
+successMovie = "scion_dn.ogv"
+
+[SCION 22]
+missionTitle = "Congratulations"
+missionInfo = "scion08.des"
+planetName = "Rend"
+planetInfo = "rend.des"
+planetGeom = "rend.fbx"
+
+techCount = 0
+mailCount = 0
+
+briefInfo = "credits.brf"

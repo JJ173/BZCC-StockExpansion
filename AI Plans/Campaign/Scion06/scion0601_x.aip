@@ -1,0 +1,144 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+CheckProvides = true
+idleAllCraft = false
+baseDir = 3 // Face West.
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = true
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Cheat]
+moneyAmount = 3 
+moneyDelay = 2
+
+[Plan1]
+planType = "Recover"
+planPriority = 150
+serviceUnit = "ibsbay_x"
+unitType1 = "ivscout_x"
+unitType2 = "ivmbike_x"
+unitType3 = "ivtank_x"
+unitType5 = "ivrckt_x"
+unitType6 = "ivatank_x"
+
+[Plan2]
+planType = "Service"
+planPriority = 145
+serviceUnit = "ivserv_x"
+unitType1 = "ivscout_x"
+unitType2 = "ivmbike_x"
+unitType3 = "ivtank_x"
+unitType5 = "ivrckt_x"
+unitType6 = "ivturr_x"
+unitType7 = "ibrecy_x"
+unitType8 = "ibfact_x"
+unitType9 = "ibgtow_x"
+unitType10 = "ibpgen_x"
+unitType11 = "ibcbun_x"
+unitType12 = "ibsbay_x"
+unitType13 = "ivatank_x"
+
+[Plan3]
+planType = "BuildMinimums"
+planPriority = 140
+buildType1 = "ivscav_x"
+buildCount1 = 2
+planCondition = "Lua"
+LuaFunction = "ScavengerCondition"
+
+[Plan4]
+planType = "CollectPool"
+planPriority = 135
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+
+// Added a second pool plan, so we can run two Scavs at the same time.
+[Plan5] 
+planType = "CollectPool"
+planPriority = 130
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+
+[Plan6]
+planType = "CollectField"
+planPriority = 125
+buildIfNoIdle = true
+planCondition = "Lua"
+LuaFunction = "CollectFieldCondition"
+
+[Plan7]
+planType = "BuildMinimums"
+planPriority = 120
+buildType1 = "ivcons_x"
+buildCount1 = 1
+planCondition = "Lua"
+LuaFunction = "ConstructorCondition"
+
+[Plan8]
+planType = "BaseBuildMinimums"
+planPriority = 115
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "brad_pgen1"
+
+[Plan9]
+planType = "BaseBuildMinimums"
+planPriority = 110
+buildType1 = "ibfact_x"
+buildCount1 = 1
+buildLoc1 = "brad_fact"
+
+[Plan10]
+planType = "BaseBuildMinimums"
+planPriority = 105
+buildType1 = "ibarmo_x"
+buildCount1 = 1
+buildLoc1 = "brad_armo"
+
+[Plan11]
+planType = "BaseBuildMinimums"
+planPriority = 100
+buildType1 = "ibcbun_x"
+buildCount1 = 1
+buildLoc1 = "brad_bunk"
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 95
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "brad_pgen2"
+
+[Plan13]
+planType = "BaseBuildMinimums"
+planPriority = 90
+buildType1 = "ibgtow_x"
+buildCount1 = 1
+buildLoc1 = "brad_gtow1"
+
+[Plan14]
+planType = "BaseBuildMinimums"
+planPriority = 85
+buildType1 = "ibsbay_x"
+buildCount1 = 1
+buildLoc1 = "brad_sbay"
+
+[Plan15]
+planType = "BaseBuildMinimums"
+planPriority = 80
+buildType1 = "ibgtow_x"
+buildCount1 = 1
+buildLoc1 = "brad_gtow2"
+
+[Plan16]
+planType = "BaseBuildMinimums"
+planPriority = 75
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "brad_pgen3"

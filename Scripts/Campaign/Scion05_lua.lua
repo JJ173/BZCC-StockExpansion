@@ -91,9 +91,9 @@ local Mission =
     m_EnemyTeam = 6,
 
     -- Specific to mission.
-    m_PlayerPilotODF = "fspilo_x",
+    m_PlayerPilotODF = "fspilo_r",
     -- Specific to mission.
-    m_PlayerShipODF = "fvtank_x",
+    m_PlayerShipODF = "fvtank_r",
 
     m_PlayerRecy = nil,
     m_AANRecy = nil,
@@ -479,7 +479,7 @@ Functions[1] = function()
     SetMaxHealth(Mission.m_BridgeStr2, 5000);
     SetCurHealth(Mission.m_BridgeStr2, 5000);
 
-    -- Set the team colour for Braddock.
+    -- Set the team colour for AAN.
     SetTeamColor(Mission.m_AlliedTeam, 0, 127, 255);
 
     -- Give the player some scrap.

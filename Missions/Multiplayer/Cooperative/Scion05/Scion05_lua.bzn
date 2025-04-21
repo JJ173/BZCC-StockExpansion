@@ -13,7 +13,7 @@ g_TerrainName = Scion05_lua
 size [1] =
 362
 [GameObject]
-objClass = fvtank
+objClass = fvtank_r
 seqno [1] =
 80281d
 team [1] =
@@ -33673,7 +33673,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = fvrecy_x
+objClass = fvrecy_r
 seqno [1] =
 2b03
 team [1] =
@@ -33805,7 +33805,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = fvturr_x
+objClass = fvturr_r
 seqno [1] =
 802b04
 team [1] =
@@ -33913,7 +33913,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = fvturr_x
+objClass = fvturr_r
 seqno [1] =
 802b07
 team [1] =
@@ -34021,7 +34021,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = fvcons_x
+objClass = fvcons_r
 seqno [1] =
 802b0a
 team [1] =

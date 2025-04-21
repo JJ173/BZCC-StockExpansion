@@ -17,12 +17,16 @@ function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers
     end
 end
 
-function AddObjectiveOverride(objective, colour, time, clearExisting)
+function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
     if (clearExisting) then
         ClearObjectives();
     end
 
-    AddObjective(objective, colour, time);
+    if (isCoop) then
+        AddToMessagesBox(objective, colour, time);
+    else
+        AddObjective(objective, colour, time);
+    end
 end
 
 function IsAliveAndEnemy(handle, enemyTeam)

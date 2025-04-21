@@ -137,7 +137,7 @@ function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilot
     end
 
     -- If a person died, respawn them, etc
-    return DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF);
+    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF);
 end
 
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
@@ -149,7 +149,7 @@ function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilot
     end
 
     -- Dead person means we must always respawn a new person
-    return DeadObject(DeadObjectHandle, KillersHandle, true, isDeadAI, MissionPilotODF);
+    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, true, isDeadAI, MissionPilotODF);
 end
 
 function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)

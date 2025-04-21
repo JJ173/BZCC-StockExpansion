@@ -1,0 +1,21 @@
+[Start]
+scrapCount = 40
+scavClass = "fvscav_x"
+consClass = "fvcons_x"
+CheckProvides = true
+idleAllCraft = false
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = true
+UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+
+[Cheat]
+moneyAmount = 3 
+moneyDelay = 2
+
+[Plan1]
+planType = "BuildMinimums"
+planPriority = 50
+buildType1 = "fvcons_x"
+buildCount1 = 2

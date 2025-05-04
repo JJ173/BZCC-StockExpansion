@@ -53,12 +53,21 @@ local Mission =
     m_BraddockBasePatrol2 = nil,
     m_BraddockBasePatrol3 = nil,
 
+    m_PlayerPower1 = nil,
+    m_PlayerPower2 = nil,
+    m_PlayerFactory = nil,
+
+    m_ConvoyTug = nil,
+    m_PowerCrystal = nil,
+
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
+
+    m_MissionDelayTime = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -217,14 +226,30 @@ Functions[1] = function()
     Mission.m_Yelena = GetHandle("yelena");
     Mission.m_Manson = GetHandle("manson");
 
+    Mission.m_PlayerPower1 = GetHandle("playerspgen1");
+    Mission.m_PlayerPower2 = GetHandle("playerspgen2");
+    Mission.m_PlayerFactory = GetHandle("playersfact");
+
+    Mission.m_ConvoyTug = GetHandle("convoy_tug1");
+    Mission.m_PowerCrystal = GetHandle("power");
+
     -- Have Manson and Yelena patrol their base.
     Patrol(Mission.m_Manson, "manson_patrol", 1);
-    Patrol(Mission.m_Yelena,"yelena_patrol", 1);
+    Patrol(Mission.m_Yelena, "yelena_patrol", 1);
 
     -- Give all relevant teams scrap.
     SetScrap(Mission.m_HostTeam, 40);
     SetScrap(Mission.m_EnemyTeam, 40);
     SetScrap(Mission.m_AlliedTeam, 40);
+
+    -- Damage the player buildings to force the repair objectives.
+    SetCurHealth(Mission.m_PlayerFactory, 2200);
+    SetCurHealth(Mission.m_PlayerPower1, 1500);
+    SetCurHealth(Mission.m_PlayerPower2, 1800);
+
+    -- Give the Power Crystal substantial health.
+    SetMaxHealth(Mission.m_PowerCrystal, 10000);
+    SetCurHealth(Mission.m_PowerCrystal, 10000);
 
     -- Set Braddock's AIP.
     SetAIP("scion0601_x.aip", Mission.m_EnemyTeam);
@@ -249,11 +274,56 @@ Functions[1] = function()
     Patrol(Mission.m_BraddockBasePatrol2, "basetank2", 1);
     Patrol(Mission.m_BraddockBasePatrol3, "basetank3", 1);
 
+    -- Rebel Tug should pick up the Power Crystal.
+    Pickup(Mission.m_ConvoyTug, Mission.m_PowerCrystal);
+
+    -- Small delay before we prompt the player to start repairs.
+    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
+
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[2] = function()
+    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
+        -- Yelena: First we must work on getting this base in shape...
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601.wav");
+
+        -- Delay for the audio.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[3] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Yelena: Build a service truck and fix the factory and power generators.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601a.wav");
+
+        -- Delay for the audio.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[4] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        -- Show Objectives.
+        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
+
+        -- Show a timer to the player for base repairs.
+        StartCockpitTimer(730, 180, 90);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[5] = function()
 
 end
 

@@ -318,13 +318,24 @@ Functions[4] = function()
         -- Show a timer to the player for base repairs.
         StartCockpitTimer(730, 180, 90);
 
+        -- Send a couple of units to harass the player.
+        local unit_a_choice = {"ivscout_x", "ivmisl_x", "ivtank_x"};
+        local unit_b_choice = {"ivscout_x", "ivscout_x", "ivmisl_x"};
+
+        local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
+        local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
+
+        Goto(unit_a, "playerbase");
+        Goto(unit_b, "playerbase");
+
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
 end
 
 Functions[5] = function()
-
+    -- This function can handle the main repair logic.
+    
 end
 
 -- Checks for failure conditions.

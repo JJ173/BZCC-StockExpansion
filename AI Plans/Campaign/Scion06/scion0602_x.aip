@@ -1,7 +1,7 @@
 [Start]
 scrapCount = 40
-scavClass = "fvscav_x"
-consClass = "fvcons_x"
+scavClass = "fvscav_r"
+consClass = "fvcons_r"
 CheckProvides = true
 idleAllCraft = false
 
@@ -15,7 +15,157 @@ moneyAmount = 3
 moneyDelay = 2
 
 [Plan1]
+planType = "Service"
+planPriority = 100
+serviceUnit = "fvserv_r"
+unitType1 = "fbrecy_r"
+unitType2 = "fbspir_r"
+unitType3 = "fbforg_r"
+unitType4 = "fbkiln_r"
+unitType5 = "fbover_r"
+unitType6 = "fbantm_r"
+unitType7 = "fbstro_r"
+unitType8 = "fbdowe_r"
+
+[Plan2]
 planType = "BuildMinimums"
-planPriority = 50
-buildType1 = "fvcons_x"
+planPriority = 95
+buildType1 = "fvcons_r"
 buildCount1 = 2
+
+[Plan3]
+planType = "BuildMinimums"
+planPriority = 90
+buildType1 = "fvturr_r"
+buildCount1 = 2
+
+[Plan4]
+planType = "BaseBuildMinimums"
+planPriority = 85
+buildType1 = "fbkiln_r"
+buildCount1 = 1
+buildHeading = 1
+buildLoc1 = "yelena_forge"
+
+[Plan5]
+planType = "BaseBuildMinimums"
+planPriority = 80
+buildType1 = "fbspir_r"
+buildCount1 = 1
+buildLoc1 = "yelena_spire_1"
+
+[Plan6]
+planType = "BaseBuildMinimums"
+planPriority = 75
+buildType1 = "fbspir_r"
+buildCount1 = 1
+buildLoc1 = "yelena_spire_2"
+
+[Plan7]
+planType = "BaseBuildMinimums"
+planPriority = 70
+buildType1 = "fbspir_r"
+buildCount1 = 1
+buildLoc1 = "yelena_spire_3"
+
+[Plan8]
+planType = "Upgrade"
+planPriority = 65
+planCondition1 = "Exists"
+planConditionClass1 = "fbkiln_r"
+planConditionCount1 = 1
+unitType = "fbkiln_r"
+
+[Plan9]
+planType = "BaseBuildMinimums"
+planPriority = 60
+planCondition1 = "Exists"
+planConditionClass1 = "fbkiln_r"
+planConditionCount1 = 1
+buildType1 = "fbantm_r"
+buildCount1 = 1
+buildLoc1 = "yelena_overseer"
+
+[Plan10]
+planType = "Upgrade"
+planPriority = 55
+planCondition1 = "Exists"
+planConditionClass1 = "fbantm_r"
+planConditionCount1 = 1
+unitType = "fbantm_r"
+
+[Plan11]
+planType = "BaseBuildMinimums"
+planPriority = 50
+planCondition1 = "Exists"
+planConditionClass1 = "fbforg_r"
+planConditionCount1 = 1
+buildType1 = "fbstro_r"
+buildCount1 = 1
+buildLoc1 = "yelena_stronghold"
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 45
+planCondition1 = "Exists"
+planConditionClass1 = "fbforg_r"
+planConditionCount1 = 1
+buildType1 = "fbdowe_r"
+buildCount1 = 1
+buildLoc1 = "yelena_dower"
+
+[Plan13]
+planType = "BuildMinimums"
+planPriority = 40
+planCondition1 = "NotExists"
+planConditionClass1 = "fvserv_r"
+planConditionCount1 = 3
+planCondition2 = "Exists"
+planConditionClass2 = "fbdowe_r"
+planConditionCount2 = 1
+buildType1 = "fvserv_r"
+buildCount1 = 3
+
+[Plan14]
+planType = "Attacker"
+planPriority = 35
+targetType1 = "ibgtow_x"
+targetType2 = "ibfact_x"
+targetType3 = "ivcons_x"
+targetType4 = "ibrecy_x"
+targetType5 = "ibpgen_x"
+attackType1 = "fvsent_r"
+attackType2 = "fvsent_r"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan15]
+planType = "Attacker"
+planPriority = 30
+targetType1 = "ibgtow_x"
+targetType2 = "ibfact_x"
+targetType3 = "ivcons_x"
+targetType4 = "ibrecy_x"
+targetType5 = "ibpgen_x"
+attackType1 = "fvscout_r"
+attackType2 = "fvscout_r"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+
+[Plan16]
+planType = "Attacker"
+planPriority = 25
+targetType1 = "ibgtow_x"
+targetType2 = "ibfact_x"
+targetType3 = "ivcons_x"
+targetType4 = "ibrecy_x"
+targetType5 = "ibpgen_x"
+attackType1 = "fvwalk_r"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true

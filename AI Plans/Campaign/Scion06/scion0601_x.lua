@@ -28,7 +28,7 @@ function ScavengerCondition(team, time)
     local recyclerExists = DoesRecyclerExist(team, time);
     local scavengerCount = AIPUtil.CountUnits(team, "VIRTUAL_CLASS_SCAVENGER", 'sameteam', true);
 
-    if (recyclerExists and scavengerCount <2) then
+    if (recyclerExists and scavengerCount < 2) then
         return true, "Braddock is building a Scavenger...";
     else
         return false, "Braddock has enough Scavengers...";
@@ -46,8 +46,34 @@ function ConstructorCondition(team, time)
     end
 end
 
+function TurretCondition(team, time)
+    local recyclerExists = DoesRecyclerExist(team, time);
+    local turretCount = AIPUtil.CountUnits(team, "VIRTUAL_CLASS_TURRET", 'sameteam', true);
+
+    if (recyclerExists and turretCount < 4) then
+        return true, "Braddock is building a turret...";
+    else
+        return false, "Braddock has enough turrets...";
+    end
+end
+
+function ServiceTruckCondition(team, time)
+    local recyclerExists = DoesRecyclerExist(team, time);
+    local serviceTruckCount = AIPUtil.CountUnits(team, "VIRTUAL_CLASS_SERVICETRUCK", 'sameteam', true);
+
+    if (recyclerExists and serviceTruckCount < 3) then
+        return true, "Braddock is building a turret...";
+    else
+        return false, "Braddock has enough turrets...";
+    end
+end
+
 function DoesRecyclerExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_RECYCLERBUILDING", 'sameteam', true) > 0;
+end
+
+function DoesServiceBayExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_SUPPLYDEPOT", "sameteam", true) > 0;
 end
 
 function DoesScrapPoolExist(team, time)

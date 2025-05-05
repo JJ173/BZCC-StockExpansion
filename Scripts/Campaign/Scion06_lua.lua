@@ -25,6 +25,9 @@ local m_GameTPS = GetTPS();
 -- Mission Name
 local m_MissionName = "Scion06: Ambush";
 
+-- Timer for repairs based on difficulty.
+local m_RepairTimeTable = { 600, 450, 300 };
+
 -- Mission important variables.
 local Mission =
 {
@@ -53,12 +56,24 @@ local Mission =
     m_BraddockBasePatrol2 = nil,
     m_BraddockBasePatrol3 = nil,
 
+    m_YelenaTurret1 = nil,
+    m_YelenaTurret2 = nil,
+
     m_PlayerPower1 = nil,
     m_PlayerPower2 = nil,
     m_PlayerFactory = nil,
 
     m_ConvoyTug = nil,
     m_PowerCrystal = nil,
+
+    m_Nav1 = nil,
+
+    m_RepairsWarningActive = false,
+    m_RepairsStarted = false,
+    m_RepairsComplete = false,
+
+    m_YelenaTurret1Sent = false,
+    m_YelenaTurret2Sent = false,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -68,6 +83,9 @@ local Mission =
     m_AudioTimer = 0,
 
     m_MissionDelayTime = 0,
+    m_UnitDispatcherTime = 0,
+    m_RepairWarningTime = 0,
+    m_RepairWarningCount = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -110,13 +128,63 @@ end
 
 function AddObject(h)
     local teamNum = GetTeamNum(h);
+    local objClass = GetClassLabel(h);
 
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty);
+
+        if (objClass == "CLASS_TURRETTANK") then
+            if (IsAliveAndEnemy(Mission.m_BraddockTurret1, Mission.m_EnemyTeam) == false) then
+                Mission.m_BraddockTurret1 = h;
+            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret2, Mission.m_EnemyTeam) == false) then
+                Mission.m_BraddockTurret2 = h;
+            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret3, Mission.m_EnemyTeam) == false) then
+                Mission.m_BraddockTurret3 = h;
+            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret4, Mission.m_EnemyTeam) == false) then
+                Mission.m_BraddockTurret4 = h;
+            end
+        end
     elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
         -- Always max our player units.
         SetSkill(h, 3);
+
+        -- If the player has rebuilt the Power Plants or Factory, we can just let them go for it.
+        if (teamNum == Mission.m_HostTeam) then
+            if (Mission.m_RepairsComplete == false) then
+                if (objClass == "CLASS_PLANT") then
+                    if (IsAround(Mission.m_PlayerPower1) == false) then
+                        Mission.m_PlayerPower1 = h;
+                    elseif (IsAround(Mission.m_PlayerPower2) == false) then
+                        Mission.m_PlayerPower2 = h;
+                    end
+                elseif (objClass == "CLASS_FACTORY") then
+                    if (IsAround(Mission.m_PlayerFactory) == false) then
+                        Mission.m_PlayerFactory = h;
+                    end
+                end
+            end
+        end
+    elseif (teamNum == Mission.m_AlliedTeam) then
+        if (objClass == "CLASS_TURRETTANK") then
+            SetIndependence(h, 1);
+
+            if (IsAlive(Mission.m_YelenaTurret1) == false) then
+                Mission.m_YelenaTurret1 = h;
+                Mission.m_YelenaTurret1Sent = false;
+            elseif (IsAlive(Mission.m_YelenaTurret2) == false) then
+                Mission.m_YelenaTurret2 = h;
+                Mission.m_YelenaTurret2Sent = false;
+            end
+        end
+    end
+end
+
+function DeleteObject(h)
+    if (h == Mission.m_YelenaTurret1) then
+        Mission.m_YelenaTurret1 = nil;
+    elseif (h == Mission.m_YelenaTurret2) then
+        Mission.m_YelenaTurret2 = nil;
     end
 end
 
@@ -155,6 +223,9 @@ function Update()
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
+
+            -- Make sure Yelena sends turrets.
+            YelenaUnitDispatcher();
 
             -- Check failure conditions...
             HandleFailureConditions();
@@ -199,7 +270,15 @@ function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+        if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
+            -- Fire FF message.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
 
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+        end
+    end
 end
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -236,6 +315,10 @@ Functions[1] = function()
     -- Have Manson and Yelena patrol their base.
     Patrol(Mission.m_Manson, "manson_patrol", 1);
     Patrol(Mission.m_Yelena, "yelena_patrol", 1);
+
+    -- Make sure Yelena and Manson can't die.
+    SetMaxHealth(Mission.m_Manson, 0);
+    SetMaxHealth(Mission.m_Yelena, 0);
 
     -- Give all relevant teams scrap.
     SetScrap(Mission.m_HostTeam, 40);
@@ -274,6 +357,9 @@ Functions[1] = function()
     Patrol(Mission.m_BraddockBasePatrol2, "basetank2", 1);
     Patrol(Mission.m_BraddockBasePatrol3, "basetank3", 1);
 
+    -- Set Yelena's AIP.
+    SetAIP("scion0602_x.aip", Mission.m_AlliedTeam);
+
     -- Rebel Tug should pick up the Power Crystal.
     Pickup(Mission.m_ConvoyTug, Mission.m_PowerCrystal);
 
@@ -285,60 +371,223 @@ Functions[1] = function()
 end
 
 Functions[2] = function()
-    if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
-        -- Yelena: First we must work on getting this base in shape...
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601.wav");
+    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
 
-        -- Delay for the audio.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+    -- Yelena: First we must work on getting this base in shape...
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601.wav");
 
-        -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;
-    end
+    -- Delay for the audio.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[3] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        -- Yelena: Build a service truck and fix the factory and power generators.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601a.wav");
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
 
-        -- Delay for the audio.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+    -- Yelena: Build a service truck and fix the factory and power generators.
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601a.wav");
 
-        -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;
-    end
+    -- Delay for the audio.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[4] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        -- Show Objectives.
-        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
 
-        -- Show a timer to the player for base repairs.
-        StartCockpitTimer(730, 180, 90);
+    -- Show Objectives.
+    AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
 
-        -- Send a couple of units to harass the player.
-        local unit_a_choice = {"ivscout_x", "ivmisl_x", "ivtank_x"};
-        local unit_b_choice = {"ivscout_x", "ivscout_x", "ivmisl_x"};
+    -- Grab the right timer so we can perform some math to divide it for the timer.
+    local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty];
 
-        local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
-        local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
+    -- Show a timer to the player for base repairs.
+    StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4);
 
-        Goto(unit_a, "playerbase");
-        Goto(unit_b, "playerbase");
+    -- Send a couple of units to harass the player.
+    local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" };
+    local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" };
 
-        -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;
-    end
+    local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
+    local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
+
+    Goto(unit_a, "playerbase");
+    Goto(unit_b, "playerbase");
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
 Functions[5] = function()
     -- This function can handle the main repair logic.
-    
+    if (Mission.m_RepairsComplete == false) then
+        if (IsAround(Mission.m_PlayerFactory) == false) then return end;
+        if (IsAround(Mission.m_PlayerPower1) == false) then return end;
+        if (IsAround(Mission.m_PlayerPower2) == false) then return end;
+
+        local factHealth = GetCurHealth(Mission.m_PlayerFactory);
+        local pgen1Health = GetCurHealth(Mission.m_PlayerPower1);
+        local pgen2Health = GetCurHealth(Mission.m_PlayerPower2);
+
+        -- Check the health of everything first so we don't play the below audio if the player just decides to rebuild.
+        if (factHealth > 5900 and pgen1Health > 2900 and pgen2Health > 2900) then
+            -- Small delay before the next voice line.
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
+
+            -- Stop the timer.
+            StopCockpitTimer();
+            HideCockpitTimer();
+
+            -- Skip the below section if this is done first.
+            Mission.m_RepairsStarted = true;
+
+            -- Repairs are complete.
+            Mission.m_RepairsComplete = true;
+
+            -- Advance the mission state...
+            Mission.m_MissionState = Mission.m_MissionState + 1;
+        end
+
+        -- Check the health of each building to see if they are being repaired.
+        if (Mission.m_RepairsStarted == false) then
+            if (factHealth > 2250 or pgen1Health > 1550 or pgen2Health > 1850) then
+                -- Yelena: Good.  Continue to build up your forces while waiting for the repairs.
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0602.wav");
+
+                -- Timer for this clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+                -- So we don't loop this sequence.
+                Mission.m_RepairsStarted = true;
+            end
+        end
+    end
+end
+
+Functions[6] = function()
+    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+    -- Yelena: Ok the repairs are complete.  Now we should be in good shape for the base assault.  Continue to build your forces, and take out that base!	
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0603.wav");
+
+    -- Timer for this clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[7] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+    -- Show Objectives.
+    AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
+
+    -- Build and rename a nav for Braddock's bases.
+    Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "enemybase");
+    SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0601"));
+    SetObjectiveOn(Mission.m_Nav1);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[8] = function()
+
+end
+
+function YelenaUnitDispatcher()
+    if (Mission.m_UnitDispatcherTime < Mission.m_MissionTime) then
+        if (Mission.m_YelenaTurret1Sent == false) then
+            -- Pick a random path for this turret to move to.
+            local rand = GetRandomFloat(1);
+            local path;
+
+            if (rand < 0.5) then
+                path = "yelena_turret_path_1";
+            else
+                path = "yelena_turret_path_3";
+            end
+
+            Goto(Mission.m_YelenaTurret1, path);
+
+            Mission.m_YelenaTurret1Sent = true;
+        end
+
+        if (Mission.m_YelenaTurret2Sent == false) then
+            -- Pick a random path for this turret to move to.
+            local rand = GetRandomFloat(1);
+            local path;
+
+            if (rand < 0.5) then
+                path = "yelena_turret_path_2";
+            else
+                path = "yelena_turret_path_4";
+            end
+
+            Goto(Mission.m_YelenaTurret2, path);
+
+            Mission.m_YelenaTurret2Sent = true;
+        end
+
+        -- To delay loops.
+        Mission.m_UnitDispatcherTime = Mission.m_MissionTime + SecondsToTurns(1.5);
+    end
 end
 
 -- Checks for failure conditions.
 function HandleFailureConditions()
+    if (Mission.m_RepairsWarningActive) then
+        if (Mission.m_RepairWarningTime >= Mission.m_MissionTime) then return end;
 
+        if (Mission.m_RepairWarningCount == 0) then
+            -- Yelena: Those repairs should have been finished by now,  What's going on?
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0603.wav");
+
+            -- Timer for this clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+        elseif (Mission.m_RepairWarningCount == 1) then
+            -- Yelena: The base STILL is not fully repaired.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0616.wav");
+
+            -- Timer for this clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+        elseif (Mission.m_RepairWarningCount == 2) then
+            -- Yelena: That's it... I'm pissed now, mission over.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0617.wav");
+
+            -- Timer for this clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+        end
+
+        -- Advance the warning count.
+        Mission.m_RepairWarningCount = Mission.m_RepairWarningCount + 1;
+
+        if (Mission.m_RepairWarningCount < 3) then
+            -- Add more time for the warning.
+            Mission.m_RepairWarningTime = m_RepairTimeTable[Mission.m_MissionDifficulty] / 4;
+        else
+            StopCockpitTimer();
+            HideCockpitTimer();
+
+            -- Show Objectives.
+            AddObjectiveOverride("scion0607.otf", "RED", 10, true);
+
+            -- Fail the mission.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("The base wasn't repaired in time.");
+                DoGameover(10);
+            else
+                FailMission(GetTime() + 10, "scion06L1.txt");
+            end
+
+            -- Just so we don't loop.
+            Mission.m_MissionOver = true;
+        end
+    end
 end

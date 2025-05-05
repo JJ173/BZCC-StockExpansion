@@ -8,7 +8,7 @@ idleAllCraft = false
 [IdleDispatcher]
 sendAllUnitsOnStartup = false
 CraftTeamIsPilotTeam = true
-UnitIdleSeconds = 999999 // Don't send out units via Dispatch.
+UnitIdleSeconds = 999999
 
 [Cheat]
 moneyAmount = 3 
@@ -51,7 +51,6 @@ buildIfNoIdle = true
 planCondition = "Lua"
 LuaFunction = "CollectPoolCondition"
 
-// Added a second pool plan, so we can run two Scavs at the same time.
 [Plan5] 
 planType = "CollectPool"
 planPriority = 130
@@ -75,125 +74,117 @@ planCondition = "Lua"
 LuaFunction = "ConstructorCondition"
 
 [Plan8]
-planType = "BaseBuildMinimums"
+planType = "BuildMinimums"
 planPriority = 115
-buildType1 = "ibpgen_x"
-buildCount1 = 1
-buildLoc1 = "brad_pgen1"
+buildType1 = "ivserv_x"
+buildCount1 = 3
+planCondition = "Lua"
+LuaFunction = "ServiceTruckCondition"
 
 [Plan9]
 planType = "BaseBuildMinimums"
 planPriority = 110
+buildType1 = "ibpgen_x"
+buildCount1 = 1
+buildLoc1 = "brad_pgen1"
+
+[Plan10]
+planType = "BaseBuildMinimums"
+planPriority = 105
 buildType1 = "ibfact_x"
 buildCount1 = 1
 buildLoc1 = "brad_fact"
 buildHeading = 0
 
-[Plan10]
+[Plan11]
 planType = "BaseBuildMinimums"
-planPriority = 105
+planPriority = 100
 buildType1 = "ibarmo_x"
 buildCount1 = 1
 buildLoc1 = "brad_armo"
 
-[Plan11]
+[Plan12]
 planType = "BaseBuildMinimums"
-planPriority = 100
+planPriority = 95
 buildType1 = "ibcbun_x"
 buildCount1 = 1
 buildLoc1 = "brad_bunk"
 
-[Plan12]
+[Plan13]
 planType = "BaseBuildMinimums"
-planPriority = 95
+planPriority = 90
 buildType1 = "ibpgen_x"
 buildCount1 = 1
 buildLoc1 = "brad_pgen2"
 
-[Plan13]
+[Plan14]
 planType = "BaseBuildMinimums"
-planPriority = 90
+planPriority = 85
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow1"
 
-[Plan14]
+[Plan15]
 planType = "BaseBuildMinimums"
-planPriority = 85
+planPriority = 80
 buildType1 = "ibsbay_x"
 buildCount1 = 1
 buildLoc1 = "brad_sbay"
 
-[Plan15]
+[Plan16]
 planType = "BaseBuildMinimums"
-planPriority = 80
+planPriority = 75
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow2"
 
-[Plan16]
+[Plan17]
 planType = "BaseBuildMinimums"
-planPriority = 75
+planPriority = 70
 buildType1 = "ibpgen_x"
 buildCount1 = 1
 buildLoc1 = "brad_pgen3"
 
-[Plan17]
+[Plan18]
 planType = "BaseBuildMinimums"
-planPriority = 70
+planPriority = 65
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow3"
 
-[Plan18]
+[Plan19]
 planType = "BaseBuildMinimums"
-planPriority = 65
+planPriority = 60
 buildType1 = "ibtrain_x"
 buildCount1 = 1
 buildLoc1 = "brad_train"
 
-[Plan19]
+[Plan20]
 planType = "BaseBuildMinimums"
-planPriority = 60
+planPriority = 55
 buildType1 = "ibtcen_x"
 buildCount1 = 1
 buildLoc1 = "brad_tech"
 buildHeading = 2
 
-[Plan20]
+[Plan21]
 planType = "BaseBuildMinimums"
-planPriority = 55
+planPriority = 50
 buildType1 = "ibbomb_x"
 buildCount1 = 1
 buildLoc1 = "brad_bomb"
 
-[Plan21]
+[Plan22]
 planType = "BaseBuildMinimums"
-planPriority = 50
+planPriority = 45
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow4"
 
-[Plan22]
+[Plan23]
 planType = "BuildMinimums"
-planPriority = 45
+planPriority = 40
 buildType1 = "ivturr_c"
 buildCount1 = 4
 planCondition = "Lua"
-LuaFunction = "BuildTurretCondition"
-
-[Plan23]
-planType = "Attacker"
-planPriority = 40
-planCondition = "Lua"
-targetType1 = "ibscav_x"
-targetType2 = "ibfact_x"
-targetType3 = "ivcons_x"
-targetType4 = "ibrecy_x"
-targetType5 = "ibpgen_x"
-attackType1 = "ivscout_c"
-attackType2 = "ivscout_c"
-LuaFunction = "Attack1Condition"
-AttackAnything = true
-buildIfNoIdle = true
-ContinueEvenIfFail = true
+LuaFunction = "TurretCondition"

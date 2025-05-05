@@ -1,4 +1,4 @@
-# BZCC-StockExpansion
+![bzcc_reimagined_logo](https://github.com/user-attachments/assets/5c556c91-d768-4525-bde3-a894935b177a)
 
 This repository contains assets and content intended to expand the stock experience of *Battlezone: Combat Commander*.
 

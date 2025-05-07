@@ -56,17 +56,26 @@ local Mission =
     m_BraddockBasePatrol2 = nil,
     m_BraddockBasePatrol3 = nil,
 
+    m_BraddockRecycler = nil,
+
     m_YelenaTurret1 = nil,
     m_YelenaTurret2 = nil,
 
+    m_PlayerRecycler = nil,
     m_PlayerPower1 = nil,
     m_PlayerPower2 = nil,
     m_PlayerFactory = nil,
 
     m_ConvoyTug = nil,
+    m_ConvoyScout1 = nil,
+    m_ConvoyScout2 = nil,
+    m_ConvoySent1 = nil,
+    m_ConvoySent2 = nil,
     m_PowerCrystal = nil,
 
     m_Nav1 = nil,
+
+    m_YelenaPowerDialogPlayed = false,
 
     m_RepairsWarningActive = false,
     m_RepairsStarted = false,
@@ -74,6 +83,12 @@ local Mission =
 
     m_YelenaTurret1Sent = false,
     m_YelenaTurret2Sent = false,
+
+    m_ConvoyEscortClose = false,
+    m_ConvoyEscortTooFar = false,
+    m_ConvoyEnroute = false,
+    m_ConvoyActive = false,
+    m_ConvoyFleeing = false,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -86,6 +101,7 @@ local Mission =
     m_UnitDispatcherTime = 0,
     m_RepairWarningTime = 0,
     m_RepairWarningCount = 0,
+    m_ConvoyBrainDelayTime = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -224,8 +240,12 @@ function Update()
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
 
+            if (Mission.m_ConvoyActive) then
+                ConvoyBrain();
+            end
+
             -- Make sure Yelena sends turrets.
-            YelenaUnitDispatcher();
+            YelenaBrain();
 
             -- Check failure conditions...
             HandleFailureConditions();
@@ -305,9 +325,16 @@ Functions[1] = function()
     Mission.m_Yelena = GetHandle("yelena");
     Mission.m_Manson = GetHandle("manson");
 
+    Mission.m_BraddockRecycler = GetHandle("enemyrecy");
+
     Mission.m_PlayerPower1 = GetHandle("playerspgen1");
     Mission.m_PlayerPower2 = GetHandle("playerspgen2");
     Mission.m_PlayerFactory = GetHandle("playersfact");
+
+    Mission.m_ConvoyScout1 = GetHandle("convoy_scout1");
+    Mission.m_ConvoyScout2 = GetHandle("convoy_scout2");
+    Mission.m_ConvoySent1 = GetHandle("convoy_sent1");
+    Mission.m_ConvoySent2 = GetHandle("convoy_sent2");
 
     Mission.m_ConvoyTug = GetHandle("convoy_tug1");
     Mission.m_PowerCrystal = GetHandle("power");
@@ -498,10 +525,87 @@ Functions[7] = function()
 end
 
 Functions[8] = function()
+    if (Mission.m_YelenaPowerDialogPlayed == false) then
+        if (IsPlayerWithinDistance("enemybase", 220, _Cooperative.m_TotalPlayerCount)) then
+            -- Yelena: Cooke go for the power generators, that will buy you some time to take out those gun towers.	
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0604.wav");
+
+            -- Timer for this clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
+
+            -- So we don't loop.
+            Mission.m_YelenaPowerDialogPlayed = true;
+        end
+    end
+
+    if (IsAround(Mission.m_BraddockRecycler) == false) then
+        -- Small delay before the next state.
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(4);
+
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+    end
+end
+
+Functions[9] = function()
+    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
+
+    -- Yelena: Good job, you've knocked the base out of commission.
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0606.wav");
+
+    -- Timer for this clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[10] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+    -- Start up the convoy.
+    Retreat(Mission.m_ConvoyScout1, "convoypath");
+    Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1);
+
+    Retreat(Mission.m_ConvoyTug, "convoypath");
+    Follow(Mission.m_ConvoySent1, Mission.m_ConvoyTug);
+    Follow(Mission.m_ConvoySent2, Mission.m_ConvoySent1);
+
+    Mission.m_ConvoyEnroute = true;
+    Mission.m_ConvoyActive = true;
+
+    -- Burns: It looks like we took out that base just in time, we've just picked up the Evil Scion convoy on radar and they are nearing the base!  Move as many forces to the destroyed base as you can, we must take out that convoy. Remember, do not damage the power source.
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0607.wav");
+
+    -- Timer for this clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(16.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[11] = function()
+    if (Mission.m_ConvoyFleeing == false or Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+    -- Yelena: Cooke, the tug is retreating, do not let it get away!!
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0609.wav");
+
+    -- Show Objectives.
+    AddObjectiveOverride("scion0604.otf", "WHITE", 10, true);
+
+    -- Timer for this clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[12] = function()
 
 end
 
-function YelenaUnitDispatcher()
+function YelenaBrain()
     if (Mission.m_UnitDispatcherTime < Mission.m_MissionTime) then
         if (Mission.m_YelenaTurret1Sent == false) then
             -- Pick a random path for this turret to move to.
@@ -537,6 +641,68 @@ function YelenaUnitDispatcher()
 
         -- To delay loops.
         Mission.m_UnitDispatcherTime = Mission.m_MissionTime + SecondsToTurns(1.5);
+    end
+end
+
+function ConvoyBrain()
+    -- If we have a delay, don't run this.
+    if (Mission.m_ConvoyBrainDelayTime > Mission.m_MissionTime) then return end;
+
+    -- Handle the Convoy movement to Braddock's base.
+    if (Mission.m_ConvoyEnroute) then
+        local convoy1Distance = GetDistance(Mission.m_ConvoyScout1, Mission.m_ConvoyTug);
+
+        if (Mission.m_ConvoyEscortTooFar == false and convoy1Distance > 100) then
+            -- Stop the Convoy Scouts if they get too far ahead.
+            Stop(Mission.m_ConvoyScout1);
+            Stop(Mission.m_ConvoyScout2);
+
+            -- Switch these around.
+            Mission.m_ConvoyEscortClose = false;
+            Mission.m_ConvoyEscortTooFar = true;
+        elseif (Mission.m_ConvoyEscortClose == false and convoy1Distance < 90) then
+            -- Move the Scouts down the convoypath again.
+            Retreat(Mission.m_ConvoyScout1, "convoypath");
+            Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1);
+
+            -- Switch these around.
+            Mission.m_ConvoyEscortClose = true;
+            Mission.m_ConvoyEscortTooFar = false;
+        end
+
+        -- Double check the distance between the player and the convoy tug, or the forward scout.
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local playerHandle = GetPlayerHandle(i);
+
+            if (GetDistance(playerHandle, Mission.m_ConvoyScout1) < 200 or GetDistance(playerHandle, Mission.m_ConvoyTug) < 200) then
+                -- Have both front scouts attack the nearest player.
+                Attack(Mission.m_ConvoyScout1, playerHandle);
+                Attack(Mission.m_ConvoyScout2, playerHandle);
+
+                -- Tell the Scion tug to retreat out of the map.
+                Retreat(Missison.m_ConvoyTug, "tugretreatpath");
+
+                -- EVIL CONVOY:  Squad alpha here, we have the package. Hey wait a minute, those aren't Braddock's forces!  Destroy them!
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0608.wav");
+
+                -- Timer for this clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+
+                -- Delay to let the player know that the convoy is fleeing.
+                Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(15);
+
+                -- So we can track if the Tug escapes.
+                Mission.m_ConvoyFleeing = true;
+
+                -- Stop the escort logic.
+                Mission.m_ConvoyEnroute = false;
+            end
+        end
+    elseif (Mission.m_ConvoyFleeing) then
+        -- Use this to track the enemy guards.
+
+        -- Small delay so we don't constantly check the state of the Scion Convoy each turn.
+        Mission.m_ConvoyBrainDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
     end
 end
 
@@ -584,6 +750,24 @@ function HandleFailureConditions()
                 DoGameover(10);
             else
                 FailMission(GetTime() + 10, "scion06L1.txt");
+            end
+
+            -- Just so we don't loop.
+            Mission.m_MissionOver = true;
+        end
+    end
+
+    if (Mission.m_ConvoyFleeing) then
+        if (GetDistance(Mission.m_ConvoyTug, "tug_end_missison") < 75) then
+            -- Show Objectives.
+            AddObjectiveOverride("scion0604.otf", "RED", 10, true);
+
+            -- Fail the mission.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("The Hauler escaped.");
+                DoGameover(10);
+            else
+                FailMission(GetTime() + 10, "The Hauler escaped.");
             end
 
             -- Just so we don't loop.

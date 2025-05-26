@@ -1356,7 +1356,7 @@ Functions[44] = function()
     -- Check to see if one of our players is in the bunker.
     if (IsPlayerInBuilding(_Cooperative.GetTotalPlayers())) then
         -- Braddock: Okay Cooke... you've just become a key part of this op.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0430b.wav", true);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0430b.wav", SUBTITLE_PANEL_SIZES["SubtitlesPanel_Large"]);
 
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(34.5);

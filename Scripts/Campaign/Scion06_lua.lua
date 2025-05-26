@@ -1,7 +1,7 @@
 --[[
     BZCC Scion06 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 21-04-2026
+    Version 1.0 21-04-2025
 --]]
 
 -- Fix for finding files outside of this script directory.
@@ -294,6 +294,14 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
             -- Fire FF message.
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+        end
+
+        if (IsAlive(Mission.m_Yelena) and VictimHandle == Mission.m_Yelena) then
+            -- Fire FF message.
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scngen30.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);

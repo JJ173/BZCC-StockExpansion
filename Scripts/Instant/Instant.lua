@@ -657,7 +657,7 @@ function Update()
 
                     if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
                         -- "Condor": "We are returning to base."
-                        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav", false);
+                        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav");
 
                         -- So we don't loop.
                         _Session.m_DropshipTakeOffDialogPlayed = true;
@@ -935,7 +935,7 @@ ISDFIntroFunctions[2] = function()
     end
 
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav");
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(10);
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
@@ -962,7 +962,7 @@ end
 
 ISDFIntroFunctions[5] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav");
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(6);
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
@@ -995,7 +995,7 @@ ISDFIntroFunctions[7] = function()
         StartSoundEffect("dropdoor.wav", _Session.m_IntroShip1);
 
         _Session.m_DropshipTakeoffCheck = true;
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_3.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_3.wav");
 
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
@@ -1014,14 +1014,14 @@ ISDFIntroFunctions[9] = function()
 
         BuildCarriers();
 
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
 
 ISDFIntroFunctions[10] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
@@ -1068,14 +1068,14 @@ end
 
 ScionIntroFunctions[2] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_1.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_1.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
 
 ScionIntroFunctions[3] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_2.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_2.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
@@ -1085,9 +1085,9 @@ ScionIntroFunctions[4] = function()
         local mapName = GetMapTRNFilename();
 
         if (FindInTable(MireMaps, mapName)) then
-            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav", false);
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav");
         elseif (FindInTable(BaneMaps, mapName)) then
-            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav", false);
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav");
         end
 
         _Session.m_IntroState = _Session.m_IntroState + 1;
@@ -1096,14 +1096,14 @@ end
 
 ScionIntroFunctions[5] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
 
 ScionIntroFunctions[6] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_4.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_4.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
@@ -1187,14 +1187,14 @@ ScionIntroFunctions[12] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         BuildCarriers();
 
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_1.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_1.wav");
         _Session.m_IntroState = _Session.m_IntroState + 1;
     end
 end
 
 ScionIntroFunctions[13] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_2.wav", false);
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_2.wav");
         _Session.m_IntroDone = true;
     end
 end

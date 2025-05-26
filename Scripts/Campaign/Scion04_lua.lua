@@ -389,7 +389,7 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
         if (IsPlayer(ShooterHandle) and (VictimHandle == Mission.m_Evil1 or VictimHandle == Mission.m_Evil2 or VictimHandle == Mission.m_Evil3)) then
             if (GetCurHealth(VictimHandle) < 750) then
                 -- Rebel: He's onto us! Attack!
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0404.wav", false);
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0404.wav");
 
                 -- Set the timer for this audio clip.
                 Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
@@ -551,7 +551,7 @@ Functions[2] = function()
         -- Ok Cooke, we MUST get this power source to the data transfer machine.
         -- We have been unable to locate any scrap veins in the area, so you will have to make due with the units we have available.
         -- Good luck Cooke, the fate of an entire race is in your hands.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0401.wav", false);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0401.wav");
 
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
@@ -588,7 +588,7 @@ Functions[4] = function()
     if (Mission.m_EvilsDead and Mission.m_PlayerAmbushed == false and Mission.m_BurnsRebelDialogPlayed == false) then
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- You did the right thing, John,  Those were the rebels!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav", false);
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0408.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
@@ -601,7 +601,7 @@ Functions[4] = function()
     if (Mission.m_PlayerAmbushed and Mission.m_EvilsDead == false and Mission.m_BurnsAmbushDialogPlayed == false and Mission.m_BurnsAmbushTimer < Mission.m_MissionTime) then
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
             -- John, you fell right into a trap...those were the rebels!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0412.wav", false);
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0412.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
@@ -1745,7 +1745,7 @@ function RebelBrain()
                     LookAt(Mission.m_Evil3, pHandle);
 
                     -- Cooke stop! The way ahead is very dangerous, a massive ISDF blockade is entrenched in the canyon.  Follow us we know a safe way through the pass!
-                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0402.wav", false);
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0402.wav");
 
                     -- Set the timer for this audio clip.
                     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(10.5);
@@ -1793,7 +1793,7 @@ function RebelBrain()
                     -- First warning for the Rebels.
                     if (Mission.m_RebelWarningCount == 0) then
                         -- Start the Rebel voices.
-                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0403.wav", false);
+                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0403.wav");
 
                         -- Set the timer for this audio clip.
                         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
@@ -1810,7 +1810,7 @@ function RebelBrain()
                         Mission.m_RebelWarningCount = Mission.m_RebelWarningCount + 1;
                     else
                         -- Ok Cooke, I was hoping we could do this the easy way but you are too stubborn! Attack men
-                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0405.wav", false);
+                        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0405.wav");
 
                         -- Set the timer for this audio clip.
                         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
@@ -1828,7 +1828,7 @@ function RebelBrain()
                 -- Check to see if the Rebels are dead.
                 if (Mission.m_Evil1Check == false and IsAliveAndEnemy(Mission.m_Evil1, 7) == false) then
                     -- Tell burns we will never return with him to earth!
-                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0407.wav", false);
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0407.wav");
 
                     -- Set the timer for this audio clip.
                     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
@@ -1867,7 +1867,7 @@ function HandleFailureConditions()
             Mission.m_MissionOver = true;
 
             -- The Power Crystal has been destroyed.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0409.wav", false);
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0409.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
@@ -1890,7 +1890,7 @@ function HandleFailureConditions()
             Mission.m_MissionOver = true;
 
             -- Dammit the Hauler has been destroyed!
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0415.wav", false);
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0415.wav");
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);

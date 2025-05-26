@@ -549,7 +549,7 @@ end
 Functions[2] = function()
     if (Mission.m_MissionDelayTime < Mission.m_MissionTime) then
         -- Give Braddock his message.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1601.wav", false);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1601.wav");
 
         -- The timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(21.5);

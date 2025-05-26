@@ -20,10 +20,14 @@ local subtitleToUse = nil;
 local audioClip = nil;
 
 -- This determines which panel should be loaded for the text.
-local largePanel = false;
+local chosenPanel = 0;
 
 -- Set the audioClip variable up so we can track when it's finished.
-function _Subtitles.AudioWithSubtitles(clip, useLargePanel)
+function _Subtitles.AudioWithSubtitles(clip, panelSize)
+	if (panelSize == nil) then
+		panelSize = SUBTITLE_PANEL_SIZES["SubtitlesPanel"];
+	end
+
 	-- Set this global variable so we can keep track of the clip until it's finished.
 	audioClip = AudioMessage(clip);
 
@@ -39,7 +43,7 @@ function _Subtitles.AudioWithSubtitles(clip, useLargePanel)
 	subtitleToUse = RemoveWavExtension(clip) .. "_subtitle.txt";
 
 	-- Whether we need to use a larger box.
-	largePanel = useLargePanel;
+	chosenPanel = panelSize;
 
 	-- Mark this as invisible so we can start the subtitles.
 	startSubtitles = true;
@@ -58,9 +62,12 @@ function _Subtitles.Run()
 		end
 
 		-- Active the subtitle panel.
-		if (largePanel) then
+		if (chosenPanel == SUBTITLE_PANEL_SIZES["SubtitlesPanel_Large"]) then
 			IFace_FillListBoxFromText("SubtitlesPanel_Large", subtitleToUse);
 			IFace_Activate("SubtitlesPanel_Large");
+		elseif (chosenPanel == SUBTITLE_PANEL_SIZES["SubtitlesPanel_Medium"]) then
+			IFace_FillListBoxFromText("SubtitlesPanel_Medium", subtitleToUse);
+			IFace_Activate("SubtitlesPanel_Medium");
 		else
 			IFace_FillListBoxFromText("SubtitlesPanel", subtitleToUse);
 			IFace_Activate("SubtitlesPanel");
@@ -73,6 +80,7 @@ function _Subtitles.Run()
 	if (audioClip ~= nil) then
 		if (IsAudioMessageDone(audioClip)) then
 			IFace_Deactivate("SubtitlesPanel_Large");
+			IFace_Deactivate("SubtitlesPanel_Medium");
 			IFace_Deactivate("SubtitlesPanel");
 		end
 	end

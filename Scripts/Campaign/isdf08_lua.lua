@@ -471,7 +471,7 @@ end
 
 Functions[4] = function()
     -- Send a rescue team to attack.
-    if (GetCurrentCommand(Mission.m_Unit1) == CMD_NONE) then
+    if (GetCurrentCommand(Mission.m_Unit1) == AiCommand.CMD_NONE) then
         if (IsAlive(Mission.m_Start1)) then
             Attack(Mission.m_Unit1, Mission.m_Start1);
         elseif (IsAlive(Mission.m_Start2)) then
@@ -481,7 +481,7 @@ Functions[4] = function()
         end
     end
 
-    if (GetCurrentCommand(Mission.m_Unit2) == CMD_NONE) then
+    if (GetCurrentCommand(Mission.m_Unit2) == AiCommand.CMD_NONE) then
         if (IsAlive(Mission.m_Start1)) then
             Attack(Mission.m_Unit2, Mission.m_Start1);
         elseif (IsAlive(Mission.m_Start2)) then
@@ -491,7 +491,7 @@ Functions[4] = function()
         end
     end
 
-    if (GetCurrentCommand(Mission.m_Unit3) == CMD_NONE) then
+    if (GetCurrentCommand(Mission.m_Unit3) == AiCommand.CMD_NONE) then
         if (IsAlive(Mission.m_Start1)) then
             Attack(Mission.m_Unit3, Mission.m_Start1);
         elseif (IsAlive(Mission.m_Start2)) then
@@ -501,7 +501,7 @@ Functions[4] = function()
         end
     end
 
-    if (GetCurrentCommand(Mission.m_Unit4) == CMD_NONE) then
+    if (GetCurrentCommand(Mission.m_Unit4) == AiCommand.CMD_NONE) then
         if (IsAlive(Mission.m_Start1)) then
             Attack(Mission.m_Unit4, Mission.m_Start1);
         elseif (IsAlive(Mission.m_Start2)) then

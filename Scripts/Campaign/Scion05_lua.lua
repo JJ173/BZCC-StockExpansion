@@ -955,27 +955,27 @@ end
 
 function DispatchAANUnits()
     if (Mission.m_AANDispatchCooldown < Mission.m_MissionTime) then
-        if (IsAlive(Mission.m_Manson) and GetCurrentCommand(Mission.m_Manson) == CMD_NONE) then
+        if (IsAlive(Mission.m_Manson) and GetCurrentCommand(Mission.m_Manson) == AiCommand.CMD_NONE) then
             Patrol(Mission.m_Manson, "AAN_Patrol1", 1);
         end
 
-        if (IsAlive(Mission.m_AANTank1) and GetCurrentCommand(Mission.m_Manson) == CMD_NONE) then
+        if (IsAlive(Mission.m_AANTank1) and GetCurrentCommand(Mission.m_Manson) == AiCommand.CMD_NONE) then
             Follow(Mission.m_AANTank1, Mission.m_Manson, 1);
         end
 
-        if (IsAlive(Mission.m_AANTank2) and GetCurrentCommand(Mission.m_AANTank2) == CMD_NONE and GetDistance(Mission.m_AANTank2, "basetank1") > 30) then
+        if (IsAlive(Mission.m_AANTank2) and GetCurrentCommand(Mission.m_AANTank2) == AiCommand.CMD_NONE and GetDistance(Mission.m_AANTank2, "basetank1") > 30) then
             Goto(Mission.m_AANTank2, "basetank1", 1);
         end
 
-        if (IsAlive(Mission.m_AANTank3) and GetCurrentCommand(Mission.m_AANTank3) == CMD_NONE and GetDistance(Mission.m_AANTank3, "basetank3") > 30) then
+        if (IsAlive(Mission.m_AANTank3) and GetCurrentCommand(Mission.m_AANTank3) == AiCommand.CMD_NONE and GetDistance(Mission.m_AANTank3, "basetank3") > 30) then
             Goto(Mission.m_AANTank3, "basetank3", 1);
         end
 
-        if (IsAlive(Mission.m_AANATank1) and GetCurrentCommand(Mission.m_AANATank1) == CMD_NONE and GetDistance(Mission.m_AANATank1, "AANBase_ATank1") > 30) then
+        if (IsAlive(Mission.m_AANATank1) and GetCurrentCommand(Mission.m_AANATank1) == AiCommand.CMD_NONE and GetDistance(Mission.m_AANATank1, "AANBase_ATank1") > 30) then
             Goto(Mission.m_AANATank1, "AANBase_ATank1", 1);
         end
 
-        if (IsAlive(Mission.m_AANATank2) and GetCurrentCommand(Mission.m_AANATank2) == CMD_NONE and GetDistance(Mission.m_AANATank2, "AANBase_ATank2") > 30) then
+        if (IsAlive(Mission.m_AANATank2) and GetCurrentCommand(Mission.m_AANATank2) == AiCommand.CMD_NONE and GetDistance(Mission.m_AANATank2, "AANBase_ATank2") > 30) then
             Goto(Mission.m_AANATank2, "AANBase_ATank2", 1);
         end
 

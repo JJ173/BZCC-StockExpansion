@@ -565,7 +565,7 @@ end
 Functions[7] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Move out and end this part of the mission.
-        if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_GO) then
+        if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_GO) then
             Goto(Mission.m_Shabayev, "truckwait_path", 1);
         end
 
@@ -849,7 +849,7 @@ Functions[19] = function()
         -- Show objectives.
         AddObjectiveOverride("rendezvous.otf", "WHITE", 10, true);
 
-        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
             AddObjective("truck.otf", "WHITE");
         end
 
@@ -912,7 +912,7 @@ end
 
 Functions[22] = function()
     if (GetCurHealth(Mission.m_Shabayev) > 1700 and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
             -- Give command back to the main player.
             Follow(Mission.m_Truck, Mission.m_MainPlayer, 0);
         end
@@ -1030,7 +1030,7 @@ end
 
 Functions[28] = function()
     -- Give Shabayev a target.
-    if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_ATTACK) then
+    if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
         if (IsAlive(Mission.m_Scion1)) then
             Attack(Mission.m_Shabayev, Mission.m_Scion1, 1);
         elseif (IsAlive(Mission.m_Scion2)) then
@@ -1085,7 +1085,7 @@ Functions[29] = function()
         -- Show objectives.
         AddObjectiveOverride("rendezvous.otf", "WHITE", 10, true);
 
-        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
             AddObjective("truck.otf", "WHITE");
         end
 
@@ -1282,7 +1282,7 @@ Functions[38] = function()
 end
 
 Functions[39] = function()
-    if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_ATTACK) then
+    if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
         if (IsAlive(Mission.m_LastTurret1)) then
             -- Have Shabayev attack the first turret.
             Attack(Mission.m_Shabayev, Mission.m_LastTurret1, 1);
@@ -1487,7 +1487,7 @@ end
 
 Functions[51] = function()
     -- Run a check to get the third Scion to attack when Shabayev isn't too far from her destination.
-    if (IsAlive(Mission.m_Scion3) and GetCurrentCommand(Mission.m_Scion3) ~= CMD_ATTACK) then
+    if (IsAlive(Mission.m_Scion3) and GetCurrentCommand(Mission.m_Scion3) ~= AiCommand.CMD_ATTACK) then
         -- Run a distance check.
         if (GetDistance(Mission.m_Shabayev, "back_at_base") < 175) then
             -- Send the Scion to attack.
@@ -1809,7 +1809,7 @@ function HandlePlayerDisobeyingOrders()
         end
     elseif (IsAlive(Mission.m_Truck) and not Mission.m_RepairsNeeded) then
         -- Check to see if the truck is following a player, or Shabayev.
-        if (GetCurrentCommand(Mission.m_Truck) == CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) == AiCommand.CMD_FOLLOW) then
             -- If it is following, but it's not the player...Run the reminder.
             local leader = GetCurrentWho(Mission.m_Truck);
 

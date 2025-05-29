@@ -856,7 +856,7 @@ end
 
 function YelenaBrain()
     -- This will run every 5 seconds to see if Yelena is doing something. If she's not, we will move her to a random position in the base.
-    if (Mission.m_MissionTime % SecondsToTurns(10) == 0 and GetCurrentCommand(Mission.m_Yelena) == CMD_NONE) then
+    if (Mission.m_MissionTime % SecondsToTurns(10) == 0 and GetCurrentCommand(Mission.m_Yelena) == AiCommand.CMD_NONE) then
         -- Pick a random position near her path.
         local pathPos = GetPosition("YelenaRadius");
         local chosenPos = GetPositionNear(pathPos, 5, 60);

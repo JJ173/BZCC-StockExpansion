@@ -1955,11 +1955,11 @@ Functions[62] = function()
 
         -- This checks to see if the player has ignored the order to attack.
         if (check1 or check2) then
-            if (GetCurrentCommand(Mission.m_Scion1) ~= CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Scion1) ~= AiCommand.CMD_ATTACK) then
                 Attack(Mission.m_Scion1, GetPlayerHandle(i), 1);
             end
 
-            if (GetCurrentCommand(Mission.m_Scion2) ~= CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Scion2) ~= AiCommand.CMD_ATTACK) then
                 Attack(Mission.m_Scion2, GetPlayerHandle(i), 1);
             end
         end
@@ -2438,7 +2438,7 @@ Functions[82] = function()
     -- This will get Shabayev to attack when she is near.
     if (not check1) then
         if (GetDistance(Mission.m_Shabayev, Mission.m_Truck) < 100) then
-            if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
                 if (IsAlive(Mission.m_Scion1)) then
                     -- Have her attack.
                     Attack(Mission.m_Shabayev, Mission.m_Scion1, 1);
@@ -2766,7 +2766,7 @@ function SimmsBrain()
     end
 
     -- This checks to see if Simms should look at the turret or not.
-    if (not Mission.m_SimmsLookAtTurret and GetCurrentCommand(Mission.m_ScionTurret) == CMD_ATTACK and GetDistance(Mission.m_Simms, Mission.m_ScionTurret) < 50) then
+    if (not Mission.m_SimmsLookAtTurret and GetCurrentCommand(Mission.m_ScionTurret) == AiCommand.CMD_ATTACK and GetDistance(Mission.m_Simms, Mission.m_ScionTurret) < 50) then
         -- Have him look at the turret.
         LookAt(Mission.m_Simms, Mission.m_Turret, 1);
 

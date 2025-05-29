@@ -881,7 +881,7 @@ Functions[11] = function()
         end
 
         -- Otherwise, check to see if the tugger has been told to follow Yelena.
-        if (GetCurrentCommand(Mission.m_Tugger) == CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Tugger) == AiCommand.CMD_FOLLOW) then
             -- Chekc to see if the Leader is Yelena.
             local leader = GetCurrentWho(Mission.m_Tugger);
 
@@ -1012,7 +1012,7 @@ Functions[12] = function()
             -- We have done this part.
             Mission.m_ShabGoToCave = true;
         elseif (Mission.m_ShabAtCave == false) then
-            if (GetCurrentCommand(Mission.m_Yelena) == CMD_NONE) then
+            if (GetCurrentCommand(Mission.m_Yelena) == AiCommand.CMD_NONE) then
                 if (IsAlive(closestPlayer)) then
                     LookAt(Mission.m_Yelena, closestPlayer);
                 else

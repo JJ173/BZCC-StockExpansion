@@ -594,7 +594,7 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     -- This will make the turrets stop if they are shot.
     if (Mission.m_MissionDifficulty > 1) then
         if (GetCfg(VictimHandle) == "fvturr_x" and OrdnanceTeam ~= Mission.m_EnemyTeam) then
-            if (GetCurrentCommand(VictimHandle) ~= CMD_DEFEND) then
+            if (GetCurrentCommand(VictimHandle) ~= AiCommand.CMD_DEFEND) then
                 Defend(VictimHandle);
             end
         end
@@ -926,7 +926,7 @@ Functions[11] = function()
         end
 
         -- This will cancel any deployment orders on the Recycler before the nav.
-        if (GetCurrentCommand(Mission.m_Recycler) == CMD_DEPLOY) then
+        if (GetCurrentCommand(Mission.m_Recycler) == AiCommand.CMD_DEPLOY) then
             Stop(Mission.m_Recycler, 0);
         end
 
@@ -943,7 +943,7 @@ Functions[11] = function()
                 -- So we don't loop.
                 Mission.m_RecyclerWhySelectMsgPlayed = true;
             elseif (Mission.m_RecyclerUnderwayCanceled == false and Mission.m_RecyclerMadeItMsgPlayed == false and Mission.m_RecyclerWhySelectMsgPlayed) then
-                if (GetCurrentCommand(Mission.m_Recycler) ~= CMD_GO) then
+                if (GetCurrentCommand(Mission.m_Recycler) ~= AiCommand.CMD_GO) then
                     -- "You've got to get me to the drop site!"
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf1010.wav");
 
@@ -1390,7 +1390,7 @@ function WingmanBrain()
     -- This runs if the crashed dropship is around.
     if (IsAround(Mission.m_CrashShip1) and (Mission.m_DestroyHintMessagePlayed == false)) then
         -- Check to see if the scout has been ordered to follow a player.
-        if (GetCurrentCommand(Mission.m_Wingman) == CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Wingman) == AiCommand.CMD_FOLLOW) then
             -- This adds our objectives.
             AddObjectiveOverride("nav1.otf", "WHITE", 10, true);
 

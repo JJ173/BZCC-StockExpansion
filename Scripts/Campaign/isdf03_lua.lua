@@ -1307,7 +1307,7 @@ function ScionBrain()
 
     -- This will handle the extra enemies and when they attack.
     if (IsAlive(Mission.m_Scion3)) then
-        if (GetCurrentCommand(Mission.m_Scion3) == CMD_NONE) then
+        if (GetCurrentCommand(Mission.m_Scion3) == AiCommand.CMD_NONE) then
             Goto(Mission.m_Scion3, "last_path", 1);
         end
 
@@ -1349,7 +1349,7 @@ function ScionBrain()
     end
 
     if (IsAlive(Mission.m_Scion4)) then
-        if (GetCurrentCommand(Mission.m_Scion3) == CMD_NONE) then
+        if (GetCurrentCommand(Mission.m_Scion3) == AiCommand.CMD_NONE) then
             if (IsAlive(Mission.m_Scion3)) then
                 Follow(Mission.m_Scion4, Mission.m_Scion3, 1);
             else
@@ -1392,7 +1392,7 @@ function ScionBrain()
         end
 
         -- If the player target is dead.
-        if (not Mission.m_Scion5Switch and GetCurrentCommand(Mission.m_Scion5) == CMD_NONE) then
+        if (not Mission.m_Scion5Switch and GetCurrentCommand(Mission.m_Scion5) == AiCommand.CMD_NONE) then
             if (IsAlive(Mission.m_Truck) and GetCurAmmo(Mission.m_Scion5) < 100) then
                 Attack(Mission.m_Scion5, Mission.m_Truck, 1);
             else

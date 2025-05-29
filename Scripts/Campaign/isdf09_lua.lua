@@ -307,7 +307,7 @@ end
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (Mission.m_MissionDifficulty > 1) then
         if (GetCfg(VictimHandle) == "fvturr_x" and (OrdnanceTeam ~= Mission.m_EnemyTeam)) then
-            if (GetCurrentCommand(VictimHandle) ~= CMD_DEFEND) then
+            if (GetCurrentCommand(VictimHandle) ~= AiCommand.CMD_DEFEND) then
                 Defend(VictimHandle);
             end
         end

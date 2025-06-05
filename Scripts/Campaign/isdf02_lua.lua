@@ -10,6 +10,9 @@ assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 -- Required Globals.
 require("_GlobalVariables");
 
+-- Required AICmd.
+require("_AICmd");
+
 -- Required helper functions.
 require("_HelperFunctions");
 
@@ -30,8 +33,8 @@ local m_FirstScionWave1 = { "fvscout_x", "fvscout_x", "fvsent_x" };
 local m_FirstScionWave2 = { "fvscout_x", "fvsent_x", "fvsent_x" };
 local m_SecondScionWave1 = { "fvsent_x", "fvsent_x", "fvsent_x" };
 local m_SecondScionWave2 = { "fvscout_x", "fvsent_x", "fvsent_x" };
-local m_SecondScionWave3 = { "fvscout_x", "fvscout_x", "fvtank_x" };
-local m_ThirdScionWave1 = { "fvsent_x", "fvsent_x", "fvtank_x" };
+local m_SecondScionWave3 = { "fvscout_x", "fvscout_x", "fvsent_x" };
+local m_ThirdScionWave1 = { "fvsent_x", "fvsent_x", "fvsent_x" };
 local m_ThirdScionWave2 = { "fvscout_x", "fvscout_x", "fvsent_x" };
 local m_ThirdScionWave3 = { "fvscout_x", "fvsent_x", "fvscout_x" };
 
@@ -79,6 +82,12 @@ local Mission =
     m_BuilderRunTime = 0,
     m_BuilderSecondRetreatDone = false,
     -- End Builder Brain Variables.
+
+    -- Shabayev's Brain Variables.
+    m_ShabLookLogicEnabled = false,
+    m_ShabLookAtPlayer = false,
+    m_ShabLookSwitchTime = 0,
+    -- End Shabayev's Brain Variables.
 
     m_MainPlayer = nil,
     m_Shabayev = nil,
@@ -160,6 +169,12 @@ function InitialSetup()
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
+
+    -- Preload ODFs for the mission.
+    PreloadODF("isshab_p");
+    PreloadODF("ivcons2");
+    PreloadODF("ivpscou");
+    PreloadODF("ivpcon");
 end
 
 function Save()
@@ -252,16 +267,11 @@ function Update()
                 HandleScionBuilder();
             end
 
+            ShabayevBrain();
             HandleShabayevGarbledDialogue();
             HandlePlayerDisobeyingOrders();
             HandleScionAttackWaves();
             HandleFailureConditions();
-
-            -- So we don't cause a large amount of time for Shabayev's repair.
-            if (IsOdf(Mission.m_Shabayev, "ivpscou") and GetCurHealth(Mission.m_Shabayev) < 1300) then
-                -- Otherwise the Service Sequence is too long.
-                SetCurHealth(Mission.m_Shabayev, 1300);
-            end
 
             -- The builder needs to be kept alive for the first part of the mission.
             if (IsAlive(Mission.m_Builder1) and GetCurHealth(Mission.m_Builder1) < 900 and not Mission.m_CheckpointDone) then
@@ -488,7 +498,16 @@ Functions[3] = function()
     -- Check that Shabayev is in the base centre. If she is, have her stop and look at the first player.
     if (GetDistance(Mission.m_Shabayev, "oldbase_center") < 25) then
         -- Face the player.
+        Mission.m_ShabLookLogicEnabled = true;
+
+        -- Have Shabayev look at the player.
         LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
+
+        -- Update the look time.
+        Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(5);
+
+        -- This makes sure she switches to the truck.
+        Mission.m_ShabLookAtPlayer = true;
 
         -- Set a warning time for the truck.
         Mission.m_PlayerTruckWarningTime = Mission.m_MissionTime + SecondsToTurns(40);
@@ -499,25 +518,28 @@ Functions[3] = function()
 end
 
 Functions[4] = function()
+    if (Mission.m_IsCooperativeMode) then
+        -- Advance the mission state...
+        Mission.m_MissionState = Mission.m_MissionState + 1;
+
+        -- Stop the rest of this function from running.
+        return;
+    end
+
     -- We can't use IsSelected for COOP as it's not MP friendly, so we'll need to code a work around.
-    if (not Mission.m_IsCooperativeMode) then
-        if (IsSelected(Mission.m_Truck)) then
-            -- Interrupt Shabayev...
-            StopAudioMessage(Mission.m_Audioclip);
+    if (IsSelected(Mission.m_Truck)) then
+        -- Interrupt Shabayev...
+        StopAudioMessage(Mission.m_Audioclip);
 
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = 0;
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = 0;
 
-            -- Shab: Good, now have it follow you.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0227.wav");
+        -- Shab: Good, now have it follow you.
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0227.wav");
 
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
 
-            -- Advance the mission state...
-            Mission.m_MissionState = Mission.m_MissionState + 1;
-        end
-    else
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
     end
@@ -549,6 +571,9 @@ Functions[6] = function()
     -- Set the timer for this audio clip.
     Mission.m_AudioTimer = 0;
 
+    -- Stop Shabayev from looking at the player.
+    Mission.m_ShabLookLogicEnabled = false;
+
     -- Shab: Good, let's go.
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0202.wav");
 
@@ -565,13 +590,22 @@ end
 Functions[7] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Move out and end this part of the mission.
-        if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_GO) then
+        if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_GO) then
             Goto(Mission.m_Shabayev, "truckwait_path", 1);
         end
 
         if (GetDistance(Mission.m_Shabayev, "truckwait_point") < 20) then
             -- Look at the Player.
             LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
+
+            -- Enable the look logic.
+            Mission.m_ShabLookLogicEnabled = true;
+
+            -- Update the look time.
+            Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(3);
+
+            -- This makes sure she switches to the truck.
+            Mission.m_ShabLookAtPlayer = true;
 
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -581,13 +615,10 @@ end
 
 Functions[8] = function()
     -- Mark the player as lost.
-    if (not IsPlayerWithinDistance(Mission.m_Shabayev, 200, _Cooperative.GetTotalPlayers())) then
+    if (IsPlayerWithinDistance(Mission.m_Shabayev, 200, _Cooperative.GetTotalPlayers()) == false) then
         -- So she starts yelling at the player.
         Mission.m_PlayerLost = true;
     elseif (IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers()) and Mission.m_TruckFollowing) then
-        -- Face the Truck.
-        LookAt(Mission.m_Shabayev, Mission.m_Truck, 1);
-
         -- Shab: Sometimes you have to wait for slower vehicles...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0210.wav");
 
@@ -599,7 +630,7 @@ Functions[8] = function()
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
-    elseif (not Mission.m_TruckMessage) then
+    elseif (Mission.m_TruckMessage == false) then
         -- To remind about the truck.
         Mission.m_GetTruckTime = Mission.m_MissionTime + SecondsToTurns(2);
         Mission.m_TruckMessage = true;
@@ -620,9 +651,6 @@ Functions[9] = function()
                 -- Set the timer for this audio clip.
                 Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
 
-                -- Look at the main player.
-                LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
-
                 -- Advance the mission state...
                 Mission.m_MissionState = Mission.m_MissionState + 1;
             end
@@ -638,6 +666,9 @@ Functions[10] = function()
     if (IsAlive(Mission.m_Builder1) and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Move Shabayev to the next point after she has finished talking.
         Goto(Mission.m_Shabayev, "shab_path1");
+
+        -- Stop Shabayev from looking at the player.
+        Mission.m_ShabLookLogicEnabled = false;
 
         -- Shab: I'm detecting something...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0211.wav");
@@ -730,7 +761,7 @@ Functions[15] = function()
 end
 
 Functions[16] = function()
-    if (not IsAlive(Mission.m_Jammer)) then
+    if (IsAlive(Mission.m_Jammer) == false) then
         -- Cut Shabayev's dialog if the jammer dies.
         StopAudioMessage(Mission.m_Audioclip);
 
@@ -790,8 +821,8 @@ end
 
 Functions[18] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (not Mission.m_RedirectShabayev) then
-            if (IsAlive(Mission.m_Scion1) and not IsAlive(Mission.m_Scion2)) then
+        if (Mission.m_RedirectShabayev == false) then
+            if (IsAlive(Mission.m_Scion1) and IsAlive(Mission.m_Scion2) == false) then
                 -- Shab: "Good job, now help me with this other one."
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0247.wav");
 
@@ -810,7 +841,7 @@ Functions[18] = function()
 
                 -- Stop the loop.
                 Mission.m_RedirectShabayev = true;
-            elseif (IsAlive(Mission.m_Scion2) and not IsAlive(Mission.m_Scion1)) then
+            elseif (IsAlive(Mission.m_Scion2) and IsAlive(Mission.m_Scion1) == false) then
                 -- Shab: "Good job, now help me with this other one."
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0247.wav");
 
@@ -849,7 +880,7 @@ Functions[19] = function()
         -- Show objectives.
         AddObjectiveOverride("rendezvous.otf", "WHITE", 10, true);
 
-        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
             AddObjective("truck.otf", "WHITE");
         end
 
@@ -860,12 +891,21 @@ end
 
 Functions[20] = function()
     if (GetDistance(Mission.m_Shabayev, "super_rendezvous") < 40) then
-        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers())) then
-            -- Have her look at the player.
-            LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
+        -- Look at the Player.
+        LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
 
+        -- Enable the look logic.
+        Mission.m_ShabLookLogicEnabled = true;
+
+        -- Update the look time.
+        Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(10);
+
+        -- This makes sure she switches to the truck.
+        Mission.m_ShabLookAtPlayer = true;
+
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers()) == false) then
             -- Mark the player as lost.
-            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers())) then
+            if (IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers()) == false) then
                 -- So she starts yelling at the player.
                 Mission.m_PlayerLost = true;
             end
@@ -876,11 +916,11 @@ Functions[20] = function()
             -- Shab: "Truck will repair me".
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0248.wav");
 
+            -- Update the look time.
+            Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(2);
+
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
-
-            -- Have her look at the player incase the first one is missed.
-            LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
 
             -- For the failure conditions.
             Mission.m_RepairsNeeded = true;
@@ -912,7 +952,7 @@ end
 
 Functions[22] = function()
     if (GetCurHealth(Mission.m_Shabayev) > 1700 and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
             -- Give command back to the main player.
             Follow(Mission.m_Truck, Mission.m_MainPlayer, 0);
         end
@@ -948,6 +988,9 @@ Functions[24] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) and Mission.m_TruckFollowing) then
         -- Move the Commander to her next path.
         Goto(Mission.m_Shabayev, "shab_path2");
+
+        -- Stop Shabayev from looking at the player.
+        Mission.m_ShabLookLogicEnabled = false;
 
         -- So we can process the next phase of the mission.
         Mission.m_CheckpointDone = true;
@@ -1002,7 +1045,7 @@ Functions[26] = function()
 end
 
 Functions[27] = function()
-    if (not IsAlive(Mission.m_Builder1) and not Mission.m_BuildKilledPrematurely and Mission.m_ShabBuilderDeadMessagePlayed and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+    if (IsAlive(Mission.m_Builder1) == false and Mission.m_BuildKilledPrematurely == false and Mission.m_ShabBuilderDeadMessagePlayed and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Tell Shabayev to retreat here after her dialogue.
         Retreat(Mission.m_Shabayev, "shab_path2a");
 
@@ -1030,7 +1073,7 @@ end
 
 Functions[28] = function()
     -- Give Shabayev a target.
-    if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
+    if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_ATTACK) then
         if (IsAlive(Mission.m_Scion1)) then
             Attack(Mission.m_Shabayev, Mission.m_Scion1, 1);
         elseif (IsAlive(Mission.m_Scion2)) then
@@ -1085,7 +1128,7 @@ Functions[29] = function()
         -- Show objectives.
         AddObjectiveOverride("rendezvous.otf", "WHITE", 10, true);
 
-        if (GetCurrentCommand(Mission.m_Truck) ~= AiCommand.CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) ~= CMD_FOLLOW) then
             AddObjective("truck.otf", "WHITE");
         end
 
@@ -1096,12 +1139,21 @@ end
 
 Functions[30] = function()
     if (GetDistance(Mission.m_Shabayev, "jam2_spawn") < 40) then
-        if (not IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers())) then
-            -- Have her look at the player.
-            LookAt(Mission.m_Shabayev, Mission.m_MainPlayer);
+        if (IsPlayerWithinDistance(Mission.m_Shabayev, 50, _Cooperative.GetTotalPlayers()) == false) then
+            -- Face the player.
+            LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
+
+            -- Enable the look logic.
+            Mission.m_ShabLookLogicEnabled = true;
+
+            -- Update the look time.
+            Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(10);
+
+            -- This makes sure she switches to the truck.
+            Mission.m_ShabLookAtPlayer = true;
 
             -- Mark the player as lost.
-            if (not IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers())) then
+            if (IsPlayerWithinDistance(Mission.m_Shabayev, 300, _Cooperative.GetTotalPlayers()) == false) then
                 -- So she starts yelling at the player.
                 Mission.m_PlayerLost = true;
             end
@@ -1113,7 +1165,7 @@ Functions[30] = function()
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
             -- Check if the truck is following...
-            if (not Mission.m_TruckFollowing) then
+            if (Mission.m_TruckFollowing == false) then
                 -- Time before the message.
                 Mission.m_GetTruckTime = Mission.m_MissionTime + SecondsToTurns(5);
                 -- To do the message if it's not following.
@@ -1131,6 +1183,9 @@ Functions[31] = function()
         -- Move to the next location.
         Retreat(Mission.m_Shabayev, "shab_path3", 1);
 
+        -- Stop Shabayev from looking at the player.
+        Mission.m_ShabLookLogicEnabled = false;
+
         -- Shab: Let's press on.
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0234.wav");
 
@@ -1147,6 +1202,15 @@ Functions[32] = function()
         -- Look at the dead Scavenger.
         LookAt(Mission.m_Shabayev, Mission.m_DeadScav1, 1);
 
+        -- Enable the look logic.
+        Mission.m_ShabLookLogicEnabled = true;
+
+        -- Update the look time.
+        Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(3);
+
+        -- This makes sure she switches to the truck.
+        Mission.m_ShabLookAtPlayer = false;
+
         -- Shab: Scavengers, these guys didn't have a chance...
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0235.wav");
 
@@ -1162,6 +1226,9 @@ Functions[33] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Make her retreat.
         Retreat(Mission.m_Shabayev, "sue_path", 1);
+
+        -- Stop Shabayev from looking at the player.
+        Mission.m_ShabLookLogicEnabled = false;
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1180,7 +1247,7 @@ Functions[34] = function()
         Mission.m_OnToBaseTime = Mission.m_MissionTime + SecondsToTurns(4);
 
         -- Check if the truck is following...
-        if (not Mission.m_TruckFollowing) then
+        if (Mission.m_TruckFollowing == false) then
             -- Time before the message.
             Mission.m_GetTruckTime = Mission.m_MissionTime + SecondsToTurns(5);
             -- To do the message if it's not following.
@@ -1189,6 +1256,15 @@ Functions[34] = function()
 
         -- Have Shab look at the player.
         LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
+
+        -- Enable the look logic.
+        Mission.m_ShabLookLogicEnabled = true;
+
+        -- Update the look time.
+        Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(5);
+
+        -- This makes sure she switches to the truck.
+        Mission.m_ShabLookAtPlayer = true;
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -1204,6 +1280,9 @@ Functions[35] = function()
         if (IsPlayerWithinDistance(Mission.m_Shabayev, 100, _Cooperative.GetTotalPlayers())) then
             -- Move Shabayev to the base.
             Goto(Mission.m_Shabayev, "base_center");
+
+            -- Stop Shabayev from looking at the player.
+            Mission.m_ShabLookLogicEnabled = false;
 
             -- Move turrets if they are alive
             if (IsAlive(Mission.m_LastTurret1)) then
@@ -1282,7 +1361,7 @@ Functions[38] = function()
 end
 
 Functions[39] = function()
-    if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
+    if (GetCurrentCommand(Mission.m_Shabayev) ~= CMD_ATTACK) then
         if (IsAlive(Mission.m_LastTurret1)) then
             -- Have Shabayev attack the first turret.
             Attack(Mission.m_Shabayev, Mission.m_LastTurret1, 1);
@@ -1292,7 +1371,7 @@ Functions[39] = function()
         end
     end
 
-    if (not IsAlive(Mission.m_LastTurret1) and not IsAlive(Mission.m_LastTurret2)) then
+    if (IsAlive(Mission.m_LastTurret1) == false and IsAlive(Mission.m_LastTurret2) == false) then
         -- Move Shabayev to the center of the base.
         Goto(Mission.m_Shabayev, "base_center");
 
@@ -1487,7 +1566,7 @@ end
 
 Functions[51] = function()
     -- Run a check to get the third Scion to attack when Shabayev isn't too far from her destination.
-    if (IsAlive(Mission.m_Scion3) and GetCurrentCommand(Mission.m_Scion3) ~= AiCommand.CMD_ATTACK) then
+    if (IsAlive(Mission.m_Scion3) and GetCurrentCommand(Mission.m_Scion3) ~= CMD_ATTACK) then
         -- Run a distance check.
         if (GetDistance(Mission.m_Shabayev, "back_at_base") < 175) then
             -- Send the Scion to attack.
@@ -1535,7 +1614,7 @@ Functions[52] = function()
 end
 
 Functions[53] = function()
-    if (not Mission.m_IsCooperativeMode) then
+    if (Mission.m_IsCooperativeMode == false) then
         -- Prep the camera.
         CameraReady();
     end
@@ -1545,7 +1624,7 @@ Functions[53] = function()
 end
 
 Functions[54] = function()
-    if (not Mission.m_IsCooperativeMode) then
+    if (Mission.m_IsCooperativeMode == false) then
         -- Get the Camera to look at the right path.
         CameraPath("camera_point2", 700, 0, Mission.m_LookPole);
     end
@@ -1556,56 +1635,35 @@ end
 
 Functions[55] = function()
     -- Gradually replace each pole.
-    if (not IsOdf(Mission.m_Pole3, "pbtele01") and Mission.m_Pole3Time < Mission.m_MissionTime) then
+    if (IsOdf(Mission.m_Pole3, "pbtele01") == false and Mission.m_Pole3Time < Mission.m_MissionTime) then
         Mission.m_Pole3 = ReplaceObject(Mission.m_Pole3, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole4, "pbtele01") and Mission.m_Pole4Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole4, "pbtele01") == false and Mission.m_Pole4Time < Mission.m_MissionTime) then
         Mission.m_Pole4 = ReplaceObject(Mission.m_Pole4, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole5, "pbtele01") and Mission.m_Pole5Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole5, "pbtele01") == false and Mission.m_Pole5Time < Mission.m_MissionTime) then
         Mission.m_Pole5 = ReplaceObject(Mission.m_Pole5, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole6, "pbtele01") and Mission.m_Pole6Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole6, "pbtele01") == false and Mission.m_Pole6Time < Mission.m_MissionTime) then
         Mission.m_Pole6 = ReplaceObject(Mission.m_Pole6, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole7, "pbtele01") and Mission.m_Pole7Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole7, "pbtele01") == false and Mission.m_Pole7Time < Mission.m_MissionTime) then
         Mission.m_Pole7 = ReplaceObject(Mission.m_Pole7, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole8, "pbtele01") and Mission.m_Pole8Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole8, "pbtele01") == false and Mission.m_Pole8Time < Mission.m_MissionTime) then
         Mission.m_Pole8 = ReplaceObject(Mission.m_Pole8, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole9, "pbtele01") and Mission.m_Pole9Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole9, "pbtele01") == false and Mission.m_Pole9Time < Mission.m_MissionTime) then
         Mission.m_Pole9 = ReplaceObject(Mission.m_Pole9, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole10, "pbtele01") and Mission.m_Pole10Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole10, "pbtele01") == false and Mission.m_Pole10Time < Mission.m_MissionTime) then
         Mission.m_Pole10 = ReplaceObject(Mission.m_Pole10, "pbtele01");
-    end
-
-    if (not IsOdf(Mission.m_Pole11, "pbtele01") and Mission.m_Pole11Time < Mission.m_MissionTime) then
+    elseif (IsOdf(Mission.m_Pole11, "pbtele01") == false and Mission.m_Pole11Time < Mission.m_MissionTime) then
         Mission.m_Pole11 = ReplaceObject(Mission.m_Pole11, "pbtele01");
 
-        -- Move to the next state.
-        Mission.m_MissionState = Mission.m_MissionState + 1;
-    end
-end
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.");
+            DoGameover(2.1);
+        else
+            SucceedMission(GetTime() + 2.1, "isdf02w1.txt");
+        end
 
-Functions[56] = function()
-    if (Mission.m_IsCooperativeMode) then
-        NoteGameoverWithCustomMessage("Mission Accomplished.");
-        DoGameover(2.1);
-    else
-        SucceedMission(GetTime() + 2.1, "isdf02w1.txt");
+        -- Halt the mission.
+        Mission.m_MissionOver = true;
     end
-
-    -- Halt the mission.
-    Mission.m_MissionOver = true;
 end
 
 -- This function handles dispatching all spawned Scion attackers during the mission runtime.
@@ -1752,11 +1810,48 @@ function HandleScionBuilder()
     end
 end
 
+-- This function is the `brain` of Shabayev.
+function ShabayevBrain()
+    -- So we don't cause a large amount of time for Shabayev's repair.
+    if (IsOdf(Mission.m_Shabayev, "ivpscou") and GetCurHealth(Mission.m_Shabayev) < 1300) then
+        -- Otherwise the Service Sequence is too long.
+        SetCurHealth(Mission.m_Shabayev, 1300);
+    end
+
+    -- This is the "mini-brain" for Shabayev switching her perspective between player and Simms.
+    if (Mission.m_ShabLookLogicEnabled) then
+        if (Mission.m_ShabLookSwitchTime < Mission.m_MissionTime) then
+            if (Mission.m_ShabLookAtPlayer == false) then
+                -- Let's have her look at random players for fun.
+                local randChance = math.ceil(GetRandomFloat(0, _Cooperative.GetTotalPlayers()));
+
+                -- Have her look at the main player.
+                LookAt(Mission.m_Shabayev, GetPlayerHandle(randChance), 1);
+
+                -- Small cooldown for her to switch.
+                Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(13);
+
+                -- So we switch targets correctly.
+                Mission.m_ShabLookAtPlayer = true;
+            else
+                -- Have her look at the Truck.
+                LookAt(Mission.m_Shabayev, Mission.m_Truck, 1);
+
+                -- Small cooldown for her to switch.
+                Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(9);
+
+                -- So we switch targets correctly.
+                Mission.m_ShabLookAtPlayer = false;
+            end
+        end
+    end
+end
+
 -- TODO: Add function to handle Service Truck responsibilities.
 -- Yell at the player if they take too long ordering the truck.
 function HandlePlayerDisobeyingOrders()
     if (Mission.m_PlayerLost) then
-        if (not Mission.m_FirstWarning) then
+        if (Mission.m_FirstWarning == false) then
             -- Shab: Do you want to join me?
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0206.wav");
 
@@ -1774,7 +1869,7 @@ function HandlePlayerDisobeyingOrders()
 
             -- So we don't loop.
             Mission.m_FirstWarning = true;
-        elseif (not Mission.m_SecondWarning) then
+        elseif (Mission.m_SecondWarning == false) then
             if (Mission.m_PlayerLostTime < Mission.m_MissionTime) then
                 -- Shab: Last warning John!
                 Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0208.wav");
@@ -1794,7 +1889,7 @@ function HandlePlayerDisobeyingOrders()
         end
 
         -- Reset if the player is within Distance.
-        if (not Mission.m_MissionOver and Mission.m_PlayerCheckTime < Mission.m_MissionTime) then
+        if (Mission.m_MissionOver == false and Mission.m_PlayerCheckTime < Mission.m_MissionTime) then
             -- Set a delay between loops.
             Mission.m_PlayerCheckTime = Mission.m_MissionTime + SecondsToTurns(1.5);
 
@@ -1807,9 +1902,9 @@ function HandlePlayerDisobeyingOrders()
                 Mission.m_PlayerLost = false;
             end
         end
-    elseif (IsAlive(Mission.m_Truck) and not Mission.m_RepairsNeeded) then
+    elseif (IsAlive(Mission.m_Truck) and Mission.m_RepairsNeeded == false) then
         -- Check to see if the truck is following a player, or Shabayev.
-        if (GetCurrentCommand(Mission.m_Truck) == AiCommand.CMD_FOLLOW) then
+        if (GetCurrentCommand(Mission.m_Truck) == CMD_FOLLOW) then
             -- If it is following, but it's not the player...Run the reminder.
             local leader = GetCurrentWho(Mission.m_Truck);
 
@@ -1847,7 +1942,7 @@ end
 
 function HandleFailureConditions()
     -- If the truck died...
-    if (not IsAlive(Mission.m_Truck)) then
+    if (IsAlive(Mission.m_Truck) == false) then
         -- Halt the mission.
         Mission.m_MissionOver = true;
 
@@ -1871,7 +1966,7 @@ function HandleFailureConditions()
             FailMission(GetTime() + 7);
         end
         -- Check if the Constructor is dead.
-    elseif (not IsAlive(Mission.m_Cons) and not IsOdf(Mission.m_Shabayev, "ivpcon")) then
+    elseif (IsAlive(Mission.m_Cons) == false and IsOdf(Mission.m_Shabayev, "ivpcon") == false) then
         -- Halt the mission.
         Mission.m_MissionOver = true;
 
@@ -1895,7 +1990,7 @@ function HandleFailureConditions()
             FailMission(GetTime() + 7, "isdf02l1.txt");
         end
         -- If Shabayev died...
-    elseif (IsOdf(Mission.m_Shabayev, "isshab_p") and not IsAlive(Mission.m_Shabayev)) then
+    elseif (IsOdf(Mission.m_Shabayev, "isshab_p") and IsAlive(Mission.m_Shabayev) == false) then
         -- Halt the mission.
         Mission.m_MissionOver = true;
 

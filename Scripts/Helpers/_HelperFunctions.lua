@@ -10,7 +10,7 @@ function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers
     end
 
     -- If we're not safe, don't spawn on the first path.
-    if (not isSafe) then
+    if (isSafe == false) then
         return BuildObject(handle, team, GetPositionNear(alternativePath, 20, 20));
     else
         return BuildObject(handle, team, GetPositionNear(path, 20, 20));
@@ -23,7 +23,7 @@ function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
     end
 
     if (isCoop) then
-        AddToMessagesBox(objective, colour, time);
+        AddToMessagesBox(objective, colour);
     else
         AddObjective(objective, colour, time);
     end

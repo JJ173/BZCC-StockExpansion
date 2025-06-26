@@ -622,6 +622,9 @@ Functions[12] = function()
     else
         SucceedMission(GetTime() + 10, "scion02w1.txt");
     end
+
+    -- Stop the mission.
+    Mission.m_MissionOver = true;
 end
 
 -- This function will dispatch enemy turrets around the map. If a turret

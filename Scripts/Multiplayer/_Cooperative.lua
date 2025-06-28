@@ -1,9 +1,8 @@
 _Cooperative =
 {
-    m_GameReady = false,
     m_TotalPlayerCount = 0,
-    m_TeamIsSetUp = { false, false, false, false },
-    m_TeamsPendingSetup = 0
+    m_TeamIsSetUp      = { false, false, false, false },
+    m_ElapsedGameTime  = 0,
 };
 
 function _Cooperative.Load(CoopData)
@@ -35,22 +34,6 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, 
     -- print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
     print("Good luck and have fun :)");
 
-    -- Run a loop to see how many players are in the match at start.
-    if (IsCoop) then
-        for i = 1, 4 do
-            local player = IFace_GetString("network.stats.team" .. i .. "player");
-
-            print("Player " .. i .. " : ", player);
-
-            if (player ~= "") then
-                _Cooperative.m_TeamsPendingSetup = _Cooperative.m_TeamsPendingSetup + 1;
-            end
-        end
-
-        -- Testing again
-        print("Start complete. Players found: ", _Cooperative.m_TeamsPendingSetup);
-    end
-
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
 
@@ -68,17 +51,25 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, 
     SetAsUser(PlayerH, LocalTeamNum);
 end
 
-function _Cooperative.Update()
-    if (_Cooperative.m_GameReady == false) then
-        -- Check and see that all teams are set up.
-        for i = 1, _Cooperative.m_TeamsPendingSetup do
-            if (_Cooperative.m_TeamIsSetUp[i] == false) then
-                return;
-            end
+function _Cooperative.Update(m_GameTPS)
+    _Cooperative.m_ElapsedGameTime = _Cooperative.m_ElapsedGameTime + 1;
+
+    if (_Cooperative.m_ElapsedGameTime % m_GameTPS == 0) then
+        local seconds = _Cooperative.m_ElapsedGameTime / m_GameTPS;
+        local minutes = seconds / 60;
+        local hours = minutes / 60;
+        local msgString = '';
+
+        seconds = seconds % 60;
+        minutes = minutes % 60;
+
+        if (hours > 0) then
+            msgString = TranslateString("mission", ("Mission Time %d:%02d:%02d"):format(hours, minutes, seconds));
+        else
+            msgString = TranslateString("mission", ("Mission Time %d:%02d"):format(minutes, seconds));
         end
 
-        -- If the return is not hit, then we are ready.
-        _Cooperative.m_GameReady = true;
+        SetTimerBox(msgString);
     end
 end
 
@@ -376,10 +367,6 @@ function _Cooperative.CleanSpawns()
             RemoveObject(spawn_handle);
         end
     end
-end
-
-function _Cooperative.GetGameReadyStatus()
-    return _Cooperative.m_GameReady;
 end
 
 function _Cooperative.GetTotalPlayers()

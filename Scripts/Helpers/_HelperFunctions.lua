@@ -23,7 +23,7 @@ function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
     end
 
     if (isCoop) then
-        AddToMessagesBox(objective, colour);
+        AddToMessagesBox(TranslateString(objective), colour);
     else
         AddObjective(objective, colour, time);
     end

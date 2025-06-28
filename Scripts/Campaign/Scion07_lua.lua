@@ -133,7 +133,7 @@ end
 function Update()
     -- This checks to see if the game is ready.
     if (Mission.m_IsCooperativeMode) then
-        _Cooperative.Update();
+        _Cooperative.Update(m_GameTPS);
     end
 
     -- Make sure Subtitles is always running.
@@ -146,7 +146,7 @@ function Update()
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
+    if (Mission.m_MissionOver == false) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();

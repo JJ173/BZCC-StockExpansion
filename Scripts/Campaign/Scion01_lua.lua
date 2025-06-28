@@ -127,6 +127,13 @@ local Mission =
     m_SpawnDeltaSquad = false,
     m_MeetDeltaWarningActive = false,
     m_DeltaBrainActive = false,
+    m_Escort1Close = false,
+    m_Escort1Far = false,
+
+    m_JakStop1 = false,
+    m_JakStop2 = false,
+
+    m_Jak12Spawned = false,
 
     m_CutsceneAudioClip = nil,
     m_Audioclip = nil,
@@ -134,10 +141,13 @@ local Mission =
     m_MorphClip = nil,
     m_AudioTimer = 0,
 
+    m_JakGoTime2 = 0,
+    m_Jak12SpawnTime = 0,
+    m_Jak910SpawnTime = 0,
+
     m_DeltaSquadSpawnTime = 0,
     m_PilotMoveTime = 0,
     m_MissionDelayTime = 0,
-    m_Jak910SpawnTime = 0,
     m_PowerLunchTookTooLongTime = 0,
     m_MorphTookTooLongTime = 0,
     m_MorphTookTooLongWarningCount = 0,
@@ -288,7 +298,7 @@ end
 function Update()
     -- This checks to see if the game is ready.
     if (Mission.m_IsCooperativeMode) then
-        _Cooperative.Update();
+        _Cooperative.Update(m_GameTPS);
     end
 
     -- Make sure Subtitles is always running.
@@ -301,7 +311,7 @@ function Update()
     Mission.m_MainPlayer = GetPlayerHandle(1);
 
     -- Start mission logic.
-    if (not Mission.m_MissionOver and (Mission.m_IsCooperativeMode == false or _Cooperative.GetGameReadyStatus())) then
+    if (Mission.m_MissionOver == false) then
         if (Mission.m_StartDone) then
             -- Run each function for the mission.
             Functions[Mission.m_MissionState]();
@@ -489,6 +499,10 @@ Functions[1] = function()
 
     -- Advance the mission state...
     if (Mission.m_IsCooperativeMode) then
+        -- Remove the player and Shabayev.
+        RemoveObject(Mission.m_PlayerPilo1);
+        RemoveObject(Mission.m_ShabPilo);
+
         -- Set the mission state to 7 for coop.
         Mission.m_MissionState = 7;
     else
@@ -919,6 +933,9 @@ Functions[19] = function()
     Retreat(Mission.m_Hauler, "rondevous1");
     Follow(Mission.m_DeltaSquad2, Mission.m_PowerCrystal);
 
+    -- Controls Delta squad whilst they move to the rendezvous nav.
+    Mission.m_DeltaBrainActive = true;
+
     -- Yelena: "Excellent, Delta wing. Cooke you're up. Take a couple wingmen, and meet them at Nav 1. Leave a few ships to help me defend the base."
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0110.wav");
 
@@ -968,6 +985,9 @@ Functions[21] = function()
         -- Remove the highlight from Nav 1.
         SetObjectiveOff(Mission.m_Nav1);
 
+        -- Remove the brain logic.
+        Mission.m_DeltaBrainActive = false;
+
         -- De-activate the warning for meeting Delta.
         Mission.m_MeetDeltaWarningActive = false;
 
@@ -986,6 +1006,10 @@ Functions[22] = function()
 
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[23] = function()
+
 end
 
 function HandleFailureConditions()
@@ -1077,7 +1101,7 @@ function HandleFailureConditions()
 
                 if (Mission.m_IsCooperativeMode) then
                     NoteGameoverWithCustomMessage(
-                    "By leaving Delta Wing alone at Nav 1, you failed to follow orders and left the Power Crystal vulnerable.");
+                        "By leaving Delta Wing alone at Nav 1, you failed to follow orders and left the Power Crystal vulnerable.");
                     DoGameover(6);
                 else
                     FailMission(GetTime() + 6, "scion01L1.txt");
@@ -1091,6 +1115,45 @@ function HandleFailureConditions()
 end
 
 function HandleMireAnimals()
+    if (Mission.m_Jak12Spawned == false and Mission.m_Jak12SpawnTime < Mission.m_MissionTime) then
+        -- Spawn the Jak 1 and 2.
+        Mission.m_Jak1 = BuildObject("mcjak01", 0, "jak1spawn");
+        Mission.m_Jak2 = BuildObject("mcjak01", 0, "jak2spawn");
+
+        -- Move the creatures around.
+        Goto(Mission.m_Jak1, "jakstop1");
+        Follow(Mission.m_Jak2, Mission.m_Jak1);
+
+        -- So we don't loop.
+        Mission.m_Jak12Spawned = true;
+    elseif (Mission.m_Jak12Spawned) then
+        if (Mission.m_JakStop1 == false and GetDistance(Mission.m_Jak1, "jakstop1" < 15)) then
+            if (IsAlive(Mission.m_Jak1)) then
+                LookAt(Mission.m_Jak1, Mission.m_PlayersRecy);
+            end
+
+            if (IsAlive(Mission.m_Jak2)) then
+                LookAt(Mission.m_Jak2, Mission.m_PlayersRecy);
+            end
+
+            Mission.m_JakGoTime2 = Mission.m_MissionTime + SecondsToTurns(10);
+
+            -- So we don't loop.
+            Mission.m_JakStop1 = true;
+        elseif (Mission.m_JakStop2 == false and Mission.m_JakGoTime2 < Mission.m_MissionTime) then
+            if (IsAlive(Mission.m_Jak1)) then
+                Goto(Mission.m_Jak1, "jakstop2");
+
+                if (IsAlive(Mission.m_Jak2)) then
+                    Follow(Mission.m_Jak2, Mission.m_Jak1);
+                end
+            end
+
+            -- So we don't loop.
+            Mission.m_JakStop2 = true;
+        end
+    end
+
     if (Mission.m_Jak910SpawnTime < Mission.m_MissionTime) then
         -- Spawn the Jak 9 and Jak 10.
         Mission.m_Jak9 = BuildObject("mcjak01", 0, "jak9spawn");
@@ -1193,7 +1256,15 @@ function HandleISDF()
 end
 
 function HandleDeltaBrain()
-
+    if (Mission.m_Escort1Far == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler) > 100) then
+        LookAt(Mission.m_DeltaSquad1, Mission.m_Hauler, 1);
+        Mission.m_Escort1Far = true;
+        Mission.m_Escort1Close = false;
+    elseif (Mission.m_Escort1Close == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler < 99)) then
+        Retreat(Mission.m_DeltaSquad1, "rondevous1", 1);
+        Mission.m_Escort1Close = true;
+        Mission.m_Escort1Far = false;
+    end
 end
 
 function CreateShab3Pilot()

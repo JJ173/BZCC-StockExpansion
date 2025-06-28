@@ -56,7 +56,7 @@ end
 function _Subtitles.Run()
 	if (startSubtitles) then
 		-- If we haven't loaded the module, load it up.
-		if (not subtitlesLoaded) then
+		if (subtitlesLoaded == false) then
 			IFace_Exec("bzgame_subtitles.cfg");
 			subtitlesLoaded = true;
 		end

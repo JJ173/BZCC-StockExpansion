@@ -1,0 +1,29 @@
+[GameObjectClass]
+classLabel = "fvartl_x"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+selectWaitMsg = "ivmbike04.wav"
+selectAttackMsg = "ivmbike01.wav"
+selectFollowMsg = "ivmbike03.wav"
+selectGoMsg = "ivmbike02.wav"
+selectOtherMsg = "ivmbike04.wav"
+goMsg = "ivmbike05.wav"
+attackMsg = "ivmbike06.wav"
+followMeMsg = "ivmbike08.wav"
+followMsg = "ivmbike10.wav"
+repairMsg = "ivmbike09.wav"
+reloadMsg = "ivmbike09.wav"
+rescueMsg = "ivmbike10.wav"
+recycleMsg = "ivmbike11.wav"
+otherMsg = "ivmbike02.wav" 
+holdMsg = "ivmbike12.wav"
+user1Msg = ""  
+killedMsg = "ivmbike07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+
+[ArtilleryClass]
+
+[DeployableClass]

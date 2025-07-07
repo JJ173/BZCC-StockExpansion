@@ -1,0 +1,30 @@
+[GameObjectClass]
+classLabel = "ivmisl_x"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+selectWaitMsg = "fvarch04.wav"
+selectAttackMsg = "fvarch01.wav"
+selectFollowMsg = "fvarch03.wav"
+selectGoMsg = "fvarch02.wav"
+selectOtherMsg = "fvarch04.wav"
+holdMsg = "fvarch12.wav"
+goMsg = "fvarch05.wav"
+attackMsg = "fvarch06.wav"
+followMeMsg = "fvarch08.wav"
+followMsg = "fvarch03.wav"
+repairMsg = "fvarch09.wav"
+reloadMsg = "fvarch09.wav"
+rescueMsg = "fvarch10.wav"
+recycleMsg = "fvarch11.wav"
+otherMsg = "fvarch05.wav"
+
+user1Msg = ""  
+killedMsg = "fvarch07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

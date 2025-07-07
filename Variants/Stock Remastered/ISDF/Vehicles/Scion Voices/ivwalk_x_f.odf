@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "ivwalk_x"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+selectWaitMsg = "fvwalk04.wav"
+selectAttackMsg = "fvwalk01.wav"
+selectFollowMsg = "fvwalk03.wav"
+selectGoMsg = "fvwalk02.wav"
+selectOtherMsg = "fvwalk04.wav"
+holdMsg = "fvwalk12.wav"
+goMsg = "fvwalk05.wav"
+attackMsg = "fvwalk06.wav"
+followMeMsg = "fvwalk08.wav"
+followMsg = "fvwalk03.wav"
+repairMsg = "fvwalk09.wav"
+reloadMsg = "fvwalk09.wav"
+rescueMsg = "fvwalk10.wav"
+recycleMsg = "fvwalk11.wav"
+otherMsg = "fvwalk05.wav" 
+
+user1Msg = ""  
+killedMsg = "fvwalk07.wav"
+diedMsg = ""
+
+[WalkerClass]

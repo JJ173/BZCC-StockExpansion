@@ -26,11 +26,19 @@ local m_GameTPS = GetTPS();
 local m_MissionName = "Scion01: Transformation";
 
 -- Difficulty tables for attackers.
-local m_WaveAttackers = {
+local m_WaveAttackers =
+{
     { { "ivscout_x", "ivscout_x" },            { "ivmisl_x", "ivscout_x" },             { "ivtank_x", "ivscout_x" } },                        -- Attack 1
     { { "ivscout_x", "ivmisl_x" },             { "ivmisl_x", "ivtank_x" },              { "ivtank_x", "ivscout_x", "ivmbike_x" } },           -- Attack 2
     { { "ivtank_x", "ivmisl_x" },              { "ivtank_x", "ivtank_x", "ivscout_x" }, { "ivtank_x", "ivtank_x", "ivrckt_x", "ivmisl_x" } }, -- Attack 3
     { { "ivtank_x", "ivscout_x", "ivmisl_x" }, { "ivtank_x", "ivtank_x", "ivrckt_x" },  { "ivrckt_x", "ivtank_x", "ivatank_x", "ivtank_x" } } -- Attack 4
+}
+
+local m_Ambush1 =
+{
+    { "ivscout_x", "ivscout_x", "ivtank_x" },
+    { "ivscout_x", "ivmisl_x",  "ivtank_x" },
+    { "ivmbike_x", "ivtank_x",  "ivtank_x" }
 }
 
 local m_WaveCooldowns = { 45, 60, 75, 90 };
@@ -92,6 +100,16 @@ local Mission =
     m_ISDFAttacker3 = nil,
     m_ISDFAttacker4 = nil,
 
+    m_ISDFAmbusher1 = nil,
+    m_ISDFAmbusher2 = nil,
+    m_ISDFAmbusher3 = nil,
+
+    m_ISDFRouteAttacker1A = nil,
+    m_ISDFRouteAttacker1B = nil,
+    m_ISDFRouteAttacker1C = nil,
+    m_ISDFRouteAttacker2A = nil,
+    m_ISDFRouteAttacker2B = nil,
+
     m_PlayerPilo1 = nil,
     m_ShabPilo = nil,
     m_ShabPilo3 = nil,
@@ -102,6 +120,7 @@ local Mission =
     m_PowerCrystal = nil,
 
     m_Nav1 = nil,
+    m_Nav2 = nil,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -112,23 +131,33 @@ local Mission =
     m_IntroCutsceneDone = false,
     m_ShabInShip = false,
     m_ShabRelook = false,
-    m_EnableAnimals = false,
-    m_PowerLungWarningActive = false,
-    m_MorphWarningActive = false,
     m_PlayerTookTooLongMorphing = false,
     m_PowerObjectivesShown = false,
     m_MorphObjectivesShown = false,
-    m_EnableISDF = false,
-    m_EnableISDFWaves = false,
     m_ISDFWaveSpawned = false,
     m_YelenaUnderFire = false,
     m_YelenaPraise = false,
     m_YelenaReturnToPatrol = false,
     m_SpawnDeltaSquad = false,
+
+    m_PowerLungWarningActive = false,
+    m_MorphWarningActive = false,
+    m_EnableAnimals = false,
+    m_EnableISDF = false,
+    m_EnableISDFWaves = false,
     m_MeetDeltaWarningActive = false,
     m_DeltaBrainActive = false,
+    m_YelenaBrainActive = false,
+
+    m_AmbushDefeated = false,
+
     m_Escort1Close = false,
     m_Escort1Far = false,
+    m_EscortAlerted = false,
+    m_Escort1Look = false,
+    m_Escort2Look = false,
+    m_EscortRetreat = false,
+    m_EscortReturnToBase = false,
 
     m_JakStop1 = false,
     m_JakStop2 = false,
@@ -204,7 +233,6 @@ end
 
 function AddObject(h)
     local teamNum = GetTeamNum(h);
-    local objClass = GetClassLabel(h);
 
     -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
@@ -329,6 +357,10 @@ function Update()
 
             if (Mission.m_DeltaBrainActive) then
                 HandleDeltaBrain();
+            end
+
+            if (Mission.m_YelenaBrainActive) then
+                HandleYelenaBrain();
             end
 
             -- Check to see if the intro cutscene has been skipped.
@@ -496,6 +528,21 @@ Functions[1] = function()
 
     -- Clean up any player spawns that haven't been taken by the player.
     _Cooperative.CleanSpawns();
+
+    -- Create the enemy units that exist along the escort path early.
+    -- It's fine if the player takes initiative to clear these out before-hand.
+    Mission.m_ISDFRouteAttacker1A = BuildObject("ivscout_x", Mission.m_EnemyTeam, "routeattack1a");
+    Mission.m_ISDFRouteAttacker1B = BuildObject("ivscout_x", Mission.m_EnemyTeam, "routeattack1b");
+    Mission.m_ISDFRouteAttacker1C = BuildObject("ivscout_x", Mission.m_EnemyTeam, "routeattack1c");
+    Mission.m_ISDFRouteAttacker2A = BuildObject("ivscout_x", Mission.m_EnemyTeam, "routeattack2a");
+    Mission.m_ISDFRouteAttacker2B = BuildObject("ivtank_x", Mission.m_EnemyTeam, "routeattack2b");
+
+    -- Have them look at the player for now so they maintain formation.
+    LookAt(Mission.m_ISDFRouteAttacker1A, Mission.m_MainPlayer);
+    LookAt(Mission.m_ISDFRouteAttacker1B, Mission.m_MainPlayer);
+    LookAt(Mission.m_ISDFRouteAttacker1C, Mission.m_MainPlayer);
+    LookAt(Mission.m_ISDFRouteAttacker2A, Mission.m_MainPlayer);
+    LookAt(Mission.m_ISDFRouteAttacker2B, Mission.m_MainPlayer);
 
     -- Advance the mission state...
     if (Mission.m_IsCooperativeMode) then
@@ -691,7 +738,6 @@ Functions[10] = function()
     Mission.m_MissionState = Mission.m_MissionState + 1;
 end
 
--- Todo, refactor this to use booleans for the dialog and objectives so we can effectively skip this part if the player does something early.
 Functions[11] = function()
     if (IsPowered(Mission.m_Kiln)) then
         -- Stop Yelena from talking.
@@ -827,6 +873,9 @@ Functions[16] = function()
     -- Show Objectives.
     AddObjectiveOverride("scion0101.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode);
 
+    -- Enable Yelena's brain.
+    Mission.m_YelenaBrainActive = true;
+
     -- Enable ISDF attacks.
     Mission.m_EnableISDF = true;
 
@@ -844,62 +893,22 @@ Functions[16] = function()
 end
 
 Functions[17] = function()
-    if (Mission.m_YelenaUnderFire == false) then
-        local attacker = nil;
-
-        -- Check if any of the ISDF attackers are within 50 meters of Yelena.
-        if (Mission.m_ISDFAttacker1 and GetDistance(Mission.m_ISDFAttacker1, Mission.m_Yelena) < 100) then
-            attacker = Mission.m_ISDFAttacker1;
-        elseif (Mission.m_ISDFAttacker2 and GetDistance(Mission.m_ISDFAttacker2, Mission.m_Yelena) < 100) then
-            attacker = Mission.m_ISDFAttacker2;
-        elseif (Mission.m_ISDFAttacker3 and GetDistance(Mission.m_ISDFAttacker3, Mission.m_Yelena) < 100) then
-            attacker = Mission.m_ISDFAttacker3;
-        elseif (Mission.m_ISDFAttacker4 and GetDistance(Mission.m_ISDFAttacker4, Mission.m_Yelena) < 100) then
-            attacker = Mission.m_ISDFAttacker4;
-        end
-
-        if (attacker) then
-            -- Have Yelena attack.
-            Attack(Mission.m_Yelena, attacker);
-
-            -- Yelena: "I'm under fire, John!  Help me out!"
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0107.wav");
-
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
-
-            -- Set the flag that Yelena is under fire.
-            Mission.m_YelenaUnderFire = true;
-        end
-    elseif (Mission.m_YelenaReturnToPatrol == false) then
-        if (Mission.m_ISDFAttacker1 == nil and Mission.m_ISDFAttacker2 == nil and Mission.m_ISDFAttacker3 == nil and Mission.m_ISDFAttacker4 == nil) then
-            -- Send Yelena back to patrol.
-            Patrol(Mission.m_Yelena, "shab_patrol");
-
-            -- Small delay before we praise.
-            Mission.m_YelenaPraiseDelay = Mission.m_MissionTime + SecondsToTurns(1.3);
-
-            -- Set the flag that Yelena is returning to patrol.
-            Mission.m_YelenaReturnToPatrol = true;
-        end
-    elseif (Mission.m_YelenaPraise == false and Mission.m_YelenaPraiseDelay < Mission.m_MissionTime) then
-        -- Yelena: "Thanks for the help, John.  I appreciate it."
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0108.wav");
-
-        -- Set the timer for this audio clip.
-        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
-
-        -- Set the flag that Yelena has been praised.
-        Mission.m_YelenaPraise = true;
-    end
-
     if (Mission.m_SpawnDeltaSquad and Mission.m_DeltaSquadSpawnTime < Mission.m_MissionTime) then
         -- Spawn Delta squad.
         Mission.m_DeltaSquad1 = BuildObject("fvscout_x", Mission.m_HostTeam, "escort1a");
         Mission.m_DeltaSquad2 = BuildObject("fvscout_x", Mission.m_HostTeam, "escort1b");
 
         Mission.m_Hauler = BuildObject("fvtug", Mission.m_HostTeam, "tug1");
-        Mission.m_PowerCrystal = BuildObject("cotran01", 0, "power");
+        Mission.m_PowerCrystal = BuildObject("cotran01", Mission.m_HostTeam, "power");
+
+        -- Make sure the Player can't command Delta or the Tug
+        Stop(Mission.m_DeltaSquad1);
+        Stop(Mission.m_DeltaSquad2);
+        Stop(Mission.m_Hauler);
+
+        -- Given in the original mission, the Hauler has a health buff, we should do the same to the Power Crystal so it's not too unfair.
+        SetMaxHealth(Mission.m_PowerCrystal, 5000);
+        SetCurHealth(Mission.m_PowerCrystal, 5000);
 
         -- Small delay before the Hauler picks up the crystal.
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
@@ -961,7 +970,7 @@ Functions[20] = function()
     AddObjectiveOverride("scion0102.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode);
 
     -- Add time to the warning for meeting Delta.
-    Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(45);
+    Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(60);
 
     -- Activate the warning for meeting Delta.
     Mission.m_MeetDeltaWarningActive = true;
@@ -972,7 +981,7 @@ end
 
 Functions[21] = function()
     -- This checks to see if a Player has reached the nav point.
-    if (GetDistance(Mission.m_Hauler, "rondevous1") and IsPlayerWithinDistance(Mission.m_Hauler, 125, _Cooperative.m_TotalPlayerCount)) then
+    if (GetDistance(Mission.m_Hauler, "rondevous1") < 125 and IsPlayerWithinDistance(Mission.m_Hauler, 125, _Cooperative.m_TotalPlayerCount)) then
         -- Delta: Delta wing here, we have Cook on radar. Lt. Shabayev, are you sure we can trust this man with the power source?
         Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0113.wav");
 
@@ -985,11 +994,19 @@ Functions[21] = function()
         -- Remove the highlight from Nav 1.
         SetObjectiveOff(Mission.m_Nav1);
 
-        -- Remove the brain logic.
-        Mission.m_DeltaBrainActive = false;
-
         -- De-activate the warning for meeting Delta.
         Mission.m_MeetDeltaWarningActive = false;
+
+        -- We can spawn in the ambush attackers here to engage the Crystal and surrounding units.
+        local chosenAmbushSet = m_Ambush1[Mission.m_MissionDifficulty];
+
+        Mission.m_ISDFAmbusher1 = BuildObject(chosenAmbushSet[1], Mission.m_EnemyTeam, "spawn_1_b");
+        Mission.m_ISDFAmbusher2 = BuildObject(chosenAmbushSet[2], Mission.m_EnemyTeam, "spawn_2_a");
+        Mission.m_ISDFAmbusher3 = BuildObject(chosenAmbushSet[3], Mission.m_EnemyTeam, "spawn_2_b");
+
+        Retreat(Mission.m_ISDFAmbusher1, "rondevous1");
+        Retreat(Mission.m_ISDFAmbusher2, "rondevous1");
+        Retreat(Mission.m_ISDFAmbusher3, "rondevous1");
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -998,6 +1015,7 @@ end
 
 Functions[22] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
     -- Yelena: You have my word on it.
     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0123.wav");
 
@@ -1009,7 +1027,118 @@ Functions[22] = function()
 end
 
 Functions[23] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
 
+    -- Run a check to make sure that an enemy is within the correct distance from the escort crew.
+    local check1 = IsAliveAndEnemy(Mission.m_ISDFAmbusher1, Mission.m_EnemyTeam);
+    local check2 = IsAliveAndEnemy(Mission.m_ISDFAmbusher2, Mission.m_EnemyTeam);
+    local check3 = IsAliveAndEnemy(Mission.m_ISDFAmbusher3, Mission.m_EnemyTeam);
+
+    if (check1 or check2 or check3) then
+        if (Mission.m_EscortAlerted == false) then
+            local isEnemyClose = false;
+
+            -- Run a series of checks to see if any of the ambushers are near.
+            -- If any of the enemies get within distance, don't bother checking the rest.
+            if (GetDistance(Mission.m_ISDFAmbusher1, "rondevous1") < 75) then
+                isEnemyClose = true;
+            end
+
+            if (isEnemyClose == false and GetDistance(Mission.m_ISDFAmbusher2, "rondevous1") < 75) then
+                isEnemyClose = true;
+            end
+
+            if (isEnemyClose == false and GetDistance(Mission.m_ISDFAmbusher2, "rondevous1") < 75) then
+                isEnemyClose = true;
+            end
+
+            if (isEnemyClose) then
+                Attack(Mission.m_ISDFAmbusher1, Mission.m_MainPlayer);
+                Attack(Mission.m_ISDFAmbusher2, Mission.m_PowerCrystal);
+                Attack(Mission.m_ISDFAmbusher3, Mission.m_Hauler);
+
+                -- Give the enemy their independence back after using Retreat.
+                SetIndependence(Mission.m_ISDFAmbusher1, 1);
+                SetIndependence(Mission.m_ISDFAmbusher2, 1);
+                SetIndependence(Mission.m_ISDFAmbusher3, 1);
+
+                -- Send Delta to protect and engage.
+                Attack(Mission.m_DeltaSquad1, Mission.m_ISDFAmbusher1);
+                Attack(Mission.m_DeltaSquad2, Mission.m_ISDFAmbusher2);
+
+                -- Delta: Ambush! Protect the Hauler!
+                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0114.wav");
+
+                -- Set the timer for this audio clip.
+                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+                -- Enemies are now attacking, we don't need to do this anymore.
+                Mission.m_EscortAlerted = true;
+            end
+        end
+
+        return;
+    end
+
+    -- So we know for other functions that the ambush is dead.
+    Mission.m_AmbushDefeated = true;
+
+    -- Add a delay,
+    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[24] = function()
+    if (Mission.m_MissionDelayTime > Mission.m_MissionTime) then return end;
+
+    -- Delta: We are handing the tug over to cook and heading to base.
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0115.wav");
+
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[25] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+    -- Have delta retreat back to base.
+    Patrol(Mission.m_DeltaSquad1, "shab_patrol");
+    Follow(Mission.m_DeltaSquad2, Mission.m_DeltaSquad1);
+
+    -- Build and label nav 2 for the next objective.
+    Mission.m_Nav2 = BuildObject("ibnav", 1, "nav2");
+    SetObjectiveOn(Mission.m_Nav2);
+    SetObjectiveName(Mission.m_Nav2, TranslateString("MissionS0102"));
+
+    -- Highlight the Crystal as well because why not.
+    SetObjectiveOn(Mission.m_PowerCrystal);
+
+    -- Stop their brain.
+    Mission.m_DeltaBrainActive = false;
+
+    -- Yelena can be deactivated as well as this part of the mission is done.
+    Mission.m_YelenaBrainActive = false;
+
+    -- Yelena: John, escort that Hauler to Nav 2.
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0116.wav");
+
+    -- Set the timer for this audio clip.
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
+
+    -- Small delay before the next part.
+    Mission.m_MissionDelayTime = Mission.m_MissionDelayTime + SecondsToTurns(8);
+
+    -- Advance the mission state...
+    Mission.m_MissionState = Mission.m_MissionState + 1;
+end
+
+Functions[26] = function()
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
 end
 
 function HandleFailureConditions()
@@ -1057,60 +1186,64 @@ function HandleFailureConditions()
         end
     end
 
-    if (Mission.m_MeetDeltaWarningActive) then
-        if (Mission.m_MissionTime > Mission.m_MeetDeltaWarningTime) then
-            if (Mission.m_DeltaWarningCount == 0) then
-                -- Delta: "Delta wing here, I'm at the rondevous point, where are you?"
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0112.wav");
+    if (Mission.m_SpawnDeltaSquad) then
+        if (Mission.m_MeetDeltaWarningActive) then
+            if (Mission.m_MissionTime > Mission.m_MeetDeltaWarningTime) then
+                if (Mission.m_DeltaWarningCount == 0) then
+                    -- Delta: "Delta wing here, I'm at the rondevous point, where are you?"
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0112.wav");
 
-                -- Set the timer for this audio clip.
-                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
-                -- Increase the warning time.
-                Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(30);
+                    -- Increase the warning time.
+                    Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(45);
 
-                -- Increase the warning count.
-                Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
-            elseif (Mission.m_DeltaWarningCount == 1) then
-                -- Yelena: "Hurry up Cooke! They could run into trouble out there."
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0111.wav");
+                    -- Increase the warning count.
+                    Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
+                elseif (Mission.m_DeltaWarningCount == 1) then
+                    -- Yelena: "Hurry up Cooke! They could run into trouble out there."
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0111.wav");
 
-                -- Set the timer for this audio clip.
-                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
-                -- Increase the warning time.
-                Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(30);
+                    -- Increase the warning time.
+                    Mission.m_MeetDeltaWarningTime = Mission.m_MissionTime + SecondsToTurns(30);
 
-                -- Increase the warning count.
-                Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
-            elseif (Mission.m_DeltaWarningCount == 2) then
-                -- Yelena: "That's it John, I have to let you go! If you cannot follow orders...."
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0124.wav");
+                    -- Increase the warning count.
+                    Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
+                elseif (Mission.m_DeltaWarningCount == 2) then
+                    -- Yelena: "That's it John, I have to let you go! If you cannot follow orders...."
+                    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0124.wav");
 
-                -- Set the timer for this audio clip.
-                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
+                    -- Set the timer for this audio clip.
+                    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
 
-                -- Increase the warning count.
-                Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
-            elseif (Mission.m_DeltaWarningCount == 3 and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, _Mission.m_IsCooperativeMode)) then
-                -- Disable this warning.
-                Mission.m_MeetDeltaWarningActive = false;
+                    -- Increase the warning count.
+                    Mission.m_DeltaWarningCount = Mission.m_DeltaWarningCount + 1;
+                elseif (Mission.m_DeltaWarningCount == 3 and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, _Mission.m_IsCooperativeMode)) then
+                    -- Disable this warning.
+                    Mission.m_MeetDeltaWarningActive = false;
 
-                -- Show the failure message.
-                AddObjectiveOverride("scion0102.otf", "RED", 10, true, Mission.m_IsCooperativeMode);
+                    -- Show the failure message.
+                    AddObjectiveOverride("scion0102.otf", "RED", 10, true, Mission.m_IsCooperativeMode);
 
-                if (Mission.m_IsCooperativeMode) then
-                    NoteGameoverWithCustomMessage(
-                        "By leaving Delta Wing alone at Nav 1, you failed to follow orders and left the Power Crystal vulnerable.");
-                    DoGameover(6);
-                else
-                    FailMission(GetTime() + 6, "scion01L1.txt");
+                    if (Mission.m_IsCooperativeMode) then
+                        NoteGameoverWithCustomMessage(
+                            "By leaving Delta Wing alone at Nav 1, you failed to follow orders and left the Power Crystal vulnerable.");
+                        DoGameover(6);
+                    else
+                        FailMission(GetTime() + 6, "scion01L1.txt");
+                    end
+
+                    -- Set the mission over.
+                    Mission.m_MissionOver = true;
                 end
-
-                -- Set the mission over.
-                Mission.m_MissionOver = true;
             end
         end
+
+
     end
 end
 
@@ -1127,7 +1260,7 @@ function HandleMireAnimals()
         -- So we don't loop.
         Mission.m_Jak12Spawned = true;
     elseif (Mission.m_Jak12Spawned) then
-        if (Mission.m_JakStop1 == false and GetDistance(Mission.m_Jak1, "jakstop1" < 15)) then
+        if (Mission.m_JakStop1 == false and GetDistance(Mission.m_Jak1, "jakstop1") < 15) then
             if (IsAlive(Mission.m_Jak1)) then
                 LookAt(Mission.m_Jak1, Mission.m_PlayersRecy);
             end
@@ -1253,17 +1386,95 @@ function HandleISDF()
         -- Mark that a wave has spawned.
         Mission.m_ISDFWaveSpawned = true;
     end
+
+    -- Logic for when the player / hauler gets close to the trigger paths.
+    
+end
+
+function HandleYelenaBrain()
+    if (Mission.m_YelenaUnderFire == false) then
+        local attacker = nil;
+
+        -- Check if any of the ISDF attackers are within 50 meters of Yelena.
+        if (Mission.m_ISDFAttacker1 and GetDistance(Mission.m_ISDFAttacker1, Mission.m_Yelena) < 100) then
+            attacker = Mission.m_ISDFAttacker1;
+        elseif (Mission.m_ISDFAttacker2 and GetDistance(Mission.m_ISDFAttacker2, Mission.m_Yelena) < 100) then
+            attacker = Mission.m_ISDFAttacker2;
+        elseif (Mission.m_ISDFAttacker3 and GetDistance(Mission.m_ISDFAttacker3, Mission.m_Yelena) < 100) then
+            attacker = Mission.m_ISDFAttacker3;
+        elseif (Mission.m_ISDFAttacker4 and GetDistance(Mission.m_ISDFAttacker4, Mission.m_Yelena) < 100) then
+            attacker = Mission.m_ISDFAttacker4;
+        end
+
+        if (attacker) then
+            -- Have Yelena attack.
+            Attack(Mission.m_Yelena, attacker);
+
+            -- Yelena: "I'm under fire, John!  Help me out!"
+            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0107.wav");
+
+            -- Set the timer for this audio clip.
+            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+            -- Set the flag that Yelena is under fire.
+            Mission.m_YelenaUnderFire = true;
+        end
+    elseif (Mission.m_YelenaReturnToPatrol == false) then
+        if (Mission.m_ISDFAttacker1 == nil and Mission.m_ISDFAttacker2 == nil and Mission.m_ISDFAttacker3 == nil and Mission.m_ISDFAttacker4 == nil) then
+            -- Send Yelena back to patrol.
+            Patrol(Mission.m_Yelena, "shab_patrol");
+
+            -- Small delay before we praise.
+            Mission.m_YelenaPraiseDelay = Mission.m_MissionTime + SecondsToTurns(1.3);
+
+            -- Set the flag that Yelena is returning to patrol.
+            Mission.m_YelenaReturnToPatrol = true;
+        end
+    elseif (Mission.m_YelenaPraise == false and Mission.m_YelenaPraiseDelay < Mission.m_MissionTime) then
+        -- Yelena: "Thanks for the help, John.  I appreciate it."
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0108.wav");
+
+        -- Set the timer for this audio clip.
+        Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+
+        -- Set the flag that Yelena has been praised.
+        Mission.m_YelenaPraise = true;
+    end
 end
 
 function HandleDeltaBrain()
-    if (Mission.m_Escort1Far == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler) > 100) then
-        LookAt(Mission.m_DeltaSquad1, Mission.m_Hauler, 1);
-        Mission.m_Escort1Far = true;
-        Mission.m_Escort1Close = false;
-    elseif (Mission.m_Escort1Close == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler < 99)) then
-        Retreat(Mission.m_DeltaSquad1, "rondevous1", 1);
-        Mission.m_Escort1Close = true;
-        Mission.m_Escort1Far = false;
+    if (Mission.m_EscortComplete == false) then
+        if (Mission.m_Escort1Far == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler) > 55) then
+            LookAt(Mission.m_DeltaSquad1, Mission.m_Hauler, 1);
+            Mission.m_Escort1Far = true;
+            Mission.m_Escort1Close = false;
+        elseif (Mission.m_Escort1Close == false and GetDistance(Mission.m_DeltaSquad1, Mission.m_Hauler) < 40) then
+            Retreat(Mission.m_DeltaSquad1, "rondevous1", 1);
+            Mission.m_Escort1Close = true;
+            Mission.m_Escort1Far = false;
+        end
+    end
+
+    -- For when the enemies are dead, we can move Delta back to a realistic position.
+    if (Mission.m_AmbushDefeated) then
+        if (Mission.m_EscortRetreat == false) then
+            Retreat(Mission.m_DeltaSquad1, "escort1a_go1");
+            Retreat(Mission.m_DeltaSquad2, "escort1b_go1");
+
+            -- So we don't loop.
+            Mission.m_EscortRetreat = true;
+        else
+            -- Checks to see if the escorts need to look at the player.
+            if (Mission.m_Escort1Look == false and GetDistance(Mission.m_DeltaSquad1, "escort1a_go1") < 20) then
+                LookAt(Mission.m_DeltaSquad1, Mission.m_MainPlayer, 1);
+                Mission.m_Escort1Look = true;
+            end
+
+            if (Mission.m_Escort2Look == false and GetDistance(Mission.m_DeltaSquad2, "escort1b_go1") < 20) then
+                LookAt(Mission.m_DeltaSquad2, Mission.m_MainPlayer, 1);
+                Mission.m_Escort2Look = true;
+            end
+        end
     end
 end
 

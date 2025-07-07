@@ -1,0 +1,30 @@
+[GameObjectClass]
+classLabel = "ivatank_x"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+selectWaitMsg = "fvatank04.wav"
+selectAttackMsg = "fvatank01.wav"
+selectFollowMsg = "fvatank03.wav"
+selectGoMsg = "fvatank02.wav"
+selectOtherMsg = "fvatank04.wav"
+
+goMsg = "fvatank06.wav"
+attackMsg = "fvatank05.wav"
+followMeMsg = "fvatank08.wav"
+followMsg = "fvatank03.wav"
+repairMsg = "fvatank09.wav"
+reloadMsg = "fvatank09.wav"
+rescueMsg = "fvatank10.wav"
+recycleMsg = "fvatank11.wav"
+otherMsg = "fvatank06.wav" 
+holdMsg = "fvatank09.wav"
+user1Msg = ""  
+killedMsg = "fvatank07.wav"
+diedMsg = ""
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]

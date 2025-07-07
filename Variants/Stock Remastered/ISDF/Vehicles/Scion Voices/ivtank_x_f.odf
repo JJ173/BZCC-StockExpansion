@@ -1,0 +1,30 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+PilotConfig = "fspilo_x"
+
+[CraftClass]
+selectWaitMsg = "fvtank04.wav"
+selectAttackMsg = "fvtank01.wav"
+selectFollowMsg = "fvtank03.wav"
+selectGoMsg = "fvtank02.wav"
+selectOtherMsg = "fvtank04.wav"
+holdMsg = "fvtank12.wav"
+goMsg = "fvtank05.wav"
+attackMsg = "fvtank06.wav"
+followMeMsg = "fvtank08.wav"
+followMsg = "fvtank03.wav"
+repairMsg = "fvtank09.wav"
+reloadMsg = "fvtank09.wav"
+rescueMsg = "fvtank10.wav"
+recycleMsg = "fvtank11.wav"
+otherMsg = "fvtank05.wav" 
+
+user1Msg = ""  
+killedMsg = "fvtank07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

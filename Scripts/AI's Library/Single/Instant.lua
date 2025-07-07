@@ -765,11 +765,15 @@ function ObjectSniped(DeadObjectHandle, KillersHandle)
 end
 
 function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
+    -- Apply a skin to the unit if it is a player.
     if (IsPlayer(pilotHandle)) then
-        -- Apply the skin to the unit.
         ApplySkinToHandle(GetPlayerName(pilotHandle), emptyCraftHandle, GetTeamNum(pilotHandle));
     end
 
+    -- Run our replacement script logic.
+    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle);
+
+    -- Always allow the entry
     return PREGETIN_ALLOW;
 end
 

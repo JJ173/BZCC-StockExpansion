@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "fvturr_x"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+selectGoMsg = "ivturr01.wav"
+selectAttackMsg = "ivturr03.wav"
+selectDeployMsg = "ivturr04.wav"
+selectOtherMsg = "ivturr03.wav"
+holdMsg = "ivturr12.wav"
+goMsg = "ivturr05.wav"
+followMeMsg = "ivturr08.wav"
+reloadMsg = "ivturr09.wav"
+repairMsg = "ivturr09.wav"
+rescueMsg = "ivturr10.wav"
+recycleMsg = "ivturr11.wav"
+otherMsg = "ivturr11.wav"
+attackMsg = "ivturr06.wav"
+deployedMsg = "ivturr14.wav"
+killedMsg = "ivturr07.wav"
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]

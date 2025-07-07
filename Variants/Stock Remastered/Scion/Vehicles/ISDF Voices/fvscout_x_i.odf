@@ -1,0 +1,29 @@
+[GameObjectClass]
+classLabel = "fvscout_x"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+selectWaitMsg = "ivscout04.wav"
+selectAttackMsg = "ivscout01.wav"
+selectFollowMsg = "ivscout03.wav"
+selectGoMsg = "ivscout02.wav"
+selectOtherMsg = "ivscout04.wav"
+goMsg = "ivscout05.wav"
+attackMsg = "ivscout06.wav"
+followMeMsg = "ivscout03.wav"
+followMsg = "ivscout08.wav"
+repairMsg = "ivscout09.wav"
+reloadMsg = "ivscout09.wav"
+rescueMsg = "ivscout10.wav"
+recycleMsg = "ivscout11.wav"
+otherMsg = "ivscout10.wav" 
+holdMsg = "ivscout12.wav"
+user1Msg = ""  
+killedMsg = "ivscout07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

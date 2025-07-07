@@ -2,8 +2,13 @@ _Cooperative =
 {
     m_TotalPlayerCount = 0,
     m_TeamIsSetUp      = { false, false, false, false },
-    m_ElapsedGameTime  = 0,
 };
+
+local m_DifficultyMap = {
+    'Easy',
+    'Medium',
+    'Hard'
+}
 
 function _Cooperative.Load(CoopData)
     _Cooperative = CoopData;
@@ -14,25 +19,33 @@ function _Cooperative.Save()
 end
 
 function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, SpawnPilotOnly, HeightOffset)
-    -- Few prints to console.
-    print("Welcome to " .. MissionName);
-    print("Written by AI_Unit");
+    local difficulty;
 
     if (IsCoop) then
-        print("Cooperative mode enabled: Yes");
+        difficulty = GetVarItemInt("network.session.ivar102") + 1;
     else
-        print("Cooperative mode enabled: No");
+        difficulty = IFace_GetInteger("options.play.difficulty") + 1;
     end
+
+    -- Change this to AddToMessagesBox;
+    AddToMessagesBox("[WELCOME!]");
+    AddToMessagesBox("Mission: " .. MissionName);
+    AddToMessagesBox("Author: AI_Unit");
+
+    if (IsCoop) then
+        AddToMessagesBox("Cooperative: Yes");
+    else
+        AddToMessagesBox("Cooperative: No");
+    end
+
+    AddToMessagesBox("Difficulty: " .. m_DifficultyMap[difficulty]);
+    AddToMessagesBox("Good luck and have fun :)");
 
     -- Remove team colours here.
     ClearTeamColors();
 
     -- Just for the units on Team 0.
     SetTeamNameForStat(0, "Neutral");
-
-    -- TODO: Re-add when difficulty is moved to coop module.
-    -- print("Chosen difficulty: " .. Mission.m_MissionDifficulty);
-    print("Good luck and have fun :)");
 
     -- Remove the player ODF that is saved as part of the BZN.
     local PlayerEntryH = GetPlayerHandle(1);
@@ -52,25 +65,7 @@ function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, 
 end
 
 function _Cooperative.Update(m_GameTPS)
-    _Cooperative.m_ElapsedGameTime = _Cooperative.m_ElapsedGameTime + 1;
-
-    if (_Cooperative.m_ElapsedGameTime % m_GameTPS == 0) then
-        local seconds = _Cooperative.m_ElapsedGameTime / m_GameTPS;
-        local minutes = seconds / 60;
-        local hours = minutes / 60;
-        local msgString = '';
-
-        seconds = seconds % 60;
-        minutes = minutes % 60;
-
-        if (hours > 0) then
-            msgString = TranslateString("mission", ("Mission Time %d:%02d:%02d"):format(hours, minutes, seconds));
-        else
-            msgString = TranslateString("mission", ("Mission Time %d:%02d"):format(minutes, seconds));
-        end
-
-        SetTimerBox(msgString);
-    end
+    _Multiplayer.UpdateGameTime(m_GameTPS);
 end
 
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
@@ -112,13 +107,11 @@ function _Cooperative.PlayerEjected(DeadObjectHandle)
 end
 
 function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilotODF)
+    -- Sanity check for multiworld
+    if (GetCurWorld() ~= 0) then return DoEjectPilot; end
+
     local isDeadAI = not IsPlayer(DeadObjectHandle);
     local isDeadPerson = IsPerson(DeadObjectHandle);
-
-    -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then
-        return DoEjectPilot;
-    end
 
     -- Someone on neutral team always gets default behavior
     local deadObjectTeam = GetTeamNum(DeadObjectHandle);
@@ -132,18 +125,19 @@ function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilot
 end
 
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
-    local isDeadAI = not IsPlayer(DeadObjectHandle);
-
     -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then
-        return DoEjectPilot;
-    end
+    if (GetCurWorld() ~= 0) then return DoEjectPilot; end
+
+    local isDeadAI = not IsPlayer(DeadObjectHandle);
 
     -- Dead person means we must always respawn a new person
     return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, true, isDeadAI, MissionPilotODF);
 end
 
 function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
+    -- Safety, do not do this if we are not in the lockstep world.
+    if (curWorld ~= 0) then return end;
+
     -- Never allow friendly fire otherwise we may screw with mission logic.
     local relationship = GetTeamRelationship(shooterHandle, victimHandle);
 
@@ -162,6 +156,9 @@ function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTe
 end
 
 function _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
+    -- Safety, do not do this if we are not in the lockstep world.
+    if (curWorld ~= 0) then return end;
+
     local relationship = GetTeamRelationship(pilotHandle, emptyCraftHandle);
 
     if (relationship == TEAMRELATIONSHIP_ALLIEDTEAM and not IsPlayer(pilotHandle)) then

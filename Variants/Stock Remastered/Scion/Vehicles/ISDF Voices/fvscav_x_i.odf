@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "fvscav_x"
+PilotConfig = "ispilo_x"
+
+[CraftClass]
+selectOtherMsg = "ivscav01.wav"
+selectWaitMsg = "ivscav01.wav"
+selectGoMsg = "ivscav02.wav"
+selectFollowMsg = "ivscav03.wav"
+selectPickupMsg = "ivscav01.wav"
+selectDropoffMsg = "ivscav01.wav"
+otherMsg = "ivscav11.wav"
+goMsg = "ivscav04.wav"
+goObjectMsg = "ivscav13.wav"
+followMsg = "ivscav03.wav"
+followMeMsg = "ivscav07.wav"
+repairMsg = "ivscav08.wav"
+rescueMsg = "ivscav09.wav"
+recycleMsg = "ivscav10.wav"
+holdMsg = "ivscav04.wav"
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]

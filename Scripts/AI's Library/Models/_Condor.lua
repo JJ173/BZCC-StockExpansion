@@ -2,7 +2,7 @@
 Condor =
 {
     -- Handle for generic use.
-    Handle = 0,
+    Handle = nil,
 
     -- Team so we know what to print.
     Team = 0,
@@ -14,7 +14,7 @@ Condor =
     UnitTotal = 0,
 
     -- Checks to see if this unit already has a unit servicing it.
-    LandingPad = 0,
+    LandingPad = nil,
 
     -- Flags so we don't double logic.
     CondorState = 0,
@@ -32,11 +32,11 @@ Condor =
 function Condor:New(Handle, Team, Type, LandingPad, UnitTotal)
     local o = {}
 
-    o.Handle = Handle or 0;
+    o.Handle = Handle or nil;
     o.Team = Team or 0;
     o.Type = Type or "";
     o.UnitTotal = UnitTotal or 0;
-    o.LandingPad = LandingPad or 0;
+    o.LandingPad = LandingPad or nil;
     o.ReadyToDelete = false;
     o.DelayTime = 0;
     o.CondorUnits = {};

@@ -1,11 +1,17 @@
-require("_VoiceManager");
+local _Discord = require("_Discord")
 
-function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
-    -- Run our replacement script logic.
-    local handle = _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle);
+local DiscordStarted = false
 
-    SetObjectiveOn(handle);
+function Start()
+    local mode = "Instant Action"
+    local mapTrn = GetMissionFilename()
 
-    -- Always allow the entry
-    return 1;
+    _Discord:Start(mode, mapTrn)
+    DiscordStarted = true
+end
+
+function Update()
+    if DiscordStarted then
+        _Discord:Update()
+    end
 end

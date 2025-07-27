@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ispilo_x"
+
+weaponName1 = ""
+weaponName2 = ""
+weaponName3 = ""
+
+[CraftClass]
+
+[PersonClass]
+stepSound = "step.wav" // Change to a metalic footstep sound.

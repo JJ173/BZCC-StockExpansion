@@ -1,0 +1,29 @@
+[GameObjectClass]
+geometryName = "ibQuarters00.fbx"
+animCount = 0
+classLabel = "ibcbun"
+powerCost = 0
+canDetect = 0
+canInteract = 0
+AllowUndergroundSpawn = true
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+
+/////// PROVIDES ///////////////////
+provideCount = 0
+
+///////// LIGHTS & EFFECTS /////////
+lightHard1 = "hp_light_1"
+lightName1 = "o_blue_nf"
+
+[BuildingClass]
+soundAmbient = ""
+
+[CommBunkerClass]
+disableFog = 0
+
+[PoweredBuildingClass]
+detectRange = 0
+
+[Lod1]

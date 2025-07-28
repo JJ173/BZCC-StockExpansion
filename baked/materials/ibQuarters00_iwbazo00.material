@@ -1,0 +1,13 @@
+[solid]
+diffuse = 1.000000  1.000000  1.000000  1.000000
+specular = 1.000000  1.000000  1.000000  1.000000
+specularPower = 1024.000000
+emissive = 1.570796  1.570796  1.570797  1.000000
+ambient = 1.000000  1.000000  1.000000  1.000000
+
+
+[texture]
+diffuse = iwbazo00.dds
+emissive = iwbazo00_e.dds
+normal = iwbazo00_n.dds
+specular = iwbazo00_s.dds

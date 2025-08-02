@@ -4,33 +4,49 @@
     Version 1.0 21-04-2025
 --]]
 
--- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
+require("_GlobalVariables")
+require("_HelperFunctions")
 
--- Required Globals.
-require("_GlobalVariables");
+local _Cooperative = require("_Cooperative")
+local _Subtitles = require('_Subtitles')
 
--- Required helper functions.
-require("_HelperFunctions");
+-- =========================
+-- Variables
+-- =========================
 
--- Cooperative.
-local _Cooperative = require("_Cooperative");
+local m_GameTPS = GetTPS()
+local m_MissionName = "Scion06: The AAN"
 
--- Subtitles.
-local _Subtitles = require('_Subtitles');
+local m_RepairTimeTable = { 600, 450, 300 }
 
--- Game TPS.
-local m_GameTPS = GetTPS();
+local MissionPhase = {
+    INTRO = 1,
+    BASE = 2,
+    CONVOY = 3,
+}
 
--- Mission Name
-local m_MissionName = "Scion06: Ambush";
+local IntroState = {
+    SETUP = 1,
+    REPAIRS_DIALOG_INTRO = 2,
+    REPAIRS_DIALOG_REPAIR_TRUCK = 3,
+    REPAIRS_OBJECTIVES = 4,
+    TRACK_REPAIRS = 5,
+    REPAIRS_COMPLETE = 6,
+}
 
--- Timer for repairs based on difficulty.
-local m_RepairTimeTable = { 600, 450, 300 };
+local BaseState = {
+    SETUP = 1,
+    RECYCLER_TRACKER = 2,
+    BASE_DESTROYED = 3,
+}
 
--- Mission important variables.
-local Mission =
-{
+local ConvoyState = {
+    SETUP = 1,
+    CONVOY_BRAIN = 2,
+}
+
+local Mission = {
     m_MissionTime = 0,
     m_MissionDifficulty = 0,
 
@@ -38,9 +54,7 @@ local Mission =
     m_AlliedTeam = 5,
     m_EnemyTeam = 6,
 
-    -- Specific to mission.
     m_PlayerPilotODF = "fspilo_r",
-    -- Specific to mission.
     m_PlayerShipODF = "fvtank_r",
 
     m_MainPlayer = nil,
@@ -89,6 +103,7 @@ local Mission =
     m_ConvoyEnroute = false,
     m_ConvoyActive = false,
     m_ConvoyFleeing = false,
+    m_ConvoyFleeingDialogPlayed = false,
 
     m_IsCooperativeMode = false,
     m_StartDone = false,
@@ -103,152 +118,382 @@ local Mission =
     m_RepairWarningCount = 0,
     m_ConvoyBrainDelayTime = 0,
 
-    -- Steps for each section.
-    m_MissionState = 1,
+    m_CurrentPhase = MissionPhase.INTRO,
+    m_IntroState = IntroState.SETUP,
+    m_BaseState = BaseState.SETUP,
+    m_ConvoyState = ConvoyState.SETUP,
 }
 
--- Functions Table
-local Functions = {};
+-- =========================
+-- Helper Functions
+-- =========================
 
----------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------- Event Driven Functions -------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------
+local function playAudioWithDelay(clip, delay)
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles(clip)
+    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(delay)
+end
+
+-- =========================
+-- Phase-based State Machine
+-- =========================
+
+local IntroHandlers = {
+    [IntroState.SETUP] = function()
+        SetTeamNameForStat(Mission.m_AlliedTeam, "Scion")
+        SetTeamNameForStat(Mission.m_EnemyTeam, "New Regime")
+        SetTeamNameForStat(7, "Rebel Scions")
+
+        for i = 2, 5 do
+            Ally(Mission.m_HostTeam, i);
+        end
+
+        Ally(Mission.m_EnemyTeam, 7)
+        SetTeamColor(Mission.m_HostTeam, 0, 127, 255)
+
+        Mission.m_Yelena = GetHandle("yelena")
+        Mission.m_Manson = GetHandle("manson")
+
+        Mission.m_BraddockRecycler = GetHandle("enemyrecy")
+
+        Mission.m_PlayerPower1 = GetHandle("playerspgen1")
+        Mission.m_PlayerPower2 = GetHandle("playerspgen2")
+        Mission.m_PlayerFactory = GetHandle("playersfact")
+
+        Mission.m_ConvoyScout1 = GetHandle("convoy_scout1")
+        Mission.m_ConvoyScout2 = GetHandle("convoy_scout2")
+        Mission.m_ConvoySent1 = GetHandle("convoy_sent1")
+        Mission.m_ConvoySent2 = GetHandle("convoy_sent2")
+
+        Mission.m_ConvoyTug = GetHandle("convoy_tug1")
+        Mission.m_PowerCrystal = GetHandle("power")
+
+        Patrol(Mission.m_Manson, "manson_patrol", 1)
+        Patrol(Mission.m_Yelena, "yelena_patrol", 1)
+
+        SetMaxHealth(Mission.m_Manson, 0)
+        SetMaxHealth(Mission.m_Yelena, 0)
+        SetCanSnipe(Mission.m_Manson, 0)
+        SetCanSnipe(Mission.m_Yelena, 0)
+
+        SetScrap(Mission.m_HostTeam, 40)
+        SetScrap(Mission.m_EnemyTeam, 40)
+        SetScrap(Mission.m_AlliedTeam, 40)
+
+        SetCurHealth(Mission.m_PlayerFactory, 2200)
+        SetCurHealth(Mission.m_PlayerPower1, 1500)
+        SetCurHealth(Mission.m_PlayerPower2, 1800)
+
+        SetMaxHealth(Mission.m_PowerCrystal, 10000)
+        SetCurHealth(Mission.m_PowerCrystal, 10000)
+
+        SetAIP("scion0601_x.aip", Mission.m_EnemyTeam)
+
+        BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass1")
+        BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass2")
+
+        Mission.m_BraddockTurret1 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret1")
+        Mission.m_BraddockTurret2 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret2")
+        Mission.m_BraddockTurret3 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret3")
+        Mission.m_BraddockTurret4 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret4")
+
+        Mission.m_BraddockBasePatrol1 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank1")
+        Mission.m_BraddockBasePatrol2 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank2")
+        Mission.m_BraddockBasePatrol3 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank3")
+
+        Patrol(Mission.m_BraddockBasePatrol1, "basetank1", 1)
+        Patrol(Mission.m_BraddockBasePatrol2, "basetank2", 1)
+        Patrol(Mission.m_BraddockBasePatrol3, "basetank3", 1)
+
+        SetAIP("scion0602_x.aip", Mission.m_AlliedTeam)
+        Pickup(Mission.m_ConvoyTug, Mission.m_PowerCrystal)
+
+        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3)
+        Mission.m_IntroState = IntroState.REPAIRS_DIALOG_INTRO
+    end,
+    [IntroState.REPAIRS_DIALOG_INTRO] = function()
+        if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
+
+        playAudioWithDelay("scion0601.wav", 8.5)
+        Mission.m_IntroState = IntroState.REPAIRS_DIALOG_REPAIR_TRUCK
+    end,
+    [IntroState.REPAIRS_DIALOG_REPAIR_TRUCK] = function()
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+        playAudioWithDelay("scion0601a.wav", 4.5)
+        Mission.m_IntroState = IntroState.REPAIRS_OBJECTIVES
+    end,
+    [IntroState.REPAIRS_OBJECTIVES] = function()
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+
+        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
+
+        local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty];
+        StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4);
+
+        local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" };
+        local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" };
+
+        local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
+        local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
+
+        Goto(unit_a, "playerbase");
+        Goto(unit_b, "playerbase");
+
+        Mission.m_IntroState = IntroState.TRACK_REPAIRS
+    end,
+    [IntroState.TRACK_REPAIRS] = function()
+        if (IsAround(Mission.m_PlayerFactory) == false) then return end
+        if (IsAround(Mission.m_PlayerPower1) == false) then return end
+        if (IsAround(Mission.m_PlayerPower2) == false) then return end
+
+        local factHealth = GetCurHealth(Mission.m_PlayerFactory)
+        local pgen1Health = GetCurHealth(Mission.m_PlayerPower1)
+        local pgen2Health = GetCurHealth(Mission.m_PlayerPower2)
+
+        if (factHealth > 5900 and pgen1Health > 2900 and pgen2Health > 2900) then
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2)
+
+            StopCockpitTimer()
+            HideCockpitTimer()
+
+            Mission.m_IntroState = IntroState.REPAIRS_COMPLETE
+        end
+
+        if (Mission.m_RepairsStarted == false) then
+            if (factHealth > 2250 or pgen1Health > 1550 or pgen2Health > 1850) then
+                playAudioWithDelay("scion0602.wav", 4.5)
+                Mission.m_RepairsStarted = true
+            end
+        end
+    end,
+    [IntroState.REPAIRS_COMPLETE] = function()
+        if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
+
+        playAudioWithDelay("scion0603.wav", 9.5)
+        Mission.m_CurrentPhase = MissionPhase.BASE
+    end
+}
+
+local BaseHandlers = {
+    [BaseState.SETUP] = function()
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
+
+        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true)
+        Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "enemybase")
+        SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0601"))
+        SetObjectiveOn(Mission.m_Nav1)
+
+        Mission.m_BaseState = BaseState.RECYCLER_TRACKER
+    end,
+    [BaseState.RECYCLER_TRACKER] = function()
+        if (not Mission.m_YelenaPowerDialogPlayed and IsPlayerWithinDistance("enemybase", 220, _Cooperative.m_TotalPlayerCount)) then
+            playAudioWithDelay("scion0604.wav", 6.5)
+            Mission.m_YelenaPowerDialogPlayed = true
+        end
+
+        if (not IsAround(Mission.m_BraddockRecycler)) then
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(4)
+            Mission.m_BaseState = BaseState.BASE_DESTROYED
+        end
+    end,
+    [BaseState.BASE_DESTROYED] = function()
+        if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
+
+        playAudioWithDelay("scion0606.wav", 3.5)
+        Mission.m_CurrentPhase = MissionPhase.CONVOY
+    end
+}
+
+local ConvoyHandlers = {
+    [ConvoyState.SETUP] = function()
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
+
+        Retreat(Mission.m_ConvoyScout1, "convoypath")
+        Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1)
+
+        Retreat(Mission.m_ConvoyTug, "convoypath")
+        Follow(Mission.m_ConvoySent1, Mission.m_ConvoyTug)
+        Follow(Mission.m_ConvoySent2, Mission.m_ConvoySent1)
+
+        Mission.m_ConvoyEnroute = true
+        Mission.m_ConvoyActive = true
+
+        playAudioWithDelay("scion0607.wav", 16.5)
+
+        Mission.m_ConvoyState = ConvoyState.CONVOY_BRAIN
+    end,
+    [ConvoyState.CONVOY_BRAIN] = function()
+        if (Mission.m_ConvoyEnroute) then
+            local convoy1Distance = GetDistance(Mission.m_ConvoyScout1, Mission.m_ConvoyTug)
+
+            if (Mission.m_ConvoyEscortTooFar == false and convoy1Distance > 100) then
+                Stop(Mission.m_ConvoyScout1)
+                Stop(Mission.m_ConvoyScout2)
+                Mission.m_ConvoyEscortClose = false
+                Mission.m_ConvoyEscortTooFar = true
+            elseif (Mission.m_ConvoyEscortClose == false and convoy1Distance < 90) then
+                Retreat(Mission.m_ConvoyScout1, "convoypath")
+                Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1)
+                Mission.m_ConvoyEscortClose = true
+                Mission.m_ConvoyEscortTooFar = false
+            end
+
+            -- Double check the distance between the player and the convoy tug, or the forward scout.
+            for i = 1, _Cooperative.m_TotalPlayerCount do
+                local playerHandle = GetPlayerHandle(i);
+
+                if (GetDistance(playerHandle, Mission.m_ConvoyScout1) < 200 or GetDistance(playerHandle, Mission.m_ConvoyTug) < 200) then
+                    Attack(Mission.m_ConvoyScout1, playerHandle)
+                    Attack(Mission.m_ConvoyScout2, playerHandle)
+
+                    Retreat(Mission.m_ConvoyTug, "tugretreatpath")
+                    playAudioWithDelay("scion0608.wav", 9.5)
+
+                    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(15)
+                    Mission.m_ConvoyFleeing = true;
+                    Mission.m_ConvoyEnroute = false;
+                end
+            end
+        elseif (Mission.m_ConvoyFleeing) then
+            if (not Mission.m_ConvoyFleeingDialogPlayed) then
+                if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
+                if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
+
+                AddObjectiveOverride("scion0604.otf", "WHITE", 10, true)
+                playAudioWithDelay("scion0609.wav", 4.5)
+                Mission.m_ConvoyFleeingDialogPlayed = true
+            end
+        end
+    end
+}
+
+-- =========================
+-- Battlezone Event Hooks
+-- =========================
+
 function InitialSetup()
-    -- Check if we are cooperative mode.
-    Mission.m_IsCooperativeMode = IsNetworkOn();
-
-    -- Do not auto group units.
-    SetAutoGroupUnits(false);
-
-    -- We want bot kill messages as this may be a coop mission.
-    WantBotKillMessages();
+    Mission.m_IsCooperativeMode = IsNetworkOn()
+    SetAutoGroupUnits(false)
+    WantBotKillMessages()
 end
 
 function Save()
-    return _Cooperative.Save(), Mission;
+    return _Cooperative.Save(), Mission
 end
 
 function Load(CoopData, MissionData)
-    -- Do not auto group units.
-    SetAutoGroupUnits(false);
-
-    -- We want bot kill messages as this may be a coop mission.
-    WantBotKillMessages();
-
-    -- Load Coop.
-    _Cooperative.Load(CoopData);
-
-    -- Load mission data.
-    Mission = MissionData;
+    SetAutoGroupUnits(false)
+    WantBotKillMessages()
+    _Cooperative.Load(CoopData)
+    Mission = MissionData
 end
 
 function AddObject(h)
-    local teamNum = GetTeamNum(h);
-    local objClass = GetClassLabel(h);
+    local teamNum = GetTeamNum(h)
+    local objClass = GetClassLabel(h)
 
-    -- Handle unit skill for enemy.
     if (teamNum == Mission.m_EnemyTeam) then
-        SetSkill(h, Mission.m_MissionDifficulty);
+        SetSkill(h, Mission.m_MissionDifficulty)
 
         if (objClass == "CLASS_TURRETTANK") then
             if (IsAliveAndEnemy(Mission.m_BraddockTurret1, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret1 = h;
+                Mission.m_BraddockTurret1 = h
             elseif (IsAliveAndEnemy(Mission.m_BraddockTurret2, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret2 = h;
+                Mission.m_BraddockTurret2 = h
             elseif (IsAliveAndEnemy(Mission.m_BraddockTurret3, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret3 = h;
+                Mission.m_BraddockTurret3 = h
             elseif (IsAliveAndEnemy(Mission.m_BraddockTurret4, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret4 = h;
+                Mission.m_BraddockTurret4 = h
             end
         end
     elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
-        -- Always max our player units.
-        SetSkill(h, 3);
+        SetSkill(h, 3)
 
-        -- If the player has rebuilt the Power Plants or Factory, we can just let them go for it.
         if (teamNum == Mission.m_HostTeam) then
             if (Mission.m_RepairsComplete == false) then
                 if (objClass == "CLASS_PLANT") then
                     if (IsAround(Mission.m_PlayerPower1) == false) then
-                        Mission.m_PlayerPower1 = h;
+                        Mission.m_PlayerPower1 = h
                     elseif (IsAround(Mission.m_PlayerPower2) == false) then
-                        Mission.m_PlayerPower2 = h;
+                        Mission.m_PlayerPower2 = h
                     end
                 elseif (objClass == "CLASS_FACTORY") then
                     if (IsAround(Mission.m_PlayerFactory) == false) then
-                        Mission.m_PlayerFactory = h;
+                        Mission.m_PlayerFactory = h
                     end
                 end
             end
         end
     elseif (teamNum == Mission.m_AlliedTeam) then
         if (objClass == "CLASS_TURRETTANK") then
-            SetIndependence(h, 1);
-
             if (IsAlive(Mission.m_YelenaTurret1) == false) then
-                Mission.m_YelenaTurret1 = h;
-                Mission.m_YelenaTurret1Sent = false;
+                Mission.m_YelenaTurret1 = h
+                Mission.m_YelenaTurret1Sent = false
             elseif (IsAlive(Mission.m_YelenaTurret2) == false) then
-                Mission.m_YelenaTurret2 = h;
-                Mission.m_YelenaTurret2Sent = false;
+                Mission.m_YelenaTurret2 = h
+                Mission.m_YelenaTurret2Sent = false
             end
         end
     end
 end
 
 function DeleteObject(h)
-    if (h == Mission.m_YelenaTurret1) then
-        Mission.m_YelenaTurret1 = nil;
-    elseif (h == Mission.m_YelenaTurret2) then
-        Mission.m_YelenaTurret2 = nil;
+    local teamNum = GetTeamNum(h)
+
+    if (teamNum == Mission.m_AlliedTeam) then
+        if (h == Mission.m_YelenaTurret1) then
+            Mission.m_YelenaTurret1 = nil
+        elseif (h == Mission.m_YelenaTurret2) then
+            Mission.m_YelenaTurret2 = nil
+        end
+    elseif (teamNum == Mission.m_EnemyTeam) then
+        if (h == Mission.m_BraddockTurret1) then
+            Mission.m_BraddockTurret1 = nil
+        elseif (h == Mission.m_BraddockTurret2) then
+            Mission.m_BraddockTurret2 = nil
+        elseif (h == Mission.m_BraddockTurret3) then
+            Mission.m_BraddockTurret3 = nil
+        elseif (h == Mission.m_BraddockTurret4) then
+            Mission.m_BraddockTurret4 = nil
+        end
     end
 end
 
 function Start()
-    -- Set difficulty based on whether it's coop or not.
     if (Mission.m_IsCooperativeMode) then
-        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
+        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1
     else
-        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1
     end
 
-    -- Call generic start logic in coop.
-    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
-
-    -- Mark the set up as done so we can proceed with mission logic.
-    Mission.m_StartDone = true;
+    _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode)
+    Mission.m_StartDone = true
 end
 
 function Update()
-    -- This checks to see if the game is ready.
     if (Mission.m_IsCooperativeMode) then
-        _Cooperative.Update(m_GameTPS);
+        _Cooperative.Update(m_GameTPS)
     end
 
-    -- Make sure Subtitles is always running.
-    _Subtitles.Run();
+    _Subtitles.Run()
 
-    -- Keep track of our time.
-    Mission.m_MissionTime = Mission.m_MissionTime + 1;
+    Mission.m_MissionTime = Mission.m_MissionTime + 1
+    Mission.m_MainPlayer = GetPlayerHandle(1)
 
-    -- Get the main player
-    Mission.m_MainPlayer = GetPlayerHandle(1);
-
-    -- Start mission logic.
     if (Mission.m_MissionOver == false) then
         if (Mission.m_StartDone) then
-            -- Run each function for the mission.
-            Functions[Mission.m_MissionState]();
-
-            if (Mission.m_ConvoyActive) then
-                ConvoyBrain();
+            -- PHASE-BASED STATE MACHINE
+            if (Mission.m_CurrentPhase == MissionPhase.INTRO) then
+                IntroHandlers[Mission.m_IntroState]()
+            elseif (Mission.m_CurrentPhase == MissionPhase.BASE) then
+                BaseHandlers[Mission.m_BaseState]()
+            elseif (Mission.m_CurrentPhase == MissionPhase.CONVOY) then
+                ConvoyHandlers[Mission.m_ConvoyState]()
             end
 
-            -- Make sure Yelena sends turrets.
-            YelenaBrain();
-
-            -- Check failure conditions...
-            HandleFailureConditions();
+            HandleFailureConditions()
+            YelenaBrain()
         end
     end
 end
@@ -292,326 +537,18 @@ end
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (IsPlayer(ShooterHandle) and OrdnanceTeam == Mission.m_HostTeam and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         if (IsAlive(Mission.m_Manson) and VictimHandle == Mission.m_Manson) then
-            -- Fire FF message.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0555.wav");
-
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+            playAudioWithDelay("isdf0555.wav", 3.5)
         end
 
         if (IsAlive(Mission.m_Yelena) and VictimHandle == Mission.m_Yelena) then
-            -- Fire FF message.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scngen30.wav");
-
-            -- Set the timer for this audio clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
+            playAudioWithDelay("scngen30.wav", 3.5)
         end
     end
 end
 
----------------------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------- Mission Related Logic --------------------------------------------------------
----------------------------------------------------------------------------------------------------------------------------------------
-Functions[1] = function()
-    -- Team names for stats.
-    SetTeamNameForStat(Mission.m_AlliedTeam, "Scion");
-    SetTeamNameForStat(Mission.m_EnemyTeam, "New Regime");
-    SetTeamNameForStat(7, "Rebel Scions");
-
-    -- Ally teams to be sure.
-    for i = 2, 5 do
-        Ally(Mission.m_HostTeam, i);
-    end
-
-    -- Unique to this mission. The Rebel Scions are allying with the New Regime.
-    Ally(Mission.m_EnemyTeam, 7);
-
-    -- Since the player is using the AAN, we need to set the team colour to blue.
-    SetTeamColor(Mission.m_HostTeam, 0, 127, 255);
-
-    -- Grab all of our pre-placed handles.
-    Mission.m_Yelena = GetHandle("yelena");
-    Mission.m_Manson = GetHandle("manson");
-
-    Mission.m_BraddockRecycler = GetHandle("enemyrecy");
-
-    Mission.m_PlayerPower1 = GetHandle("playerspgen1");
-    Mission.m_PlayerPower2 = GetHandle("playerspgen2");
-    Mission.m_PlayerFactory = GetHandle("playersfact");
-
-    Mission.m_ConvoyScout1 = GetHandle("convoy_scout1");
-    Mission.m_ConvoyScout2 = GetHandle("convoy_scout2");
-    Mission.m_ConvoySent1 = GetHandle("convoy_sent1");
-    Mission.m_ConvoySent2 = GetHandle("convoy_sent2");
-
-    Mission.m_ConvoyTug = GetHandle("convoy_tug1");
-    Mission.m_PowerCrystal = GetHandle("power");
-
-    -- Have Manson and Yelena patrol their base.
-    Patrol(Mission.m_Manson, "manson_patrol", 1);
-    Patrol(Mission.m_Yelena, "yelena_patrol", 1);
-
-    -- Make sure Yelena and Manson can't die.
-    SetMaxHealth(Mission.m_Manson, 0);
-    SetMaxHealth(Mission.m_Yelena, 0);
-
-    -- Give all relevant teams scrap.
-    SetScrap(Mission.m_HostTeam, 40);
-    SetScrap(Mission.m_EnemyTeam, 40);
-    SetScrap(Mission.m_AlliedTeam, 40);
-
-    -- Damage the player buildings to force the repair objectives.
-    SetCurHealth(Mission.m_PlayerFactory, 2200);
-    SetCurHealth(Mission.m_PlayerPower1, 1500);
-    SetCurHealth(Mission.m_PlayerPower2, 1800);
-
-    -- Give the Power Crystal substantial health.
-    SetMaxHealth(Mission.m_PowerCrystal, 10000);
-    SetCurHealth(Mission.m_PowerCrystal, 10000);
-
-    -- Set Braddock's AIP.
-    SetAIP("scion0601_x.aip", Mission.m_EnemyTeam);
-
-    -- Spawn some units in Braddock's base.
-    BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass1");
-    BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass2");
-
-    -- Spawn some turrets in Braddock's base.
-    Mission.m_BraddockTurret1 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret1");
-    Mission.m_BraddockTurret2 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret2");
-    Mission.m_BraddockTurret3 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret3");
-    Mission.m_BraddockTurret4 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret4");
-
-    -- Spawn some patrols in Braddock's base.
-    Mission.m_BraddockBasePatrol1 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank1");
-    Mission.m_BraddockBasePatrol2 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank2");
-    Mission.m_BraddockBasePatrol3 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank3");
-
-    -- Patrol the base.
-    Patrol(Mission.m_BraddockBasePatrol1, "basetank1", 1);
-    Patrol(Mission.m_BraddockBasePatrol2, "basetank2", 1);
-    Patrol(Mission.m_BraddockBasePatrol3, "basetank3", 1);
-
-    -- Set Yelena's AIP.
-    SetAIP("scion0602_x.aip", Mission.m_AlliedTeam);
-
-    -- Rebel Tug should pick up the Power Crystal.
-    Pickup(Mission.m_ConvoyTug, Mission.m_PowerCrystal);
-
-    -- Small delay before we prompt the player to start repairs.
-    Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[2] = function()
-    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
-
-    -- Yelena: First we must work on getting this base in shape...
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601.wav");
-
-    -- Delay for the audio.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(8.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[3] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Yelena: Build a service truck and fix the factory and power generators.
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0601a.wav");
-
-    -- Delay for the audio.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[4] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Show Objectives.
-    AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
-
-    -- Grab the right timer so we can perform some math to divide it for the timer.
-    local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty];
-
-    -- Show a timer to the player for base repairs.
-    StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4);
-
-    -- Send a couple of units to harass the player.
-    local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" };
-    local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" };
-
-    local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
-    local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
-
-    Goto(unit_a, "playerbase");
-    Goto(unit_b, "playerbase");
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[5] = function()
-    -- This function can handle the main repair logic.
-    if (Mission.m_RepairsComplete == false) then
-        if (IsAround(Mission.m_PlayerFactory) == false) then return end;
-        if (IsAround(Mission.m_PlayerPower1) == false) then return end;
-        if (IsAround(Mission.m_PlayerPower2) == false) then return end;
-
-        local factHealth = GetCurHealth(Mission.m_PlayerFactory);
-        local pgen1Health = GetCurHealth(Mission.m_PlayerPower1);
-        local pgen2Health = GetCurHealth(Mission.m_PlayerPower2);
-
-        -- Check the health of everything first so we don't play the below audio if the player just decides to rebuild.
-        if (factHealth > 5900 and pgen1Health > 2900 and pgen2Health > 2900) then
-            -- Small delay before the next voice line.
-            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(2);
-
-            -- Stop the timer.
-            StopCockpitTimer();
-            HideCockpitTimer();
-
-            -- Skip the below section if this is done first.
-            Mission.m_RepairsStarted = true;
-
-            -- Repairs are complete.
-            Mission.m_RepairsComplete = true;
-
-            -- Advance the mission state...
-            Mission.m_MissionState = Mission.m_MissionState + 1;
-        end
-
-        -- Check the health of each building to see if they are being repaired.
-        if (Mission.m_RepairsStarted == false) then
-            if (factHealth > 2250 or pgen1Health > 1550 or pgen2Health > 1850) then
-                -- Yelena: Good.  Continue to build up your forces while waiting for the repairs.
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0602.wav");
-
-                -- Timer for this clip.
-                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
-
-                -- So we don't loop this sequence.
-                Mission.m_RepairsStarted = true;
-            end
-        end
-    end
-end
-
-Functions[6] = function()
-    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Yelena: Ok the repairs are complete.  Now we should be in good shape for the base assault.  Continue to build your forces, and take out that base!	
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0603.wav");
-
-    -- Timer for this clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[7] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Show Objectives.
-    AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
-
-    -- Build and rename a nav for Braddock's bases.
-    Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "enemybase");
-    SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0601"));
-    SetObjectiveOn(Mission.m_Nav1);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[8] = function()
-    if (Mission.m_YelenaPowerDialogPlayed == false) then
-        if (IsPlayerWithinDistance("enemybase", 220, _Cooperative.m_TotalPlayerCount)) then
-            -- Yelena: Cooke go for the power generators, that will buy you some time to take out those gun towers.	
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0604.wav");
-
-            -- Timer for this clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(6.5);
-
-            -- So we don't loop.
-            Mission.m_YelenaPowerDialogPlayed = true;
-        end
-    end
-
-    if (IsAround(Mission.m_BraddockRecycler) == false) then
-        -- Small delay before the next state.
-        Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(4);
-
-        -- Advance the mission state...
-        Mission.m_MissionState = Mission.m_MissionState + 1;
-    end
-end
-
-Functions[9] = function()
-    if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
-
-    -- Yelena: Good job, you've knocked the base out of commission.
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0606.wav");
-
-    -- Timer for this clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(3.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[10] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Start up the convoy.
-    Retreat(Mission.m_ConvoyScout1, "convoypath");
-    Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1);
-
-    Retreat(Mission.m_ConvoyTug, "convoypath");
-    Follow(Mission.m_ConvoySent1, Mission.m_ConvoyTug);
-    Follow(Mission.m_ConvoySent2, Mission.m_ConvoySent1);
-
-    Mission.m_ConvoyEnroute = true;
-    Mission.m_ConvoyActive = true;
-
-    -- Burns: It looks like we took out that base just in time, we've just picked up the Evil Scion convoy on radar and they are nearing the base!  Move as many forces to the destroyed base as you can, we must take out that convoy. Remember, do not damage the power source.
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0607.wav");
-
-    -- Timer for this clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(16.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[11] = function()
-    if (Mission.m_ConvoyFleeing == false or Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
-
-    -- Yelena: Cooke, the tug is retreating, do not let it get away!!
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0609.wav");
-
-    -- Show Objectives.
-    AddObjectiveOverride("scion0604.otf", "WHITE", 10, true);
-
-    -- Timer for this clip.
-    Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
-
-    -- Advance the mission state...
-    Mission.m_MissionState = Mission.m_MissionState + 1;
-end
-
-Functions[12] = function()
-
-end
+-- =========================
+-- Related Mission Logic
+-- =========================
 
 function YelenaBrain()
     if (Mission.m_UnitDispatcherTime < Mission.m_MissionTime) then
@@ -652,69 +589,6 @@ function YelenaBrain()
     end
 end
 
-function ConvoyBrain()
-    -- If we have a delay, don't run this.
-    if (Mission.m_ConvoyBrainDelayTime > Mission.m_MissionTime) then return end;
-
-    -- Handle the Convoy movement to Braddock's base.
-    if (Mission.m_ConvoyEnroute) then
-        local convoy1Distance = GetDistance(Mission.m_ConvoyScout1, Mission.m_ConvoyTug);
-
-        if (Mission.m_ConvoyEscortTooFar == false and convoy1Distance > 100) then
-            -- Stop the Convoy Scouts if they get too far ahead.
-            Stop(Mission.m_ConvoyScout1);
-            Stop(Mission.m_ConvoyScout2);
-
-            -- Switch these around.
-            Mission.m_ConvoyEscortClose = false;
-            Mission.m_ConvoyEscortTooFar = true;
-        elseif (Mission.m_ConvoyEscortClose == false and convoy1Distance < 90) then
-            -- Move the Scouts down the convoypath again.
-            Retreat(Mission.m_ConvoyScout1, "convoypath");
-            Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1);
-
-            -- Switch these around.
-            Mission.m_ConvoyEscortClose = true;
-            Mission.m_ConvoyEscortTooFar = false;
-        end
-
-        -- Double check the distance between the player and the convoy tug, or the forward scout.
-        for i = 1, _Cooperative.m_TotalPlayerCount do
-            local playerHandle = GetPlayerHandle(i);
-
-            if (GetDistance(playerHandle, Mission.m_ConvoyScout1) < 200 or GetDistance(playerHandle, Mission.m_ConvoyTug) < 200) then
-                -- Have both front scouts attack the nearest player.
-                Attack(Mission.m_ConvoyScout1, playerHandle);
-                Attack(Mission.m_ConvoyScout2, playerHandle);
-
-                -- Tell the Scion tug to retreat out of the map.
-                Retreat(Missison.m_ConvoyTug, "tugretreatpath");
-
-                -- EVIL CONVOY:  Squad alpha here, we have the package. Hey wait a minute, those aren't Braddock's forces!  Destroy them!
-                Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0608.wav");
-
-                -- Timer for this clip.
-                Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
-
-                -- Delay to let the player know that the convoy is fleeing.
-                Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(15);
-
-                -- So we can track if the Tug escapes.
-                Mission.m_ConvoyFleeing = true;
-
-                -- Stop the escort logic.
-                Mission.m_ConvoyEnroute = false;
-            end
-        end
-    elseif (Mission.m_ConvoyFleeing) then
-        -- Use this to track the enemy guards.
-
-        -- Small delay so we don't constantly check the state of the Scion Convoy each turn.
-        Mission.m_ConvoyBrainDelayTime = Mission.m_MissionTime + SecondsToTurns(3);
-    end
-end
-
--- Checks for failure conditions.
 function HandleFailureConditions()
     if (Mission.m_RepairsWarningActive) then
         if (Mission.m_RepairWarningTime >= Mission.m_MissionTime) then return end;

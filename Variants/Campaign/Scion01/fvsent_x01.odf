@@ -1,13 +1,11 @@
 [GameObjectClass]
-classLabel = "fvtank_r"
-unitName = "Yelena"
-maxHealth = 0
+classLabel = "fvsent_x"
+DoBettyAttack = false
 
 [CraftClass]
 
 [HoverCraftClass]
 
 [MorphTankClass]
-unitName = "Yelena"
 
 [DeployableClass]

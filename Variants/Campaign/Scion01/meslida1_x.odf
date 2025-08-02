@@ -1,0 +1,5 @@
+[GameObjectClass]
+classLabel = "meslida1"
+UseCollisionMeshForPathing = 1
+
+[BuildingClass]

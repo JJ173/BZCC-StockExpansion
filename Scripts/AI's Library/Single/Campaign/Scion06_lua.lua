@@ -8,6 +8,7 @@ assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 require("_GlobalVariables")
 require("_HelperFunctions")
 
+local _DispatchClass = require("_DispatchClass")
 local _Cooperative = require("_Cooperative")
 local _Subtitles = require('_Subtitles')
 
@@ -44,6 +45,10 @@ local BaseState = {
 local ConvoyState = {
     SETUP = 1,
     CONVOY_BRAIN = 2,
+}
+
+local YelenaState = {
+    DISPATCH_TURRETS = 1,
 }
 
 local Mission = {
@@ -89,14 +94,12 @@ local Mission = {
 
     m_Nav1 = nil,
 
-    m_YelenaPowerDialogPlayed = false,
-
     m_RepairsWarningActive = false,
     m_RepairsStarted = false,
     m_RepairsComplete = false,
 
-    m_YelenaTurret1Sent = false,
-    m_YelenaTurret2Sent = false,
+    m_YelenaPowerDialogPlayed = false,
+    m_YelenaBrainActive = true,
 
     m_ConvoyEscortClose = false,
     m_ConvoyEscortTooFar = false,
@@ -117,11 +120,14 @@ local Mission = {
     m_RepairWarningTime = 0,
     m_RepairWarningCount = 0,
     m_ConvoyBrainDelayTime = 0,
+    m_YelenaDispatchDelayTime = 0,
+    m_YelenaTurretCount = 0,
 
     m_CurrentPhase = MissionPhase.INTRO,
     m_IntroState = IntroState.SETUP,
     m_BaseState = BaseState.SETUP,
     m_ConvoyState = ConvoyState.SETUP,
+    m_YelenaState = YelenaState.DISPATCH_TURRETS,
 }
 
 -- =========================
@@ -144,7 +150,8 @@ local IntroHandlers = {
         SetTeamNameForStat(7, "Rebel Scions")
 
         for i = 2, 5 do
-            Ally(Mission.m_HostTeam, i);
+            Ally(Mission.m_HostTeam, i)
+            SetTeamColor(i, 0, 127, 255)
         end
 
         Ally(Mission.m_EnemyTeam, 7)
@@ -217,28 +224,38 @@ local IntroHandlers = {
         Mission.m_IntroState = IntroState.REPAIRS_DIALOG_REPAIR_TRUCK
     end,
     [IntroState.REPAIRS_DIALOG_REPAIR_TRUCK] = function()
-        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
         playAudioWithDelay("scion0601a.wav", 4.5)
         Mission.m_IntroState = IntroState.REPAIRS_OBJECTIVES
     end,
     [IntroState.REPAIRS_OBJECTIVES] = function()
-        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end;
+        if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
-        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true);
+        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true)
 
-        local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty];
-        StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4);
+        local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty]
+        StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4)
 
-        local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" };
-        local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" };
+        local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" }
+        local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" }
+        local unit_a_weapon = { "gchain_c", "gshadow_c", "gspstab_c" }
+        local unit_b_weapon = { "gchain_c", "gchain_c", "gshadow_c" }
 
-        local unit_a = BuildObject(unit_a_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_1");
-        local unit_b = BuildObject(unit_b_choice[Mission.m_MissionDifficulty], Mission.m_EnemyTeam, "braddock_script_2");
+        local chosen_unit_a = unit_a_choice[Mission.m_MissionDifficulty]
+        local chosen_unit_b = unit_b_choice[Mission.m_MissionDifficulty]
 
-        Goto(unit_a, "playerbase");
-        Goto(unit_b, "playerbase");
+        local unit_a = BuildObject(chosen_unit_a, Mission.m_EnemyTeam, "braddock_script_1")
+        local unit_b = BuildObject(chosen_unit_b, Mission.m_EnemyTeam, "braddock_script_2")
 
+        GiveWeapon(unit_a, unit_a_weapon[Mission.m_MissionDifficulty])
+        GiveWeapon(unit_b, unit_b_weapon[Mission.m_MissionDifficulty])
+
+        Goto(unit_a, "playerbase")
+        Goto(unit_b, "playerbase")
+
+        Mission.m_RepairWarningTime = Mission.m_MissionTime + SecondsToTurns(chosenTimer / 2)
+        Mission.m_RepairsWarningActive = true
         Mission.m_IntroState = IntroState.TRACK_REPAIRS
     end,
     [IntroState.TRACK_REPAIRS] = function()
@@ -256,6 +273,9 @@ local IntroHandlers = {
             StopCockpitTimer()
             HideCockpitTimer()
 
+            -- Skip the below section if this is done first.
+            Mission.m_RepairsStarted = true
+            Mission.m_RepairsWarningActive = false
             Mission.m_IntroState = IntroState.REPAIRS_COMPLETE
         end
 
@@ -279,7 +299,7 @@ local BaseHandlers = {
     [BaseState.SETUP] = function()
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
-        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true)
+        AddObjectiveOverride("scion0602.otf", "WHITE", 10, true)
         Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "enemybase")
         SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0601"))
         SetObjectiveOn(Mission.m_Nav1)
@@ -341,7 +361,7 @@ local ConvoyHandlers = {
 
             -- Double check the distance between the player and the convoy tug, or the forward scout.
             for i = 1, _Cooperative.m_TotalPlayerCount do
-                local playerHandle = GetPlayerHandle(i);
+                local playerHandle = GetPlayerHandle(i)
 
                 if (GetDistance(playerHandle, Mission.m_ConvoyScout1) < 200 or GetDistance(playerHandle, Mission.m_ConvoyTug) < 200) then
                     Attack(Mission.m_ConvoyScout1, playerHandle)
@@ -351,13 +371,13 @@ local ConvoyHandlers = {
                     playAudioWithDelay("scion0608.wav", 9.5)
 
                     Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(15)
-                    Mission.m_ConvoyFleeing = true;
-                    Mission.m_ConvoyEnroute = false;
+                    Mission.m_ConvoyFleeing = true
+                    Mission.m_ConvoyEnroute = false
                 end
             end
         elseif (Mission.m_ConvoyFleeing) then
             if (not Mission.m_ConvoyFleeingDialogPlayed) then
-                if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end;
+                if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
                 if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
                 AddObjectiveOverride("scion0604.otf", "WHITE", 10, true)
@@ -366,6 +386,53 @@ local ConvoyHandlers = {
             end
         end
     end
+}
+
+-- =========================
+-- CPU Brain Handlers
+-- =========================
+
+local YelenaHandlers = {
+    [YelenaState.DISPATCH_TURRETS] = function()
+        if (Mission.m_YelenaTurret1 ~= nil) then
+            Mission.m_YelenaTurret1:UpdateTurn(Mission.m_MissionTime)
+        end
+        if (Mission.m_YelenaTurret2 ~= nil) then
+            Mission.m_YelenaTurret2:UpdateTurn(Mission.m_MissionTime)
+        end
+
+        if (Mission.m_YelenaDispatchDelayTime >= Mission.m_MissionTime) then return end
+
+        if (Mission.m_YelenaTurret1 ~= nil and Mission.m_YelenaTurret1:IsIdle()) then
+            -- Pick a random path for this turret to move to.
+            local rand = GetRandomFloat(1)
+            local path
+
+            if (rand < 0.5) then
+                path = "yelena_turret_path_1"
+            else
+                path = "yelena_turret_path_3"
+            end
+
+            Mission.m_YelenaTurret1:MoveTo(path)
+        end
+
+        if (Mission.m_YelenaTurret2 ~= nil and Mission.m_YelenaTurret2:IsIdle()) then
+            -- Pick a random path for this turret to move to.
+            local rand = GetRandomFloat(1)
+            local path
+
+            if (rand < 0.5) then
+                path = "yelena_turret_path_2"
+            else
+                path = "yelena_turret_path_4"
+            end
+
+            Mission.m_YelenaTurret2:MoveTo(path)
+        end
+
+        Mission.m_YelenaDispatchDelayTime = Mission.m_MissionTime + SecondsToTurns(5)
+    end,
 }
 
 -- =========================
@@ -427,12 +494,18 @@ function AddObject(h)
         end
     elseif (teamNum == Mission.m_AlliedTeam) then
         if (objClass == "CLASS_TURRETTANK") then
-            if (IsAlive(Mission.m_YelenaTurret1) == false) then
-                Mission.m_YelenaTurret1 = h
-                Mission.m_YelenaTurret1Sent = false
-            elseif (IsAlive(Mission.m_YelenaTurret2) == false) then
-                Mission.m_YelenaTurret2 = h
-                Mission.m_YelenaTurret2Sent = false
+            if (Mission.m_YelenaTurret1 == nil) then
+                Mission.m_YelenaTurret1 = _DispatchClass:New(h, Mission.m_AlliedTeam, 0,
+                    Mission.m_MissionTime + SecondsToTurns(15))
+            elseif (Mission.m_YelenaTurret2 == nil) then
+                Mission.m_YelenaTurret2 = _DispatchClass:New(h, Mission.m_AlliedTeam, 0,
+                    Mission.m_MissionTime + SecondsToTurns(15))
+            end
+
+            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount + 1
+
+            if (Mission.m_YelenaTurretCount >= 2) then
+                SetAIP("scion0603_x.aip", Mission.m_AlliedTeam)
             end
         end
     end
@@ -440,12 +513,19 @@ end
 
 function DeleteObject(h)
     local teamNum = GetTeamNum(h)
+    local objClass = GetClassLabel(h)
 
-    if (teamNum == Mission.m_AlliedTeam) then
-        if (h == Mission.m_YelenaTurret1) then
+    if (teamNum == Mission.m_AlliedTeam and objClass == "CLASS_TURRETTANK") then
+        if (h == Mission.m_YelenaTurret1.DispatchObject) then
             Mission.m_YelenaTurret1 = nil
-        elseif (h == Mission.m_YelenaTurret2) then
+            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount - 1
+        elseif (h == Mission.m_YelenaTurret2.DispatchObject) then
             Mission.m_YelenaTurret2 = nil
+            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount - 1
+        end
+
+        if (Mission.m_YelenaTurretCount <= 2) then
+            SetAIP("scion0602_x.aip", Mission.m_AlliedTeam)
         end
     elseif (teamNum == Mission.m_EnemyTeam) then
         if (h == Mission.m_BraddockTurret1) then
@@ -493,45 +573,46 @@ function Update()
             end
 
             HandleFailureConditions()
-            YelenaBrain()
+
+            if (Mission.m_YelenaBrainActive) then YelenaHandlers[Mission.m_YelenaState]() end
         end
     end
 end
 
 function AddPlayer(id, Team, IsNewPlayer)
-    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0);
+    return _Cooperative.AddPlayer(id, Team, IsNewPlayer, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, false, 0)
 end
 
 function DeletePlayer(id)
-    return _Cooperative.DeletePlayer(id);
+    return _Cooperative.DeletePlayer(id)
 end
 
 function PlayerEjected(DeadObjectHandle)
-    return _Cooperative.PlayerEjected(DeadObjectHandle);
+    return _Cooperative.PlayerEjected(DeadObjectHandle)
 end
 
 function ObjectKilled(DeadObjectHandle, KillersHandle)
-    return _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, Mission.m_PlayerPilotODF);
+    return _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, Mission.m_PlayerPilotODF)
 end
 
 function ObjectSniped(DeadObjectHandle, KillersHandle)
-    return _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, Mission.m_PlayerPilotODF);
+    return _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, Mission.m_PlayerPilotODF)
 end
 
 function PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
-    return _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF);
+    return _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
 end
 
 function PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle);
+    return _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
 end
 
 function RespawnPilot(DeadObjectHandle, Team)
-    return _Cooperative.RespawnPilot(DeadObjectHandle, Team, Mission.m_PlayerPilotODF);
+    return _Cooperative.RespawnPilot(DeadObjectHandle, Team, Mission.m_PlayerPilotODF)
 end
 
 function DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
-    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF);
+    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, Mission.m_PlayerPilotODF)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
@@ -550,110 +631,52 @@ end
 -- Related Mission Logic
 -- =========================
 
-function YelenaBrain()
-    if (Mission.m_UnitDispatcherTime < Mission.m_MissionTime) then
-        if (Mission.m_YelenaTurret1Sent == false) then
-            -- Pick a random path for this turret to move to.
-            local rand = GetRandomFloat(1);
-            local path;
-
-            if (rand < 0.5) then
-                path = "yelena_turret_path_1";
-            else
-                path = "yelena_turret_path_3";
-            end
-
-            Goto(Mission.m_YelenaTurret1, path);
-
-            Mission.m_YelenaTurret1Sent = true;
-        end
-
-        if (Mission.m_YelenaTurret2Sent == false) then
-            -- Pick a random path for this turret to move to.
-            local rand = GetRandomFloat(1);
-            local path;
-
-            if (rand < 0.5) then
-                path = "yelena_turret_path_2";
-            else
-                path = "yelena_turret_path_4";
-            end
-
-            Goto(Mission.m_YelenaTurret2, path);
-
-            Mission.m_YelenaTurret2Sent = true;
-        end
-
-        -- To delay loops.
-        Mission.m_UnitDispatcherTime = Mission.m_MissionTime + SecondsToTurns(1.5);
-    end
-end
-
 function HandleFailureConditions()
     if (Mission.m_RepairsWarningActive) then
-        if (Mission.m_RepairWarningTime >= Mission.m_MissionTime) then return end;
+        if (Mission.m_RepairWarningTime >= Mission.m_MissionTime) then return end
 
         if (Mission.m_RepairWarningCount == 0) then
-            -- Yelena: Those repairs should have been finished by now,  What's going on?
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0603.wav");
-
-            -- Timer for this clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(9.5);
+            playAudioWithDelay("scion0605.wav", 4.5)
         elseif (Mission.m_RepairWarningCount == 1) then
-            -- Yelena: The base STILL is not fully repaired.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0616.wav");
-
-            -- Timer for this clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+            playAudioWithDelay("scion0616.wav", 5.5)
         elseif (Mission.m_RepairWarningCount == 2) then
-            -- Yelena: That's it... I'm pissed now, mission over.
-            Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0617.wav");
-
-            -- Timer for this clip.
-            Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
+            playAudioWithDelay("scion0617.wav", 5.5)
         end
 
-        -- Advance the warning count.
-        Mission.m_RepairWarningCount = Mission.m_RepairWarningCount + 1;
+        Mission.m_RepairWarningCount = Mission.m_RepairWarningCount + 1
 
         if (Mission.m_RepairWarningCount < 3) then
-            -- Add more time for the warning.
-            Mission.m_RepairWarningTime = m_RepairTimeTable[Mission.m_MissionDifficulty] / 4;
+            Mission.m_RepairWarningTime = Mission.m_MissionTime +
+                SecondsToTurns(m_RepairTimeTable[Mission.m_MissionDifficulty] / 4)
         else
-            StopCockpitTimer();
-            HideCockpitTimer();
+            StopCockpitTimer()
+            HideCockpitTimer()
 
-            -- Show Objectives.
-            AddObjectiveOverride("scion0607.otf", "RED", 10, true);
+            AddObjectiveOverride("scion0607.otf", "RED", 10, true)
 
-            -- Fail the mission.
             if (Mission.m_IsCooperativeMode) then
-                NoteGameoverWithCustomMessage("The base wasn't repaired in time.");
-                DoGameover(10);
+                NoteGameoverWithCustomMessage("The base wasn't repaired in time.")
+                DoGameover(10)
             else
-                FailMission(GetTime() + 10, "scion06L1.txt");
+                FailMission(GetTime() + 10, "scion06L1.txt")
             end
 
-            -- Just so we don't loop.
-            Mission.m_MissionOver = true;
+            Mission.m_MissionOver = true
         end
     end
 
     if (Mission.m_ConvoyFleeing) then
         if (GetDistance(Mission.m_ConvoyTug, "tug_end_missison") < 75) then
-            -- Show Objectives.
-            AddObjectiveOverride("scion0604.otf", "RED", 10, true);
+            AddObjectiveOverride("scion0604.otf", "RED", 10, true)
 
-            -- Fail the mission.
             if (Mission.m_IsCooperativeMode) then
-                NoteGameoverWithCustomMessage("The Hauler escaped.");
-                DoGameover(10);
+                NoteGameoverWithCustomMessage("The Hauler escaped.")
+                DoGameover(10)
             else
-                FailMission(GetTime() + 10, "The Hauler escaped.");
+                FailMission(GetTime() + 10, "The Hauler escaped.")
             end
 
-            -- Just so we don't loop.
-            Mission.m_MissionOver = true;
+            Mission.m_MissionOver = true
         end
     end
 end

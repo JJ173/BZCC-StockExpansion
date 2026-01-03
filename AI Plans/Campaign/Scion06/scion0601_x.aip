@@ -14,9 +14,12 @@ UnitIdleSeconds = 999999
 moneyAmount = 3 
 moneyDelay = 2
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan1]
 planType = "Recover"
-planPriority = 150
+planPriority = 300
 serviceUnit = "ibsbay_x"
 unitType1 = "ivscout_x"
 unitType2 = "ivmbike_x"
@@ -24,9 +27,12 @@ unitType3 = "ivtank_x"
 unitType5 = "ivrckt_x"
 unitType6 = "ivatank_x"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan2]
 planType = "Service"
-planPriority = 145
+planPriority = 295
 serviceUnit = "ivserv_x"
 unitType1 = "ibrecy_x"
 unitType2 = "ibfact_x"
@@ -36,155 +42,241 @@ unitType5 = "ibcbun_x"
 unitType6 = "ibsbay_x"
 unitType7 = "ivturr_x"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan3]
 planType = "BuildMinimums"
-planPriority = 140
+planPriority = 290
 buildType1 = "ivscav_x"
 buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "ScavengerCondition"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan4]
 planType = "CollectPool"
-planPriority = 135
+planPriority = 285
 buildIfNoIdle = true
 planCondition = "Lua"
 LuaFunction = "CollectPoolCondition"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
 
 [Plan5] 
 planType = "CollectPool"
-planPriority = 130
+planPriority = 280
 buildIfNoIdle = true
 planCondition = "Lua"
 LuaFunction = "CollectPoolCondition"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan6]
 planType = "CollectField"
-planPriority = 125
+planPriority = 275
 buildIfNoIdle = true
 planCondition = "Lua"
 LuaFunction = "CollectFieldCondition"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan7]
 planType = "BuildMinimums"
-planPriority = 120
+planPriority = 270
 buildType1 = "ivcons_x"
 buildCount1 = 1
 planCondition = "Lua"
 LuaFunction = "ConstructorCondition"
 
+///////////////////////////////////////////
+///////////////////////////////////////////
+
 [Plan8]
 planType = "BuildMinimums"
-planPriority = 115
+planPriority = 265
 buildType1 = "ivserv_x"
 buildCount1 = 3
 planCondition = "Lua"
 LuaFunction = "ServiceTruckCondition"
 
-[Plan9]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan9] // Probe attack. If the player has a Gun Tower, do not attack the base.
+planType = "Attacker"
+planPriority = 260
+targetType1 = "ibfact_x"
+targetType2 = "ivcons_x"
+targetType3 = "ibrecy_x"
+targetType4 = "ibpgen_x"
+attackType1 = "ivscout_x"
+attackType2 = "ivscout_x"
+pickTargetType = 2 // Avoid predictable attacks. Target a random unit from the list.
+maxAttacks = 5
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+planCondition = "Lua"
+LuaFunction = "ProbeAttackCondition"
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan10]
 planType = "BaseBuildMinimums"
-planPriority = 110
+planPriority = 255
 buildType1 = "ibpgen_x"
 buildCount1 = 1
 buildLoc1 = "brad_pgen1"
 
-[Plan10]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan11]
 planType = "BaseBuildMinimums"
-planPriority = 105
+planPriority = 250
 buildType1 = "ibfact_x"
 buildCount1 = 1
 buildLoc1 = "brad_fact"
 buildHeading = 0
 
-[Plan11]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan12]
 planType = "BaseBuildMinimums"
-planPriority = 100
+planPriority = 245
 buildType1 = "ibarmo_x"
 buildCount1 = 1
 buildLoc1 = "brad_armo"
 
-[Plan12]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan13]
 planType = "BaseBuildMinimums"
-planPriority = 95
+planPriority = 240
 buildType1 = "ibcbun_x"
 buildCount1 = 1
 buildLoc1 = "brad_bunk"
 
-[Plan13]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan14]
 planType = "BaseBuildMinimums"
-planPriority = 90
+planPriority = 235
 buildType1 = "ibpgen_x"
 buildCount1 = 1
 buildLoc1 = "brad_pgen2"
 
-[Plan14]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan15]
 planType = "BaseBuildMinimums"
-planPriority = 85
+planPriority = 230
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow1"
 
-[Plan15]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan16]
 planType = "BaseBuildMinimums"
-planPriority = 80
+planPriority = 225
 buildType1 = "ibsbay_x"
 buildCount1 = 1
 buildLoc1 = "brad_sbay"
 
-[Plan16]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan17]
 planType = "BaseBuildMinimums"
-planPriority = 75
+planPriority = 220
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow2"
 
-[Plan17]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan18]
 planType = "BaseBuildMinimums"
-planPriority = 70
+planPriority = 215
 buildType1 = "ibpgen_x"
 buildCount1 = 1
 buildLoc1 = "brad_pgen3"
 
-[Plan18]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan19]
 planType = "BaseBuildMinimums"
-planPriority = 65
+planPriority = 210
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow3"
 
-[Plan19]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan20]
 planType = "BaseBuildMinimums"
-planPriority = 60
+planPriority = 205
 buildType1 = "ibtrain_x"
 buildCount1 = 1
 buildLoc1 = "brad_train"
 
-[Plan20]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan21]
 planType = "BaseBuildMinimums"
-planPriority = 55
+planPriority = 200
 buildType1 = "ibtcen_x"
 buildCount1 = 1
 buildLoc1 = "brad_tech"
 buildHeading = 2
 
-[Plan21]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan22]
 planType = "BaseBuildMinimums"
-planPriority = 50
+planPriority = 195
 buildType1 = "ibbomb_x"
 buildCount1 = 1
 buildLoc1 = "brad_bomb"
 
-[Plan22]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan23]
 planType = "BaseBuildMinimums"
-planPriority = 45
+planPriority = 190
 buildType1 = "ibgtow_x"
 buildCount1 = 1
 buildLoc1 = "brad_gtow4"
 
-[Plan23]
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+[Plan24]
 planType = "BuildMinimums"
-planPriority = 40
+planPriority = 185
 buildType1 = "ivturr_c"
 buildCount1 = 4
 planCondition = "Lua"
 LuaFunction = "TurretCondition"
+
+///////////////////////////////////////////
+///////////////////////////////////////////

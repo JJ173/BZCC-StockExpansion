@@ -97,7 +97,8 @@ local EscortState = {
 
 local PlayerEscortState = {
     ESCORT = 1,
-    FINISH = 2
+    AT_DROPSHIP = 2,
+    FINISH = 3
 }
 
 local RockslideState = {
@@ -215,6 +216,12 @@ local Mission = {
 
     m_YelenaTarget = nil,
 
+    m_Dropship = nil,
+    m_DropshipSentry1 = nil,
+    m_DropshipSentry2 = nil,
+    m_DropshipGuardian1 = nil,
+    m_DropshipGuardian2 = nil,
+
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
@@ -255,6 +262,7 @@ local Mission = {
     m_Escort2Look = false,
     m_EscortRetreat = false,
     m_EscortReturnToBase = false,
+    m_EscortComplete = false,
 
     m_ISDFRoute1Attack = false,
     m_ISDFRoute2Attack = false,
@@ -271,6 +279,9 @@ local Mission = {
     m_AminiMove = false,
 
     m_PlayerEscortTug = false,
+    m_DropshipSpawned = false,
+    m_DropshipSwapped = false,
+    m_DropshipOpen = false,
 
     m_CutsceneAudioClip = nil,
     m_Audioclip = nil,
@@ -295,6 +306,8 @@ local Mission = {
     m_DeltaWarningCount = 0,
     m_ISDFRouteDelay = 0,
     m_AminiGoTime = 0,
+    m_SwapDropshipTime = 0,
+    m_OpenDropshipTime = 0,
 
     m_CurrentPhase = MissionPhase.INTRO,
     m_IntroState = IntroState.SETUP,
@@ -356,6 +369,34 @@ local IntroHandlers = {
         Mission.m_PlayerPilo1 = GetHandle("player_pilo1")
         Mission.m_ShabPilo = GetHandle("shab_pilo")
         Mission.m_OldPlayerTank = GetHandle("player_old_tank")
+        Mission.m_DropshipSentry1 = GetHandle("sentry1")
+        Mission.m_DropshipSentry2 = GetHandle("sentry2")
+        Mission.m_DropshipGuardian1 = GetHandle("guardian1")
+        Mission.m_DropshipGuardian2 = GetHandle("guardian2")
+
+        if (Mission.m_DropshipSentry1) then
+            SetMaxHealth(Mission.m_DropshipSentry1, 0)
+            SetCurHealth(Mission.m_DropshipSentry1, 0)
+            SetCanSnipe(Mission.m_DropshipSentry1, 0)
+        end
+
+        if (Mission.m_DropshipSentry2) then
+            SetMaxHealth(Mission.m_DropshipSentry2, 0)
+            SetCurHealth(Mission.m_DropshipSentry2, 0)
+            SetCanSnipe(Mission.m_DropshipSentry2, 0)
+        end
+
+        if (Mission.m_DropshipGuardian1) then
+            SetMaxHealth(Mission.m_DropshipGuardian1, 0)
+            SetCurHealth(Mission.m_DropshipGuardian1, 0)
+            SetCanSnipe(Mission.m_DropshipGuardian1, 0)
+        end
+
+        if (Mission.m_DropshipGuardian2) then
+            SetMaxHealth(Mission.m_DropshipGuardian2, 0)
+            SetCurHealth(Mission.m_DropshipGuardian2, 0)
+            SetCanSnipe(Mission.m_DropshipGuardian2, 0)
+        end
 
         if (_Cooperative.m_TotalPlayerCount < 4) then
             if (Mission.m_PlayerSentry4) then RemoveObject(Mission.m_PlayerSentry4) end
@@ -465,8 +506,6 @@ local IntroHandlers = {
             SetObjectiveOn(Mission.m_Yelena)
             LookAt(Mission.m_Yelena, Mission.m_MainPlayer)
             SetCanSnipe(Mission.m_Yelena, 0)
-            SetMaxHealth(Mission.m_Yelena, 0)
-            SetCurHealth(Mission.m_Yelena, 0)
             SetSkill(Mission.m_Yelena, 3)
             Patrol(Mission.m_Jak3, "jak_3_4_path")
             Follow(Mission.m_Jak4, Mission.m_Jak3)
@@ -528,6 +567,15 @@ local PowerupHandlers = {
     [PowerupState.WAIT_FOR_MORPH] = function()
         local isPlayerDeployed = false
 
+        if (not Mission.m_MorphObjectivesShown) then
+            if (IsAudioMessageFinished(Mission.m_MorphClip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
+                AddObjectiveOverride("scion0110.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
+                Mission.m_MorphWarningActive = true
+                Mission.m_MorphTookTooLongTime = Mission.m_MissionTime + SecondsToTurns(40)
+                Mission.m_MorphObjectivesShown = true
+            end
+        end
+
         for i = 1, _Cooperative.m_TotalPlayerCount do
             local playerHandle = GetPlayerHandle(i)
             if (IsDeployed(playerHandle)) then
@@ -546,17 +594,6 @@ local PowerupHandlers = {
             end
 
             Mission.m_PowerupState = PowerupState.FINISH
-
-            return
-        end
-
-        if (not Mission.m_MorphObjectivesShown) then
-            if (IsAudioMessageFinished(Mission.m_MorphClip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-                AddObjectiveOverride("scion0110.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
-                Mission.m_MorphWarningActive = true
-                Mission.m_MorphTookTooLongTime = Mission.m_MissionTime + SecondsToTurns(40)
-                Mission.m_MorphObjectivesShown = true
-            end
         end
     end,
     [PowerupState.FINISH] = function()
@@ -599,6 +636,8 @@ local EscortHandlers = {
             Mission.m_DeltaSquad2 = BuildObject("fvscout_x", Mission.m_HostTeam, "escort1b")
             Mission.m_Hauler = BuildObject("fvtug", Mission.m_HostTeam, "tug1")
             Mission.m_PowerCrystal = BuildObject("cotran01", Mission.m_HostTeam, "power")
+            SetCanSnipe(Mission.m_DeltaSquad1, 0)
+            SetCanSnipe(Mission.m_DeltaSquad2, 0)
             Stop(Mission.m_DeltaSquad1)
             Stop(Mission.m_DeltaSquad2)
             Stop(Mission.m_Hauler)
@@ -651,6 +690,7 @@ local EscortHandlers = {
             Retreat(Mission.m_ISDFAmbusher1, "rondevous1")
             Retreat(Mission.m_ISDFAmbusher2, "rondevous1")
             Retreat(Mission.m_ISDFAmbusher3, "rondevous1")
+            Mission.m_EscortComplete = true
             Mission.m_EscortState = EscortState.YELENA_CONFIRM
         end
     end,
@@ -728,7 +768,27 @@ local EscortHandlers = {
 
 local PlayerEscortHandlers = {
     [PlayerEscortState.ESCORT] = function()
+        if (not Mission.m_DropshipSpawned) then
+            Mission.m_Dropship = BuildObject("fvdrop_land", Mission.m_AlliedTeam, "dropship")
+            Mission.m_SwapDropshipTime = Mission.m_MissionTime + SecondsToTurns(15)
+            SetAnimation(Mission.m_Dropship, "land", 1)
+            Mission.m_DropshipSpawned = true
+        elseif (not Mission.m_DropshipSwapped and Mission.m_SwapDropshipTime < Mission.m_MissionTime) then
+            RemoveObject(Mission.m_Dropship)
+            Mission.m_Dropship = BuildObject("fvdrop", Mission.m_AlliedTeam, "dropship")
+            Mission.m_OpenDropshipTime = Mission.m_MissionTime + SecondsToTurns(1)
+            Mission.m_DropshipSwapped = true
+        elseif (not Mission.m_DropshipOpen and Mission.m_OpenDropshipTime < Mission.m_MissionTime) then
+            SetAnimation(Mission.m_Dropship, "deploy", 1)
+            Mission.m_DropshipOpen = true
+        end
+    end,
+    [PlayerEscortState.AT_DROPSHIP] = function()
 
+    end,
+    [PlayerEscortState.FINISH] = function()
+        Mission.m_CurrentPhase = MissionPhase.ROCKSLIDE
+        Mission.m_RockslideState = RockslideState.WAIT_FOR_TRIGGER
     end
 }
 
@@ -743,6 +803,12 @@ local RockslideHandlers = {
             for i = 1, 12 do
                 BuildObject("flshbng" .. i, 0, GetPosition(GetHandle("explode" .. i)))
             end
+
+            local h = GetTug(Mission.m_PowerCrystal)
+            if (h) then
+                Stop(h, 0)
+            end
+
             Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(1.1)
             Mission.m_RockslideState = RockslideState.LANDSLIDE_ANIMATION
             return
@@ -821,10 +887,10 @@ local RockslideHandlers = {
     [RockslideState.AMBUSH] = function()
         if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
 
-        local distCheck1 = GetDistance(Mission.m_ISDFAmbusher1, Mission.m_MainPlayer) < 150
-        local distCheck2 = GetDistance(Mission.m_ISDFAmbusher2, Mission.m_PowerCrystal) < 150
-        local distCheck3 = GetDistance(Mission.m_ISDFAmbusher3, Mission.m_MainPlayer) < 150
-        local distCheck4 = GetDistance(Mission.m_ISDFAmbusher4, Mission.m_PowerCrystal) < 150
+        local distCheck1 = GetDistance(Mission.m_ISDFAmbusher1, Mission.m_MainPlayer) < 250
+        local distCheck2 = GetDistance(Mission.m_ISDFAmbusher2, Mission.m_PowerCrystal) < 250
+        local distCheck3 = GetDistance(Mission.m_ISDFAmbusher3, Mission.m_MainPlayer) < 250
+        local distCheck4 = GetDistance(Mission.m_ISDFAmbusher4, Mission.m_PowerCrystal) < 250
 
         if (not Mission.m_Ambush2Attacking and (distCheck1 or distCheck2 or distCheck3 or distCheck4)) then
             playAudioWithDelay("scion0129.wav", 2.5)
@@ -866,9 +932,13 @@ local RockslideHandlers = {
             Mission.m_ShowRockslideObjective = true
         end
 
-        if (GetDistance(Mission.m_MainPlayer, "trig_rockslide") < 125 and IsPerson(Mission.m_MainPlayer)) then
-            StopAudioMessage(Mission.m_Audioclip);
-            Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1;
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local player = GetPlayerHandle(i)
+            if (player and IsPerson(player) and GetDistance(player, Mission.m_Landslide) < 50) then
+                StopAudioMessage(Mission.m_Audioclip)
+                Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_SETUP
+                return
+            end
         end
     end,
     [RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_SETUP] = function()
@@ -877,6 +947,7 @@ local RockslideHandlers = {
 
         SetIndependent(Mission.m_Amini, 0)
         CameraReady()
+        Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1;
     end,
     [RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1] = function()
         CameraObject(Mission.m_PlayerOnFoot, 0, -1, -3, Mission.m_PlayerOnFoot)
@@ -934,6 +1005,10 @@ local RockslideHandlers = {
         Mission.m_RockslideFinished = true
     end
 }
+
+-- =========================
+-- CPU Brain Handlers
+-- =========================
 
 local YelenaHandlers = {
     [YelenaState.PATROL] = function()
@@ -999,6 +1074,7 @@ function InitialSetup()
     Mission.m_IsCooperativeMode = IsNetworkOn()
     SetAutoGroupUnits(false)
     WantBotKillMessages()
+
     PreloadODF("fvtug")
     PreloadODF("fvsent_x")
     PreloadODF("fspilo_x")
@@ -1011,6 +1087,9 @@ function InitialSetup()
     PreloadODF("ivrckt_x")
     PreloadODF("ivatank_x")
     PreloadODF("cotran01")
+    PreloadODF("fvdrop_land")
+    PreloadODF("fvdrop")
+
     for i = 1, 12 do
         PreloadODF("flshbng" .. i)
     end

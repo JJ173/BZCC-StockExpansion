@@ -6,6 +6,8 @@ PilotConfig = "fspilo_x"
 OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
+CanAIPForceIdle = false // AIPs should not be forcing any units to idle if they are moved by script for example. - AI_Unit
+DoIdleDispatch = false // Don't bother with the AIP dispatcher. We can make our own. - AI_Unit
 
 [HoverCraftClass]
 

@@ -68,6 +68,23 @@ function ServiceTruckCondition(team, time)
     end
 end
 
+function ProbeAttackCondition(team, time)
+    -- Special case: If the player has an ISDF Gun Tower, do not attack the base. 
+    -- We need to exclude Yelena's base from these checks.
+    -- TODO: Add a custom provide for ISDF / Scion Gun Towers?
+    local gunTowerExists = AIPUtil.CountUnits(team, "ibgtow_x", 'enemy', true) > 0;
+
+    if (gunTowerExists) then
+        return false, "Braddock is not attacking the base...";
+    end
+
+    if (not DoesRecyclerExist(team, time)) then
+        return false, "Braddock is not attacking the base...";
+    end
+
+    return true, "Braddock is attacking the base...";
+end
+
 function DoesRecyclerExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_RECYCLERBUILDING", 'sameteam', true) > 0;
 end

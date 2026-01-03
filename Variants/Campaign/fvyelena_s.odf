@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvtank_r"
+classLabel = "fvsent_r"
 unitName = "Yelena"
 maxHealth = 0
 

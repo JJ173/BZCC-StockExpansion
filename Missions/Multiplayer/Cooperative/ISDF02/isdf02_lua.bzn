@@ -314,7 +314,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 21b
 team [1] =
@@ -418,7 +418,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 285
 team [1] =
@@ -522,7 +522,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 28f
 team [1] =
@@ -626,7 +626,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 292
 team [1] =

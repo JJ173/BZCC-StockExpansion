@@ -11321,7 +11321,7 @@ false
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 543
 team [1] =
@@ -11425,7 +11425,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 547
 team [1] =
@@ -11529,7 +11529,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 54b
 team [1] =
@@ -11633,7 +11633,7 @@ true
 independence [1] =
 1
 [GameObject]
-objClass = ivplysct
+objClass = ivplysct_x
 seqno [1] =
 54f
 team [1] =

@@ -1015,7 +1015,7 @@ Functions[24] = function()
 
             -- Have the Haulers go for the crates.
             Retreat(Mission.m_Hauler1, "haulerin_path1");
-            Retreat(Mission.m_Hauler2, "haulerin_path2");
+            Retreat(Mission.m_Hauler2, "haulerin_path1");
 
             -- So we can check the reset logic in the Scion Brain function.
             Mission.m_HaulersDead = false;
@@ -1056,7 +1056,7 @@ Functions[24] = function()
                     Mission.m_ArmorySequence = Mission.m_ArmorySequence + 1;
                 end
             elseif (Mission.m_ArmorySequence == 2) then
-                if (IsSelected(Mission.m_Armory)) then
+                if (IsSelected(Mission.m_Armory) or (Mission.m_IsCooperativeMode)) then
                     -- Stop Shabayev from chatting.
                     if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
                         -- Stop Shabayev from talking.

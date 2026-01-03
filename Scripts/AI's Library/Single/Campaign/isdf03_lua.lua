@@ -168,6 +168,12 @@ function InitialSetup()
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
+
+    PreloadODF("fvtug");
+    PreloadODF("ivscout");
+    PreloadODF("fvscout");
+    PreloadODF("fvsent");
+    PreloadODF("fvtank");
 end
 
 function Save()
@@ -1255,7 +1261,9 @@ function ScionBrain()
             -- This checks to see if the Hauler has cargo.
             if (HasCargo(Mission.m_Hauler1)) then
                 -- Tell it to retreat.
-                if (GetDistance(Mission.m_Hauler1, "hauler_check1") > GetDistance(Mission.m_Hauler1, "hauler_check2")) then
+                if (GetDistance(Mission.m_Hauler1, "hauler_check1") < GetDistance(Mission.m_Hauler1, "hauler_check2")) then
+                    Retreat(Mission.m_Hauler1, "haulerout_path1");
+                elseif (GetDistance(Mission.m_Hauler1, "hauler_check2") < GetDistance(Mission.m_Hauler1, "final_check")) then
                     Retreat(Mission.m_Hauler1, "haulerout_path2");
                 else
                     Retreat(Mission.m_Hauler1, "final_check");
@@ -1284,7 +1292,9 @@ function ScionBrain()
             -- This checks to see if the Hauler has cargo.
             if (HasCargo(Mission.m_Hauler2)) then
                 -- Tell it to retreat.
-                if (GetDistance(Mission.m_Hauler2, "hauler_check1") > GetDistance(Mission.m_Hauler2, "hauler_check2")) then
+                if (GetDistance(Mission.m_Hauler2, "hauler_check1") < GetDistance(Mission.m_Hauler2, "hauler_check2")) then
+                    Retreat(Mission.m_Hauler2, "haulerout_path1");
+                elseif (GetDistance(Mission.m_Hauler2, "hauler_check2") < GetDistance(Mission.m_Hauler2, "final_check")) then
                     Retreat(Mission.m_Hauler2, "haulerout_path2");
                 else
                     Retreat(Mission.m_Hauler2, "final_check");

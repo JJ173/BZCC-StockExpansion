@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "aprepa"
+scrapCost = 0
+
+[green]
+
+[PowerUpClass]
+
+[HealthPowerupClass]

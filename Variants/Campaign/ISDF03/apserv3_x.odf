@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "apserv"
+scrapCost = 0
+
+[blue]
+
+[PowerUpClass]
+
+[ServicePowerupClass]

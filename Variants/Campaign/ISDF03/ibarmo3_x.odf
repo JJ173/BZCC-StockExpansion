@@ -1,0 +1,99 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+buildLabel = "Supplies"
+buildItem1 = "aprepa3_x"
+buildItem2 = "apammo3_x"
+buildItem3 = "apserv3_x"
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup2]
+buildLabel = "Guns"
+buildItem1 = "apmini3"
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup3]
+buildLabel = "Rockets"
+buildItem1 = "apshd3"
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup4]
+buildLabel = "Mortars"
+buildItem1 = "apmort3"
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup5]
+buildLabel = ""
+buildItem1 = ""
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup6]
+buildLabel = ""
+buildItem1 = ""
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[ArmoryGroup7]
+buildLabel = ""
+buildItem1 = ""
+buildItem2 = ""
+buildItem3 = ""
+buildItem4 = ""
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""

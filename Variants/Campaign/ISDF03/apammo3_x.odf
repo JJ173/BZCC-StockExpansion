@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "apammo"
+scrapCost = 0
+
+[blue]
+
+[PowerUpClass]
+
+[AmmoPowerupClass]

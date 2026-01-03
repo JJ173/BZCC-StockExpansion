@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvtank"
+classLabel = "fvtank_vsr"
 PilotConfig = "fspilo_x"
 
 aiName = "AttachWingman"

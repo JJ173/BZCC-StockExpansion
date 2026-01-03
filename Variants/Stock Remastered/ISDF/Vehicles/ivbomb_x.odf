@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivbomb"
+classLabel = "ivbomb_vsr"
 PilotConfig = "ispilo_x"
 
 [CraftClass]

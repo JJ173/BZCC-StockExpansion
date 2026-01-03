@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivatank"
+classLabel = "ivatank_vsr"
 PilotConfig = "ispilo_x"
 
 weaponName1 = "gplasma_ax"

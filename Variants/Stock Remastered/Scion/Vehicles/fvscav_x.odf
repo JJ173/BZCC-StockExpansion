@@ -3,7 +3,7 @@
 // to the VSR team (Feared_1, GeneralBlackDragon).
 
 [GameObjectClass]
-classLabel = "fvscav"
+classLabel = "fvscav_vsr"
 PilotConfig = "fspilo_x"
 mass = 40000.0
 

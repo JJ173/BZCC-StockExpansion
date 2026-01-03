@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivtank"
+classLabel = "ivtank_vsr"
 PilotConfig = "ispilo_x"
 
 unitName = "Sabre"

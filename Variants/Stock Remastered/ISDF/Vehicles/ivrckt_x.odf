@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivrckt"
+classLabel = "ivrckt_vsr"
 PilotConfig = "ispilo_x"
 
 aiName = "AssaultTankProcess"

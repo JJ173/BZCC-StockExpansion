@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvarch"
+classLabel = "fvarch_vsr"
 PilotConfig = "fspilo_x"
 
 [CraftClass]

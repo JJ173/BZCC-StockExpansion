@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivscout"
+classLabel = "ivscout_vsr"
 PilotConfig = "ispilo_x"
 
 lightName2 = "spotblue2"

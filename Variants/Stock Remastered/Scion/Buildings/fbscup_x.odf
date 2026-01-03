@@ -1,6 +1,6 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
-classLabel = "fbscup"
+classLabel = "fbscup_vsr"
 unitName = "Extractor II"
 
 [BuildingClass]

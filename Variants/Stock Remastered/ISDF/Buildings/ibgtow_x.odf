@@ -1,6 +1,6 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
-classLabel = "ibgtow"
+classLabel = "ibgtow_vsr"
 
 weaponName1 = "gtower_x"
 weaponName2 = "gtower_x"

@@ -3,7 +3,7 @@
 // to the VSR team (Feared_1, GeneralBlackDragon).
 
 [GameObjectClass]
-classLabel = "ivscav"
+classLabel = "ivscav_vsr"
 PilotConfig = "ispilo_x"
 mass = 40000.0
 

@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvrecy"
+classLabel = "fvrecy_vsr"
 
 // Don't give units to the commander.
 StayWithOwner = true

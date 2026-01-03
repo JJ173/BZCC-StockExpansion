@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivcons"
+classLabel = "ivcons_vsr"
 PilotConfig = "ispilo_x"
 
 // Don't give units to the commander.

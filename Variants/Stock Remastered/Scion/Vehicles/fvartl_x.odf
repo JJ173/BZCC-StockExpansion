@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "fvartl"
+classLabel = "fvartl_vsr"
 PilotConfig = "fspilo_x"
 
 [CraftClass]

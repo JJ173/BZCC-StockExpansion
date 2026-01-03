@@ -1,5 +1,5 @@
 [GameObjectClass]
-classLabel = "ivmbike"
+classLabel = "ivmbike_vsr"
 PilotConfig = "ispilo_x"
 
 [CraftClass]

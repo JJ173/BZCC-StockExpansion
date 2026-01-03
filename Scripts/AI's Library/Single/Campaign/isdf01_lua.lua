@@ -394,7 +394,7 @@ Functions[1] = function()
     StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
     -- If there's only one player, remove the third dropship.
-    if (Mission.m_TotalPlayerCount == 1) then
+    if (_Cooperative.m_TotalPlayerCount == 1) then
         RemoveObject(Mission.m_Condor3);
     end
 

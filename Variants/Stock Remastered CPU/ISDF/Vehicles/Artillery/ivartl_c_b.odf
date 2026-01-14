@@ -1,7 +1,6 @@
 [GameObjectClass]
 classLabel = "ivartl_gh_b"
 
-scrapValue = 28 // Scrap value for the CPU is reduced by half so it drops less loose.
 scrapCost = 53 // Original Scrap Cost (95) / 2 = 52.5, round up to 53.
 
 /////// PROVIDES ///////////////////

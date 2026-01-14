@@ -1,6 +1,6 @@
 [GameObjectClass]
 TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
-classLabel = "ibtrain_vsr"
+classLabel = "ibtrain"
 
 isSingle = 0
 

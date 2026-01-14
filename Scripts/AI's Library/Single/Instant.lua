@@ -13,14 +13,23 @@ require("_Skins");
 -- Required AI Command Vars.
 require("_AICmd");
 
--- Models
+-- Controllers.
 local _AIController = require("_AIController");
+local _AnimalController = require("_AnimalController");
+
+-- Database.
+local _BZCCDatabase = require("_BZCCDatabase");
+
+-- Models
 local _Pool = require("_Pool");
 local _Condor = require("_Condor");
 local _Portal = require("_Portal");
 
 -- Subtitles.
 local _Subtitles = require('_Subtitles');
+
+-- Voice Manager.
+local _VoiceManager = require('_VoiceManager');
 
 local _Session = {
     m_GameTPS = 20,
@@ -43,6 +52,10 @@ local _Session = {
     m_CompForce = 0,
     m_Difficulty = 0,
 
+    m_CPUScrapDelay = 0,
+    m_CPUScrapAmount = 0,
+    m_NextCPUScrapTime = 0,
+
     m_IntroForcePlayerTeleportDelay = 0,
     m_IntroState = 1,
     m_IntroDelay = 0,
@@ -60,6 +73,7 @@ local _Session = {
     m_IntroTurret2Teleported = false,
 
     m_CustomAIPStr = nil,
+    m_MapName = nil,
 
     m_EnemyRecycler = nil,
     m_Recycler = nil,
@@ -108,8 +122,10 @@ local _Session = {
     m_IntroCutsceneEnabled = false,
     m_AICommanderEnabled = false,
     m_RTSModeEnabled = false,
+    m_WildlifeEnabled = false,
 
     m_AIController = nil,
+    m_AnimalController = nil,
 
     m_Pools = {},
 
@@ -152,7 +168,10 @@ local PreloadODFs = {
     "fbhangar",
     "fbportb_ARK",
     "fbstro_ARK",
-    "fbark2holo"
+    "fbark2holo",
+    "bcrhino",
+    "mcjak01",
+    "mcwing01"
 }
 
 -- Audio to Preload.
@@ -274,27 +293,6 @@ local ScionBaseLayout =
     -- { "fbrspir_c",  "F_Field_RocketTower_3" }
 }
 
--- Planet assortment for different map names.
-local MireMaps = {
-    "bridges.trn",
-    "mpicanyons.trn",
-    "iacirclebzcc.trn",
-    "iadustbzcc.trn",
-    "iaentrapbzcc.trn",
-    "iafirebzcc.trn",
-    "iafortbzcc.trn",
-    "iaghzonebzcc.trn"
-}
-
-local BaneMaps = {
-    "dunesi.trn",
-    "chill.trn",
-    "ground4.trn",
-    "ground0.trn",
-    "MPIIsland.trn",
-    "sea_battle.trn"
-}
-
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -321,14 +319,20 @@ function InitialSetup()
 end
 
 function Save()
-    return _Session, _AIController:Save();
+    return _Session,
+        _Session.m_AIController:Save(),
+        _Session.m_AnimalController:Save();
 end
 
-function Load(Session, AIController)
+function Load(Session, AIController, AnimalController)
     _Session = Session;
 
     if (_Session.m_AIController ~= nil) then
         _Session.m_AIController:Load(AIController);
+    end
+
+    if (_Session.m_AnimalController ~= nil) then
+        _Session.m_AnimalController:Load(AnimalController);
     end
 end
 
@@ -350,10 +354,9 @@ function AddObject(handle)
         end
     end
 
-    -- Max out skills.
-    SetSkill(handle, 3);
-
     if (teamNum == _Session.m_CompTeam) then
+        SetSkill(handle, _Session.m_Difficulty);
+
         if (isRecyclerVehicle) then
             _Session.m_EnemyRecycler = handle;
         elseif (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm" or objCfg == _Session.m_CPUTeamRace .. "bport_xm") then
@@ -365,6 +368,9 @@ function AddObject(handle)
             _Session.m_AIController:AddObject(handle, classLabel, objCfg, objBase, _Session.m_TurnCounter);
         end
     elseif (teamNum == _Session.m_StratTeam) then
+        -- Max out skills.
+        SetSkill(handle, 3);
+
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle;
         elseif (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm" or objCfg == _Session.m_HumanTeamRace .. "bport_xm") then
@@ -373,7 +379,8 @@ function AddObject(handle)
             local dropshipRequestItem =
             {
                 ItemHandle = handle,
-                TimeToDelete = _Session.m_TurnCounter + SecondsToTurns(600),
+                TimeToDelete = _Session.m_TurnCounter +
+                    SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]),
             };
 
             _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
@@ -444,13 +451,22 @@ function Start()
     _Session.m_CompTeam = 6;
     _Session.m_StratTeam = 1;
 
-    _Session.m_CanRespawn = IFace_GetInteger("options.instant.bool0");
-    _Session.m_IntroCutsceneEnabled = IFace_GetInteger("options.instant.bool1");
-    _Session.m_RTSModeEnabled = IFace_GetInteger("options.instant.bool3");
+    _Session.m_CanRespawn = IFace_GetInteger(_BZCCDatabase.ShellVariables.CAN_RESPAWN);
+    _Session.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED);
+    _Session.m_RTSModeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.RTS_MODE_ENABLED);
+    _Session.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED);
 
-    _Session.m_CPUTeamRace = string.char(IFace_GetInteger("options.instant.hisrace"));
-    _Session.m_HumanTeamRace = string.char(IFace_GetInteger("options.instant.myrace"));
-    _Session.m_Difficulty = GetInstantDifficulty();
+    _Session.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE));
+    _Session.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE));
+    _Session.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1;
+
+    if (_Session.m_Difficulty == DIFFICULTY_MEDIUM) then
+        _Session.m_CPUScrapDelay = 2;
+        _Session.m_CPUScrapAmount = 1;
+    elseif (_Session.m_Difficulty == DIFFICULTY_HARD) then
+        _Session.m_CPUScrapDelay = 1;
+        _Session.m_CPUScrapAmount = 2;
+    end
 end
 
 function Update()
@@ -494,6 +510,9 @@ function Update()
 
         return;
     end
+
+    -- Most important, get the map name.
+    _Session.m_MapName = GetMapTRNFilename();
 
     -- Subtitles.
     _Subtitles.Run();
@@ -542,6 +561,31 @@ function Update()
         -- Setup the AI Controller.
         _Session.m_AIController:Setup(_Session.m_CompTeam);
 
+        -- Setup the animal herd controller.
+        if (_Session.m_WildlifeEnabled == 1) then
+            -- If we're a Mire map, set up some birds and Jaks with no special behaviour.
+            if (FindInTable(_BZCCDatabase.MireMaps, _Session.m_MapName)) then
+                _Session.m_AnimalController = _AnimalController:New();
+                _Session.m_AnimalController:SetupMireMapHerds();
+            else
+                -- Determine which ODFs to use for the mother and baby animals.
+                local motherODF = 'bcrhino';
+                local babyODF = 'bcrhino';
+
+                -- Only use Rhinos for Bane maps, except for Dunes, that's a special case.
+                if (_Session.m_MapName == "dunesi.trn") then
+                    motherODF = motherODF .. "_s";
+                    babyODF = babyODF .. "_s_b";
+                elseif (FindInTable(_BZCCDatabase.BaneMaps, _Session.m_MapName)) then
+                    motherODF = motherODF .. "_x";
+                    babyODF = babyODF .. "_x_b";
+                end
+
+                _Session.m_AnimalController = _AnimalController:New();
+                _Session.m_AnimalController:SetupMapHerds(motherODF, babyODF);
+            end
+        end
+
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1");
         _Session.m_IntroShip2 = GetHandle("intro_drop_2");
@@ -578,6 +622,36 @@ function Update()
                 GetPositionNear(recPos, 40.0, 60.0));
             BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
                 GetPositionNear(recPos, 40.0, 60.0));
+
+            -- Give reinforcements to the player based on difficulty.
+            if (_Session.m_Difficulty < DIFFICULTY_HARD) then
+                local tank1 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vtank_x", "*vtank",
+                    GetPositionNear(recPos, 10, 10));
+                local tank2 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vtank_x", "*vtank",
+                    GetPositionNear(recPos, 10, 10));
+
+                SetRandomHeadingAngle(tank1);
+                SetRandomHeadingAngle(tank2);
+                SetBestGroup(tank1);
+                SetBestGroup(tank2);
+
+                if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
+                    if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
+                        GiveWeapon(tank1, "gspstab_c");
+                        GiveWeapon(tank2, "gspstab_c");
+                    elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
+                        GiveWeapon(tank1, "garc_c");
+                        GiveWeapon(tank2, "garc_c");
+                        GiveWeapon(tank1, "gabsorb");
+                        GiveWeapon(tank2, "gabsorb");
+                    end
+
+                    local truck1 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vserv_x",
+                        "*vserv", GetPositionNear(recPos, 10, 10));
+                    SetRandomHeadingAngle(truck1);
+                    SetBestGroup(truck1);
+                end
+            end
 
             BuildCarriers();
 
@@ -678,6 +752,10 @@ function Update()
         _Session.m_AIController:Run(_Session.m_TurnCounter);
     end
 
+    if (_Session.m_AnimalController ~= nil) then
+        _Session.m_AnimalController:Run(_Session.m_TurnCounter);
+    end
+
     if (_Session.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions();
@@ -719,6 +797,14 @@ function Update()
                         _Session.m_PlayerPortal = nil;
                     end
                 end
+            end
+        end
+
+        -- Start running the scrap cheat for the CPU.
+        if (_Session.m_Difficulty >= DIFFICULTY_MEDIUM) then
+            if (_Session.m_NextCPUScrapTime <= _Session.m_TurnCounter) then
+                _Session.m_NextCPUScrapTime = _Session.m_TurnCounter + SecondsToTurns(_Session.m_CPUScrapDelay);
+                AddScrap(_Session.m_CompTeam, _Session.m_CPUScrapAmount);
             end
         end
     end
@@ -778,14 +864,18 @@ function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
+    if (GetClassSig(VictimHandle) == "CLASS_ID_ANIMAL") then
+        _Session.m_AnimalController:AnimalShot(_Session.m_TurnCounter, VictimHandle, ShooterHandle);
+    end
+
     if (OrdnanceTeam ~= _Session.m_CompTeam) then
         if (GetTeamNum(VictimHandle) == _Session.m_CompTeam) then
             local objClass = GetClassLabel(VictimHandle);
 
             if (objClass == "CLASS_TURRETTANK") then
-                _AIController:TurretShot(VictimHandle, _Session.m_TurnCounter);
+                _Session.m_AIController:TurretShot(VictimHandle, _Session.m_TurnCounter);
             elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
-                _AIController:ScavengerShot(VictimHandle);
+                _Session.m_AIController:ScavengerShot(VictimHandle);
             end
         end
     end
@@ -919,7 +1009,7 @@ end
 ISDFIntroFunctions[1] = function()
     RemoveScionIntroUnits();
 
-    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+    SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255));
     StartEarthQuake(5);
 
     _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
@@ -976,11 +1066,31 @@ ISDFIntroFunctions[6] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
         SetAnimation(_Session.m_IntroShip1, "deploy", 1);
 
-        local dropship2Vector = GetTransform(_Session.m_IntroShip2);
-
-        BuildPlayerRecycler(dropship2Vector);
-
+        BuildPlayerRecycler(GetTransform(_Session.m_IntroShip2));
         SetPosition(_Session.m_Recycler, GetPosition("Recycler"));
+
+        -- Give reinforcements to the player based on difficulty.
+        if (_Session.m_Difficulty < DIFFICULTY_HARD) then
+            local recyclerPos = GetPosition(_Session.m_Recycler);
+
+            local tank1 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+            local tank2 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+
+            SetBestGroup(tank1);
+            SetBestGroup(tank2);
+
+            Defend2(tank1, _Session.m_Recycler, 0);
+            Defend2(tank2, _Session.m_Recycler, 0);
+
+            if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
+                GiveWeapon(tank1, "gspstab_c");
+                GiveWeapon(tank2, "gspstab_c");
+
+                local truck1 = BuildObject("ivserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+                SetBestGroup(truck1);
+                Follow(truck1, _Session.m_Recycler, 0);
+            end
+        end
 
         _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5);
 
@@ -1011,8 +1121,8 @@ end
 
 ISDFIntroFunctions[9] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        SetGroup(_Session.m_IntroTurret1, 1);
-        SetGroup(_Session.m_IntroTurret2, 1);
+        SetBestGroup(_Session.m_IntroTurret1);
+        SetBestGroup(_Session.m_IntroTurret2);
         Defend(_Session.m_IntroTurret1, 0);
         Defend(_Session.m_IntroTurret2, 0);
 
@@ -1086,11 +1196,9 @@ end
 
 ScionIntroFunctions[4] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        local mapName = GetMapTRNFilename();
-
-        if (FindInTable(MireMaps, mapName)) then
+        if (FindInTable(_BZCCDatabase.MireMaps, _Session.m_MapName)) then
             _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav");
-        elseif (FindInTable(BaneMaps, mapName)) then
+        elseif (FindInTable(_BZCCDatabase.BaneMaps, _Session.m_MapName)) then
             _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav");
         end
 
@@ -1145,6 +1253,28 @@ ScionIntroFunctions[9] = function()
         _Session.m_PlayerRecycler = TeleportIn(recyOdf, _Session.m_StratTeam, "Recycler");
         SetBestGroup(_Session.m_PlayerRecycler);
         SetScrap(_Session.m_StratTeam, 40);
+
+        -- Give reinforcements to the player based on difficulty.
+        if (_Session.m_Difficulty < DIFFICULTY_HARD) then
+            local recyclerPos = GetPosition(_Session.m_Recycler);
+
+            local tank1 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+            local tank2 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+
+            SetBestGroup(tank1);
+            SetBestGroup(tank2);
+
+            if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
+                GiveWeapon(tank1, "garc_c");
+                GiveWeapon(tank2, "garc_c");
+                GiveWeapon(tank1, "gabsorb");
+                GiveWeapon(tank2, "gabsorb");
+
+                local truck1 = BuildObject("fvserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+                SetBestGroup(truck1);
+                SetRandomHeadingAngle(truck1);
+            end
+        end
 
         _Session.m_IntroMatriarchTeleported = true;
     end
@@ -1208,7 +1338,7 @@ function CheckIntroEnemiesKilled()
         for i = 1, _Session.m_Difficulty + 1 do
             local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i);
 
-            SetSkill(enemy, 3);
+            SetSkill(enemy, _Session.m_Difficulty + 1);
 
             if (i == 1) then
                 _Session.m_IntroEnemy1 = enemy;

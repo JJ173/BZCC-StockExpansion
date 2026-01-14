@@ -20,10 +20,6 @@ UnitIdleSeconds = 999999
 BomberIdleSeconds = 60
 CraftTeamIsPilotTeam = true
 
-[Cheat]
-moneyAmount = 2
-moneyDelay = 1
-
 [Plan1]
 planType = "Service"
 planPriority = 1000

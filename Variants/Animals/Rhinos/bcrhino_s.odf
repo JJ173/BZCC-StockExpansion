@@ -1,7 +1,6 @@
 [GameObjectClass]
-classLabel = "bcrhino"
+classLabel = "bcrhino_x"
 geometryName = "sRhino_skel.fbx"
-
 unitName = "Sand Rhino"
 
 [CraftClass]

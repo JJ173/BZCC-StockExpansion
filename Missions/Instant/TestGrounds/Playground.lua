@@ -9,6 +9,13 @@ function Start()
 
     _Discord:Start(mode, mapTrn)
     DiscordStarted = true
+
+    -- Spawn a Rhino and set it as the player for testing.
+    local scout = BuildObject("ivscout", 1, "Recycler")
+    SetAsUser(scout, 1)
+
+    local rhino = BuildObject("bcrhino_s_attack", 2, GetPositionNear("Recycler", 40, 60))
+    Attack(rhino, scout)
 end
 
 function Update()

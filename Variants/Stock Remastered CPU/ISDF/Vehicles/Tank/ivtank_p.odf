@@ -1,5 +1,4 @@
 [GameObjectClass]
-baseName = "Patrol"
 classLabel = "ivtank_c"
 
 buildTime = 5 // Halved to stop these units from taking up too much time when being built.
@@ -8,6 +7,10 @@ scrapCost = 0 // Original Scrap Cost (55).
 unitName = "Patrol"
 
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "Patrol"
+////////////////////////////////////
 
 [CraftClass]
 CanAIPForceIdle = false

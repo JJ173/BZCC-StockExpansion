@@ -1,13 +1,7 @@
--- Return this to whatever file calls it.
 AssaultUnit =
 {
-    -- Handle for generic use.
     Handle = 0,
-
-    -- Checks to see if this unit already has a unit defending it.
     DefenderHandle = 0,
-
-    -- Checks to see if this unit already has a unit servicing it.
     HealerHandle = 0,
 }
 

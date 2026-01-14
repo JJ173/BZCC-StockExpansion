@@ -2,5 +2,6 @@
 classLabel = "bcrhino"
 
 [CraftClass]
+LandAnimalTCrowdedDist = 0.0
 
 [LandCreature]

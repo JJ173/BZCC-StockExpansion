@@ -8,6 +8,11 @@ DPID_UNKNOWN = 0xFFFFFFFF
 RACE_SCION = 102
 RACE_ISDF = 105
 
+-- Difficulty Levels
+DIFFICULTY_EASY = 1
+DIFFICULTY_MEDIUM = 2
+DIFFICULTY_HARD = 3
+
 -- AIPs (Lua index starts at 1, so we have to adjust these accordingly.)
 AIPType0 = 0;
 AIPType1 = 1;

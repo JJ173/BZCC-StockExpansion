@@ -16,6 +16,10 @@ ownsTerrain = false
 categoryTypeOverride = 5
 useCollisionMeshForPathing = true
 
+/////// REIMAGINED  ////////////////
+AIUnitType = "Carrier"
+////////////////////////////////////
+
 /////// REQUIREMENTS ///////////////
 requireCount = 0
 ////////////////////////////////////

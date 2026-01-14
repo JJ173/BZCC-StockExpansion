@@ -10,7 +10,7 @@ function _VoiceManager.SwitchVehicleVoices(handle, pilotHandle)
     local handleRace = GetRace(handle);
 
     -- First we need to check if the pilot race is the same as the craft race.
-    local odfName;
+    local odfName = '';
 
     if (pilotRace == handleRace) then
         -- Crack open the current ODF that the pilot got into.

@@ -19,10 +19,6 @@ ScavIdleSeconds = 20
 UnitIdleSeconds = 999999
 CraftTeamIsPilotTeam = true
 
-[Cheat]
-moneyAmount = 2
-moneyDelay = 1
-
 [Plan1]
 planType = "Service"
 planPriority = 1000
@@ -208,7 +204,6 @@ targetType1 = "VIRTUAL_CLASS_TURRET"
 targetType2 = "VIRTUAL_CLASS_GUNTOWER"
 attackType1 = "fvarch_c"
 attackType2 = "fvarch_c"
-attackType3 = "fvarch_c"
 LuaFunction = "LancerAttackCondition"
 maxAttacks = 5
 AttackAnything = true

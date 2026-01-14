@@ -1,7 +1,6 @@
 [GameObjectClass]
 classLabel = "fvburn_gh"
 
-scrapValue = 20 // Scrap value for the CPU is reduced by half so it drops less loose.
 scrapCost = 50 // Scrap cost is reduced by 50%.
 
 /////// PROVIDES ///////////////////

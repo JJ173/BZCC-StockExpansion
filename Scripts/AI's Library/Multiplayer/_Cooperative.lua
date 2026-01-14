@@ -1,3 +1,5 @@
+local _Multiplayer = require("_Multiplayer")
+
 _Cooperative =
 {
     m_TotalPlayerCount = 0,

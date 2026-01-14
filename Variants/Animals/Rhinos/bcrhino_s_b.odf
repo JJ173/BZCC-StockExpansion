@@ -1,8 +1,8 @@
 [GameObjectClass]
-classLabel = "bcrhino"
+classLabel = "bcrhino_x"
 
 geometryName = "sRhino_skel.fbx"
-geometryScale = 0.45
+geometryScale = 0.35
 
 animCount = 6
 

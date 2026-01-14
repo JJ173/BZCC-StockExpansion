@@ -23,9 +23,9 @@ true
 objAddr = 00000001
 transform [1] =
   right.x [1] =
--9.99994576e-01
+-9.99994636e-01
   right.y [1] =
--8.53559534e-09
+-8.53565396e-09
   right.z [1] =
 1.49662292e-03
   up.x [1] =
@@ -39,7 +39,7 @@ transform [1] =
   front.y [1] =
 -1.75610927e-04
   front.z [1] =
--9.99990225e-01
+-9.99990284e-01
   posit.x [1] =
 -6.38584404e+01
   posit.y [1] =
@@ -61,17 +61,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-5.72449658e+03
+4.31408984e+03
  mass_inv [1] =
-1.74687855e-04
+2.31798607e-04
  v_mag [1] =
 4.14947681e-06
  v_mag_inv [1] =
 2.40994234e+05
  I [1] =
-3.92424258e+04
+2.95738418e+04
  k_i [1] =
-2.54826246e-05
+3.38136670e-05
  v [1] =
   x [1] =
 -1.09581040e-12
@@ -322,7 +322,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-3.33073676e-01
+3.33073616e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -330,7 +330,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--3.33072215e-01
+-3.33072156e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -512,7 +512,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.56687135e-01
+2.56687224e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -520,7 +520,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.56686032e-01
+-2.56686121e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -797,7 +797,7 @@ transform [1] =
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-8.89940038e-02
+8.89940113e-02
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -805,7 +805,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--8.89936164e-02
+-8.89936239e-02
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -892,7 +892,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-2.05343112e-01
+2.05343083e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -900,7 +900,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--2.05342218e-01
+-2.05342188e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -1367,7 +1367,7 @@ transform [1] =
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-1.45462225e-04
+1.45462254e-04
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -1375,7 +1375,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.45461599e-04
+-1.45461629e-04
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -1462,7 +1462,7 @@ transform [1] =
   right.y [1] =
 4.50202171e-03
   right.z [1] =
-8.05187228e-05
+8.05187519e-05
   up.x [1] =
 -4.49820794e-03
   up.y [1] =
@@ -1470,7 +1470,7 @@ transform [1] =
   up.z [1] =
 -2.69899629e-02
   front.x [1] =
--2.01997638e-04
+-2.01997667e-04
   front.y [1] =
 2.69892141e-02
   front.z [1] =
@@ -1557,7 +1557,7 @@ transform [1] =
   right.y [1] =
 -1.39985085e-02
   right.z [1] =
--3.54374059e-08
+-3.54383154e-08
   up.x [1] =
 1.39985047e-02
   up.y [1] =
@@ -1565,7 +1565,7 @@ transform [1] =
   up.z [1] =
 -4.99912538e-04
   front.x [1] =
-7.03346359e-06
+7.03346450e-06
   front.y [1] =
 4.99860907e-04
   front.z [1] =
@@ -1842,7 +1842,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-8.90297592e-01
+8.90297472e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -1850,7 +1850,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--8.90293717e-01
+-8.90293598e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -1933,7 +1933,7 @@ false
 objAddr = 00000015
 transform [1] =
   right.x [1] =
--5.95362425e-01
+-5.95362604e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -1949,7 +1949,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--5.95359862e-01
+-5.95360041e-01
   posit.x [1] =
 1.14042999e+02
   posit.y [1] =
@@ -2028,7 +2028,7 @@ false
 objAddr = 00000016
 transform [1] =
   right.x [1] =
-1.62219495e-01
+1.62219509e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -2044,7 +2044,7 @@ transform [1] =
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-1.62218794e-01
+1.62218809e-01
   posit.x [1] =
 2.23651993e+02
   posit.y [1] =
@@ -2127,7 +2127,7 @@ transform [1] =
   right.y [1] =
 -0.00000000e+00
   right.z [1] =
-1.28367856e-01
+1.28367871e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -2135,7 +2135,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--1.28367305e-01
+-1.28367320e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -2222,7 +2222,7 @@ transform [1] =
   right.y [1] =
 0.00000000e+00
   right.z [1] =
-9.56222892e-01
+9.56223011e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -2230,7 +2230,7 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
--9.56218719e-01
+-9.56218839e-01
   front.y [1] =
 0.00000000e+00
   front.z [1] =
@@ -2313,11 +2313,11 @@ false
 objAddr = 00000019
 transform [1] =
   right.x [1] =
-8.95197630e-01
+8.95197511e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
--4.45659876e-01
+-4.45659757e-01
   up.x [1] =
 0.00000000e+00
   up.y [1] =
@@ -2325,11 +2325,11 @@ transform [1] =
   up.z [1] =
 0.00000000e+00
   front.x [1] =
-4.45657939e-01
+4.45657820e-01
   front.y [1] =
 -0.00000000e+00
   front.z [1] =
-8.95193756e-01
+8.95193636e-01
   posit.x [1] =
 -1.42702999e+01
   posit.y [1] =
@@ -2408,7 +2408,7 @@ false
 objAddr = 0000001A
 transform [1] =
   right.x [1] =
--2.11761028e-01
+-2.11760998e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -2424,7 +2424,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--2.11760104e-01
+-2.11760074e-01
   posit.x [1] =
 -3.06009007e+00
   posit.y [1] =
@@ -7405,17 +7405,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-7.20821143e+03
+7.08712988e+03
  mass_inv [1] =
-1.38730669e-04
+1.41100842e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.39524375e+04
+5.30461602e+04
  k_i [1] =
-1.85348435e-05
+1.88515060e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7516,17 +7516,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-7.20821143e+03
+7.08712988e+03
  mass_inv [1] =
-1.38730669e-04
+1.41100842e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-5.39524375e+04
+5.30461602e+04
  k_i [1] =
-1.85348435e-05
+1.88515060e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7584,7 +7584,7 @@ false
 objAddr = 00000051
 transform [1] =
   right.x [1] =
-9.99995649e-01
+9.99995708e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -7592,7 +7592,7 @@ transform [1] =
   up.x [1] =
 0.00000000e+00
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
 0.00000000e+00
   front.x [1] =
@@ -7600,7 +7600,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-9.99995649e-01
+9.99991357e-01
   posit.x [1] =
 1.59809906e+02
   posit.y [1] =
@@ -7629,7 +7629,7 @@ buildMatrix [1] =
   posit.x [1] =
 -9.60000000e+01
   posit.y [1] =
-4.03614197e+02
+5.00000000e+00
   posit.z [1] =
 5.44000000e+02
 state = 00000000
@@ -7718,7 +7718,7 @@ false
 objAddr = 00000052
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995649e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -7726,7 +7726,7 @@ transform [1] =
   up.x [1] =
 0.00000000e+00
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
 0.00000000e+00
   front.x [1] =
@@ -7734,7 +7734,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-1.00000000e+00
+9.99991298e-01
   posit.x [1] =
 1.75838516e+02
   posit.y [1] =
@@ -7761,17 +7761,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-9.09894531e+03
+7.08712988e+03
  mass_inv [1] =
-1.09902845e-04
+1.41100842e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-7.66656563e+04
+5.97145508e+04
  k_i [1] =
-1.30436501e-05
+1.67463368e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7829,7 +7829,7 @@ false
 objAddr = 00000053
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995649e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -7837,7 +7837,7 @@ transform [1] =
   up.x [1] =
 0.00000000e+00
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
 0.00000000e+00
   front.x [1] =
@@ -7845,7 +7845,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-1.00000000e+00
+9.99991298e-01
   posit.x [1] =
 1.43838516e+02
   posit.y [1] =
@@ -7872,17 +7872,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-9.09894531e+03
+7.08712988e+03
  mass_inv [1] =
-1.09902845e-04
+1.41100842e-04
  v_mag [1] =
 0.00000000e+00
  v_mag_inv [1] =
 1.00000002e+30
  I [1] =
-7.66656563e+04
+5.97145508e+04
  k_i [1] =
-1.30436501e-05
+1.67463368e-05
  v [1] =
   x [1] =
 0.00000000e+00
@@ -7942,7 +7942,7 @@ transform [1] =
   right.x [1] =
 9.99817848e-01
   right.y [1] =
--1.46426391e-08
+-1.46426373e-08
   right.z [1] =
 1.88543051e-02
   up.x [1] =
@@ -7981,17 +7981,17 @@ illumination [1] =
 1.00000000e+00
 euler =
  mass [1] =
-2.00767517e+03
+4.31408984e+03
  mass_inv [1] =
-4.98088542e-04
+2.31798607e-04
  v_mag [1] =
 2.29120487e-04
  v_mag_inv [1] =
 4.36451563e+03
  I [1] =
-7.61818164e+03
+1.63699385e+04
  k_i [1] =
-1.31264926e-04
+6.10875868e-05
  v [1] =
   x [1] =
 2.54514418e-08
@@ -8049,7 +8049,7 @@ false
 objAddr = 00000055
 transform [1] =
   right.x [1] =
--1.00000000e+00
+-9.99995649e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -8057,7 +8057,7 @@ transform [1] =
   up.x [1] =
 0.00000000e+00
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
 0.00000000e+00
   front.x [1] =
@@ -8065,7 +8065,7 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
--1.00000000e+00
+-9.99991298e-01
   posit.x [1] =
 1.59999985e+02
   posit.y [1] =
@@ -8073,9 +8073,9 @@ transform [1] =
   posit.z [1] =
 6.40847412e+02
 powerHandle [3] =
-108004414
-109052991
-110101568
+102761534
+103810111
+104858688
 scriptPowerOverride [1] =
 -1
 saveClass = 
@@ -8150,23 +8150,23 @@ false
 objAddr = 00000056
 transform [1] =
   right.x [1] =
--1.00000000e+00
+-9.99995649e-01
   right.y [1] =
-2.51214768e-15
+2.51213667e-15
   right.z [1] =
-2.03052411e-15
+2.03051522e-15
   up.x [1] =
-2.51214768e-15
+2.51213667e-15
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
-2.51214831e-15
+2.51213730e-15
   front.x [1] =
--2.03052411e-15
+-2.03050632e-15
   front.y [1] =
-2.51214831e-15
+2.51212629e-15
   front.z [1] =
--1.00000000e+00
+-9.99991298e-01
   posit.x [1] =
 1.59999985e+02
   posit.y [1] =
@@ -8220,7 +8220,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-0
+3
 groupNumber [1] =
 -1
 undefaicmd =
@@ -8247,23 +8247,23 @@ false
 objAddr = 00000057
 transform [1] =
   right.x [1] =
--1.00000000e+00
+-9.99995649e-01
   right.y [1] =
-2.51214768e-15
+2.51213667e-15
   right.z [1] =
-2.03052411e-15
+2.03051522e-15
   up.x [1] =
-2.51214768e-15
+2.51213667e-15
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
-2.51214831e-15
+2.51213730e-15
   front.x [1] =
--2.03052411e-15
+-2.03050632e-15
   front.y [1] =
-2.51214831e-15
+2.51212629e-15
   front.z [1] =
--1.00000000e+00
+-9.99991298e-01
   posit.x [1] =
 7.24749908e+01
   posit.y [1] =
@@ -8344,23 +8344,23 @@ false
 objAddr = 00000058
 transform [1] =
   right.x [1] =
--1.00000000e+00
+-9.99995649e-01
   right.y [1] =
-2.51214768e-15
+2.51213667e-15
   right.z [1] =
-2.03052411e-15
+2.03051522e-15
   up.x [1] =
-2.51214768e-15
+2.51213667e-15
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
-2.51214831e-15
+2.51213730e-15
   front.x [1] =
--2.03052411e-15
+-2.03050632e-15
   front.y [1] =
-2.51214831e-15
+2.51212629e-15
   front.z [1] =
--1.00000000e+00
+-9.99991298e-01
   posit.x [1] =
 2.47524994e+02
   posit.y [1] =
@@ -8374,7 +8374,7 @@ false
 buildCount [1] =
 0
 navHandle [1] =
-111150145
+105907265
 scriptPowerOverride [1] =
 -1
 saveClass = 
@@ -8422,7 +8422,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-0
+3
 groupNumber [1] =
 -1
 undefaicmd =
@@ -8450,7 +8450,7 @@ false
 objAddr = 00000059
 transform [1] =
   right.x [1] =
-1.00000000e+00
+9.99995649e-01
   right.y [1] =
 0.00000000e+00
   right.z [1] =
@@ -8458,7 +8458,7 @@ transform [1] =
   up.x [1] =
 0.00000000e+00
   up.y [1] =
-1.00000000e+00
+9.99995649e-01
   up.z [1] =
 0.00000000e+00
   front.x [1] =
@@ -8466,11 +8466,11 @@ transform [1] =
   front.y [1] =
 0.00000000e+00
   front.z [1] =
-1.00000000e+00
+9.99991298e-01
   posit.x [1] =
 2.43526749e+02
   posit.y [1] =
-4.32949615e+02
+4.29595856e+02
   posit.z [1] =
 5.83367371e+02
 name = Stronghold Drop Off
@@ -8520,7 +8520,7 @@ isVisible [1] =
 EffectsMask [1] =
 65535
 isSeen [1] =
-0
+3
 groupNumber [1] =
 -1
 undefaicmd =
@@ -8544,7 +8544,7 @@ size [1] =
 0
 [AiPaths]
 count [1] =
-90
+92
 name = AiPath
 sObject = 0000005A
 size [1] =
@@ -8561,83 +8561,18 @@ pathType = 00000000
 name = AiPath
 sObject = 0000005B
 size [1] =
-13
-label = RecyclerEnemy
+16
+label = intro_attacker_3
 pointCount [1] =
 1
 points [1] =
   x [1] =
--1.26331070e+02
+2.77688538e+02
   z [1] =
--7.66104004e+02
+2.75327515e+02
 pathType = 00000000
 name = AiPath
 sObject = 0000005C
-size [1] =
-10
-label = anti-air_1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.81588715e+02
-  z [1] =
--3.90516510e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000005D
-size [1] =
-12
-label = TurretEnemy1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.30826859e+02
-  z [1] =
--6.71618713e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000005E
-size [1] =
-8
-label = Turret_3
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--6.24165649e+02
-  z [1] =
--3.35347595e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000005F
-size [1] =
-8
-label = Recycler
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.17223808e+02
-  z [1] =
-5.07612488e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000060
-size [1] =
-12
-label = TurretEnemy2
-pointCount [1] =
-1
-points [1] =
-  x [1] =
-5.83106995e-01
-  z [1] =
--6.72431152e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000061
 size [1] =
 10
 label = anti-air_2
@@ -8650,20 +8585,72 @@ points [1] =
 -5.23670837e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000062
+sObject = 0000005D
 size [1] =
-16
-label = intro_attacker_3
+12
+label = TurretEnemy2
 pointCount [1] =
 1
 points [1] =
   x [1] =
-2.77688538e+02
+5.83106995e-01
   z [1] =
-2.75327515e+02
+-6.72431152e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000063
+sObject = 0000005E
+size [1] =
+8
+label = Recycler
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.17223808e+02
+  z [1] =
+5.07612488e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000005F
+size [1] =
+8
+label = Turret_3
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-6.24165649e+02
+  z [1] =
+-3.35347595e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000060
+size [1] =
+12
+label = TurretEnemy1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.30826859e+02
+  z [1] =
+-6.71618713e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000061
+size [1] =
+10
+label = anti-air_1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.81588715e+02
+  z [1] =
+-3.90516510e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000062
 size [1] =
 9
 label = edge_path
@@ -8680,7 +8667,33 @@ points [2] =
 7.96997009e+02
 pathType = 00000000
 name = AiPath
+sObject = 00000063
+size [1] =
+13
+label = RecyclerEnemy
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.26331070e+02
+  z [1] =
+-7.66104004e+02
+pathType = 00000000
+name = AiPath
 sObject = 00000064
+size [1] =
+10
+label = i_Training
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-6.35165634e+01
+  z [1] =
+-8.15741577e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000065
 size [1] =
 8
 label = patrol_1
@@ -8773,7 +8786,20 @@ points [21] =
 -3.28844177e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000065
+sObject = 00000066
+size [1] =
+9
+label = i_Plate_7
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-8.03448944e+01
+  z [1] =
+-6.88019897e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000067
 size [1] =
 6
 label = stage1
@@ -8786,7 +8812,7 @@ points [1] =
 -1.81194809e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000066
+sObject = 00000068
 size [1] =
 6
 label = stage3
@@ -8799,7 +8825,7 @@ points [1] =
 -4.10025360e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000067
+sObject = 00000069
 size [1] =
 11
 label = recycler_go
@@ -8816,7 +8842,7 @@ points [2] =
 4.76739441e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000068
+sObject = 0000006A
 size [1] =
 11
 label = turret_1_go
@@ -8837,7 +8863,7 @@ points [3] =
 4.76467346e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000069
+sObject = 0000006B
 size [1] =
 16
 label = intro_attacker_2
@@ -8850,7 +8876,7 @@ points [1] =
 9.65846252e+01
 pathType = 00000000
 name = AiPath
-sObject = 0000006A
+sObject = 0000006C
 size [1] =
 8
 label = i_Bunker
@@ -8863,7 +8889,7 @@ points [1] =
 -7.83989380e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000006B
+sObject = 0000006D
 size [1] =
 12
 label = i_GunTower_4
@@ -8876,33 +8902,20 @@ points [1] =
 -7.51633362e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000006C
-size [1] =
-10
-label = i_Training
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--6.35165634e+01
-  z [1] =
--8.15741577e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000006D
-size [1] =
-9
-label = i_Plate_7
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--8.03448944e+01
-  z [1] =
--6.88019897e+02
-pathType = 00000000
-name = AiPath
 sObject = 0000006E
+size [1] =
+12
+label = i_LandingPad
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-3.52753601e+02
+  z [1] =
+-7.99039246e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000006F
 size [1] =
 6
 label = i_Tech
@@ -8915,7 +8928,20 @@ points [1] =
 -7.67623047e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000006F
+sObject = 00000070
+size [1] =
+9
+label = i_Plate_8
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.82658768e+01
+  z [1] =
+-6.87494019e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000071
 size [1] =
 9
 label = i_Power_2
@@ -8928,7 +8954,20 @@ points [1] =
 -8.15835815e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000070
+sObject = 00000072
+size [1] =
+16
+label = i_Base_AntiAir_1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-2.41002930e+02
+  z [1] =
+-7.83427734e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000073
 size [1] =
 16
 label = intro_attacker_1
@@ -8941,7 +8980,7 @@ points [1] =
 2.76531799e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000071
+sObject = 00000074
 size [1] =
 14
 label = F_BaseJammer_2
@@ -8954,7 +8993,7 @@ points [1] =
 -8.15478638e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000072
+sObject = 00000075
 size [1] =
 9
 label = i_Power_1
@@ -8967,7 +9006,7 @@ points [1] =
 -8.15355225e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000073
+sObject = 00000076
 size [1] =
 8
 label = patrol_2
@@ -9040,7 +9079,7 @@ points [16] =
 -4.89516174e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000074
+sObject = 00000077
 size [1] =
 11
 label = turret_2_go
@@ -9061,7 +9100,7 @@ points [3] =
 4.76467346e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000075
+sObject = 00000078
 size [1] =
 11
 label = i_BomberBay
@@ -9074,150 +9113,7 @@ points [1] =
 -7.99439148e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000076
-size [1] =
-12
-label = i_LandingPad
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--3.52753601e+02
-  z [1] =
--7.99039246e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000077
-size [1] =
-9
-label = i_Plate_8
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--4.82658768e+01
-  z [1] =
--6.87494019e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000078
-size [1] =
-16
-label = i_Base_AntiAir_1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--2.41002930e+02
-  z [1] =
--7.83427734e+02
-pathType = 00000000
-name = AiPath
 sObject = 00000079
-size [1] =
-9
-label = i_Plate_1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.44502930e+02
-  z [1] =
--7.19767517e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007A
-size [1] =
-9
-label = i_Factory
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--6.47255859e+01
-  z [1] =
--7.68263123e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007B
-size [1] =
-12
-label = i_ServiceBay
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.92884399e+02
-  z [1] =
--7.04054749e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007C
-size [1] =
-8
-label = i_Armory
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.76581940e+02
-  z [1] =
--7.51647400e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007D
-size [1] =
-9
-label = i_Plate_6
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.12423920e+02
-  z [1] =
--6.87494019e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007E
-size [1] =
-18
-label = i_Base_Artillery_1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.79039352e+02
-  z [1] =
--8.56805664e+02
-pathType = 00000000
-name = AiPath
-sObject = 0000007F
-size [1] =
-9
-label = i_Plate_2
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.12686859e+02
-  z [1] =
--7.19572998e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000080
-size [1] =
-16
-label = i_Base_AntiAir_2
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.67127533e+01
-  z [1] =
--7.20185425e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000081
 size [1] =
 21
 label = i_Base_AssaultTower_1
@@ -9230,7 +9126,20 @@ points [1] =
 -8.80314026e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000082
+sObject = 0000007A
+size [1] =
+9
+label = i_Plate_1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.44502930e+02
+  z [1] =
+-7.19767517e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000007B
 size [1] =
 16
 label = i_Field_Bunker_2
@@ -9243,7 +9152,20 @@ points [1] =
 -4.64322723e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000083
+sObject = 0000007C
+size [1] =
+9
+label = i_Factory
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-6.47255859e+01
+  z [1] =
+-7.68263123e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000007D
 size [1] =
 12
 label = i_GunTower_3
@@ -9256,111 +9178,85 @@ points [1] =
 -8.15528442e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000084
+sObject = 0000007E
 size [1] =
-24
-label = i_Field_AssualtTower_2_A
+12
+label = i_ServiceBay
 pointCount [1] =
 1
 points [1] =
   x [1] =
--2.72942047e+02
+-1.92884399e+02
   z [1] =
--4.32048065e+02
+-7.04054749e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000085
+sObject = 0000007F
 size [1] =
-18
-label = i_Field_GunTower_1
+8
+label = i_Armory
 pointCount [1] =
 1
 points [1] =
   x [1] =
--4.96320343e+02
+-1.76581940e+02
   z [1] =
--5.91287048e+02
+-7.51647400e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000086
+sObject = 00000080
 size [1] =
 9
-label = i_Plate_3
+label = i_Plate_6
 pointCount [1] =
 1
 points [1] =
   x [1] =
--8.03448944e+01
-  z [1] =
--7.19835938e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000087
-size [1] =
-16
-label = i_Field_Bunker_1
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--4.64504272e+02
-  z [1] =
--5.92027100e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000088
-size [1] =
-9
-label = i_Plate_4
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--4.80029373e+01
-  z [1] =
--7.19572998e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000089
-size [1] =
-9
-label = i_Plate_5
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--1.44502930e+02
+-1.12423920e+02
   z [1] =
 -6.87494019e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000008A
+sObject = 00000081
 size [1] =
-15
-label = i_Base_Bunker_2
+18
+label = i_Base_Artillery_1
 pointCount [1] =
 1
 points [1] =
   x [1] =
--1.78685486e+02
+-1.79039352e+02
   z [1] =
--8.79664734e+02
+-8.56805664e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000008B
+sObject = 00000082
 size [1] =
-21
-label = i_Field_RocketTower_2
+9
+label = i_Plate_2
 pointCount [1] =
 1
 points [1] =
   x [1] =
--2.72254120e+02
+-1.12686859e+02
   z [1] =
--4.64305908e+02
+-7.19572998e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000008C
+sObject = 00000083
+size [1] =
+16
+label = i_Base_AntiAir_2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.67127533e+01
+  z [1] =
+-7.20185425e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000084
 size [1] =
 12
 label = i_GunTower_1
@@ -9373,7 +9269,20 @@ points [1] =
 -5.92166199e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000008D
+sObject = 00000085
+size [1] =
+24
+label = i_Field_AssualtTower_2_A
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-2.72942047e+02
+  z [1] =
+-4.32048065e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000086
 size [1] =
 12
 label = i_GunTower_2
@@ -9386,7 +9295,111 @@ points [1] =
 -5.92429138e+02
 pathType = 00000000
 name = AiPath
+sObject = 00000087
+size [1] =
+18
+label = i_Field_GunTower_1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.96320343e+02
+  z [1] =
+-5.91287048e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000088
+size [1] =
+9
+label = i_Plate_3
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-8.03448944e+01
+  z [1] =
+-7.19835938e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000089
+size [1] =
+16
+label = i_Field_Bunker_1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.64504272e+02
+  z [1] =
+-5.92027100e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000008A
+size [1] =
+9
+label = i_Plate_4
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.80029373e+01
+  z [1] =
+-7.19572998e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000008B
+size [1] =
+9
+label = i_Plate_5
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.44502930e+02
+  z [1] =
+-6.87494019e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000008C
+size [1] =
+15
+label = i_Base_Bunker_2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-1.78685486e+02
+  z [1] =
+-8.79664734e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000008D
+size [1] =
+21
+label = i_Field_RocketTower_2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-2.72254120e+02
+  z [1] =
+-4.64305908e+02
+pathType = 00000000
+name = AiPath
 sObject = 0000008E
+size [1] =
+18
+label = i_Base_Artillery_2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+1.11340363e+02
+  z [1] =
+-7.19956360e+02
+pathType = 00000000
+name = AiPath
+sObject = 0000008F
 size [1] =
 24
 label = i_Field_AssualtTower_1_A
@@ -9399,7 +9412,20 @@ points [1] =
 -6.23629028e+02
 pathType = 00000000
 name = AiPath
-sObject = 0000008F
+sObject = 00000090
+size [1] =
+24
+label = i_Field_AssualtTower_2_B
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-2.09449799e+02
+  z [1] =
+-4.64059784e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000091
 size [1] =
 15
 label = i_Base_Bunker_3
@@ -9412,7 +9438,20 @@ points [1] =
 -7.20223511e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000090
+sObject = 00000092
+size [1] =
+7
+label = Carrier
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-7.00354187e+02
+  z [1] =
+5.74412354e+02
+pathType = 00000000
+name = AiPath
+sObject = 00000093
 size [1] =
 18
 label = i_Field_GunTower_2
@@ -9425,7 +9464,7 @@ points [1] =
 -4.31980774e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000091
+sObject = 00000094
 size [1] =
 15
 label = i_Base_Bunker_1
@@ -9438,7 +9477,7 @@ points [1] =
 -5.91903259e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000092
+sObject = 00000095
 size [1] =
 24
 label = i_Field_AssualtTower_1_B
@@ -9451,7 +9490,7 @@ points [1] =
 -5.59733887e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000093
+sObject = 00000096
 size [1] =
 21
 label = i_Field_RocketTower_1
@@ -9464,7 +9503,7 @@ points [1] =
 -5.91812927e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000094
+sObject = 00000097
 size [1] =
 21
 label = i_Base_AssaultTower_2
@@ -9477,7 +9516,7 @@ points [1] =
 -6.87877319e+02
 pathType = 00000000
 name = AiPath
-sObject = 00000095
+sObject = 00000098
 size [1] =
 11
 label = BasePatrol1
@@ -9504,45 +9543,6 @@ points [5] =
 -1.10414978e+02
   z [1] =
 -6.16144104e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000096
-size [1] =
-18
-label = i_Base_Artillery_2
-pointCount [1] =
-1
-points [1] =
-  x [1] =
-1.11340363e+02
-  z [1] =
--7.19956360e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000097
-size [1] =
-24
-label = i_Field_AssualtTower_2_B
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--2.09449799e+02
-  z [1] =
--4.64059784e+02
-pathType = 00000000
-name = AiPath
-sObject = 00000098
-size [1] =
-7
-label = Carrier
-pointCount [1] =
-1
-points [1] =
-  x [1] =
--7.00354187e+02
-  z [1] =
-5.74412354e+02
 pathType = 00000000
 name = AiPath
 sObject = 00000099
@@ -9898,6 +9898,32 @@ points [1] =
 -4.32149658e+02
   z [1] =
 -3.99756287e+02
+pathType = 00000000
+name = AiPath
+sObject = 000000B4
+size [1] =
+11
+label = AnimalHerd1
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+-4.76006378e+02
+  z [1] =
+-1.53590714e+02
+pathType = 00000000
+name = AiPath
+sObject = 000000B5
+size [1] =
+11
+label = AnimalHerd2
+pointCount [1] =
+1
+points [1] =
+  x [1] =
+3.67854736e+02
+  z [1] =
+-2.51170746e+02
 pathType = 00000000
 hasEntered [1] =
 false

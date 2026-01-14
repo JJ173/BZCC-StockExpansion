@@ -30,7 +30,7 @@ function CollectFieldCondition(team, time)
         return false, "I don't have any Scavengers.";
     end
 
-    if (DoesLooseScrapExist(team, time) == false) then
+    if (not DoesLooseScrapExist(team, time)) then
         return false, "I cannot find any available loose scrap.";
     end
 
@@ -42,7 +42,7 @@ function CollectPoolCondition(team, time)
         return false, "I don't have any Scavengers.";
     end
 
-    if (DoesScrapPoolExist(team, time) == false) then
+    if (not DoesScrapPoolExist(team, time)) then
         return false, "I cannot find any available scrap pools.";
     end
 
@@ -59,7 +59,7 @@ end
 
 -- BUILD PLAN CONDITIONS [UNITS]
 function BuildScavengerCondition(team, time)
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
@@ -75,7 +75,7 @@ function BuildScavengerCondition(team, time)
 end
 
 function BuildConstructorCondition(team, time)
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
@@ -91,7 +91,7 @@ function BuildConstructorCondition(team, time)
 end
 
 function BuildTurretCondition(team, time)
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
@@ -107,7 +107,7 @@ function BuildTurretCondition(team, time)
 end
 
 function BuildScoutCondition(team, time)
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
@@ -131,7 +131,7 @@ function BuildSentryCondition(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Factory yet.";
     end
 
@@ -147,7 +147,7 @@ function BuildTankCondition(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge so I can't build any Warriors.";
     end
 
@@ -159,32 +159,28 @@ function BuildTankCondition(team, time)
 end
 
 function BuildScoutCommander(team, time)
-    if (IsCommanderOptionEnabled(team, time) == false) then
+    if (not IsCommanderOptionEnabled(team, time)) then
         return false, "Commander option is disabled for this game.";
     end
 
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
-    if (DoesFactoryExist(team, time) and DoesRelayBunkerExist(team, time)) then
-        return false, "I have a Factory so I can build a better Commander unit.";
+    if (DoesForgeExist(team, time)) then
+        return false, "I have a Forge so I can build a better Commander unit.";
     end
 
     return true, "I can replace the Commander in a Scout unit. Tasking Recycler to build.";
 end
 
 function BuildTankCommander(team, time)
-    if (IsCommanderOptionEnabled(team, time) == false) then
+    if (not IsCommanderOptionEnabled(team, time)) then
         return false, "Commander option is disabled for this game.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Factory yet.";
-    end
-
-    if (DoesRelayBunkerExist(team, time) == false) then
-        return false, "I don't have a Relay Bunker yet.";
     end
 
     return true, "I can replace the Commander in a Tank unit. Tasking Factory to build.";
@@ -195,11 +191,11 @@ function BuildArcherCondition(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge so I can't build any Archers.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer so I can't build any Archers.";
     end
 
@@ -215,11 +211,11 @@ function BuildServiceTrucks(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesDowerExist(team, time) == false) then
+    if (not DoesDowerExist(team, time)) then
         return false, "I don't have a Service Bay yet.";
     end
 
-    if (DoesRecyclerExist(team, time) == false) then
+    if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
     end
 
@@ -235,7 +231,7 @@ function BuildAssaultDefenders(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Factory so I can't build any Sentries.";
     end
 
@@ -257,7 +253,7 @@ function BuildAssaultServicers(team, time)
         return false, "I don't have any deployed Scavengers yet.";
     end
 
-    if (DoesDowerExist(team, time) == false) then
+    if (not DoesDowerExist(team, time)) then
         return false, "I don't have a Factory so I can't build any Tanks.";
     end
 
@@ -276,7 +272,7 @@ end
 
 -- UPGRADE CONDITIONS
 function UpgradeKilnCondition(team, time)
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
@@ -292,12 +288,12 @@ function UpgradeKilnCondition(team, time)
 end
 
 function UpgradeAntennaCondition(team, time)
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
-        return false, "I don't have a Antenna yet.";
+    if (not DoesFactoryExist(team, time)) then
+        return false, "I don't have a Factory yet.";
     end
 
     if (ExtractorCount(team, time) <= 2) then
@@ -317,11 +313,11 @@ function BuildKiln(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (IsPathAvailable("F_Forge") == false) then
+    if (not IsPathAvailable("F_Forge")) then
         return false, "F_Forge is unavailable, or a building already exists on it."
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
@@ -333,11 +329,11 @@ function BuildKiln(team, time)
 end
 
 function BuildAntenna(team, time)
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Kiln yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
@@ -345,7 +341,7 @@ function BuildAntenna(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (IsPathAvailable("F_Overseer") == false) then
+    if (not IsPathAvailable("F_Overseer")) then
         return false, "F_Overseer is unavailable, or a building already exists on it."
     end
 
@@ -357,11 +353,11 @@ function BuildAntenna(team, time)
 end
 
 function BuildDower(team, time)
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Kiln yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
@@ -369,7 +365,7 @@ function BuildDower(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (IsPathAvailable("F_Dower") == false) then
+    if (not IsPathAvailable("F_Dower")) then
         return false, "F_Dower is unavailable, or a building already exists on it."
     end
 
@@ -381,11 +377,11 @@ function BuildDower(team, time)
 end
 
 function BuildStronghold(team, time)
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
@@ -393,7 +389,7 @@ function BuildStronghold(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (IsPathAvailable("F_Stronghold") == false) then
+    if (not IsPathAvailable("F_Stronghold")) then
         return false, "F_Stronghold is unavailable, or a building already exists on it."
     end
 
@@ -409,11 +405,11 @@ function BuildGunSpire1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_BaseSpire_1") == false) then
+    if (not IsPathAvailable("F_BaseSpire_1")) then
         return false, "F_BaseSpire_1 is unavailable, or a building already exists on it."
     end
 
@@ -429,11 +425,11 @@ function BuildGunSpire2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_BaseSpire_2") == false) then
+    if (not IsPathAvailable("F_BaseSpire_2")) then
         return false, "F_BaseSpire_2 is unavailable, or a building already exists on it."
     end
 
@@ -449,11 +445,11 @@ function BuildGunSpire3(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_BaseSpire_3") == false) then
+    if (not IsPathAvailable("F_BaseSpire_3")) then
         return false, "F_BaseSpire_3 is unavailable, or a building already exists on it."
     end
 
@@ -469,11 +465,11 @@ function BuildBaseAntiAir1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AntiAir_1") == false) then
+    if (not IsPathAvailable("F_Base_AntiAir_1")) then
         return false, "F_Base_AntiAir_1 is unavailable, or a building already exists on it."
     end
 
@@ -489,11 +485,11 @@ function BuildBaseAntiAir2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AntiAir_2") == false) then
+    if (not IsPathAvailable("F_Base_AntiAir_2")) then
         return false, "F_Base_AntiAir_2 is unavailable, or a building already exists on it."
     end
 
@@ -509,11 +505,11 @@ function BuildBaseAntiAir3(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AntiAir_3") == false) then
+    if (not IsPathAvailable("F_Base_AntiAir_3")) then
         return false, "F_Base_AntiAir_3 is unavailable, or a building already exists on it."
     end
 
@@ -529,11 +525,11 @@ function BuildBaseAssaultSpire1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AssaultSpire_1") == false) then
+    if (not IsPathAvailable("F_Base_AssaultSpire_1")) then
         return false, "F_Base_AssaultSpire_1 is unavailable, or a building already exists on it."
     end
 
@@ -549,11 +545,11 @@ function BuildBaseAssaultSpire2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AssaultSpire_2") == false) then
+    if (not IsPathAvailable("F_Base_AssaultSpire_2")) then
         return false, "F_Base_AssaultSpire_2 is unavailable, or a building already exists on it."
     end
 
@@ -569,11 +565,11 @@ function BuildBaseAssaultSpire3(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Base_AssaultSpire_3") == false) then
+    if (not IsPathAvailable("F_Base_AssaultSpire_3")) then
         return false, "F_Base_AssaultSpire_3 is unavailable, or a building already exists on it."
     end
 
@@ -589,11 +585,11 @@ function BuildFieldAssaultSpire1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Field_AssaultSpire_1") == false) then
+    if (not IsPathAvailable("F_Field_AssaultSpire_1")) then
         return false, "F_Field_AssaultSpire_1 is unavailable, or a building already exists on it."
     end
 
@@ -609,11 +605,11 @@ function BuildFieldAssaultSpire2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Field_AssaultSpire_2") == false) then
+    if (not IsPathAvailable("F_Field_AssaultSpire_2")) then
         return false, "F_Field_AssaultSpire_2 is unavailable, or a building already exists on it."
     end
 
@@ -629,11 +625,11 @@ function BuildFieldAssaultSpire3(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Field_AssaultSpire_3") == false) then
+    if (not IsPathAvailable("F_Field_AssaultSpire_3")) then
         return false, "F_Field_AssaultSpire_3 is unavailable, or a building already exists on it."
     end
 
@@ -649,11 +645,11 @@ function BuildFieldAssaultSpire4(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (IsPathAvailable("F_Field_AssaultSpire_4") == false) then
+    if (not IsPathAvailable("F_Field_AssaultSpire_4")) then
         return false, "F_Field_AssaultSpire_4 is unavailable, or a building already exists on it."
     end
 
@@ -673,15 +669,15 @@ function BuildLandingPad(team, time)
         return false, "I already have a Landing Pad.";
     end
 
-    if (IsPathAvailable("i_LandingPad") == false) then
+    if (not IsPathAvailable("i_LandingPad")) then
         return false, "i_LandingPad is unavailable, or a building already exists on it."
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I should prioritise the Forge first.";
     end
 
@@ -693,19 +689,23 @@ function BuildLandingPad(team, time)
 end
 
 function BuildJammer1(team, time)
+    if (GetDifficultyLevel() < 2) then
+        return false, "Jammers are only built on Medium and Hard difficulties.";
+    end
+
     if (ExtractorCount(team, time) < 1) then
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_BaseJammer_1") == false) then
+    if (not IsPathAvailable("F_BaseJammer_1")) then
         return false, "F_BaseJammer_1 is unavailable, or a building already exists on it."
     end
 
@@ -717,19 +717,23 @@ function BuildJammer1(team, time)
 end
 
 function BuildJammer2(team, time)
+    if (GetDifficultyLevel() < 2) then
+        return false, "Jammers are only built on Medium and Hard difficulties.";
+    end
+
     if (ExtractorCount(team, time) < 1) then
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_BaseJammer_2") == false) then
+    if (not IsPathAvailable("F_BaseJammer_2")) then
         return false, "F_BaseJammer_2 is unavailable, or a building already exists on it."
     end
 
@@ -745,15 +749,15 @@ function BuildBaseArtillery1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_Base_Artillery_1") == false) then
+    if (not IsPathAvailable("F_Base_Artillery_1")) then
         return false, "F_Base_Artillery_1 is unavailable, or a building already exists on it."
     end
 
@@ -769,15 +773,15 @@ function BuildBaseArtillery2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_Base_Artillery_2") == false) then
+    if (not IsPathAvailable("F_Base_Artillery_2")) then
         return false, "F_Base_Artillery_2 is unavailable, or a building already exists on it."
     end
 
@@ -793,15 +797,15 @@ function BuildFieldRocketTower1(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_Field_RocketTower_1") == false) then
+    if (not IsPathAvailable("F_Field_RocketTower_1")) then
         return false, "F_Field_RocketTower_1 is unavailable, or a building already exists on it."
     end
 
@@ -817,15 +821,15 @@ function BuildFieldRocketTower2(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_Field_RocketTower_2") == false) then
+    if (not IsPathAvailable("F_Field_RocketTower_2")) then
         return false, "F_Field_RocketTower_2 is unavailable, or a building already exists on it."
     end
 
@@ -841,15 +845,15 @@ function BuildFieldRocketTower3(team, time)
         return false, "I don't have enough deployed Scavengers yet.";
     end
 
-    if (DoesConstructorExist(team, time) == false) then
+    if (not DoesConstructorExist(team, time)) then
         return false, "I don't have a Constructor yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (IsPathAvailable("F_Field_RocketTower_3") == false) then
+    if (not IsPathAvailable("F_Field_RocketTower_3")) then
         return false, "F_Field_RocketTower_3 is unavailable, or a building already exists on it."
     end
 
@@ -899,7 +903,7 @@ function Attack2Condition(team, time)
         return false, "I don't have any Extractors yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Kiln/Forge yet.";
     end
 
@@ -915,11 +919,11 @@ function LancerAttackCondition(team, time)
         return false, "I don't have any Extractors yet.";
     end
 
-    if (DoesFactoryExist(team, time) == false) then
+    if (not DoesFactoryExist(team, time)) then
         return false, "I don't have a Kiln/Forge yet.";
     end
 
-    if (DoesAntennaExist(team, time) == false) then
+    if (not DoesAntennaExist(team, time)) then
         return false, "I don't have an Antenna yet.";
     end
 
@@ -931,7 +935,7 @@ function LancerAttackCondition(team, time)
 end
 
 function ArcherAttackCondition(team, time)
-    if (BuildArcherCondition(team, time) == false) then
+    if (not BuildArcherCondition(team, time)) then
         return false;
     end
 
@@ -943,7 +947,7 @@ function Attack5Condition(team, time)
         return false, "I don't have any Extractors yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
@@ -955,15 +959,15 @@ function Attack6Condition(team, time)
         return false, "I don't have any Extractors yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
-    if (DoesDowerExist(team, time) == false) then
+    if (not DoesDowerExist(team, time)) then
         return false, "I don't have a Dower yet.";
     end
 
-    if (DoesStrongholdExist(team, time) == false) then
+    if (not DoesStrongholdExist(team, time)) then
         return false, "I don't have a Stronghold yet.";
     end
 
@@ -979,15 +983,15 @@ function LateAttackCondition(team, time)
         return false, "I don't have any Extractors yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (DoesStrongholdExist(team, time) == false) then
+    if (not DoesStrongholdExist(team, time)) then
         return false, "I don't have a Stronghold yet.";
     end
 
@@ -999,15 +1003,15 @@ function FuryAttackCondition(team, time)
         return false, "We haven't been playing for 15 minutes. I can't build a Fury yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (DoesStrongholdExist(team, time) == false) then
+    if (not DoesStrongholdExist(team, time)) then
         return false, "I don't have a Stronghold yet.";
     end
 
@@ -1019,15 +1023,15 @@ function FurySecondAttackCondition(team, time)
         return false, "We haven't been playing for 20 minutes. I can't build a second Fury yet.";
     end
 
-    if (DoesForgeExist(team, time) == false) then
+    if (not DoesForgeExist(team, time)) then
         return false, "I don't have a Forge yet.";
     end
 
-    if (DoesOverseerExist(team, time) == false) then
+    if (not DoesOverseerExist(team, time)) then
         return false, "I don't have an Overseer yet.";
     end
 
-    if (DoesStrongholdExist(team, time) == false) then
+    if (not DoesStrongholdExist(team, time)) then
         return false, "I don't have a Stronghold yet.";
     end
 
@@ -1036,11 +1040,15 @@ end
 
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
 function IsCommanderOptionEnabled(team, time)
-    return AIPUtil.GetVarItemInt("options.instant.bool2") == 1;
+    return AIPUtil.GetVarItemInt("options.instant.aiCommander") == 1;
+end
+
+function GetDifficultyLevel(team, time)
+    return AIPUtil.GetVarItemInt("options.instant.difficulty");
 end
 
 function IsPathAvailable(pathName)
-    if (AIPUtil.PathExists(pathName) == false) then
+    if (not AIPUtil.PathExists(pathName)) then
         return false;
     elseif (AIPUtil.PathBuildingExists(pathName)) then
         return false;

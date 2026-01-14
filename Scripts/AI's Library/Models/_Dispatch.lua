@@ -19,7 +19,7 @@ function Dispatch:New(Handle, MissionTurn, objBase)
 
     o.Handle = Handle or 0;
     o.BuiltTime = MissionTurn or 0;
-    o.DispatchDelay = (MissionTurn + SecondsToTurns(2)) or 0;
+    o.DispatchDelay = (MissionTurn + SecondsToTurns(15)) or 0;
     o.Base = objBase or '';
 
     setmetatable(o, { __index = self });

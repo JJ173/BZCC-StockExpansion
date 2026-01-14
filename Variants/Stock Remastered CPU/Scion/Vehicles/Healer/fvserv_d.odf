@@ -1,6 +1,9 @@
 [GameObjectClass]
-baseName = "AssaultService"
 classLabel = "fvserv_c"
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "AssaultService"
+////////////////////////////////////
 
 /////// PROVIDES ///////////////////
 provideCount = 3

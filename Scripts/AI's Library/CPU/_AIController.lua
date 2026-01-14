@@ -1,5 +1,5 @@
-local _Dispatch = require("_Dispatch");
 local _AssaultUnit = require("_AssaultUnit");
+local _BZCCDatabase = require("_BZCCDatabase");
 
 AIController =
 {
@@ -55,30 +55,6 @@ AIController =
     IdleQueueCooldown = 0
 };
 
--- States for the AI Commander.
-local CMDR_IDLE = 0;
-local CMDR_ATTACK = 1;
-local CMDR_DEFEND = 2;
-local CMDR_RETREAT = 3;
-
--- Potential Supporter Names for CPU.
-local _CPUNames =
-{
-    "SIR BRAMBLEY",
-    "GrizzlyOne95",
-    "BlackDragon",
-    "Spymaster",
-    "Autarch Katherlyn",
-    "blue_banana",
-    "Zorn",
-    "Gravey",
-    "VTrider",
-    "Ultraken",
-    "Darkvale",
-    "Econchump",
-    "Sev"
-}
-
 function AIController:New(Team, Race, Pools)
     local o = {}
 
@@ -121,7 +97,6 @@ function AIController:New(Team, Race, Pools)
     o.IdleQueueCooldown = 0;
 
     setmetatable(o, { __index = self });
-
     return o;
 end
 
@@ -138,11 +113,11 @@ function AIController:Setup(CPUTeamNumber)
 
     table.sort(self.Pools, Compare);
 
-    local chosenCPUName = _CPUNames[math.ceil(GetRandomInt(1, #_CPUNames))];
+    local chosenCPUName = _BZCCDatabase.CPUNames[math.ceil(GetRandomInt(1, #_BZCCDatabase.CPUNames))];
     SetTauntCPUTeamName(chosenCPUName);
 
-    self.AIPString = IFace_GetString("options.instant.string0");
-    self.AICommanderEnabled = IFace_GetInteger("options.instant.bool2");
+    self.AIPString = IFace_GetString(_BZCCDatabase.ShellVariables.AIP_STRING);
+    self.AICommanderEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.COMMANDER_ENABLED);
     self.Name = chosenCPUName;
 
     if (self.AICommanderEnabled == 1) then
@@ -197,36 +172,69 @@ function AIController:Run(missionTurnCount)
 end
 
 function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCount)
-    -- print('Running AIController:AddObject ', objClass .. ' ', objCfg .. ' ', objBase .. ' ', missionTurnCount);
+    -- Check if the object is a Recycler.
+    if (not self.RecyclerDeployed and objClass == "CLASS_RECYCLER") then
+        self.RecyclerDeployed = true;
+        return;
+    end
 
-    if (objCfg == self.Race .. "vcmdr_s" or objCfg == self.Race .. "vcmdr_t") then
+    -- Read custom properties from the ODF of the object that has been added.
+    local AICraftType = GetODFString(objCfg, "GameObjectClass", "AIUnitType");
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.COMMANDER) then
         self.Commander = handle;
         SetObjectiveName(self.Commander, self.Name);
-    elseif (self.RecyclerDeployed == false and objClass == "CLASS_RECYCLER") then
-        self.RecyclerDeployed = true;
-    elseif (objCfg == self.Race .. "bcarrier_xm") then
+        return;
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.CARRIER) then
         self.Carrier = handle;
-    elseif (objClass == "CLASS_TURRETTANK") then
+        return;
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.TURRET) then
         self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
-    elseif (objBase == "Patrol" or objBase == "BasePatrol") then
-        if (objBase == "BasePatrol") then
+        return;
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.PATROL or AICraftType == _BZCCDatabase.AIUnitTypes.BASE_PATROL) then
+        if (AICraftType == AIUnitTypes.BASE_PATROL) then
             self.BasePatrolCount = self.BasePatrolCount + 1;
         end
 
         self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
-    elseif (objBase == "AntiAir") then
+        return;
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.ANTI_AIR) then
         self.AntiAirCount = self.AntiAirCount + 1;
         self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
-    elseif (objBase == "Minion" or objBase == "AssaultService") then
+        return;
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.MINION or AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT_SERVICE) then
         self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
-    elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
+        return;
+    end
+
+    if (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
         self.AssaultUnits[#self.AssaultUnits + 1] = CreateAssaultUnit(handle);
-    elseif (objClass == "CLASS_ARMORY") then
+        return;
+    end
+    
+    if (objClass == "CLASS_ARMORY") then
         self.HasArmory = true;
-    elseif (objClass == "CLASS_SUPPLYDEPOT") then
+        return;
+    end
+
+    if (objClass == "CLASS_SUPPLYDEPOT") then
         self.HasServiceBay = true;
-    elseif (objClass == "CLASS_TECHCENTER") then
+        return;
+    end
+
+    if (objClass == "CLASS_TECHCENTER") then
         self.HasTechCenter = true;
+        return;
     end
 end
 
@@ -276,6 +284,31 @@ function AIController:SetPlan(type)
 
     SetAIP(AIPFile .. '.aip', self.Team);
     DoTaunt(TAUNTS_Random);
+end
+
+function AIController:ProcessIdleUnits()
+    -- print("Processing idle units");
+
+    for i = 1, #self.IdleQueue do
+        -- Grab the idle unit.
+        local idleUnit = self.IdleQueue[i];
+
+        -- Let's first check that this unit is indeed idle.
+        if (IsIdle(idleUnit.Handle) == false) then
+            return false;
+        end
+
+        -- Check the base of the unit to see where it needs to be added.
+        if (idleUnit.Base == "Minion" or idleUnit.Base == "AssaultService") then
+            ReturnIdleUnitToBase(idleUnit);
+            self.MinionsToDispatch[#self.MinionsToDispatch + 1] = idleUnit;
+        elseif (idleUnit.Base == "Patrol") then
+            self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
+        end
+
+        -- Remove the idle unit from the idle table.
+        RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
+    end
 end
 
 function AIController:DispatchTurrets(missionTurnCount)
@@ -553,61 +586,9 @@ function AIController:TurretShot(handle, missionTurnCount)
     end
 end
 
-function AIController:ProcessIdleUnits()
-    -- print("Processing idle units");
-
-    for i = 1, #self.IdleQueue do
-        -- Grab the idle unit.
-        local idleUnit = self.IdleQueue[i];
-
-        -- Let's first check that this unit is indeed idle.
-        if (IsIdle(idleUnit.Handle) == false) then
-            return false;
-        end
-
-        -- Check the base of the unit to see where it needs to be added.
-        if (idleUnit.Base == "Minion" or idleUnit.Base == "AssaultService") then
-            ReturnIdleUnitToBase(idleUnit);
-            self.MinionsToDispatch[#self.MinionsToDispatch + 1] = idleUnit;
-        elseif (idleUnit.Base == "Patrol") then
-            self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = idleUnit;
-        end
-
-        -- Remove the idle unit from the idle table.
-        RemoveDispatchFromTable(self.IdleQueue, idleUnit.Handle);
-    end
-end
-
 function AIController:ScavengerShot(handle)
     if (IsIdle(handle)) then
         Goto(handle, GetPositionNear("RecyclerEnemy", 40, 60), 0);
-    end
-end
-
-function AIController:AssignWeapons(handle)
-    if (not handle) then return end
-
-    local objClass = GetClassLabel(handle);
-    if (not objClass) then return end
-
-    -- Assign appropriate weapons based on unit class
-    if (objClass == "CLASS_ASSAULTTANK") then
-        -- Assign primary weapon
-        if (self.Cannons[1]) then
-            SetWeapon(handle, 0, self.Cannons[1]);
-        end
-        -- Assign secondary weapon if available
-        if (self.Missiles[1]) then
-            SetWeapon(handle, 1, self.Missiles[1]);
-        end
-    elseif (objClass == "CLASS_WALKER") then
-        -- Assign walker-specific weapons
-        if (self.Guns[1]) then
-            SetWeapon(handle, 0, self.Guns[1]);
-        end
-        if (self.Specials[1]) then
-            SetWeapon(handle, 1, self.Specials[1]);
-        end
     end
 end
 

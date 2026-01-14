@@ -1,3 +1,4 @@
+local _AIUnit = require("_AIUnit");
 local _AssaultUnit = require("_AssaultUnit");
 local _BZCCDatabase = require("_BZCCDatabase");
 
@@ -113,7 +114,7 @@ function AIController:Setup(CPUTeamNumber)
 
     table.sort(self.Pools, Compare);
 
-    local chosenCPUName = _BZCCDatabase.CPUNames[math.ceil(GetRandomInt(1, #_BZCCDatabase.CPUNames))];
+    local chosenCPUName = _BZCCDatabase.CPUNames[GetRandomInt(1, #_BZCCDatabase.CPUNames)];
     SetTauntCPUTeamName(chosenCPUName);
 
     self.AIPString = IFace_GetString(_BZCCDatabase.ShellVariables.AIP_STRING);
@@ -143,7 +144,7 @@ function AIController:Run(missionTurnCount)
             self.TauntCooldown = missionTurnCount + SecondsToTurns(90)
         end
 
-        
+
         if (self.RecyclerDeployed) then
             if (self.IdleQueueCooldown < missionTurnCount) then
                 if (#self.IdleQueue > 0) then
@@ -179,7 +180,11 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     end
 
     -- Read custom properties from the ODF of the object that has been added.
-    local AICraftType = GetODFString(objCfg, "GameObjectClass", "AIUnitType");
+    local AICraftType = GetODFString(handle, "GameObjectClass", "AIUnitType");
+
+    if AICraftType == nil or AICraftType == "" then
+        return;
+    end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.COMMANDER) then
         self.Commander = handle;
@@ -193,27 +198,27 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.TURRET) then
-        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
+        self.TurretsToDispatch[#self.TurretsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
         return;
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.PATROL or AICraftType == _BZCCDatabase.AIUnitTypes.BASE_PATROL) then
-        if (AICraftType == AIUnitTypes.BASE_PATROL) then
+        if (AICraftType == _BZCCDatabase.AIUnitTypes.BASE_PATROL) then
             self.BasePatrolCount = self.BasePatrolCount + 1;
         end
 
-        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
+        self.PatrolsToDispatch[#self.PatrolsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
         return;
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.ANTI_AIR) then
         self.AntiAirCount = self.AntiAirCount + 1;
-        self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
+        self.AntiAirToDispatch[#self.AntiAirToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
         return;
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.MINION or AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT_SERVICE) then
-        self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount, objBase);
+        self.MinionsToDispatch[#self.MinionsToDispatch + 1] = CreateDispatchUnit(handle, missionTurnCount);
         return;
     end
 
@@ -221,7 +226,7 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
         self.AssaultUnits[#self.AssaultUnits + 1] = CreateAssaultUnit(handle);
         return;
     end
-    
+
     if (objClass == "CLASS_ARMORY") then
         self.HasArmory = true;
         return;
@@ -597,8 +602,8 @@ function Compare(a, b)
     return a["DistanceFromCPURecycler"] < b["DistanceFromCPURecycler"];
 end
 
-function CreateDispatchUnit(handle, missionTurn, objBase)
-    return _Dispatch:New(handle, missionTurn, objBase);
+function CreateDispatchUnit(handle, missionTurn)
+    return _AIUnit:New(handle, missionTurn);
 end
 
 function CreateAssaultUnit(handle)

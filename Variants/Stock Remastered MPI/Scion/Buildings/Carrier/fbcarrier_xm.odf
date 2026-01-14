@@ -35,6 +35,10 @@ panelIcon = "icon_ark_sub.tga"
 [BuildingClass]
 soundAmbient = "carrier.wav"
 
+CanDemolish = false
+CanAlliedCommanderDemolish = false
+DoBettyLost = false
+
 [FactoryClass]
 buildItem1 = "scavenger_dropship"
 buildItem2 = "defense_dropship"

@@ -1,14 +1,34 @@
 [GameObjectClass]
 classLabel = "fvtank_x"
 
-scrapCost = 28 // Original Scrap Cost (55) / 2 = 27.5, round up to 28.
+scrapCost = 0
+
+unitName = "Commander"
 
 /////// REIMAGINED  ////////////////
 AIUnitType = "Commander"
 ////////////////////////////////////
 
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName4 = "Commander"
+////////////////////////////////////
+
 [CraftClass]
+ClosestEnemyGoodEyes = true
+
 CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+DoIdleDispatch = false
+
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+SitAttackAllowCounterattack = true
+SitAttackAllowIndependence = true
+OffensiveProcessIsTenaciousAITeam = true
 
 [HoverCraftClass]
 

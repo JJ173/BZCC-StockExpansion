@@ -55,6 +55,7 @@ local _Session = {
     m_CPUScrapDelay = 0,
     m_CPUScrapAmount = 0,
     m_NextCPUScrapTime = 0,
+    m_VSRTauntEasterEggTime = 0,
 
     m_IntroForcePlayerTeleportDelay = 0,
     m_IntroState = 1,
@@ -459,6 +460,7 @@ function Start()
     _Session.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE));
     _Session.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE));
     _Session.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1;
+    _Session.m_VSRTauntEasterEggTime = _Session.m_TurnCounter + SecondsToTurns(600);
 
     if (_Session.m_Difficulty == DIFFICULTY_MEDIUM) then
         _Session.m_CPUScrapDelay = 2;
@@ -934,26 +936,27 @@ end
 function GameConditions()
     if (_Session.m_GameOver == false) then
         if (IsAlive(_Session.m_EnemyRecycler) == false) then
-            -- Check to see if the DLL Team slot is filled first.
             local DLLHandle = GetObjectByTeamSlot(_Session.m_CompTeam, DLL_TEAM_SLOT_RECYCLER);
 
             if (IsAround(DLLHandle)) then
                 _Session.m_EnemyRecycler = DLLHandle;
             else
-                -- Taunt for game over.
                 DoTaunt(TAUNTS_CPURecyDestroyed);
                 SucceedMission(GetTime() + 5, "instantw.txt");
                 _Session.m_GameOver = true;
             end
         elseif (IsAlive(_Session.m_Recycler) == false) then
-            -- Check to see if the DLL Team slot is filled first.
             local DLLHandle = GetObjectByTeamSlot(_Session.m_StratTeam, DLL_TEAM_SLOT_RECYCLER);
 
             if (IsAround(DLLHandle)) then
                 _Session.m_Recycler = DLLHandle;
             else
-                -- Taunt for game over.
-                DoTaunt(TAUNTS_HumanRecyDestroyed);
+                if (_Session.m_TurnCounter < _Session.m_VSRTauntEasterEggTime) then
+                    DoTaunt(TAUNTS_VSR_EasterEgg);
+                else
+                    DoTaunt(TAUNTS_HumanRecyDestroyed);
+                end
+
                 SucceedMission(GetTime() + 5, "instantl.txt");
                 _Session.m_GameOver = true;
             end

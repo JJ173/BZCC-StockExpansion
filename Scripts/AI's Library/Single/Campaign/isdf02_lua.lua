@@ -450,7 +450,7 @@ end
 
 Functions[2] = function()
     -- Check if the main player is in a scout so we can continue.
-    if (IsOdf(Mission.m_MainPlayer, "ivplysct") and Mission.m_ShabInShip) then
+    if (IsOdf(Mission.m_MainPlayer, "ivplysct_x") and Mission.m_ShabInShip) then
         -- Give command of the Service Truck to the player.
         SetBestGroup(Mission.m_Truck);
 

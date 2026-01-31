@@ -1,6 +1,9 @@
 [GameObjectClass]
 classLabel = "ivserv_c"
 
+buildTime = 5
+scrapCost = 0
+
 /////// REIMAGINED  ////////////////
 AIUnitType = "AssaultService"
 ////////////////////////////////////

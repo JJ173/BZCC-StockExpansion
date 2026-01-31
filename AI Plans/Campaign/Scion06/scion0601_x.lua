@@ -57,14 +57,29 @@ function TurretCondition(team, time)
     end
 end
 
-function ServiceTruckCondition(team, time)
-    local recyclerExists = DoesRecyclerExist(team, time);
-    local serviceTruckCount = AIPUtil.CountUnits(team, "VIRTUAL_CLASS_SERVICETRUCK", 'sameteam', true);
+function RocketTankCondition(team, time)
+    if (not DoesFactoryExist(team, time)) then
+        return false, "Braddock doesn't have a Factory and can't build any Rocket Tanks.";
+    end
 
-    if (recyclerExists and serviceTruckCount < 3) then
-        return true, "Braddock is building a turret...";
+    if (not DoesRelayBunkerExist(team, time)) then
+        return false, "Braddock doesn't have a Relay Bunker and can't build any Rocket Tanks.";
+    end
+
+    if (not DoesArmoryExist(team, time)) then
+        return false, "Braddock doesn't have an Armory and can't build any Rocket Tanks.";
+    end
+
+    return true, "Tasking Factory to build a Rocket Tank..";
+end
+
+function ServiceTruckCondition(team, time)
+    local recyclerExists = DoesRecyclerExist(team, time)
+
+    if (recyclerExists) then
+        return true, "Braddock is building a Service Truck..."
     else
-        return false, "Braddock has enough turrets...";
+        return false, "Braddock has enough Service Truck..."
     end
 end
 
@@ -87,6 +102,18 @@ end
 
 function DoesRecyclerExist(team, time)
     return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_RECYCLERBUILDING", 'sameteam', true) > 0;
+end
+
+function DoesFactoryExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_FACTORY", "sameteam", true) > 0;
+end
+
+function DoesRelayBunkerExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_COMMBUNKER", "sameteam", true) > 0;
+end
+
+function DoesArmoryExist(team, time)
+    return AIPUtil.CountUnits(team, "VIRTUAL_CLASS_ARMORY", "sameteam", true) > 0;
 end
 
 function DoesServiceBayExist(team, time)

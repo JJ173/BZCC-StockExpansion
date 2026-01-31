@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF01 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 09-12-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF01: This is Not a Drill";
+local m_MissionName = _BZCCDatabase.Missions.ISDF01;
 
 -- Mission important variables.
 local Mission =

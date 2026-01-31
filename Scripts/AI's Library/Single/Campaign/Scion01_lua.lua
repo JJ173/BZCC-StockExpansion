@@ -1,19 +1,15 @@
 --[[
     BZCC Scion01 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 18-05-2025
-
-    Mission Flow:
-    - Handles intro cutscene, player/AI setup, and a multi-phase escort/defense mission.
-    - Uses a state machine (Functions[n]) for mission progression.
-    - Key events: player morphing, base defense, ISDF attack waves, escorting a hauler, ambush, and a rockslide event.
-    - Cooperative and single-player supported.
-    - See constants and helper functions for tuning and repeated logic.
 --]]
+
+-- Fix for finding files outside of this script directory.
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 
 require("_GlobalVariables")
 require("_HelperFunctions")
 
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative")
 local _Subtitles = require('_Subtitles')
 
@@ -22,7 +18,7 @@ local _Subtitles = require('_Subtitles')
 -- =========================
 
 local m_GameTPS = GetTPS()
-local m_MissionName = "Scion01: Transformation"
+local m_MissionName = _BZCCDatabase.Missions.SCION01
 local m_WaveCooldowns = { 45, 60, 75, 90 }
 
 local m_WaveAttackers = {
@@ -95,12 +91,6 @@ local EscortState = {
     FINISH = 11
 }
 
-local PlayerEscortState = {
-    ESCORT = 1,
-    AT_DROPSHIP = 2,
-    FINISH = 3
-}
-
 local RockslideState = {
     WAIT_FOR_TRIGGER = 1,
     LANDSLIDE_ANIMATION = 2,
@@ -118,6 +108,12 @@ local RockslideState = {
     PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA3 = 14,
     PLAYER_INVESTIGATE_ROCKSLIDE_FINISH = 15,
     FINISH = 16
+}
+
+local PlayerEscortState = {
+    ESCORT = 1,
+    AT_DROPSHIP = 2,
+    FINISH = 3
 }
 
 local YelenaState = {
@@ -194,10 +190,6 @@ local Mission = {
     m_ISDFRouteAttacker4A = nil,
     m_ISDFRouteAttacker4B = nil,
 
-    m_RockslideMine1 = nil,
-    m_RockslideMine2 = nil,
-    m_RockslideMine3 = nil,
-
     m_PlayerPilo1 = nil,
     m_ShabPilo = nil,
     m_ShabPilo3 = nil,
@@ -225,6 +217,8 @@ local Mission = {
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
+    m_MissionSuccess = false,
+    m_CanFail = false,
 
     m_PilotsMoved = false,
     m_ConstructorMoved = false,
@@ -241,6 +235,8 @@ local Mission = {
     m_SpawnDeltaSquad = false,
     m_PowerCrystalDestroyed = false,
     m_RecyclerDestroyed = false,
+    m_YelenaPraiseEndOfMission = false,
+    m_DropshipGuardsLook = false,
 
     m_PowerLungWarningActive = false,
     m_MorphWarningActive = false,
@@ -266,7 +262,8 @@ local Mission = {
 
     m_ISDFRoute1Attack = false,
     m_ISDFRoute2Attack = false,
-    m_ISDFRoute3Attack = false,
+    m_ISDFRoute4AAttack = false,
+    m_ISDFRoute4BAttack = false,
 
     m_JakStop1 = false,
     m_JakStop2 = false,
@@ -282,6 +279,15 @@ local Mission = {
     m_DropshipSpawned = false,
     m_DropshipSwapped = false,
     m_DropshipOpen = false,
+    m_DropshipTakeoff = false,
+    m_DropshipCameraReady = false,
+    m_DropshipCameraDone = false,
+    m_Sentry1ToDropship = false,
+    m_Sentry2ToDropship = false,
+    m_HaulerToDropship = false,
+    m_RemoveSentry1 = false,
+    m_RemoveSentry2 = false,
+    m_RemoveHauler = false,
 
     m_CutsceneAudioClip = nil,
     m_Audioclip = nil,
@@ -304,10 +310,12 @@ local Mission = {
     m_ISDFWaveTime = 0,
     m_ISDFWaveCount = 1,
     m_DeltaWarningCount = 0,
-    m_ISDFRouteDelay = 0,
     m_AminiGoTime = 0,
     m_SwapDropshipTime = 0,
     m_OpenDropshipTime = 0,
+    m_IntoDropshipTime = 0,
+    m_DropshipTakeOffSoundTime = 0,
+    m_DropshipCameraEndTime = 0,
 
     m_CurrentPhase = MissionPhase.INTRO,
     m_IntroState = IntroState.SETUP,
@@ -373,6 +381,8 @@ local IntroHandlers = {
         Mission.m_DropshipSentry2 = GetHandle("sentry2")
         Mission.m_DropshipGuardian1 = GetHandle("guardian1")
         Mission.m_DropshipGuardian2 = GetHandle("guardian2")
+
+        Mission.m_CanFail = true
 
         if (Mission.m_DropshipSentry1) then
             SetMaxHealth(Mission.m_DropshipSentry1, 0)
@@ -716,6 +726,9 @@ local EscortHandlers = {
             Attack(Mission.m_DeltaSquad1, Mission.m_ISDFAmbusher1)
             Attack(Mission.m_DeltaSquad2, Mission.m_ISDFAmbusher2)
 
+            Stop(Mission.m_DeltaSquad1)
+            Stop(Mission.m_DeltaSquad2)
+
             Mission.m_AmbushAttacking = true
         end
 
@@ -737,7 +750,8 @@ local EscortHandlers = {
     [EscortState.DELTA_RETREAT] = function()
         if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
         Patrol(Mission.m_DeltaSquad1, "shab_patrol")
-        Follow(Mission.m_DeltaSquad2, Mission.m_DeltaSquad1)
+        Patrol(Mission.m_DeltaSquad2, "shab_patrol")
+
         Mission.m_Nav2 = BuildObject("ibnav", 1, "nav2")
         SetObjectiveOn(Mission.m_Nav2)
         SetObjectiveName(Mission.m_Nav2, TranslateString("MissionS0102"))
@@ -752,8 +766,8 @@ local EscortHandlers = {
         if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
 
         if (IsAlive(Mission.m_Hauler)) then
-            Stop(Mission.m_Hauler, 0);
-            SetBestGroup(Mission.m_Hauler);
+            Stop(Mission.m_Hauler, 0)
+            SetBestGroup(Mission.m_Hauler)
         end
 
         SetObjectiveOn(Mission.m_PowerCrystal)
@@ -762,32 +776,6 @@ local EscortHandlers = {
     end,
     [EscortState.FINISH] = function()
         Mission.m_CurrentPhase = MissionPhase.PLAYER_ESCORT
-        Mission.m_RockslideState = RockslideState.WAIT_FOR_TRIGGER
-    end
-}
-
-local PlayerEscortHandlers = {
-    [PlayerEscortState.ESCORT] = function()
-        if (not Mission.m_DropshipSpawned) then
-            Mission.m_Dropship = BuildObject("fvdrop_land", Mission.m_AlliedTeam, "dropship")
-            Mission.m_SwapDropshipTime = Mission.m_MissionTime + SecondsToTurns(15)
-            SetAnimation(Mission.m_Dropship, "land", 1)
-            Mission.m_DropshipSpawned = true
-        elseif (not Mission.m_DropshipSwapped and Mission.m_SwapDropshipTime < Mission.m_MissionTime) then
-            RemoveObject(Mission.m_Dropship)
-            Mission.m_Dropship = BuildObject("fvdrop", Mission.m_AlliedTeam, "dropship")
-            Mission.m_OpenDropshipTime = Mission.m_MissionTime + SecondsToTurns(1)
-            Mission.m_DropshipSwapped = true
-        elseif (not Mission.m_DropshipOpen and Mission.m_OpenDropshipTime < Mission.m_MissionTime) then
-            SetAnimation(Mission.m_Dropship, "deploy", 1)
-            Mission.m_DropshipOpen = true
-        end
-    end,
-    [PlayerEscortState.AT_DROPSHIP] = function()
-
-    end,
-    [PlayerEscortState.FINISH] = function()
-        Mission.m_CurrentPhase = MissionPhase.ROCKSLIDE
         Mission.m_RockslideState = RockslideState.WAIT_FOR_TRIGGER
     end
 }
@@ -863,7 +851,7 @@ local RockslideHandlers = {
             return
         end
 
-        local chosenAmbushSet = m_Ambush2[Mission.m_MissionDifficulty];
+        local chosenAmbushSet = m_Ambush2[Mission.m_MissionDifficulty]
 
         Mission.m_ISDFAmbusher1 = BuildObject(chosenAmbushSet[1], Mission.m_EnemyTeam, "rockslide_ambush_1")
         Mission.m_ISDFAmbusher2 = BuildObject(chosenAmbushSet[2], Mission.m_EnemyTeam, "rockslide_ambush_2")
@@ -934,7 +922,7 @@ local RockslideHandlers = {
 
         for i = 1, _Cooperative.m_TotalPlayerCount do
             local player = GetPlayerHandle(i)
-            if (player and IsPerson(player) and GetDistance(player, Mission.m_Landslide) < 50) then
+            if (player and IsPerson(player) and GetDistance(player, Mission.m_Landslide) < 100) then
                 StopAudioMessage(Mission.m_Audioclip)
                 Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_SETUP
                 return
@@ -945,9 +933,9 @@ local RockslideHandlers = {
         Mission.m_Amini = BuildObject("fvsent_x", 7, "amini_spawn")
         Mission.m_PlayerOnFoot = BuildObject("fspilo_x", 0, "pilo_on_foot_spawn")
 
-        SetIndependent(Mission.m_Amini, 0)
+        SetIndependence(Mission.m_Amini, 0)
         CameraReady()
-        Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1;
+        Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1
     end,
     [RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA1] = function()
         CameraObject(Mission.m_PlayerOnFoot, 0, -1, -3, Mission.m_PlayerOnFoot)
@@ -959,8 +947,8 @@ local RockslideHandlers = {
         end
 
         if (GetDistance(Mission.m_PlayerOnFoot, "pilo_on_foot_endpath1") < 5) then
-            Stop(Mission.m_PlayerOnFoot);
-            LookAt(Mission.m_PlayerOnFoot, Mission.m_Amini);
+            Stop(Mission.m_PlayerOnFoot)
+            LookAt(Mission.m_PlayerOnFoot, Mission.m_Amini)
 
             Mission.m_AminiGoTime = Mission.m_MissionTime + SecondsToTurns(5)
             Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_CAMERA2
@@ -987,7 +975,7 @@ local RockslideHandlers = {
             Retreat(Mission.m_PlayerOnFoot, "pilo_on_foot_path2")
             Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(6)
             Mission.m_PlayerPilotRetreat = true
-            Mission.m_RockslideState = RockslideState.FINISH
+            Mission.m_RockslideState = RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_FINISH
         end
     end,
     [RockslideState.PLAYER_INVESTIGATE_ROCKSLIDE_FINISH] = function()
@@ -998,11 +986,138 @@ local RockslideHandlers = {
         CameraFinish()
 
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(5)
+        Mission.m_RockslideState = RockslideState.FINISH
     end,
     [RockslideState.FINISH] = function()
         if (Mission.m_MissionDelayTime > Mission.m_MissionTime) then return end
         playAudioWithDelay("scion0122.wav", 17.5)
         Mission.m_RockslideFinished = true
+    end
+}
+
+local PlayerEscortHandlers = {
+    [PlayerEscortState.ESCORT] = function()
+        Mission.m_Hauler = GetTug(Mission.m_PowerCrystal)
+
+        if (not Mission.m_DropshipGuardsLook and GetDistance(Mission.m_PowerCrystal, "dropship") < 300) then
+            LookAt(Mission.m_DropshipSentry1, Mission.m_PowerCrystal)
+            LookAt(Mission.m_DropshipSentry2, Mission.m_PowerCrystal)
+            Mission.m_DropshipGuardsLook = true
+        end
+
+        if (not Mission.m_DropshipSpawned) then
+            Mission.m_Dropship = BuildObject("fvdrop_land", Mission.m_AlliedTeam, "dropship")
+            Mission.m_SwapDropshipTime = Mission.m_MissionTime + SecondsToTurns(15)
+            SetAnimation(Mission.m_Dropship, "land", 1)
+            Mission.m_DropshipSpawned = true
+        elseif (not Mission.m_DropshipSwapped and Mission.m_SwapDropshipTime < Mission.m_MissionTime) then
+            RemoveObject(Mission.m_Dropship)
+            Mission.m_Dropship = BuildObject("fvdrop", Mission.m_AlliedTeam, "dropship")
+            Mission.m_OpenDropshipTime = Mission.m_MissionTime + SecondsToTurns(1)
+            Mission.m_DropshipSwapped = true
+        elseif (Mission.m_DropshipSwapped and not Mission.m_DropshipOpen and Mission.m_OpenDropshipTime < Mission.m_MissionTime) then
+            SetAnimation(Mission.m_Dropship, "deploy", 1)
+            Mission.m_DropshipOpen = true
+        end
+
+        -- Check to make sure the tug has arrived at the dropship.
+        if (IsAlive(Mission.m_Hauler) and GetDistance(Mission.m_PowerCrystal, "dropship") < 100) then
+            Retreat(Mission.m_DropshipSentry1, "tug_end_path")
+            Retreat(Mission.m_DropshipSentry2, "tug_end_path")
+            Retreat(Mission.m_Hauler, "tug_end_path")
+
+            Mission.m_IntoDropshipTime = Mission.m_MissionTime + SecondsToTurns(4)
+
+            SetObjectiveOff(Mission.m_Nav2)
+            playAudioWithDelay("scion0121.wav", 6.5)
+            Mission.m_PlayerEscortState = PlayerEscortState.AT_DROPSHIP
+        end
+    end,
+    [PlayerEscortState.AT_DROPSHIP] = function()
+        if (not Mission.m_IsCooperativeMode) then
+            -- Get the camera ready.
+            if (not Mission.m_DropshipCameraReady) then
+                CameraReady()
+                Mission.m_DropshipCameraReady = true
+            end
+
+            CameraPath("dropship_cam1", 5000, 0, Mission.m_DropshipCam1Look)
+        end
+
+        if (not Mission.m_YelenaPraiseEndOfMission) then
+            if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
+            playAudioWithDelay("scion0135.wav", 3.5)
+            Mission.m_YelenaPraiseEndOfMission = true
+
+            -- End it here for coop.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("Mission Accomplished.")
+                DoGameover(12)
+            end
+        end
+
+        if (Mission.m_IntoDropshipTime < Mission.m_MissionTime) then
+            if (not Mission.m_Sentry1ToDropship) then
+                Retreat(Mission.m_DropshipSentry1, "dropship")
+                Mission.m_Sentry1ToDropship = true
+                Mission.m_IntoDropshipTime = Mission.m_MissionTime + SecondsToTurns(2)
+                return
+            end
+
+            if (not Mission.m_Sentry2ToDropship) then
+                Retreat(Mission.m_DropshipSentry2, "dropship")
+                Mission.m_Sentry2ToDropship = true
+                return
+            end
+
+            if (not Mission.m_HaulerToDropship and GetDistance(Mission.m_Hauler, "hauler_to_dropship") < 10) then
+                Retreat(Mission.m_Hauler, "dropship")
+                Mission.m_HaulerToDropship = true
+                return
+            end
+        end
+
+        if (Mission.m_Sentry1ToDropship and not Mission.m_RemoveSentry1 and GetDistance(Mission.m_DropshipSentry1, "dropship") < 5) then
+            RemoveObject(Mission.m_DropshipSentry1)
+            Mission.m_RemoveSentry1 = true
+            return
+        end
+
+        if (Mission.m_Sentry2ToDropship and not Mission.m_RemoveSentry2 and GetDistance(Mission.m_DropshipSentry2, "dropship") < 5) then
+            RemoveObject(Mission.m_DropshipSentry2)
+            Mission.m_RemoveSentry2 = true
+            return
+        end
+
+        if (Mission.m_HaulerToDropship and not Mission.m_RemoveHauler and GetDistance(Mission.m_Hauler, "dropship") < 5) then
+            RemoveObject(Mission.m_Hauler)
+            RemoveObject(Mission.m_PowerCrystal)
+            Mission.m_RemoveHauler = true
+        end
+
+        if (Mission.m_RemoveSentry1 and Mission.m_RemoveSentry2 and Mission.m_RemoveHauler) then
+            SetAnimation(Mission.m_Dropship, "takeoff", 1)
+            Mission.m_DropshipTakeOffSoundTime = Mission.m_MissionTime + SecondsToTurns(4)
+            Mission.m_PlayerEscortState = PlayerEscortState.FINISH
+        end
+    end,
+    [PlayerEscortState.FINISH] = function()
+        if (not Mission.m_DropshipTakeoff and Mission.m_DropshipTakeOffSoundTime < Mission.m_MissionTime) then
+            AudioMessage("droptoff.wav")
+            Mission.m_DropshipTakeoff = true
+        end
+
+        if (not Mission.m_IsCooperativeMode) then
+            if (Mission.m_DropshipCameraReady and Mission.m_DropshipCameraEndTime < Mission.m_MissionTime and not Mission.m_DropshipCameraDone) then
+                CameraFinish()
+                Mission.m_DropshipCameraDone = true
+            end
+        end
+
+        if (not Mission.m_MissionSuccess) then
+            SucceedMission(GetTime() + 12, "scion01w1.txt")
+            Mission.m_MissionSuccess = true
+        end
     end
 }
 
@@ -1216,7 +1331,9 @@ function Update()
                 end
             end
 
-            HandleFailureConditions()
+            if (Mission.m_CanFail) then
+                HandleFailureConditions()
+            end
 
             if (Mission.m_EnableAnimals) then HandleMireAnimals() end
             if (Mission.m_EnableISDF) then HandleISDF() end
@@ -1331,7 +1448,7 @@ function HandleFailureConditions()
             Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("scion0136.wav")
 
             if (Mission.m_IsCooperativeMode) then
-                NoteGameoverWithCustomMessage("You must follow Shabayev's orders and build a Lung on your Kiln.")
+                NoteGameoverWithCustomMessage("You must follow Yelena's orders and build a Lung on your Kiln.")
                 DoGameover(10)
             else
                 FailMission(GetTime() + 10, "scion01L6.txt")
@@ -1385,7 +1502,7 @@ function HandleFailureConditions()
             end
         end
 
-        if (Mission.m_PowerCrystalDestroyed and Mission.m_PowerCrystalDestroyedTime < Mission.m_MissionTime) then
+        if (not Mission.m_RemoveHauler and Mission.m_PowerCrystalDestroyed and Mission.m_PowerCrystalDestroyedTime < Mission.m_MissionTime) then
             playAudioWithDelay("scion0125.wav", 8.5)
             AddObjectiveOverride("scion0111.otf", "RED", 10, true, Mission.m_IsCooperativeMode)
 
@@ -1521,33 +1638,76 @@ function HandleISDF()
         end
 
         Mission.m_ISDFWaveSpawned = true
-    elseif (Mission.m_PlayerEscortTug) then
-        if (Mission.m_ISDFRouteDelay > Mission.m_MissionTime) then return end
+    end
 
-        if (not Mission.m_ISDFRoute1Attack) then
-            local check1 = GetDistance(Mission.m_PowerCrystal, "trig_routeattack1") < 40
-            local check2 = IsPlayerWithinDistance("trig_routeattack1", 100, _Cooperative.m_TotalPlayerCount)
+    if (not Mission.m_ISDFRoute1Attack) then
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local player = GetPlayerHandle(i)
+            if (player and GetDistance(player, "trig_routeattack1") < 100) then
+                if (IsAround(Mission.m_PowerCrystal)) then
+                    Attack(Mission.m_ISDFRouteAttacker1A, Mission.m_PowerCrystal)
+                    Attack(Mission.m_ISDFRouteAttacker1B, GetTug(Mission.m_PowerCrystal))
+                    Defend2(Mission.m_ISDFRouteAttacker1C, Mission.m_ISDFRouteAttacker1B)
+                else
+                    Attack(Mission.m_ISDFRouteAttacker1A, player)
+                    Attack(Mission.m_ISDFRouteAttacker1B, player)
+                    Defend2(Mission.m_ISDFRouteAttacker1C, Mission.m_ISDFRouteAttacker1B)
+                end
 
-            if (check1 or check2) then
-                Attack(Mission.m_ISDFRouteAttacker1A, Mission.m_PowerCrystal)
-                Attack(Mission.m_ISDFRouteAttacker1B, GetTug(Mission.m_PowerCrystal))
-                Defend2(Mission.m_ISDFRouteAttacker1C, Mission.m_ISDFRouteAttacker1B)
                 Mission.m_ISDFRoute1Attack = true
+                return
             end
         end
+    end
 
-        if (not Mission.m_ISDFRoute2Attack) then
-            local check1 = GetDistance(Mission.m_PowerCrystal, "trig_routeattack2") < 40
-            local check2 = IsPlayerWithinDistance("trig_routeattack2", 100, _Cooperative.m_TotalPlayerCount)
+    if (not Mission.m_ISDFRoute2Attack) then
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local player = GetPlayerHandle(i)
+            if (player and GetDistance(player, "trig_routeattack2") < 100) then
+                if (IsAround(Mission.m_PowerCrystal)) then
+                    Attack(Mission.m_ISDFRouteAttacker2A, Mission.m_PowerCrystal)
+                    Attack(Mission.m_ISDFRouteAttacker2B, GetTug(Mission.m_PowerCrystal))
+                else
+                    Attack(Mission.m_ISDFRouteAttacker2A, player)
+                    Attack(Mission.m_ISDFRouteAttacker2B, player)
+                end
 
-            if (check1 or check2) then
-                Attack(Mission.m_ISDFRouteAttacker2A, Mission.m_PowerCrystal)
-                Attack(Mission.m_ISDFRouteAttacker2B, GetTug(Mission.m_PowerCrystal))
                 Mission.m_ISDFRoute2Attack = true
+                return
             end
         end
+    end
 
-        Mission.m_ISDFRouteDelay = Mission.m_MissionTime + SecondsToTurns(1.5)
+    if (not Mission.m_ISDFRoute4AAttack) then
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local player = GetPlayerHandle(i)
+            if (player and GetDistance(player, Mission.m_ISDFRouteAttacker4A) < 150) then
+                if (IsAround(Mission.m_PowerCrystal)) then
+                    Attack(Mission.m_ISDFRouteAttacker4A, Mission.m_PowerCrystal)
+                else
+                    Attack(Mission.m_ISDFRouteAttacker4A, player)
+                end
+
+                Mission.m_ISDFRoute4AAttack = true
+                return
+            end
+        end
+    end
+
+    if (not Mission.m_ISDFRoute4BAttack) then
+        for i = 1, _Cooperative.m_TotalPlayerCount do
+            local player = GetPlayerHandle(i)
+            if (player and GetDistance(player, Mission.m_ISDFRouteAttacker4B) < 150) then
+                if (IsAround(Mission.m_PowerCrystal)) then
+                    Attack(Mission.m_ISDFRouteAttacker4B, Mission.m_PowerCrystal)
+                else
+                    Attack(Mission.m_ISDFRouteAttacker4B, player)
+                end
+
+                Mission.m_ISDFRoute4BAttack = true
+                return
+            end
+        end
     end
 end
 

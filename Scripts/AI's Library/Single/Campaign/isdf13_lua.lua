@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF13 Lua Mission Script
     Written by AI_Unit
-    Version 2.0 24-01-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF13: Payback";
+local m_MissionName = _BZCCDatabase.Missions.ISDF13;
 
 local m_ShieldChance = 0.2;
 local m_WeaponChance = 0.25;
@@ -33,7 +27,7 @@ local m_WeaponTable = {
     m_Cannons = { "gquill_c", "gsonic_c", "garc_c" },
 
     -- Table for Guns (2)
-    m_Guns = { "glock_c", "ggauss_c", },
+    m_Guns = { "glock_c", "ggauss_c" },
 
     -- Table for Missiles (3)
     m_Missiles = { "gmlock_c" },

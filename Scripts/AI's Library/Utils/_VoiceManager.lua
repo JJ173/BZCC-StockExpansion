@@ -5,28 +5,21 @@ function _VoiceManager.SwitchVehicleVoices(handle, pilotHandle)
     if (IsPlayer(pilotHandle)) then return end;
 
     -- Get these here for now, but move them down if we need to.
-    local handleOdf = GetCfg(handle);
     local pilotRace = GetRace(pilotHandle);
     local handleRace = GetRace(handle);
 
-    -- First we need to check if the pilot race is the same as the craft race.
-    local odfName = '';
-
     if (pilotRace == handleRace) then
-        -- Crack open the current ODF that the pilot got into.
-        odfName = GetODFString(handle, 'GameObjectClass', 'classLabel');
-    else
-        odfName = handleOdf .. '_' .. pilotRace;
+        return
     end
 
-    -- For extra debugging.
-    print("Attempting to replace " .. handleOdf .. " with ", odfName);
+    local handleOdf = GetCfg(handle);
+    local odfName = handleOdf .. '_' .. pilotRace;
 
     -- Abort early if the ODF that we need doesn't exist.
     if (DoesODFExist(odfName) == false) then return end;
 
     -- ODF Exists, so let's replace it based on the pilot race that entered the craft.
-    local newOdf = ReplaceObject(handle, odfName);
+    local newOdf = ReplaceObject(handle, odfName, GetTeamNum(pilotHandle));
 
     -- Just for safety.
     AddPilotByHandle(newOdf);

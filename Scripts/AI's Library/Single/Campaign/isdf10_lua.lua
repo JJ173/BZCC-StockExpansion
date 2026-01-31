@@ -1,22 +1,16 @@
 --[[
     BZCC ISDF10 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 12-01-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
@@ -26,7 +20,7 @@ local m_GameTPS = GetTPS();
 local m_ConvoyTime = { 180, 120, 60 };
 
 -- Mission Name
-local m_MissionName = "ISDF10: Snow Blind";
+local m_MissionName = _BZCCDatabase.Missions.ISDF10;
 
 -- Mission important variables.
 local Mission =

@@ -1,25 +1,34 @@
 --[[
     BZCC Scion06 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 21-04-2025
 --]]
 
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 require("_GlobalVariables")
 require("_HelperFunctions")
+require("_AICmd")
 
 local _DispatchClass = require("_DispatchClass")
 local _Cooperative = require("_Cooperative")
 local _Subtitles = require('_Subtitles')
+local _BZCCDatabase = require("_BZCCDatabase")
+local _WorldManager = require("_WorldManager")
 
 -- =========================
 -- Variables
 -- =========================
 
 local m_GameTPS = GetTPS()
-local m_MissionName = "Scion06: The AAN"
+local m_MissionName = _BZCCDatabase.Missions.SCION06
 
 local m_RepairTimeTable = { 600, 450, 300 }
+local m_WeaponChance = 0.25
+
+local m_WeaponTable = {
+    m_Cannons = { _BZCCDatabase.ISDFWeaponTable.SPStabber, _BZCCDatabase.ISDFWeaponTable.PLStabber, _BZCCDatabase.ISDFWeaponTable.Plasma },
+    m_Guns = { _BZCCDatabase.ISDFWeaponTable.Pummel, _BZCCDatabase.ISDFWeaponTable.Chain, _BZCCDatabase.ISDFWeaponTable.Laser },
+    m_Missiles = { _BZCCDatabase.ISDFWeaponTable.Shadower, _BZCCDatabase.ISDFWeaponTable.FAF },
+}
 
 local MissionPhase = {
     INTRO = 1,
@@ -45,10 +54,12 @@ local BaseState = {
 local ConvoyState = {
     SETUP = 1,
     CONVOY_BRAIN = 2,
+    CONVOY_DEAD = 3,
+    END_MISSION = 4
 }
 
-local YelenaState = {
-    DISPATCH_TURRETS = 1,
+local CPUState = {
+    DISPATCH_UNITS = 1,
 }
 
 local Mission = {
@@ -66,11 +77,6 @@ local Mission = {
     m_Yelena = nil,
     m_Manson = nil,
 
-    m_BraddockTurret1 = nil,
-    m_BraddockTurret2 = nil,
-    m_BraddockTurret3 = nil,
-    m_BraddockTurret4 = nil,
-
     m_BraddockBasePatrol1 = nil,
     m_BraddockBasePatrol2 = nil,
     m_BraddockBasePatrol3 = nil,
@@ -79,6 +85,21 @@ local Mission = {
 
     m_YelenaTurret1 = nil,
     m_YelenaTurret2 = nil,
+
+    ---@type DispatchClass[]
+    m_YelenaSentries = {},
+    ---@type DispatchClass[]
+    m_YelenaTurrets = {},
+    ---@type DispatchClass[]
+    m_BraddockAntiAirUnits = {},
+    ---@type DispatchClass[]
+    m_BraddockAssaultUnits = {},
+    ---@type DispatchClass[]
+    m_BraddockAssaultServiceUnits = {},
+    ---@type DispatchClass[]
+    m_BraddockTurrets = {},
+    ---@type DispatchClass[]
+    m_BraddockAssaultDefenseUnits = {},
 
     m_PlayerRecycler = nil,
     m_PlayerPower1 = nil,
@@ -100,6 +121,7 @@ local Mission = {
 
     m_YelenaPowerDialogPlayed = false,
     m_YelenaBrainActive = true,
+    m_BraddockBrainActive = true,
 
     m_ConvoyEscortClose = false,
     m_ConvoyEscortTooFar = false,
@@ -108,9 +130,15 @@ local Mission = {
     m_ConvoyFleeing = false,
     m_ConvoyFleeingDialogPlayed = false,
 
+    m_ConvoyHaulderDead = false,
+    m_ConvoyEscortsDead = false,
+
+    m_ShowConvoyObjective = false,
+
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
+    m_FailuresActive = false,
 
     m_Audioclip = nil,
     m_AudioTimer = 0,
@@ -121,13 +149,14 @@ local Mission = {
     m_RepairWarningCount = 0,
     m_ConvoyBrainDelayTime = 0,
     m_YelenaDispatchDelayTime = 0,
-    m_YelenaTurretCount = 0,
+    m_BraddockDispatchDelayTime = 0,
 
     m_CurrentPhase = MissionPhase.INTRO,
     m_IntroState = IntroState.SETUP,
     m_BaseState = BaseState.SETUP,
     m_ConvoyState = ConvoyState.SETUP,
-    m_YelenaState = YelenaState.DISPATCH_TURRETS,
+    m_YelenaState = CPUState.DISPATCH_UNITS,
+    m_BraddockState = CPUState.DISPATCH_UNITS
 }
 
 -- =========================
@@ -145,23 +174,31 @@ end
 
 local IntroHandlers = {
     [IntroState.SETUP] = function()
+        _WorldManager.Setup(true, _Cooperative.m_TotalPlayerCount)
+
         SetTeamNameForStat(Mission.m_AlliedTeam, "Scion")
         SetTeamNameForStat(Mission.m_EnemyTeam, "New Regime")
         SetTeamNameForStat(7, "Rebel Scions")
 
         for i = 2, 5 do
             Ally(Mission.m_HostTeam, i)
-            SetTeamColor(i, 0, 127, 255)
         end
 
+        SetTeamColor(7, 31, 127, 95)
         Ally(Mission.m_EnemyTeam, 7)
-        SetTeamColor(Mission.m_HostTeam, 0, 127, 255)
+
+        for i = Mission.m_HostTeam, 4 do
+            SetTeamColor(i, 0, 127, 255)
+        end
 
         Mission.m_Yelena = GetHandle("yelena")
         Mission.m_Manson = GetHandle("manson")
 
+        Patrol(Mission.m_Manson, "manson_patrol", 1)
+
         Mission.m_BraddockRecycler = GetHandle("enemyrecy")
 
+        Mission.m_PlayerRecycler = GetHandle("playersrecy")
         Mission.m_PlayerPower1 = GetHandle("playerspgen1")
         Mission.m_PlayerPower2 = GetHandle("playerspgen2")
         Mission.m_PlayerFactory = GetHandle("playersfact")
@@ -174,15 +211,14 @@ local IntroHandlers = {
         Mission.m_ConvoyTug = GetHandle("convoy_tug1")
         Mission.m_PowerCrystal = GetHandle("power")
 
-        Patrol(Mission.m_Manson, "manson_patrol", 1)
-        Patrol(Mission.m_Yelena, "yelena_patrol", 1)
-
         SetMaxHealth(Mission.m_Manson, 0)
         SetMaxHealth(Mission.m_Yelena, 0)
         SetCanSnipe(Mission.m_Manson, 0)
         SetCanSnipe(Mission.m_Yelena, 0)
 
-        SetScrap(Mission.m_HostTeam, 40)
+        -- Give the player more scrap based on difficulty.
+        local scrapAmount = { 60, 50, 40 }
+        SetScrap(Mission.m_HostTeam, scrapAmount[Mission.m_MissionDifficulty])
         SetScrap(Mission.m_EnemyTeam, 40)
         SetScrap(Mission.m_AlliedTeam, 40)
 
@@ -198,10 +234,11 @@ local IntroHandlers = {
         BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass1")
         BuildObject("ivatank_x", Mission.m_EnemyTeam, "ass2")
 
-        Mission.m_BraddockTurret1 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret1")
-        Mission.m_BraddockTurret2 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret2")
-        Mission.m_BraddockTurret3 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret3")
-        Mission.m_BraddockTurret4 = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret4")
+        for i = 1, 4 do
+            local h = BuildObject("ivturr_x", Mission.m_EnemyTeam, "brad_turret" .. i)
+            Mission.m_BraddockTurrets[i] = _DispatchClass.New(h, Mission.m_MissionTime, Mission.m_EnemyTeam,
+                GetClassLabel(h))
+        end
 
         Mission.m_BraddockBasePatrol1 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank1")
         Mission.m_BraddockBasePatrol2 = BuildObject("ivtank_x", Mission.m_EnemyTeam, "basetank2")
@@ -214,11 +251,14 @@ local IntroHandlers = {
         SetAIP("scion0602_x.aip", Mission.m_AlliedTeam)
         Pickup(Mission.m_ConvoyTug, Mission.m_PowerCrystal)
 
+        Mission.m_FailuresActive = true
         Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(3)
         Mission.m_IntroState = IntroState.REPAIRS_DIALOG_INTRO
     end,
     [IntroState.REPAIRS_DIALOG_INTRO] = function()
         if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
+
+        Patrol(Mission.m_Yelena, "yelena_patrol", 1)
 
         playAudioWithDelay("scion0601.wav", 8.5)
         Mission.m_IntroState = IntroState.REPAIRS_DIALOG_REPAIR_TRUCK
@@ -232,15 +272,17 @@ local IntroHandlers = {
     [IntroState.REPAIRS_OBJECTIVES] = function()
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
-        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true)
+        AddObjectiveOverride("scion0601.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
 
         local chosenTimer = m_RepairTimeTable[Mission.m_MissionDifficulty]
         StartCockpitTimer(chosenTimer, chosenTimer / 2, chosenTimer / 4)
 
         local unit_a_choice = { "ivscout_x", "ivmisl_x", "ivtank_x" }
         local unit_b_choice = { "ivscout_x", "ivscout_x", "ivmisl_x" }
-        local unit_a_weapon = { "gchain_c", "gshadow_c", "gspstab_c" }
-        local unit_b_weapon = { "gchain_c", "gchain_c", "gshadow_c" }
+        local unit_a_weapon = { _BZCCDatabase.ISDFWeaponTable.Chain, _BZCCDatabase.ISDFWeaponTable.Shadower,
+            _BZCCDatabase.ISDFWeaponTable.SPStabber }
+        local unit_b_weapon = { _BZCCDatabase.ISDFWeaponTable.Chain, _BZCCDatabase.ISDFWeaponTable.Chain, _BZCCDatabase
+            .ISDFWeaponTable.Shadower }
 
         local chosen_unit_a = unit_a_choice[Mission.m_MissionDifficulty]
         local chosen_unit_b = unit_b_choice[Mission.m_MissionDifficulty]
@@ -291,6 +333,7 @@ local IntroHandlers = {
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
         playAudioWithDelay("scion0603.wav", 9.5)
+        Mission.m_RepairsComplete = true
         Mission.m_CurrentPhase = MissionPhase.BASE
     end
 }
@@ -299,7 +342,8 @@ local BaseHandlers = {
     [BaseState.SETUP] = function()
         if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
 
-        AddObjectiveOverride("scion0602.otf", "WHITE", 10, true)
+        SetAIP("scion0603_x.aip", Mission.m_EnemyTeam)
+        AddObjectiveOverride("scion0602.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
         Mission.m_Nav1 = BuildObject("ibnav", Mission.m_HostTeam, "enemybase")
         SetObjectiveName(Mission.m_Nav1, TranslateString("MissionS0601"))
         SetObjectiveOn(Mission.m_Nav1)
@@ -321,6 +365,7 @@ local BaseHandlers = {
         if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
 
         playAudioWithDelay("scion0606.wav", 3.5)
+        AddObjectiveOverride("scion0602.otf", "GREEN", 10, true, Mission.m_IsCooperativeMode)
         Mission.m_CurrentPhase = MissionPhase.CONVOY
     end
 }
@@ -333,7 +378,7 @@ local ConvoyHandlers = {
         Follow(Mission.m_ConvoyScout2, Mission.m_ConvoyScout1)
 
         Retreat(Mission.m_ConvoyTug, "convoypath")
-        Follow(Mission.m_ConvoySent1, Mission.m_ConvoyTug)
+        Follow(Mission.m_ConvoySent1, Mission.m_PowerCrystal)
         Follow(Mission.m_ConvoySent2, Mission.m_ConvoySent1)
 
         Mission.m_ConvoyEnroute = true
@@ -378,13 +423,64 @@ local ConvoyHandlers = {
         elseif (Mission.m_ConvoyFleeing) then
             if (not Mission.m_ConvoyFleeingDialogPlayed) then
                 if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
-                if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode) == false) then return end
+                if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
 
-                AddObjectiveOverride("scion0604.otf", "WHITE", 10, true)
+                AddObjectiveOverride("scion0604.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
                 playAudioWithDelay("scion0609.wav", 4.5)
                 Mission.m_ConvoyFleeingDialogPlayed = true
             end
         end
+
+        if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
+
+        if (not Mission.m_ShowConvoyObjective) then
+            AddObjectiveOverride("scion0603.otf", "WHITE", 10, true, Mission.m_IsCooperativeMode)
+            Mission.m_ShowConvoyObjective = true
+        end
+
+        -- Check to see if the Rebels have been dealt with.
+        if (not Mission.m_ConvoyHaulderDead and not IsAliveAndEnemy(Mission.m_ConvoyTug, 7)) then
+            if (not Mission.m_ConvoyEscortsDead) then
+                playAudioWithDelay("scion0610.wav", 4.5)
+            end
+
+            Mission.m_ConvoyHaulderDead = true
+        end
+
+        if (not Mission.m_ConvoyEscortsDead
+                and not IsAliveAndEnemy(Mission.m_ConvoyScout1, 7)
+                and not IsAliveAndEnemy(Mission.m_ConvoyScout2, 7)
+                and not IsAliveAndEnemy(Mission.m_ConvoySent1, 7)
+                and not IsAliveAndEnemy(Mission.m_ConvoySent2, 7)) then
+            if (not Mission.m_ConvoyHaulderDead) then
+                playAudioWithDelay("scion0611.wav", 4.5)
+            end
+
+            Mission.m_ConvoyEscortsDead = true
+        end
+
+        if (Mission.m_ConvoyHaulderDead and Mission.m_ConvoyEscortsDead) then
+            Mission.m_ConvoyState = ConvoyState.CONVOY_DEAD
+            Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(4)
+        end
+    end,
+    [ConvoyState.CONVOY_DEAD] = function()
+        if (Mission.m_MissionDelayTime >= Mission.m_MissionTime) then return end
+        playAudioWithDelay("scion0612.wav", 4.5)
+        Mission.m_ConvoyState = ConvoyState.END_MISSION
+    end,
+    [ConvoyState.END_MISSION] = function()
+        if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
+        AddObjectiveOverride("scion0605.otf", "GREEN", 10, true, Mission.m_IsCooperativeMode)
+
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Mission Accomplished.")
+            DoGameover(10)
+        else
+            SucceedMission(GetTime() + 10, "scion06w1.txt")
+        end
+
+        Mission.m_MissionOver = true
     end
 }
 
@@ -393,48 +489,128 @@ local ConvoyHandlers = {
 -- =========================
 
 local YelenaHandlers = {
-    [YelenaState.DISPATCH_TURRETS] = function()
-        if (Mission.m_YelenaTurret1 ~= nil) then
-            Mission.m_YelenaTurret1:UpdateTurn(Mission.m_MissionTime)
-        end
-        if (Mission.m_YelenaTurret2 ~= nil) then
-            Mission.m_YelenaTurret2:UpdateTurn(Mission.m_MissionTime)
-        end
-
+    [CPUState.DISPATCH_UNITS] = function()
         if (Mission.m_YelenaDispatchDelayTime >= Mission.m_MissionTime) then return end
 
-        if (Mission.m_YelenaTurret1 ~= nil and Mission.m_YelenaTurret1:IsIdle()) then
-            -- Pick a random path for this turret to move to.
+        for i = 1, #Mission.m_YelenaTurrets do
+            local turretObj = Mission.m_YelenaTurrets[i]
+
+            if (not _DispatchClass.IsAvailable(turretObj, Mission.m_MissionTime)) then
+                goto continue
+            end
+
+            local turretHandle = turretObj.Handle
             local rand = GetRandomFloat(1)
             local path
 
-            if (rand < 0.5) then
-                path = "yelena_turret_path_1"
-            else
-                path = "yelena_turret_path_3"
+            if (GetTeamNum(turretHandle) == Mission.m_AlliedTeam) then
+                SetTeamNum(turretHandle, Mission.m_HostTeam)
             end
 
-            Mission.m_YelenaTurret1:MoveTo(path)
-        end
-
-        if (Mission.m_YelenaTurret2 ~= nil and Mission.m_YelenaTurret2:IsIdle()) then
-            -- Pick a random path for this turret to move to.
-            local rand = GetRandomFloat(1)
-            local path
-
             if (rand < 0.5) then
-                path = "yelena_turret_path_2"
+                path = "yelena_turret_path_" .. i
             else
-                path = "yelena_turret_path_4"
+                path = "yelena_turret_path_" .. i + 2
             end
 
-            Mission.m_YelenaTurret2:MoveTo(path)
+            Goto(turretHandle, path, 1)
+            turretObj.Command = CMD_GO
+
+            ::continue::
         end
 
-        Mission.m_YelenaDispatchDelayTime = Mission.m_MissionTime + SecondsToTurns(5)
-    end,
+        for i = 1, #Mission.m_YelenaSentries do
+            local sentryObj = Mission.m_YelenaSentries[i]
+
+            if (not _DispatchClass.IsAvailable(sentryObj, Mission.m_MissionTime)) then
+                goto continue
+            end
+
+            local sentryHandle = sentryObj.Handle
+            local playerBasePath = "yelena_sentry_path"
+
+            if (GetTeamNum(sentryHandle) == Mission.m_AlliedTeam) then
+                SetTeamNum(sentryHandle, Mission.m_HostTeam)
+            end
+
+            if (GetCurrentCommand(sentryHandle) ~= CMD_NONE) then
+                goto continue
+            end
+
+            if (GetDistance(sentryHandle, playerBasePath) > 200) then
+                Goto(sentryHandle, GetPositionNear(playerBasePath, 25, 50), 1)
+                goto continue
+            end
+
+            local validTarget = GetNearestEnemy(sentryHandle, true, false, 150)
+
+            if (validTarget) then
+                Attack(sentryHandle, validTarget, 1)
+                goto continue
+            end
+
+            if (Mission.m_MissionDifficulty < 3) then
+                validTarget = GetNearestEnemy(Mission.m_PlayerRecycler, true, false, 200)
+
+                if (validTarget) then
+                    Attack(sentryHandle, validTarget, 1)
+                    goto continue
+                end
+            end
+
+            ::continue::
+        end
+
+        Mission.m_YelenaDispatchDelayTime = Mission.m_MissionTime + SecondsToTurns(1.5)
+    end
 }
 
+local BraddockHandlers = {
+    [CPUState.DISPATCH_UNITS] = function()
+        if (Mission.m_BraddockDispatchDelayTime >= Mission.m_MissionTime) then return end
+
+        -- Loop through the Service Units, check if they are idle, if they are, then do a couple of checks.
+        -- If they are near the Recycler, assign them to an Assault Unit. If they are too far in the field, return home.
+        for i = 1, #Mission.m_BraddockAssaultServiceUnits do
+            ProcessAssaultSupportUnit(Mission.m_BraddockAssaultServiceUnits[i])
+        end
+
+        -- Do the same with tanks that are built to support Assault Units.
+        for i = 1, #Mission.m_BraddockAssaultDefenseUnits do
+            ProcessAssaultSupportUnit(Mission.m_BraddockAssaultDefenseUnits[i])
+        end
+
+        -- Manage Turrets.
+        for i = 1, #Mission.m_BraddockTurrets do
+            local turretModel = Mission.m_BraddockTurrets[i]
+
+            if (not _DispatchClass.IsAvailable(turretModel, Mission.m_MissionTime)) then
+                goto continue
+            end
+
+            Goto(turretModel.Handle, "brad_turret" .. i)
+            turretModel.Command = CMD_GO
+
+            ::continue::
+        end
+
+        -- Manage Anti-Air
+        for i = 1, #Mission.m_BraddockAntiAirUnits do
+            local aaModel = Mission.m_BraddockAntiAirUnits[i]
+
+            if (not _DispatchClass.IsAvailable(aaModel, Mission.m_MissionTime)) then
+                goto continue
+            end
+
+            Goto(aaModel.Handle, "brad_anti-air" .. i)
+            aaModel.Command = CMD_GO
+
+            ::continue::
+        end
+
+        Mission.m_BraddockDispatchDelayTime = Mission.m_MissionTime + SecondsToTurns(1.5)
+    end
+}
 -- =========================
 -- Battlezone Event Hooks
 -- =========================
@@ -459,20 +635,53 @@ end
 function AddObject(h)
     local teamNum = GetTeamNum(h)
     local objClass = GetClassLabel(h)
+    local objCfg = GetCfg(h)
 
     if (teamNum == Mission.m_EnemyTeam) then
         SetSkill(h, Mission.m_MissionDifficulty)
 
-        if (objClass == "CLASS_TURRETTANK") then
-            if (IsAliveAndEnemy(Mission.m_BraddockTurret1, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret1 = h
-            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret2, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret2 = h
-            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret3, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret3 = h
-            elseif (IsAliveAndEnemy(Mission.m_BraddockTurret4, Mission.m_EnemyTeam) == false) then
-                Mission.m_BraddockTurret4 = h
+        if (Mission.m_RepairsComplete) then
+            if (objCfg == "ivtank_x" or objCfg == "ivtank_d" or objCfg == "ivmisl_x" or objCfg == "ivscout_x") then
+                -- Run a random chance to see if they are allowed a weapon.
+                local chance = GetRandomFloat(0, 1)
+                local weaponChance = m_WeaponChance * Mission.m_MissionDifficulty
+
+                if (chance > weaponChance) then
+                    if (objCfg == "ivtank_x") then
+                        GiveWeapon(h, m_WeaponTable.m_Cannons[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Cannons))]);
+                    elseif (objCfg == "ivscout_x") then
+                        GiveWeapon(h, m_WeaponTable.m_Guns[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Guns))]);
+                    elseif (objCfg == "ivmisl_x") then
+                        GiveWeapon(h, m_WeaponTable.m_Missiles[math.ceil(GetRandomFloat(0, #m_WeaponTable.m_Missiles))]);
+                    end
+                end
             end
+        end
+
+        if (objClass == "CLASS_TURRETTANK") then
+            Mission.m_BraddockTurrets[#Mission.m_BraddockTurrets + 1] = _DispatchClass.New(h, Mission.m_MissionTime,
+                Mission.m_AlliedTeam, objClass)
+        elseif (objCfg == "ivatank_x" or objCfg == "ivwalk_x") then
+            Mission.m_BraddockAssaultUnits[#Mission.m_BraddockAssaultUnits + 1] = _DispatchClass.New(h,
+                Mission.m_MissionTime, Mission.m_EnemyTeam, objClass)
+        end
+
+        -- Read custom properties from the ODF of the object that has been added.
+        local AICraftType = GetODFString(h, "GameObjectClass", "AIUnitType")
+
+        if (AICraftType == nil or AICraftType == "") then
+            return
+        end
+
+        if (AICraftType == _BZCCDatabase.AIUnitTypes.ANTI_AIR) then
+            Mission.m_BraddockAntiAirUnits[#Mission.m_BraddockAntiAirUnits + 1] = _DispatchClass.New(h,
+                Mission.m_MissionTime, Mission.m_EnemyTeam, objClass)
+        elseif (AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT_SERVICE) then
+            Mission.m_BraddockAssaultServiceUnits[#Mission.m_BraddockAssaultServiceUnits + 1] = _DispatchClass.New(h,
+                Mission.m_MissionTime, Mission.m_EnemyTeam, objClass)
+        elseif (AICraftType == _BZCCDatabase.AIUnitTypes.MINION) then
+            Mission.m_BraddockAssaultDefenseUnits[#Mission.m_BraddockAssaultDefenseUnits + 1] = _DispatchClass.New(h,
+                Mission.m_MissionTime, Mission.m_EnemyTeam, objClass)
         end
     elseif (teamNum < Mission.m_AlliedTeam and teamNum > 0) then
         SetSkill(h, 3)
@@ -493,49 +702,104 @@ function AddObject(h)
             end
         end
     elseif (teamNum == Mission.m_AlliedTeam) then
+        SetSkill(h, 3)
+
         if (objClass == "CLASS_TURRETTANK") then
-            if (Mission.m_YelenaTurret1 == nil) then
-                Mission.m_YelenaTurret1 = _DispatchClass:New(h, Mission.m_AlliedTeam, 0,
-                    Mission.m_MissionTime + SecondsToTurns(15))
-            elseif (Mission.m_YelenaTurret2 == nil) then
-                Mission.m_YelenaTurret2 = _DispatchClass:New(h, Mission.m_AlliedTeam, 0,
-                    Mission.m_MissionTime + SecondsToTurns(15))
+            Mission.m_YelenaTurrets[#Mission.m_YelenaTurrets + 1] = _DispatchClass.New(h, Mission.m_MissionTime,
+                Mission.m_AlliedTeam, objClass)
+            return
+        end
+
+        if (objCfg == "fvsent_r06") then
+            -- If we're not on the hardest difficulty, then we can give this sentry some boosts.
+            if (Mission.m_MissionDifficulty < 3) then
+                GiveWeapon(h, _BZCCDatabase.ScionWeaponTable.Absorb)
+
+                if (Mission.m_MissionDifficulty < 2) then
+                    GiveWeapon(h, _BZCCDatabase.ScionWeaponTable.Gauss)
+                end
             end
 
-            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount + 1
-
-            if (Mission.m_YelenaTurretCount >= 2) then
-                SetAIP("scion0603_x.aip", Mission.m_AlliedTeam)
-            end
+            Mission.m_YelenaSentries[#Mission.m_YelenaSentries + 1] = _DispatchClass.New(h, Mission.m_MissionTime,
+                Mission.m_AlliedTeam, objCfg)
         end
     end
 end
 
 function DeleteObject(h)
     local teamNum = GetTeamNum(h)
-    local objClass = GetClassLabel(h)
 
-    if (teamNum == Mission.m_AlliedTeam and objClass == "CLASS_TURRETTANK") then
-        if (h == Mission.m_YelenaTurret1.DispatchObject) then
-            Mission.m_YelenaTurret1 = nil
-            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount - 1
-        elseif (h == Mission.m_YelenaTurret2.DispatchObject) then
-            Mission.m_YelenaTurret2 = nil
-            Mission.m_YelenaTurretCount = Mission.m_YelenaTurretCount - 1
-        end
+    if (teamNum == Mission.m_HostTeam) then
+        local objCfg = GetCfg(h)
 
-        if (Mission.m_YelenaTurretCount <= 2) then
-            SetAIP("scion0602_x.aip", Mission.m_AlliedTeam)
+        if (objCfg == "fvturr_r") then
+            for i = 1, #Mission.m_YelenaTurrets do
+                local turretObj = Mission.m_YelenaTurrets[i]
+
+                if (turretObj.Handle == h) then
+                    Mission.m_YelenaTurrets = SquelchDispatchTable(Mission.m_YelenaTurrets, turretObj)
+                    break
+                end
+            end
+        elseif (GetCfg(h) == "fvsent_r06") then
+            for i = 1, #Mission.m_YelenaSentries do
+                local sentryObj = Mission.m_YelenaSentries[i]
+
+                if (sentryObj.Handle == h) then
+                    Mission.m_YelenaSentries = SquelchDispatchTable(Mission.m_YelenaSentries, sentryObj)
+                    break
+                end
+            end
         end
     elseif (teamNum == Mission.m_EnemyTeam) then
-        if (h == Mission.m_BraddockTurret1) then
-            Mission.m_BraddockTurret1 = nil
-        elseif (h == Mission.m_BraddockTurret2) then
-            Mission.m_BraddockTurret2 = nil
-        elseif (h == Mission.m_BraddockTurret3) then
-            Mission.m_BraddockTurret3 = nil
-        elseif (h == Mission.m_BraddockTurret4) then
-            Mission.m_BraddockTurret4 = nil
+        local objClass = GetClassLabel(h)
+
+        if (objClass == "CLASS_TURRETTANK") then
+            for i = 1, #Mission.m_BraddockTurrets do
+                local turretObj = Mission.m_BraddockTurrets[i]
+
+                if (turretObj.Handle == h) then
+                    Mission.m_BraddockTurrets = SquelchDispatchTable(Mission.m_BraddockTurrets, turretObj)
+                    break
+                end
+            end
+        elseif (objClass == "CLASS_ASSAULTTANK" or objClass == "CLASS_WALKER") then
+            for i = 1, #Mission.m_BraddockAssaultUnits do
+                local assaultObj = Mission.m_BraddockAssaultUnits[i]
+
+                if (assaultObj.Handle == h) then
+                    Mission.m_BraddockAssaultUnits = SquelchDispatchTable(Mission.m_BraddockAssaultUnits, assaultObj)
+                    break
+                end
+            end
+        end
+
+        -- Read custom properties from the ODF of the object that has been added.
+        local AICraftType = GetODFString(h, "GameObjectClass", "AIUnitType")
+
+        if (AICraftType == nil or AICraftType == "") then
+            return
+        end
+
+        if (AICraftType == _BZCCDatabase.AIUnitTypes.ANTI_AIR) then
+            for i = 1, #Mission.m_BraddockAntiAirUnits do
+                local unitToCheck = Mission.m_BraddockAntiAirUnits[i]
+
+                if (unitToCheck.Handle == h) then
+                    Mission.m_BraddockAntiAirUnits = SquelchDispatchTable(Mission.m_BraddockAntiAirUnits, unitToCheck)
+                    break
+                end
+            end
+        elseif (AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT_SERVICE) then
+            for i = 1, #Mission.m_BraddockAssaultServiceUnits do
+                local unitToCheck = Mission.m_BraddockAssaultServiceUnits[i]
+
+                if (unitToCheck.Handle == h) then
+                    Mission.m_BraddockAssaultServiceUnits = SquelchDispatchTable(Mission.m_BraddockAssaultServiceUnits,
+                        unitToCheck)
+                    break
+                end
+            end
         end
     end
 end
@@ -548,6 +812,7 @@ function Start()
     end
 
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode)
+
     Mission.m_StartDone = true
 end
 
@@ -557,6 +822,7 @@ function Update()
     end
 
     _Subtitles.Run()
+    _WorldManager.Run()
 
     Mission.m_MissionTime = Mission.m_MissionTime + 1
     Mission.m_MainPlayer = GetPlayerHandle(1)
@@ -572,9 +838,12 @@ function Update()
                 ConvoyHandlers[Mission.m_ConvoyState]()
             end
 
-            HandleFailureConditions()
+            if (Mission.m_FailuresActive) then
+                HandleFailureConditions()
+            end
 
             if (Mission.m_YelenaBrainActive) then YelenaHandlers[Mission.m_YelenaState]() end
+            if (Mission.m_BraddockBrainActive) then BraddockHandlers[Mission.m_BraddockState]() end
         end
     end
 end
@@ -652,7 +921,7 @@ function HandleFailureConditions()
             StopCockpitTimer()
             HideCockpitTimer()
 
-            AddObjectiveOverride("scion0607.otf", "RED", 10, true)
+            AddObjectiveOverride("scion0607.otf", "RED", 10, true, Mission.m_IsCooperativeMode)
 
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("The base wasn't repaired in time.")
@@ -665,9 +934,26 @@ function HandleFailureConditions()
         end
     end
 
+    if (not IsAround(Mission.m_PlayerRecycler)) then
+        -- Stop the mission.
+        Mission.m_MissionOver = true;
+
+        -- Show failure objective.
+        AddObjectiveOverride("scion0608.otf", "RED", 10, true, Mission.m_IsCooperativeMode);
+        playAudioWithDelay("scion0699.wav", 5.5)
+
+        -- Failure.
+        if (Mission.m_IsCooperativeMode) then
+            NoteGameoverWithCustomMessage("Your Recycler was destroyed.");
+            DoGameover(10);
+        else
+            FailMission(GetTime() + 10, "scion06L3.txt");
+        end
+    end
+
     if (Mission.m_ConvoyFleeing) then
-        if (GetDistance(Mission.m_ConvoyTug, "tug_end_missison") < 75) then
-            AddObjectiveOverride("scion0604.otf", "RED", 10, true)
+        if (GetTug(Mission.m_PowerCrystal) ~= nil and GetDistance(Mission.m_PowerCrystal, "tug_end_missison") < 75) then
+            AddObjectiveOverride("scion0604.otf", "RED", 10, true, Mission.m_IsCooperativeMode)
 
             if (Mission.m_IsCooperativeMode) then
                 NoteGameoverWithCustomMessage("The Hauler escaped.")
@@ -679,4 +965,36 @@ function HandleFailureConditions()
             Mission.m_MissionOver = true
         end
     end
+end
+
+---Shared logic for dispatching assault support units
+---@param supportUnit DispatchClass
+function ProcessAssaultSupportUnit(supportUnit)
+    if (not _DispatchClass.IsAvailable(supportUnit, Mission.m_MissionTime)) then
+        goto continue
+    end
+
+    local unitHandle = supportUnit.Handle
+
+    -- Check if we are idle.
+    if (GetCurrentCommand(unitHandle) ~= CMD_NONE) then
+        goto continue
+    end
+
+    if (GetDistance(unitHandle, Mission.m_BraddockRecycler) > 450) then
+        local pos = GetPositionNear(GetPosition(Mission.m_BraddockRecycler), 25, 50)
+        Retreat(unitHandle, pos)
+        goto continue
+    end
+
+    if (#Mission.m_BraddockAssaultUnits > 0) then
+        local rand = Mission.m_BraddockAssaultUnits[GetRandomInt(1, #Mission.m_BraddockAssaultUnits)]
+
+        if (IsAliveAndEnemy(rand.Handle, Mission.m_EnemyTeam)) then
+            SetIndependence(unitHandle, 1) -- To restore after using Retreat.
+            Follow(unitHandle, rand.Handle)
+        end
+    end
+
+    ::continue::
 end

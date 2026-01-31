@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF16 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 22-02-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF16: Hole in One";
+local m_MissionName = _BZCCDatabase.Missions.ISDF16;
 
 -- Chance for the Scion units to get upgrades.
 local m_ShieldChance = 0.2;

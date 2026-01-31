@@ -1,7 +1,6 @@
 --[[
     BZCC ISDF09 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 15-12-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
@@ -13,20 +12,18 @@ require("_GlobalVariables");
 -- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Name of file.
 local fileName = "BZX_BASE_SAVE.txt";
 
 -- Mission Name
-local m_MissionName = "ISDF09: Rumble in the Jungle";
+local m_MissionName = _BZCCDatabase.Missions.ISDF09;
 
 -- This will handle the Shabayev sequence based on difficulty.
 local m_Shab1Timer = { 240, 180, 120 };

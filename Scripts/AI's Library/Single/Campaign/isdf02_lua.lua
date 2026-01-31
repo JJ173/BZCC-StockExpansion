@@ -1,32 +1,24 @@
 --[[
     BZCC ISDF02 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 29-10-2023
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required AICmd.
 require("_AICmd");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF02: A Simple S & R";
+local m_MissionName = _BZCCDatabase.Missions.ISDF02;
 
 -- Difficulty tables for times and spawns.
 local m_FirstScionWave1 = { "fvscout_x", "fvscout_x", "fvsent_x" };

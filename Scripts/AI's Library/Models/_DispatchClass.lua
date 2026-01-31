@@ -1,45 +1,35 @@
-DispatchClass =
-{
-    MissionTime = 0,
+DispatchClass = {}
 
-    --- @type Handle
-    DispatchObject = nil,
+---@class DispatchClass
+---@field Handle Handle
+---@field MissionTurn number
+---@field Team number
+---@field Class string
+---@field DispatchDelay number
+---@field Command number
 
-    CurrTeam = 0,
-    DispatchType = 0,
-    DispatchState = 0,
-
-    IdleTime = 0
-}
-
-local DISPATCH_STATE_NONE = 0
-local DISPATCH_STATE_GOTO = 1
-
-function DispatchClass:New(DispatchObject, CurrTeam, DispatchType, IdleTime, MissionTime)
-    local o = {}
-
-    o.DispatchObject = DispatchObject or nil
-    o.CurrTeam = CurrTeam or 0
-    o.DispatchType = DispatchType or 0
-    o.IdleTime = IdleTime or 0
-    o.MissionTime = MissionTime or 0
-
-    setmetatable(o, { __index = self })
-
-    return o;
+---Creates and returns a new object with the intention of being dispatched by a script.
+---@param Handle Handle
+---@param MissionTurn number
+---@param Team number
+---@param objClass string
+---@return DispatchClass
+function DispatchClass.New(Handle, MissionTurn, Team, objClass)
+    return {
+        Handle = Handle,
+        MissionTurn = MissionTurn,
+        Team = Team,
+        Class = objClass,
+        DispatchDelay = MissionTurn + SecondsToTurns(5),
+        Command = CMD_NONE
+    }
 end
 
-function DispatchClass:UpdateTurn(MissionTime)
-    self.MissionTime = MissionTime
-end
-
-function DispatchClass:MoveTo(path)
-    self.DispatchState = DISPATCH_STATE_GOTO
-    Goto(self.DispatchObject, path, 0);
-end
-
-function DispatchClass:IsIdle()
-    return self.DispatchState == DISPATCH_STATE_NONE and self.MissionTime < self.IdleTime
+---Returns true/false if the dispatch object is available for use.
+---@param dispatchObject DispatchClass
+---@param MissionTurn number
+function DispatchClass.IsAvailable(dispatchObject, MissionTurn)
+    return dispatchObject == nil or dispatchObject.DispatchDelay > MissionTurn or dispatchObject.Command == CMD_NONE
 end
 
 return DispatchClass;

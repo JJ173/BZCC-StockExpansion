@@ -78,6 +78,41 @@ function TableRemoveByHandle(table, handle)
     end
 end
 
+---Function to specificly squelch a table of dispatch objects.
+---@param table DispatchClass[]
+---@param obj DispatchClass
+---@return DispatchClass[]
+function SquelchDispatchTable(table, obj)
+    if (not table or not obj) then
+        return null
+    end
+
+    local newTable = {}
+
+    for i, v in ipairs(table) do
+        if (v.Handle ~= obj.Handle) then
+            newTable[#newTable + 1] = v
+        end
+    end
+
+    return newTable
+end
+
+function RemoveHandleFromTable(table, handle)
+    if (not table or not handle) then
+        return false
+    end
+
+    for i, v in ipairs(table) do
+        if (v.Handle == handle) then
+            table[i] = dispatchTable[#table]
+            table[#table] = nil
+        end
+    end
+
+    return false
+end
+
 -- Credit to Nielk1 for this.
 function GetRandomInt(Min, Max)
     local retVal = GetRandomFloat(Min, Max + 1);

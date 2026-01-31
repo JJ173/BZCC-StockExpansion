@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF05 Lua Mission Script
     Written by AI_Unit
-    Version 2.0 24-01-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF05: The Dark Planet";
+local m_MissionName = _BZCCDatabase.Missions.ISDF05;
 
 -- Difficulty tables for times and spawns.
 local m_ConstructorBuildDelay = { 15, 20, 30 };

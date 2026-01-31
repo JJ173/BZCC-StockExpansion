@@ -1,10 +1,13 @@
+local _BZCCDatabase = require("_BZCCDatabase")
 local _Multiplayer = require("_Multiplayer")
+local _WorldManager = require("_WorldManager")
+local _VoiceManager = require("_VoiceManager")
 
 _Cooperative =
 {
     m_TotalPlayerCount = 0,
     m_TeamIsSetUp      = { false, false, false, false },
-};
+}
 
 local m_DifficultyMap = {
     'Easy',
@@ -12,347 +15,373 @@ local m_DifficultyMap = {
     'Hard'
 }
 
+local m_BaneMissions = {
+    _BZCCDatabase.Missions.ISDF10,
+    _BZCCDatabase.Missions.ISDF11,
+    _BZCCDatabase.Missions.ISDF12,
+    _BZCCDatabase.Missions.SCION05,
+    _BZCCDatabase.Missions.SCION06
+}
+
 function _Cooperative.Load(CoopData)
-    _Cooperative = CoopData;
+    _Cooperative = CoopData
 end
 
 function _Cooperative.Save()
-    return _Cooperative;
+    return _Cooperative
 end
 
 function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, SpawnPilotOnly, HeightOffset)
-    local difficulty;
+    local difficulty
 
     if (IsCoop) then
-        difficulty = GetVarItemInt("network.session.ivar102") + 1;
+        difficulty = GetVarItemInt("network.session.ivar102") + 1
     else
-        difficulty = IFace_GetInteger("options.play.difficulty") + 1;
+        difficulty = IFace_GetInteger("options.play.difficulty") + 1
     end
 
-    -- Change this to AddToMessagesBox;
-    AddToMessagesBox("[WELCOME!]");
-    AddToMessagesBox("Mission: " .. MissionName);
-    AddToMessagesBox("Author: AI_Unit");
+    -- Change this to AddToMessagesBox
+    AddToMessagesBox("[WELCOME]")
+    AddToMessagesBox("Mission: " .. MissionName)
+    AddToMessagesBox("Author: AI_Unit")
 
     if (IsCoop) then
-        AddToMessagesBox("Cooperative: Yes");
+        AddToMessagesBox("Cooperative: Yes")
     else
-        AddToMessagesBox("Cooperative: No");
+        AddToMessagesBox("Cooperative: No")
     end
 
-    AddToMessagesBox("Difficulty: " .. m_DifficultyMap[difficulty]);
-    AddToMessagesBox("Good luck and have fun :)");
+    AddToMessagesBox("Difficulty: " .. m_DifficultyMap[difficulty])
+    AddToMessagesBox("Good luck and have fun :)")
 
     -- Remove team colours here.
-    ClearTeamColors();
+    ClearTeamColors()
 
     -- Just for the units on Team 0.
-    SetTeamNameForStat(0, "Neutral");
+    SetTeamNameForStat(0, "Neutral")
 
     -- Remove the player ODF that is saved as part of the BZN.
-    local PlayerEntryH = GetPlayerHandle(1);
+    local PlayerEntryH = GetPlayerHandle(1)
 
     if (PlayerEntryH ~= nil) then
-        RemoveObject(PlayerEntryH);
+        RemoveObject(PlayerEntryH)
     end
 
     -- Get Team Number.
-    local LocalTeamNum = GetLocalPlayerTeamNumber();
+    local LocalTeamNum = GetLocalPlayerTeamNumber()
 
     -- Create the player for the server.
-    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, PlayerShipODF, PlayerPilotODF, SpawnPilotOnly, HeightOffset);
+    local PlayerH = _Cooperative.SetupPlayer(LocalTeamNum, PlayerShipODF, PlayerPilotODF, SpawnPilotOnly, HeightOffset)
 
     -- Make sure we give the player control of their ship.
-    SetAsUser(PlayerH, LocalTeamNum);
+    SetAsUser(PlayerH, LocalTeamNum)
+
+    -- Check to see if we are on a bane mission so we can enable some features for the world.
+    local isBaneMission = false
+
+    for i = 1, #m_BaneMissions do
+        isBaneMission = MissionName == m_BaneMissions[i]
+
+        if (isBaneMission) then
+            break
+        end
+    end
+
+    -- Setup the world manager.
+    _WorldManager.Setup(isBaneMission, _Cooperative.m_TotalPlayerCount)
 end
 
 function _Cooperative.Update(m_GameTPS)
-    _Multiplayer.UpdateGameTime(m_GameTPS);
+    _WorldManager.Run()
+    _Multiplayer.UpdateGameTime(m_GameTPS)
 end
 
 function _Cooperative.AddPlayer(id, Team, IsNewPlayer, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     if (IsNewPlayer) then
         -- Create the player for the server.
-        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset);
+        local PlayerH = _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
 
         -- Make sure we give the player control of their ship.
-        SetAsUser(PlayerH, Team);
+        SetAsUser(PlayerH, Team)
 
         -- Make sure the handle has a pilot so the player can hop out.
-        AddPilotByHandle(PlayerH);
+        AddPilotByHandle(PlayerH)
     end
 
-    return true;
+    return true
 end
 
 function _Cooperative.DeletePlayer(id)
     -- Keep track of how many player are in the game.
     _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount - 1
 
-    return true;
+    -- Update the world manager with the new count.
+    _WorldManager.UpdatePlayerTotal(_Cooperative.m_TotalPlayerCount)
+
+    return true
 end
 
 function _Cooperative.PlayerEjected(DeadObjectHandle)
-    local deadObjectTeam = GetTeamNum(DeadObjectHandle);
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
 
     -- Invalid team. Do nothing
     if (deadObjectTeam == 0) then
-        return DLLHandled;
+        return DLLHandled
     end
 
     if (IsPlayer(DeadObjectHandle)) then
-        AddScore(DeadObjectHandle, -GetActualScrapCost(DeadObjectHandle));
+        AddScore(DeadObjectHandle, -GetActualScrapCost(DeadObjectHandle))
     end
 
     -- Tell main code to allow the ejection
-    return DoEjectPilot;
+    return DoEjectPilot
 end
 
 function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilotODF)
     -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then return DoEjectPilot; end
+    if (GetCurWorld() ~= 0) then return DoEjectPilot end
 
-    local isDeadAI = not IsPlayer(DeadObjectHandle);
-    local isDeadPerson = IsPerson(DeadObjectHandle);
+    local isDeadAI = not IsPlayer(DeadObjectHandle)
+    local isDeadPerson = IsPerson(DeadObjectHandle)
 
     -- Someone on neutral team always gets default behavior
-    local deadObjectTeam = GetTeamNum(DeadObjectHandle);
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
 
     if (deadObjectTeam == 0) then
-        return DoEjectPilot;
+        return DoEjectPilot
     end
 
     -- If a person died, respawn them, etc
-    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF);
+    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF)
 end
 
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
     -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then return DoEjectPilot; end
+    if (GetCurWorld() ~= 0) then return DoEjectPilot end
 
-    local isDeadAI = not IsPlayer(DeadObjectHandle);
+    local isDeadAI = not IsPlayer(DeadObjectHandle)
 
     -- Dead person means we must always respawn a new person
-    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, true, isDeadAI, MissionPilotODF);
+    return _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, true, isDeadAI, MissionPilotODF)
 end
 
 function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
     -- Safety, do not do this if we are not in the lockstep world.
-    if (curWorld ~= 0) then return end;
+    if (curWorld ~= 0) then return end
 
     -- Never allow friendly fire otherwise we may screw with mission logic.
-    local relationship = GetTeamRelationship(shooterHandle, victimHandle);
+    local relationship = GetTeamRelationship(shooterHandle, victimHandle)
 
     if (relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
         -- Allow snipes of items on team 0/perceived team 0, as long as they're not a local/remote player
         if (IsPlayer(victimHandle) or (GetTeamNum(victimHandle) ~= 0)) then
-            return PRESNIPE_ONLYBULLETHIT;
+            return PRESNIPE_ONLYBULLETHIT
         end
     end
 
     -- Set its team to 0
-    SetPerceivedTeam(victimHandle, 0);
+    SetPerceivedTeam(victimHandle, 0)
 
     -- If we make it here, kill the pilot.
-    return PRESNIPE_KILLPILOT;
+    return PRESNIPE_KILLPILOT
 end
 
 function _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
     -- Safety, do not do this if we are not in the lockstep world.
-    if (curWorld ~= 0) then return end;
+    if (curWorld ~= 0) then return end
 
-    local relationship = GetTeamRelationship(pilotHandle, emptyCraftHandle);
-
-    if (relationship == TEAMRELATIONSHIP_ALLIEDTEAM and not IsPlayer(pilotHandle)) then
-        SetTeamNum(pilotHandle, GetTeamNum(emptyCraftHandle));
-    end
+    -- Run our replacement script logic.
+    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
 
     -- Always allow the entry
-    return PREGETIN_ALLOW;
+    return PREGETIN_ALLOW
 end
 
 function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
-    local spawnpointPosition = SetVector(0, 0, 0);
-    local RespawnDistanceAwayXZRange = 32.0;
+    local spawnpointPosition = SetVector(0, 0, 0)
+    local RespawnDistanceAwayXZRange = 32.0
 
     if (Team < 1 or Team >= MAX_TEAMS) then
-        spawnpointPosition = GetSafestspawnpoint();
+        spawnpointPosition = GetSafestspawnpoint()
     else
         -- All players use "player_start" for missions.
-        spawnpointPosition = GetPosition("player_start");
+        spawnpointPosition = GetPosition("player_start")
     end
 
     -- Respawn at a set altitude.
-    local respawnHeight = 200.0;
+    local respawnHeight = 200.0
 
     -- Randomize starting position somewhat. This gives a range of +/-
-    spawnpointPosition.x = spawnpointPosition.x + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange);
-    spawnpointPosition.z = spawnpointPosition.z + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange);
+    spawnpointPosition.x = spawnpointPosition.x + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange)
+    spawnpointPosition.z = spawnpointPosition.z + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange)
 
     -- Make sure we spawn above ground.
-    local curFloor = TerrainFindFloor(spawnpointPosition.x, spawnpointPosition.z) + 2.5;
+    local curFloor = TerrainFindFloor(spawnpointPosition.x, spawnpointPosition.z) + 2.5
 
     -- For safety, if the y axis of the spawn point is underground, correct it to the current height of the floor.
     if (spawnpointPosition.y < curFloor) then
-        spawnpointPosition.y = curFloor;
+        spawnpointPosition.y = curFloor
     end
 
     -- Bounce them in the air to prevent multi-kills
-    spawnpointPosition.y = spawnpointPosition.y + respawnHeight;
-    spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * 8.0;
+    spawnpointPosition.y = spawnpointPosition.y + respawnHeight
+    spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * 8.0
 
     -- Always spawn with pilot.
-    local NewPilot = BuildObject(MissionPilotODF, Team, spawnpointPosition);
+    local NewPilot = BuildObject(MissionPilotODF, Team, spawnpointPosition)
 
     -- Give control to the user.
-    SetAsUser(NewPilot, Team);
+    SetAsUser(NewPilot, Team)
 
     -- Add Pilot.
-    AddPilotByHandle(NewPilot);
+    AddPilotByHandle(NewPilot)
 
     -- Look somewhere.
-    SetRandomHeadingAngle(NewPilot);
+    SetRandomHeadingAngle(NewPilot)
 
     -- If we're on Team 0, make inert.
     if (Team == 0) then
-        MakeInert(NewPilot);
+        MakeInert(NewPilot)
     end
 
     -- Return handled.
-    return DLLHandled;
+    return DLLHandled
 end
 
 function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF)
     -- Get team number of the dead object
-    local deadObjectTeam = GetTeamNum(DeadObjectHandle);
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
 
     -- Check if the object is a player.
-    local deadObjectIsPlayer = IsPlayer(DeadObjectHandle);
-    local killerObjectIsPlayer = IsPlayer(KillersHandle);
+    local deadObjectIsPlayer = IsPlayer(DeadObjectHandle)
+    local killerObjectIsPlayer = IsPlayer(KillersHandle)
 
     -- Grab the relationship between the dead object and the killer.
-    local relationship = GetTeamRelationship(DeadObjectHandle, KillersHandle);
+    local relationship = GetTeamRelationship(DeadObjectHandle, KillersHandle)
 
     -- Get the scrap cost for score.
-    local deadObjectScrapCost = GetActualScrapCost(DeadObjectHandle);
+    local deadObjectScrapCost = GetActualScrapCost(DeadObjectHandle)
 
     -- Don't count stats for Team 0.
     if (deadObjectTeam == 0) then
-        return DoEjectPilot;
+        return DoEjectPilot
     end
 
     if (deadObjectIsPlayer) then
         -- Score goes down by the scrap cost of unit that died
-        AddScore(DeadObjectHandle, -deadObjectScrapCost);
+        AddScore(DeadObjectHandle, -deadObjectScrapCost)
 
         -- Scoring: One death for players if they die as a pilot.
         if (isDeadPerson) then
-            AddDeaths(DeadObjectHandle, 1);
+            AddDeaths(DeadObjectHandle, 1)
         end
     else
         -- Add deaths for AI.
-        AddDeaths(DeadObjectHandle, 1);
+        AddDeaths(DeadObjectHandle, 1)
         -- Add score for AI.
-        AddScore(DeadObjectHandle, -deadObjectScrapCost);
+        AddScore(DeadObjectHandle, -deadObjectScrapCost)
     end
 
     -- If the killer was a human (directly, not via their AI units), then they get a kill and some score points.
     if (killerObjectIsPlayer) then
         if (relationship == TEAMRELATIONSHIP_SAMETEAM or relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
             -- Being a jerk to same or allied team loses a kill
-            AddKills(KillersHandle, -1);
+            AddKills(KillersHandle, -1)
             -- And killer loses score
-            AddScore(KillersHandle, -deadObjectScrapCost);
+            AddScore(KillersHandle, -deadObjectScrapCost)
         else
             -- Killer gains score.
-            AddKills(KillersHandle, 1);
+            AddKills(KillersHandle, 1)
             -- And, bump their score by the scrap cost of what they just killed
-            AddScore(KillersHandle, deadObjectScrapCost);
+            AddScore(KillersHandle, deadObjectScrapCost)
         end
     else
         if (relationship == TEAMRELATIONSHIP_SAMETEAM or relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
-            AddKills(KillersHandle, -1);
-            AddScore(KillersHandle, -deadObjectScrapCost);
+            AddKills(KillersHandle, -1)
+            AddScore(KillersHandle, -deadObjectScrapCost)
         else
-            AddKills(KillersHandle, 1);
-            AddScore(KillersHandle, deadObjectScrapCost);
+            AddKills(KillersHandle, 1)
+            AddScore(KillersHandle, deadObjectScrapCost)
         end
     end
 
     if (isDeadAI) then
         if (isDeadPerson) then
-            return DLLHandled;
+            return DLLHandled
         else
-            return DoEjectPilot;
+            return DoEjectPilot
         end
     else
         if (isDeadPerson) then
-            return RespawnPilot(DeadObjectHandle, deadObjectTeam, MissionPilotODF);
+            return RespawnPilot(DeadObjectHandle, deadObjectTeam, MissionPilotODF)
         else
-            return DoEjectPilot;
+            return DoEjectPilot
         end
     end
 end
 
 function _Cooperative.SetupPlayer(Team, MissionShipODF, MissionPilotODF, SpawnPilotOnly, HeightOffset)
     -- Keep track of how many player are in the game.
-    _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1;
+    _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount + 1
+
+    -- Update the world manager with the new count.
+    _WorldManager.UpdatePlayerTotal(_Cooperative.m_TotalPlayerCount)
 
     -- Setup the team if it's not set up.
     if (IsTeamplayOn()) then
-        local cmdTeam = GetCommanderTeam(Team);
+        local cmdTeam = GetCommanderTeam(Team)
 
         if (_Cooperative.m_TeamIsSetUp[cmdTeam] == false) then
             -- Get the team race of the commander team.
-            local TeamRace = GetRaceOfTeam(cmdTeam);
+            local TeamRace = GetRaceOfTeam(cmdTeam)
 
             -- Set the team race of the entire team.
-            SetMPTeamRace(WhichTeamGroup(cmdTeam), TeamRace);
+            SetMPTeamRace(WhichTeamGroup(cmdTeam), TeamRace)
 
             -- So we don't loop.
-            _Cooperative.m_TeamIsSetUp[cmdTeam] = true;
+            _Cooperative.m_TeamIsSetUp[cmdTeam] = true
         end
     end
 
     -- Put the player in ivtank, as that's what the original mission uses.
-    local PlayerH = GetHandle("player_spawn_" .. _Cooperative.m_TotalPlayerCount);
+    local PlayerH = GetHandle("player_spawn_" .. _Cooperative.m_TotalPlayerCount)
 
     if (PlayerH == nil) then
         -- Handle spawning via a vector.
-        local spawnPos = GetPositionNear("player_start", 25, 25);
+        local spawnPos = GetPositionNear("player_start", 25, 25)
 
         -- For safety so we don't spawn in the ground.
         if (HeightOffset == nil or HeightOffset == 0) then
             -- Make sure we spawn above ground.
-            local curFloor = TerrainFindFloor(spawnPos.x, spawnPos.z) + 2.5;
+            local curFloor = TerrainFindFloor(spawnPos.x, spawnPos.z) + 2.5
 
             -- For safety, if the y axis of the spawn point is underground, correct it to the current height of the floor.
             if (spawnPos.y < curFloor) then
-                spawnPos.y = curFloor;
+                spawnPos.y = curFloor
             end
         else
-            spawnPos.y = spawnPos.y + HeightOffset;
-            spawnPos.y = spawnPos.y + GetRandomFloat(1.0) * 8.0;
+            spawnPos.y = spawnPos.y + HeightOffset
+            spawnPos.y = spawnPos.y + GetRandomFloat(1.0) * 8.0
         end
 
         if (SpawnPilotOnly) then
-            PlayerH = BuildObject(MissionPilotODF, Team, spawnPos);
+            PlayerH = BuildObject(MissionPilotODF, Team, spawnPos)
         else
-            PlayerH = BuildObject(MissionShipODF, Team, spawnPos);
+            PlayerH = BuildObject(MissionShipODF, Team, spawnPos)
         end
     end
 
     -- Give them a pilot class.
-    SetPilotClass(PlayerH, MissionPilotODF);
+    SetPilotClass(PlayerH, MissionPilotODF)
 
     -- Make sure the handle has a pilot so the player can hop out.
-    AddPilotByHandle(PlayerH);
+    AddPilotByHandle(PlayerH)
 
     -- Mark the team as set up.
-    _Cooperative.m_TeamIsSetUp[Team] = true;
+    _Cooperative.m_TeamIsSetUp[Team] = true
 
     -- Return object to caller.
-    return PlayerH;
+    return PlayerH
 end
 
 function _Cooperative.CleanSpawns()
@@ -360,16 +389,16 @@ function _Cooperative.CleanSpawns()
     for i = 1, 4 do
         if (i > _Cooperative.m_TotalPlayerCount) then
             -- Grab the spawn handle.
-            local spawn_handle = GetHandle("player_spawn_" .. i);
+            local spawn_handle = GetHandle("player_spawn_" .. i)
 
             -- Remove it as we don't need it.
-            RemoveObject(spawn_handle);
+            RemoveObject(spawn_handle)
         end
     end
 end
 
 function _Cooperative.GetTotalPlayers()
-    return _Cooperative.m_TotalPlayerCount;
+    return _Cooperative.m_TotalPlayerCount
 end
 
-return _Cooperative;
+return _Cooperative

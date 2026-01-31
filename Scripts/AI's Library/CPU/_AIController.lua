@@ -182,7 +182,7 @@ function AIController:AddObject(handle, objClass, objCfg, objBase, missionTurnCo
     -- Read custom properties from the ODF of the object that has been added.
     local AICraftType = GetODFString(handle, "GameObjectClass", "AIUnitType");
 
-    if AICraftType == nil or AICraftType == "" then
+    if (AICraftType == nil or AICraftType == "") then
         return;
     end
 

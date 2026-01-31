@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF06 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 21-10-2022
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF06: The Wormhole";
+local m_MissionName = _BZCCDatabase.Missions.ISDF06;
 
 -- Difficulty tables for times and spawns.
 local m_Breacher1Ship = { "fvscout_x", "fvsent_x", "fvarch_x" };

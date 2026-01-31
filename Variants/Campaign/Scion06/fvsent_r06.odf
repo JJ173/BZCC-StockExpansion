@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fvsent_r"
+aiAddAmmo = 40
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF14 Lua Mission Script
     Written by AI_Unit
-    Version 2.0 02-02-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF14: Fanning the Fire";
+local m_MissionName = _BZCCDatabase.Missions.ISDF14;
 
 local m_ShieldChance = 0.2;
 local m_WeaponChance = 0.25;

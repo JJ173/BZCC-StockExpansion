@@ -1,32 +1,24 @@
 --[[
     BZCC Scion03 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 14-12-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required AI Commands.
 require("_AICmd");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
-local m_GameTPS = 20;
+local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "Scion03: Crystals";
+local m_MissionName = _BZCCDatabase.Missions.SCION03;
 
 -- Difficulty Tables.
 local Wave1Unit_A = { "ivscout_x", "ivmisl_x", "ivtank_x" };

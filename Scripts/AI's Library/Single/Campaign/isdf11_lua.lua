@@ -1,29 +1,23 @@
 --[[
     BZCC ISDF11 Lua Mission Script
     Written by AI_Unit
-    Version 1.0 03-01-2024
 --]]
 
 -- Fix for finding files outside of this script directory.
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
--- Required Globals.
 require("_GlobalVariables");
-
--- Required helper functions.
 require("_HelperFunctions");
 
--- Cooperative.
+local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
-
--- Subtitles.
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
 local m_GameTPS = GetTPS();
 
 -- Mission Name
-local m_MissionName = "ISDF11: On Thin Ice";
+local m_MissionName = _BZCCDatabase.Missions.ISDF11;
 
 local m_IceAttacker1 = { "fvscout_x", "fvsent_x", "fvtank_x" };
 local m_IceAttacker2 = { "fvscout_x", "fvscout_x", "fvsent_x" };

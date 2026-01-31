@@ -608,7 +608,7 @@ end
 Functions[6] = function()
     if (Mission.m_ShabRescued and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This is Braddock's big speech.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cin0601.wav", SUBTITLE_PANEL_SIZES["SubtitlesPanelLarge"]);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cin0601.wav", _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge);
 
         -- Timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(45.5);

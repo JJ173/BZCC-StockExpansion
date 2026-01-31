@@ -472,8 +472,8 @@ local IntroHandlers = {
         if (Mission.m_MissionTime > Mission.m_MissionDelayTime) then
             RemoveObject(Mission.m_PlayerPilo1)
             RemoveObject(Mission.m_ShabPilo)
-            Mission.m_CutsceneAudioClip = _Subtitles.AudioWithSubtitles("cutsc0101.wav",
-                SUBTITLE_PANEL_SIZES["SubtitlesPanel_Medium"])
+            Mission.m_CutsceneAudioClip = _Subtitles.AudioWithSubtitles("cutsc0101.wav", 
+                _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelMedium)
             Mission.m_MissionDelayTime = Mission.m_MissionTime + SecondsToTurns(28)
             Mission.m_IntroState = IntroState.CAMERA4
         end
@@ -546,7 +546,7 @@ local PowerupHandlers = {
     [PowerupState.WAIT_FOR_POWER_AUDIO] = function()
         if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
         Mission.m_PowerClip = _Subtitles.AudioWithSubtitles("scion0106.wav",
-            SUBTITLE_PANEL_SIZES["SubtitlesPanel_Medium"])
+            _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelMedium)
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(26.5)
         Mission.m_PowerupState = PowerupState.WAIT_FOR_POWER
     end,

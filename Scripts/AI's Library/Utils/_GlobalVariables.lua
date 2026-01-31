@@ -158,11 +158,4 @@ HAULER_MOVING = 1;
 HAULER_PICKUP = 2;
 HAULER_RETREAT = 3;
 
--- Used for Subtitles
-SUBTITLE_PANEL_SIZES = {
-    ["SubtitlesPanel"] = 1,
-    ["SubtitlesPanel_Medium"] = 2,
-    ["SubtitlesPanel_Large"] = 3,
-};
-
 return _GlobalVariables;

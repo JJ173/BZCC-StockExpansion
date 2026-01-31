@@ -75,6 +75,18 @@ BZCCDatabase = {
         7.5 * 60,
         10 * 60
     },
+    EventReturnCodes = {
+        DoEjectPilot = 0,           -- Do 'standard' eject
+        DoRespawnSafest = 1,        -- Respawn a 'PLAYER' at safest spawnpoint
+        DLLHandled = 2,             -- DLL handled actions. Do nothing ingame
+        DoGameOver = 3,             -- Game over, man.
+        PREGETIN_DENY = 0,          -- Deny the pilot entry to the craft
+        PREGETIN_ALLOW = 1,         -- Allow the pilot entry
+        PREPICKUPPOWERUP_DENY = 0,  -- Deny the powerup from being picked up
+        PREPICKUPPOWERUP_ALLOW = 1, -- Allow the powerup to be picked up
+        PRESNIPE_KILLPILOT = 0,     -- Kill the pilot (1.0-1.3.6.4 default). Does still pass this to bullet hit code, where damage might also be applied
+        PRESNIPE_ONLYBULLETHIT = 1, -- Do not kill the pilot. Does still pass this to bullet hit code, where damage might also be applied
+    },
     Factions = {
         ISDF = 'i',
         SCION = 'f'
@@ -146,7 +158,7 @@ BZCCDatabase = {
         Ion = 'giongn_c',
         EMP = 'glock_c',
         Gauss = 'ggauss_c',
-        -- Missiles 
+        -- Missiles
         Stinger = 'stinger_c',
         Multilock = 'gmlock_c',
         -- Shield
@@ -165,6 +177,17 @@ BZCCDatabase = {
         AIP_STRING = "options.instant.string0",
         COMMANDER_ENABLED = "options.instant.aiCommander"
     },
+    SubtitlePanelSizes = {
+        SubtitlesPanel = 0,
+        SubtitlesPanelMedium = 1,
+        SubtitlesPanelLarge = 2
+    },
+    TeamRelationships = {
+        TEAMRELATIONSHIP_INVALIDHANDLE = 0, -- One or both handles is invalid
+        TEAMRELATIONSHIP_SAMETEAM = 1,      -- Team # for both items is the same
+        TEAMRELATIONSHIP_ALLIEDTEAM = 2,    -- Team # isn't identical, but teams are allied
+        TEAMRELATIONSHIP_ENEMYTEAM = 3      --Team # isn't identical, and teams are enemies
+    }
 }
 
 return BZCCDatabase;

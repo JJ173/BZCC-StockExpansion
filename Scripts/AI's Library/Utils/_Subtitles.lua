@@ -1,8 +1,9 @@
 --[[
 	BZCC Subtitles
 	Written by AI_Unit
-	Version 1.0 14/09/2022
 --]]
+
+local _BZCCDatabase = require("_BZCCDatabase")
 
 -- Return this to whatever file calls it.
 local _Subtitles = {}
@@ -25,7 +26,7 @@ local chosenPanel = 0;
 -- Set the audioClip variable up so we can track when it's finished.
 function _Subtitles.AudioWithSubtitles(clip, panelSize)
 	if (panelSize == nil) then
-		panelSize = SUBTITLE_PANEL_SIZES["SubtitlesPanel"];
+		panelSize = _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanel;
 	end
 
 	-- Set this global variable so we can keep track of the clip until it's finished.
@@ -62,10 +63,10 @@ function _Subtitles.Run()
 		end
 
 		-- Active the subtitle panel.
-		if (chosenPanel == SUBTITLE_PANEL_SIZES["SubtitlesPanel_Large"]) then
+		if (chosenPanel == _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge) then
 			IFace_FillListBoxFromText("SubtitlesPanel_Large", subtitleToUse);
 			IFace_Activate("SubtitlesPanel_Large");
-		elseif (chosenPanel == SUBTITLE_PANEL_SIZES["SubtitlesPanel_Medium"]) then
+		elseif (chosenPanel == _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelMedium) then
 			IFace_FillListBoxFromText("SubtitlesPanel_Medium", subtitleToUse);
 			IFace_Activate("SubtitlesPanel_Medium");
 		else
@@ -96,6 +97,11 @@ function IFace_FillListBoxFromText(listBox, file)
 
 	-- Split our string based on line break.
 	local subtitleText = LoadFile(file);
+
+	-- Don't proceed if we can't find the subtitles.
+	if (subtitleText == nil) then
+		return
+	end
 
 	-- For all lines, add them as a text item to the given list box.
 	for s in subtitleText:gmatch("[^\r\n]+") do

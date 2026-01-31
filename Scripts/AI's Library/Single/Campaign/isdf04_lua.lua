@@ -78,7 +78,6 @@ local Mission =
     m_ConvoyHalted = false,
     m_CliffCrumble = false,
     m_CliffCrumbleImpact = false,
-    m_SucceedMission = false,
     m_ScavengerConditionActive = false,
     m_TurretFollowing = false,
     m_ScavengerReminderActive = false,
@@ -129,6 +128,7 @@ local Mission =
     m_ScionWaveCount = 1,
     m_ScionWaveCooldown = 0,
     m_RelayBunkerWarningCount = 0,
+    m_DropshipDoorSoundDelay = 0,
 
     -- Keep track of which functions are running.
     m_MissionState = 1,
@@ -499,6 +499,9 @@ Functions[5] = function()
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
 
+        -- Small delay before the dropship doors open.
+        Mission.m_DropshipDoorSoundDelay = Mission.m_MissionTime + SecondsToTurns(2.5)
+
         -- Open the Dropship doors.
         SetAnimation(Mission.m_RecyDropship, "deploy", 1);
 
@@ -508,10 +511,15 @@ Functions[5] = function()
 end
 
 Functions[6] = function()
-    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
-        -- Play a sound.
+    if (not Mission.m_DropshipDoorSoundPlayed and Mission.m_DropshipDoorSoundDelay < Mission.m_MissionTime) then
+        -- Play the sound.
         StartSoundEffect("dropdoor.wav", Mission.m_RecyDropship);
 
+        -- Don't loop.
+        Mission.m_DropshipDoorSoundPlayed = true;
+    end
+
+    if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Have Shabayev look at the player.
         LookAt(Mission.m_Shabayev, Mission.m_MainPlayer, 1);
 
@@ -1350,7 +1358,7 @@ Functions[44] = function()
     -- Check to see if one of our players is in the bunker.
     if (IsPlayerInBuilding(_Cooperative.GetTotalPlayers())) then
         -- Braddock: Okay Cooke... you've just become a key part of this op.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0430b.wav", SUBTITLE_PANEL_SIZES["SubtitlesPanel_Large"]);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0430b.wav", _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge);
 
         -- Set the timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(34.5);
@@ -1688,22 +1696,17 @@ Functions[53] = function()
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
+            -- Mission is a success.
+            if (Mission.m_IsCooperativeMode) then
+                NoteGameoverWithCustomMessage("Mission Accomplished.");
+                DoGameover(7);
+            else
+                SucceedMission(GetTime() + 7, "isdf04w1.txt");
+            end
+
             -- So we don't loop.
             Mission.m_FinalDialogPlayed = true;
         end
-    end
-
-    -- Mission is a success.
-    if (not Mission.m_SucceedMission) then
-        if (Mission.m_IsCooperativeMode) then
-            NoteGameoverWithCustomMessage("Mission Accomplished.");
-            DoGameover(7);
-        else
-            SucceedMission(GetTime() + 7, "isdf04w1.txt");
-        end
-
-        -- So we don't loop.
-        Mission.m_SucceedMission = true;
     end
 end
 
@@ -1801,7 +1804,7 @@ function TugBrain()
             SetAnimation(Mission.m_TugDropship, "takeoff", 1);
 
             -- Sound effects.
-            StartSoundEffect("dropleav.wav", Mission.m_TugDropship);
+            StartSoundEffect("dropdoor.wav", Mission.m_TugDropship);
 
             -- Wait 3 seconds before running again.
             Mission.m_TugCheckTime = Mission.m_MissionTime + SecondsToTurns(3);
@@ -1814,7 +1817,7 @@ function TugBrain()
     -- If we've closed the doors and the time has run out.
     if (not Mission.m_TugDropshipTakeoff and Mission.m_CloseTugDropshipDoors and Mission.m_TugCheckTime < Mission.m_MissionTime) then
         -- Sound effects.
-        StartSoundEffect("dropdoor.wav", Mission.m_TugDropship);
+        StartSoundEffect("dropleav.wav", Mission.m_TugDropship);
 
         -- Emitters..
         StartEmitter(Mission.m_TugDropship, 1);

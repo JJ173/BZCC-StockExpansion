@@ -317,7 +317,7 @@ Functions[1] = function()
     BuildObject("fvturr_x", Mission.m_EnemyTeam, "turret_2");
 
     -- Start with Shabayev's audio
-    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("mes0801.wav", SUBTITLE_PANEL_SIZES["SubtitlesPanel_Large"]);
+    Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("mes0801.wav", _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge);
 
     -- Set the timer for this audio clip.
     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(25.5);

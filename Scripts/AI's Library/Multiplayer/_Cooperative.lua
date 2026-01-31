@@ -24,7 +24,9 @@ local m_BaneMissions = {
 }
 
 function _Cooperative.Load(CoopData)
-    _Cooperative = CoopData
+    for k, v in pairs(CoopData) do
+        CoopData[k] = v
+    end
 end
 
 function _Cooperative.Save()
@@ -126,7 +128,8 @@ function _Cooperative.PlayerEjected(DeadObjectHandle)
 
     -- Invalid team. Do nothing
     if (deadObjectTeam == 0) then
-        return DLLHandled
+        print("PlayerEjected: return DLLHandled ", _BZCCDatabase.EventReturnCodes.DLLHandled)
+        return _BZCCDatabase.EventReturnCodes.DLLHandled
     end
 
     if (IsPlayer(DeadObjectHandle)) then
@@ -134,12 +137,15 @@ function _Cooperative.PlayerEjected(DeadObjectHandle)
     end
 
     -- Tell main code to allow the ejection
-    return DoEjectPilot
+    print("PlayerEjected: return DoEjectPilot ", _BZCCDatabase.EventReturnCodes.DoEjectPilot)
+    return _BZCCDatabase.EventReturnCodes.DoEjectPilot
 end
 
 function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilotODF)
     -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then return DoEjectPilot end
+    if (GetCurWorld() ~= 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
 
     local isDeadAI = not IsPlayer(DeadObjectHandle)
     local isDeadPerson = IsPerson(DeadObjectHandle)
@@ -148,7 +154,8 @@ function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilot
     local deadObjectTeam = GetTeamNum(DeadObjectHandle)
 
     if (deadObjectTeam == 0) then
-        return DoEjectPilot
+        print("Returning DoEjectPilot: ", _BZCCDatabase.EventReturnCodes.DoEjectPilot)
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
     end
 
     -- If a person died, respawn them, etc
@@ -157,7 +164,9 @@ end
 
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
     -- Sanity check for multiworld
-    if (GetCurWorld() ~= 0) then return DoEjectPilot end
+    if (GetCurWorld() ~= 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
 
     local isDeadAI = not IsPlayer(DeadObjectHandle)
 
@@ -167,15 +176,17 @@ end
 
 function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
     -- Safety, do not do this if we are not in the lockstep world.
-    if (curWorld ~= 0) then return end
+    if (curWorld ~= 0) then
+        return
+    end
 
     -- Never allow friendly fire otherwise we may screw with mission logic.
     local relationship = GetTeamRelationship(shooterHandle, victimHandle)
 
-    if (relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
+    if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
         -- Allow snipes of items on team 0/perceived team 0, as long as they're not a local/remote player
         if (IsPlayer(victimHandle) or (GetTeamNum(victimHandle) ~= 0)) then
-            return PRESNIPE_ONLYBULLETHIT
+            return _BZCCDatabase.EventReturnCodes.PRESNIPE_ONLYBULLETHIT
         end
     end
 
@@ -183,18 +194,20 @@ function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTe
     SetPerceivedTeam(victimHandle, 0)
 
     -- If we make it here, kill the pilot.
-    return PRESNIPE_KILLPILOT
+    return _BZCCDatabase.EventReturnCodes.PRESNIPE_KILLPILOT
 end
 
 function _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
     -- Safety, do not do this if we are not in the lockstep world.
-    if (curWorld ~= 0) then return end
+    if (curWorld ~= 0) then
+        return
+    end
 
     -- Run our replacement script logic.
     _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
 
     -- Always allow the entry
-    return PREGETIN_ALLOW
+    return _BZCCDatabase.EventReturnCodes.PREGETIN_ALLOW
 end
 
 function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
@@ -245,7 +258,7 @@ function _Cooperative.RespawnPilot(DeadObjectHandle, Team, MissionPilotODF)
     end
 
     -- Return handled.
-    return DLLHandled
+    return  _BZCCDatabase.EventReturnCodes.DLLHandled
 end
 
 function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI, MissionPilotODF)
@@ -264,7 +277,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 
     -- Don't count stats for Team 0.
     if (deadObjectTeam == 0) then
-        return DoEjectPilot
+        return  _BZCCDatabase.EventReturnCodes.DoEjectPilot
     end
 
     if (deadObjectIsPlayer) then
@@ -284,7 +297,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 
     -- If the killer was a human (directly, not via their AI units), then they get a kill and some score points.
     if (killerObjectIsPlayer) then
-        if (relationship == TEAMRELATIONSHIP_SAMETEAM or relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
+        if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_SAMETEAM or relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
             -- Being a jerk to same or allied team loses a kill
             AddKills(KillersHandle, -1)
             -- And killer loses score
@@ -296,7 +309,7 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
             AddScore(KillersHandle, deadObjectScrapCost)
         end
     else
-        if (relationship == TEAMRELATIONSHIP_SAMETEAM or relationship == TEAMRELATIONSHIP_ALLIEDTEAM) then
+        if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_SAMETEAM or relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
             AddKills(KillersHandle, -1)
             AddScore(KillersHandle, -deadObjectScrapCost)
         else
@@ -307,15 +320,15 @@ function _Cooperative.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, 
 
     if (isDeadAI) then
         if (isDeadPerson) then
-            return DLLHandled
+            return  _BZCCDatabase.EventReturnCodes.DLLHandled
         else
-            return DoEjectPilot
+            return  _BZCCDatabase.EventReturnCodes.DoEjectPilot
         end
     else
         if (isDeadPerson) then
-            return RespawnPilot(DeadObjectHandle, deadObjectTeam, MissionPilotODF)
+            return _Cooperative.RespawnPilot(DeadObjectHandle, deadObjectTeam, MissionPilotODF)
         else
-            return DoEjectPilot
+            return  _BZCCDatabase.EventReturnCodes.DoEjectPilot
         end
     end
 end

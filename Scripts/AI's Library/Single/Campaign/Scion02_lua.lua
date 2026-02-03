@@ -308,7 +308,7 @@ end
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (Mission.m_MissionDifficulty > 1) then
         if (GetCfg(VictimHandle) == "ivturr_x" and OrdnanceTeam ~= Mission.m_EnemyTeam) then
-            if (GetCurrentCommand(VictimHandle) ~= AiCommand.CMD_DEFEND) then
+            if (GetCurrentCommand(VictimHandle) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
                 Defend(VictimHandle);
             end
         end
@@ -625,15 +625,15 @@ end
 -- is destroyed, we will replenish it with another.
 function ISDFTurretDispatcher()
     if (Mission.m_TurretDistpacherTimer < Mission.m_MissionTime) then
-        if (IsAliveAndEnemy(Mission.m_EnemyTurret1, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret1, "TurretEnemy1") > 30 and GetCurrentCommand(Mission.m_EnemyTurret1) ~= AiCommand.CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret1, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret1, "TurretEnemy1") > 30 and GetCurrentCommand(Mission.m_EnemyTurret1) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret1, "TurretEnemy1", 1);
         end
 
-        if (IsAliveAndEnemy(Mission.m_EnemyTurret2, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret2, "TurretEnemy2") > 30 and GetCurrentCommand(Mission.m_EnemyTurret2) ~= AiCommand.CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret2, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret2, "TurretEnemy2") > 30 and GetCurrentCommand(Mission.m_EnemyTurret2) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret2, "TurretEnemy2", 1);
         end
 
-        if (IsAliveAndEnemy(Mission.m_EnemyTurret3, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret3, "TurretEnemy3") > 30 and GetCurrentCommand(Mission.m_EnemyTurret3) ~= AiCommand.CMD_DEFEND) then
+        if (IsAliveAndEnemy(Mission.m_EnemyTurret3, Mission.m_EnemyTeam) and GetDistance(Mission.m_EnemyTurret3, "TurretEnemy3") > 30 and GetCurrentCommand(Mission.m_EnemyTurret3) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
             Goto(Mission.m_EnemyTurret3, "TurretEnemy3", 1);
         end
 
@@ -649,7 +649,7 @@ function ISDFScoutDistpatcher()
             -- Check if the Scout gets shot
             local unitWhoShotTeam = GetTeamNum(GetWhoShotMe(Mission.m_EnemyScout1));
 
-            if (GetCurrentCommand(Mission.m_EnemyScout1) == AiCommand.CMD_NONE) then
+            if (GetCurrentCommand(Mission.m_EnemyScout1) == _BZCCDatabase.AICommands.CMD_NONE) then
                 -- Send the scout out to do it's job.
                 local rand = math.ceil(GetRandomFloat(0, 2));
                 local chosenPath = "route" .. rand;

@@ -6,7 +6,6 @@
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 require("_GlobalVariables")
 require("_HelperFunctions")
-require("_AICmd")
 
 local _DispatchClass = require("_DispatchClass")
 local _Cooperative = require("_Cooperative")
@@ -514,7 +513,7 @@ local YelenaHandlers = {
             end
 
             Goto(turretHandle, path, 1)
-            turretObj.Command = CMD_GO
+            turretObj.Command = _BZCCDatabase.AICommands.CMD_GO
 
             ::continue::
         end
@@ -533,7 +532,7 @@ local YelenaHandlers = {
                 SetTeamNum(sentryHandle, Mission.m_HostTeam)
             end
 
-            if (GetCurrentCommand(sentryHandle) ~= CMD_NONE) then
+            if (GetCurrentCommand(sentryHandle) ~= _BZCCDatabase.AICommands.CMD_NONE) then
                 goto continue
             end
 
@@ -589,7 +588,7 @@ local BraddockHandlers = {
             end
 
             Goto(turretModel.Handle, "brad_turret" .. i)
-            turretModel.Command = CMD_GO
+            turretModel.Command = _BZCCDatabase.AICommands.CMD_GO
 
             ::continue::
         end
@@ -603,7 +602,7 @@ local BraddockHandlers = {
             end
 
             Goto(aaModel.Handle, "brad_anti-air" .. i)
-            aaModel.Command = CMD_GO
+            aaModel.Command = _BZCCDatabase.AICommands.CMD_GO
 
             ::continue::
         end
@@ -977,7 +976,7 @@ function ProcessAssaultSupportUnit(supportUnit)
     local unitHandle = supportUnit.Handle
 
     -- Check if we are idle.
-    if (GetCurrentCommand(unitHandle) ~= CMD_NONE) then
+    if (GetCurrentCommand(unitHandle) ~= _BZCCDatabase.AICommands.CMD_NONE) then
         goto continue
     end
 

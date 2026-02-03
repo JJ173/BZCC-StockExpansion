@@ -1,30 +1,18 @@
--- Return this to whatever file calls it.
-AIUnit =
-{
-    -- Handle for generic use.
-    Handle = 0,
+---@class AIUnit
+---@field Handle Handle
+---@field State string
+---@field TimeBuilt integer
+---@field DispatchDelay integer
 
-    -- To help us work out which unit type this is.
-    State = '',
+AIUnit = {}
 
-    -- Keep track of the turn that the unit is built on.
-    BuiltTime = 0,
-
-    -- Store a delay for the unit (in turns), to avoid any units being sent on the same turn that they are in the world.
-    DispatchDelay = 0,
-}
-
-function AIUnit:New(Handle, MissionTurn)
-    local o = {}
-
-    o.Handle = Handle or 0;
-    o.BuiltTime = MissionTurn or 0;
-    o.DispatchDelay = (MissionTurn + SecondsToTurns(5)) or 0;
-    o.State = 'IDLE';
-
-    setmetatable(o, { __index = self });
-
-    return o;
+function AIUnit.New(Handle, MissionTurn)
+    return {
+        Handle = Handle,
+        State = '',
+        TimeBuilt = MissionTurn,
+        DispatchDelay = (MissionTurn + SecondsToTurns(10))
+    }
 end
 
 return AIUnit;

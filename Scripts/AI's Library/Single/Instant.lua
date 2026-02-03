@@ -1,35 +1,35 @@
 -- Fix for finding files outside of this script directory.
-assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
+assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 
 -- Required Globals.
-require("_GlobalVariables");
+require("_GlobalVariables")
 
 -- Required helper functions.
-require("_HelperFunctions");
+require("_HelperFunctions")
 
 -- Required Skins Logic.
-require("_Skins");
-
--- Required AI Command Vars.
-require("_AICmd");
+require("_Skins")
 
 -- Controllers.
-local _AIController = require("_AIController");
-local _AnimalController = require("_AnimalController");
+local _AIController = require("_AIController")
 
 -- Database.
-local _BZCCDatabase = require("_BZCCDatabase");
+local _BZCCDatabase = require("_BZCCDatabase")
+
+-- Discord
+local _Discord = require("_Discord")
 
 -- Models
-local _Pool = require("_Pool");
-local _Condor = require("_Condor");
-local _Portal = require("_Portal");
+local _Pool = require("_Pool")
+local _Condor = require("_Condor")
+local _Portal = require("_Portal")
 
 -- Subtitles.
-local _Subtitles = require('_Subtitles');
+local _Subtitles = require('_Subtitles')
 
--- Voice Manager.
-local _VoiceManager = require('_VoiceManager');
+-- Managers
+local _AnimalManager = require("_AnimalManager")
+local _VoiceManager = require('_VoiceManager')
 
 local _Session = {
     m_GameTPS = 20,
@@ -126,7 +126,6 @@ local _Session = {
     m_WildlifeEnabled = false,
 
     m_AIController = nil,
-    m_AnimalController = nil,
 
     m_Pools = {},
 
@@ -139,19 +138,16 @@ local _Session = {
     m_CarrierObjectCheckDelay = 0
 }
 
-local CHAR_RACE_ISDF = 'i';
-local CHAR_RACE_SCION = 'f';
-
 -- Functions Table
-local ISDFIntroFunctions = {};
-local ScionIntroFunctions = {};
+local ISDFIntroFunctions = {}
+local ScionIntroFunctions = {}
 
 -- Debug only.
-local debug = false;
-local debug_base = false;
-local debug_base_built = false;
-local debug_contoller = false;
-local debug_stop_script = false;
+local debug = false
+local debug_base = false
+local debug_base_built = false
+local debug_contoller = false
+local debug_stop_script = false
 
 -- ODFs to Preload.
 local PreloadODFs = {
@@ -300,130 +296,120 @@ local ScionBaseLayout =
 
 function InitialSetup()
     -- This is to stop music for the intro.
-    AllowRandomTracks(true);
+    AllowRandomTracks(true)
 
     -- Do not auto group units.
-    SetAutoGroupUnits(false);
+    SetAutoGroupUnits(false)
 
     -- We want bot kill messages as this may be a coop mission.
-    WantBotKillMessages();
+    WantBotKillMessages()
 
     -- Preload ODFs to save time when they spawn.
     for i = 1, #PreloadODFs do
-        PreloadODF(PreloadODFs[i]);
+        PreloadODF(PreloadODFs[i])
     end
 
     -- Preload Audio handles here as well.
     for i = 1, #PreloadAudios do
-        PreloadAudioMessage(PreloadAudios[i]);
+        PreloadAudioMessage(PreloadAudios[i])
     end
 end
 
 function Save()
-    return _Session,
-        _Session.m_AIController:Save(),
-        _Session.m_AnimalController:Save();
+    return _Session, _AnimalManager.Save()
 end
 
-function Load(Session, AIController, AnimalController)
-    _Session = Session;
-
-    if (_Session.m_AIController ~= nil) then
-        _Session.m_AIController:Load(AIController);
-    end
-
-    if (_Session.m_AnimalController ~= nil) then
-        _Session.m_AnimalController:Load(AnimalController);
-    end
+function Load(Session, AnimalData)
+    _Session = Session
+    _AnimalManager.Load(AnimalData)
 end
 
 function AddObject(handle)
-    local classLabel = GetClassLabel(handle);
-    local teamNum = GetTeamNum(handle);
-    local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH");
-    local objCfg = GetCfg(handle);
-    local objBase = GetBase(handle);
+    local classLabel = GetClassLabel(handle)
+    local teamNum = GetTeamNum(handle)
+    local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH")
+    local objCfg = GetCfg(handle)
+    local objBase = GetBase(handle)
 
     if (classLabel == "CLASS_DEPOSIT") then
-        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool:New(handle, GetPosition(handle),
-            GetDistance(handle, "RecyclerEnemy"));
+        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool.New(handle, GetPosition(handle))
     end
 
     if (_Session.m_IntroDone == false) then
         if (objCfg == "fbportb_ark") then
-            _Session.m_ScionIntroPortal = handle;
+            _Session.m_ScionIntroPortal = handle
         end
     end
 
     if (teamNum == _Session.m_CompTeam) then
-        SetSkill(handle, _Session.m_Difficulty);
+        SetSkill(handle, _Session.m_Difficulty)
 
         if (isRecyclerVehicle) then
-            _Session.m_EnemyRecycler = handle;
+            _Session.m_EnemyRecycler = handle
         elseif (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm" or objCfg == _Session.m_CPUTeamRace .. "bport_xm") then
-            _Session.m_CPULandingPad = handle;
+            _Session.m_CPULandingPad = handle
         end
 
         -- Add the objects to the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, objCfg, objBase, _Session.m_TurnCounter);
+            _Session.m_AIController:AddObject(handle, classLabel, objCfg, objBase, _Session.m_TurnCounter)
         end
     elseif (teamNum == _Session.m_StratTeam) then
         -- Max out skills.
-        SetSkill(handle, 3);
+        SetSkill(handle, 3)
 
         if (isRecyclerVehicle) then
-            _Session.m_Recycler = handle;
+            _Session.m_Recycler = handle
         elseif (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm" or objCfg == _Session.m_HumanTeamRace .. "bport_xm") then
-            _Session.m_PlayerLandingPad = handle;
+            _Session.m_PlayerLandingPad = handle
         elseif (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
             local dropshipRequestItem =
             {
                 ItemHandle = handle,
                 TimeToDelete = _Session.m_TurnCounter +
                     SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]),
-            };
+            }
 
-            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem;
+            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem
 
-            if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-                local condorModel;
+            if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
+                local condorModel
 
                 if (objBase == "ScrapDropship") then
-                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2)
                 else
-                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3)
                 end
 
                 if (condorModel ~= nil) then
-                    _Session.m_Condors[#_Session.m_Condors + 1] = condorModel;
+                    _Session.m_Condors[#_Session.m_Condors + 1] = condorModel
                 end
-            elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
-                local portalModel;
+            elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
+                local portalModel
 
                 if (objBase == "ScrapDropship") then
-                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 2);
+                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 2)
                 else
-                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 3);
+                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 3)
                 end
 
                 if (portalModel ~= nil) then
-                    _Session.m_Portals[#_Session.m_Portals + 1] = portalModel;
+                    _Session.m_Portals[#_Session.m_Portals + 1] = portalModel
                 end
             end
         end
 
         if (_Session.m_MyGoal == 0) then
             if (classLabel == "CLASS_WINGMAN" or classLabel == "CLASS_MORPHTANK" or classLabel == "CLASS_ASSAULTTANK" or classLabel == "CLASS_SERVICE" or classLabel == "CLASS_WALKER") then
-                SetTeamNum(handle, _Session.m_PlayerTeam);
-                SetBestGroup(handle);
+                SetTeamNum(handle, _Session.m_PlayerTeam)
+                SetBestGroup(handle)
             end
         end
     elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
         -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
         -- we should switch the extractor to the right team when it's deployed to prevent breaking.
         if (classLabel == "CLASS_EXTRACTOR") then
-            SetTeamNum(handle, _Session.m_StratTeam);
+            SetTeamNum(handle, _Session.m_StratTeam)
         end
     end
 end
@@ -432,452 +418,436 @@ function DeleteObject(handle)
     if (GetTeamNum(handle) == _Session.m_CompTeam) then
         -- Remove the objects from the AI Controller.
         if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle), GetBase(handle));
+            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle), GetBase(handle))
         end
     end
 end
 
 function Start()
     -- Do not auto group units.
-    SetAutoGroupUnits(false);
+    SetAutoGroupUnits(false)
 
-    -- Grab the TPS.
-    _Session.m_GameTPS = GetTPS();
+    _Session.m_GameTPS = GetTPS()
+    _Session.m_TurnCounter = 0
+    _Session.m_StartDone = false
+    _Session.m_GameOver = false
+    _Session.m_CompTeam = 6
+    _Session.m_StratTeam = 1
+    _Session.m_MapName = GetMapTRNFilename()
 
-    -- Reset the turn counter.
-    _Session.m_TurnCounter = 0;
+    _Session.m_CanRespawn = IFace_GetInteger(_BZCCDatabase.ShellVariables.CAN_RESPAWN)
+    _Session.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED)
+    _Session.m_RTSModeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.RTS_MODE_ENABLED)
+    _Session.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED)
 
-    _Session.m_StartDone = false;
-    _Session.m_GameOver = false;
-    _Session.m_CompTeam = 6;
-    _Session.m_StratTeam = 1;
+    _Session.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE))
+    _Session.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE))
+    _Session.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1
+    _Session.m_VSRTauntEasterEggTime = _Session.m_TurnCounter + SecondsToTurns(600)
 
-    _Session.m_CanRespawn = IFace_GetInteger(_BZCCDatabase.ShellVariables.CAN_RESPAWN);
-    _Session.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED);
-    _Session.m_RTSModeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.RTS_MODE_ENABLED);
-    _Session.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED);
+    _Session.m_CPUScrapAmount = _Session.m_Difficulty
+    _Session.m_CPUScrapDelay = (4 - _Session.m_Difficulty)
 
-    _Session.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE));
-    _Session.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE));
-    _Session.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1;
-    _Session.m_VSRTauntEasterEggTime = _Session.m_TurnCounter + SecondsToTurns(600);
-
-    if (_Session.m_Difficulty == DIFFICULTY_MEDIUM) then
-        _Session.m_CPUScrapDelay = 2;
-        _Session.m_CPUScrapAmount = 1;
-    elseif (_Session.m_Difficulty == DIFFICULTY_HARD) then
-        _Session.m_CPUScrapDelay = 1;
-        _Session.m_CPUScrapAmount = 2;
-    end
+    -- Start up Discord RPC.
+    _Discord.Start("Instant Action 2.0", _Session.m_MapName)
 end
 
 function Update()
     -- Keep track of our turn counter.
-    _Session.m_TurnCounter = _Session.m_TurnCounter + 1;
+    _Session.m_TurnCounter = _Session.m_TurnCounter + 1
+
+    -- Update Discord.
+    _Discord.Update()
 
     if (debug_stop_script) then
         if (debug_base and debug_base_built == false) then
-            if (_Session.m_CPUTeamRace == 'i') then
+            if (_Session.m_CPUTeamRace == _BZCCDatabase.Factions.ISDF) then
                 for i = 1, #ISDFBaseLayout do
                     -- Grab each table line.
-                    local baseBuilding = ISDFBaseLayout[i];
-                    BuildObject(baseBuilding[1], 0, baseBuilding[2]);
+                    local baseBuilding = ISDFBaseLayout[i]
+                    BuildObject(baseBuilding[1], 0, baseBuilding[2])
                 end
-            elseif (_Session.m_CPUTeamRace == 'f') then
+            elseif (_Session.m_CPUTeamRace == _BZCCDatabase.Factions.SCION) then
                 for i = 1, #ScionBaseLayout do
                     -- Grab each table line.
-                    local baseBuilding = ScionBaseLayout[i];
-                    BuildObject(baseBuilding[1], 0, baseBuilding[2]);
+                    local baseBuilding = ScionBaseLayout[i]
+                    BuildObject(baseBuilding[1], 0, baseBuilding[2])
                 end
             end
 
             -- If we are in debug mode, set the CPU Team to 0.
-            _Session.m_CompTeam = 0;
+            _Session.m_CompTeam = 0
 
             -- To deploy the CPU Recycler so I can see where the base will face.
-            SetAIP('debug.aip', _Session.m_CompTeam);
+            SetAIP('debug.aip', _Session.m_CompTeam)
 
             if (debug_contoller) then
                 -- Create the CPU team model to keep track of what's in the world.
                 _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session
-                    .m_Pools);
+                    .m_Pools)
 
                 -- Setup the AI Controller.
-                _Session.m_AIController:Setup(_Session.m_CompTeam);
+                _Session.m_AIController:Setup(_Session.m_CompTeam)
             end
 
             -- So we don't spawn infinite bases.
-            debug_base_built = true;
+            debug_base_built = true
         end
 
-        return;
+        return
     end
 
-    -- Most important, get the map name.
-    _Session.m_MapName = GetMapTRNFilename();
-
     -- Subtitles.
-    _Subtitles.Run();
+    _Subtitles.Run()
 
     -- Keep track of our player.
-    _Session.m_Player = GetPlayerHandle(1);
+    _Session.m_Player = GetPlayerHandle(1)
 
     if (_Session.m_StartDone == false) then
-        _Session.m_StartDone = true;
+        _Session.m_StartDone = true
 
         -- If we are in debug mode, launch cheats.
         if (debug) then
-            IFace_ConsoleCmd("game.cheat bzbody");
-            IFace_ConsoleCmd("game.cheat bztnt");
-            IFace_ConsoleCmd("game.cheat bzradar");
-            IFace_ConsoleCmd("game.cheat bzfree");
+            IFace_ConsoleCmd("game.cheat bzbody")
+            IFace_ConsoleCmd("game.cheat bztnt")
+            IFace_ConsoleCmd("game.cheat bzradar")
+            IFace_ConsoleCmd("game.cheat bzfree")
         end
 
-        local customCPURecycler = IFace_GetString("options.instant.string2");
+        local customCPURecycler = IFace_GetString("options.instant.string2")
 
         if (customCPURecycler ~= nil) then
             _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace,
-                customCPURecycler, "*vrecy", "RecyclerEnemy");
+                customCPURecycler, "*vrecy", "RecyclerEnemy")
         else
             _Session.m_EnemyRecycler = BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vrecy_x",
-                "*vrecy", "RecyclerEnemy");
+                "*vrecy", "RecyclerEnemy")
         end
 
         -- Spawn CPU vehicles.
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1");
-        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2");
-
-        CHAR_RACE_ISDF = string.char(RACE_ISDF);
-        CHAR_RACE_SCION = string.char(RACE_SCION);
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy1")
+        BuildStartingVehicle(_Session.m_CompTeam, _Session.m_CPUTeamRace, "*vturr_x", "*vturr_c", "TurretEnemy2")
 
         -- Checks for team colour differences.
-        if (_Session.m_CPUTeamRace == CHAR_RACE_ISDF and _Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-            SetTeamColor(_Session.m_CompTeam, 0, 127, 255); -- Blue like in the campaign.
-        elseif (_Session.m_CPUTeamRace == CHAR_RACE_SCION and _Session.m_HumanTeamRace == CHAR_RACE_SCION) then
-            SetTeamColor(_Session.m_CompTeam, 85, 255, 85); -- Green (Rebels) like in the campaign.
+        if (_Session.m_CPUTeamRace == _BZCCDatabase.Factions.ISDF and _Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
+            SetTeamColor(_Session.m_CompTeam, 0, 127, 255) -- Blue like in the campaign.
+        elseif (_Session.m_CPUTeamRace == _BZCCDatabase.Factions.SCION and _Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
+            SetTeamColor(_Session.m_CompTeam, 85, 255, 85) -- Green (Rebels) like in the campaign.
         end
 
         -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools);
+        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools)
 
         -- Setup the AI Controller.
-        _Session.m_AIController:Setup(_Session.m_CompTeam);
+        _Session.m_AIController:Setup(_Session.m_CompTeam)
 
         -- Setup the animal herd controller.
         if (_Session.m_WildlifeEnabled == 1) then
             -- If we're a Mire map, set up some birds and Jaks with no special behaviour.
             if (FindInTable(_BZCCDatabase.MireMaps, _Session.m_MapName)) then
-                _Session.m_AnimalController = _AnimalController:New();
-                _Session.m_AnimalController:SetupMireMapHerds();
+                _AnimalManager.SetupMireMapHerds()
             else
                 -- Determine which ODFs to use for the mother and baby animals.
-                local motherODF = 'bcrhino';
-                local babyODF = 'bcrhino';
+                local motherODF = 'bcrhino'
+                local babyODF = 'bcrhino'
 
                 -- Only use Rhinos for Bane maps, except for Dunes, that's a special case.
                 if (_Session.m_MapName == "dunesi.trn") then
-                    motherODF = motherODF .. "_s";
-                    babyODF = babyODF .. "_s_b";
+                    motherODF = motherODF .. "_s"
+                    babyODF = babyODF .. "_s_b"
                 elseif (FindInTable(_BZCCDatabase.BaneMaps, _Session.m_MapName)) then
-                    motherODF = motherODF .. "_x";
-                    babyODF = babyODF .. "_x_b";
+                    motherODF = motherODF .. "_x"
+                    babyODF = babyODF .. "_x_b"
                 end
 
-                _Session.m_AnimalController = _AnimalController:New();
-                _Session.m_AnimalController:SetupMapHerds(motherODF, babyODF);
+                _AnimalManager.SetupMapHerds(motherODF, babyODF)
             end
         end
 
         -- Grab dropship handles for the intro.
-        _Session.m_IntroShip1 = GetHandle("intro_drop_1");
-        _Session.m_IntroShip2 = GetHandle("intro_drop_2");
+        _Session.m_IntroShip1 = GetHandle("intro_drop_1")
+        _Session.m_IntroShip2 = GetHandle("intro_drop_2")
 
         -- Grab all Scion intro units.
-        _Session.m_ScionIntroHangar = GetHandle("scion_intro_hangar");
-        _Session.m_ScionIntroMatriarch = GetHandle("intro_matriarch");
-        _Session.m_ScionIntroPlayer = GetHandle("scion_player_scout");
-        _Session.m_ScionIntroTurret1 = GetHandle("intro_turret_1_scion");
-        _Session.m_ScionIntroTurret2 = GetHandle("intro_turret_2_scion");
+        _Session.m_ScionIntroHangar = GetHandle("scion_intro_hangar")
+        _Session.m_ScionIntroMatriarch = GetHandle("intro_matriarch")
+        _Session.m_ScionIntroPlayer = GetHandle("scion_player_scout")
+        _Session.m_ScionIntroTurret1 = GetHandle("intro_turret_1_scion")
+        _Session.m_ScionIntroTurret2 = GetHandle("intro_turret_2_scion")
 
         -- Grab the turrets.
-        _Session.m_IntroTurret1 = GetHandle("turret1");
-        _Session.m_IntroTurret2 = GetHandle("turret2");
+        _Session.m_IntroTurret1 = GetHandle("turret1")
+        _Session.m_IntroTurret2 = GetHandle("turret2")
 
         -- Stop them so they can't be commanded for now.
-        Stop(_Session.m_IntroTurret1, 1);
-        Stop(_Session.m_IntroTurret2, 1);
+        Stop(_Session.m_IntroTurret1, 1)
+        Stop(_Session.m_IntroTurret2, 1)
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.
         if (_Session.m_RTSModeEnabled == 1 or _Session.m_IntroCutsceneEnabled == 0) then
             -- Do not allow the intro to play.
-            DisableIntro();
+            DisableIntro()
 
             -- Create the Recycler.
-            BuildPlayerRecycler("Recycler");
+            BuildPlayerRecycler("Recycler")
 
             -- Grab the position of the Recycler for spawning more units.
-            local recPos = GetPosition(_Session.m_Recycler);
+            local recPos = GetPosition(_Session.m_Recycler)
 
             -- Create a couple of turrets.
             BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
+                GetPositionNear(recPos, 40.0, 60.0))
             BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vturr_xm", "*vturr",
-                GetPositionNear(recPos, 40.0, 60.0));
+                GetPositionNear(recPos, 40.0, 60.0))
 
             -- Give reinforcements to the player based on difficulty.
-            if (_Session.m_Difficulty < DIFFICULTY_HARD) then
+            if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_HARD) then
                 local tank1 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vtank_x", "*vtank",
-                    GetPositionNear(recPos, 10, 10));
+                    GetPositionNear(recPos, 10, 10))
                 local tank2 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vtank_x", "*vtank",
-                    GetPositionNear(recPos, 10, 10));
+                    GetPositionNear(recPos, 10, 10))
 
-                SetRandomHeadingAngle(tank1);
-                SetRandomHeadingAngle(tank2);
-                SetBestGroup(tank1);
-                SetBestGroup(tank2);
+                SetRandomHeadingAngle(tank1)
+                SetRandomHeadingAngle(tank2)
+                SetBestGroup(tank1)
+                SetBestGroup(tank2)
 
-                if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
-                    if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-                        GiveWeapon(tank1, "gspstab_c");
-                        GiveWeapon(tank2, "gspstab_c");
-                    elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
-                        GiveWeapon(tank1, "garc_c");
-                        GiveWeapon(tank2, "garc_c");
-                        GiveWeapon(tank1, "gabsorb");
-                        GiveWeapon(tank2, "gabsorb");
+                if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_MEDIUM) then
+                    if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
+                        GiveWeapon(tank1, "gspstab_c")
+                        GiveWeapon(tank2, "gspstab_c")
+                    elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
+                        GiveWeapon(tank1, "garc_c")
+                        GiveWeapon(tank2, "garc_c")
+                        GiveWeapon(tank1, "gabsorb")
+                        GiveWeapon(tank2, "gabsorb")
                     end
 
                     local truck1 = BuildStartingVehicle(_Session.m_PlayerTeam, _Session.m_HumanTeamRace, "*vserv_x",
-                        "*vserv", GetPositionNear(recPos, 10, 10));
-                    SetRandomHeadingAngle(truck1);
-                    SetBestGroup(truck1);
+                        "*vserv", GetPositionNear(recPos, 10, 10))
+                    SetRandomHeadingAngle(truck1)
+                    SetBestGroup(truck1)
                 end
             end
 
-            BuildCarriers();
+            BuildCarriers()
 
             -- Reset the player and give them the RTS Vehicle.
-            RemoveObject(_Session.m_Player);
+            RemoveObject(_Session.m_Player)
 
             if (_Session.m_RTSModeEnabled == 1) then
                 -- Build the RTS vehicle.
-                local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 40.0, 60.0));
-                SetAsUser(PlayerH, _Session.m_PlayerTeam);
-                AddPilotByHandle(PlayerH);
+                local PlayerH = BuildObject("iv_rts_vehicle", _Session.m_PlayerTeam, GetPositionNear(recPos, 40.0, 60.0))
+                SetAsUser(PlayerH, _Session.m_PlayerTeam)
+                AddPilotByHandle(PlayerH)
             else
-                RespawnPlayer(true);
+                RespawnPlayer(true)
             end
         end
-    else
-        if (_Session.m_RTSModeEnabled == 1) then
-            -- Basically force the player into a deployed state.
-            if (IsDeployed(_Session.m_Player) == false and _Session.m_TurnCounter % SecondsToTurns(0.2) == 0) then
-                Deploy(_Session.m_Player);
-            end
-        elseif (_Session.m_IntroCutsceneEnabled == 1 and _Session.m_IntroDone == false) then
-            if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
-                ISDFIntroFunctions[_Session.m_IntroState]();
 
-                -- Check to see that the dropship is clear.
-                if (_Session.m_DropshipTakeoffCheck) then
-                    if (_Session.m_Dropship1Takeoff == false) then
-                        local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil);
+        return
+    end
 
-                        if (distCheck1 == 1) then
-                            -- Start the take-off sequence.
-                            SetAnimation(_Session.m_IntroShip1, "takeoff", 1);
+    if (_Session.m_IntroCutsceneEnabled == 1 and _Session.m_IntroDone == false) then
+        if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
+            ISDFIntroFunctions[_Session.m_IntroState]()
 
-                            -- Engine sound.
-                            local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip1);
-                            SetVolume(engineSound, 0.3);
+            -- Check to see that the dropship is clear.
+            if (_Session.m_DropshipTakeoffCheck) then
+                if (_Session.m_Dropship1Takeoff == false) then
+                    local distCheck1 = CountUnitsNearObject(_Session.m_IntroShip1, 30, _Session.m_PlayerTeam, nil)
 
-                            -- Set the timer for when we remove the dropship.
-                            _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15);
+                    if (distCheck1 == 1) then
+                        -- Start the take-off sequence.
+                        SetAnimation(_Session.m_IntroShip1, "takeoff", 1)
 
-                            -- So we don't loop.
-                            _Session.m_Dropship1Takeoff = true;
-                        end
-                    elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
-                        -- Remove the Dropship.
-                        RemoveObject(_Session.m_IntroShip1);
+                        -- Engine sound.
+                        local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip1)
+                        SetVolume(engineSound, 0.3)
 
-                        -- Mark this as done.
-                        _Session.m_Dropship1Remove = true;
-                    end
-
-                    if (_Session.m_Dropship2Takeoff == false) then
-                        local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil);
-
-                        if (distCheck2 == 1) then
-                            -- Start the take-off sequence.
-                            SetAnimation(_Session.m_IntroShip2, "takeoff", 1);
-
-                            -- Engine sound.
-                            local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip2);
-                            SetVolume(engineSound, 0.3);
-
-                            -- Set the timer for when we remove the dropship.
-                            _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15);
-
-                            -- So we don't loop.
-                            _Session.m_Dropship2Takeoff = true;
-                        end
-                    elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
-                        -- Remove the Dropship.
-                        RemoveObject(_Session.m_IntroShip2);
-
-                        -- Mark this as done.
-                        _Session.m_Dropship2Remove = true;
-                    end
-
-                    if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
-                        -- "Condor": "We are returning to base."
-                        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav");
+                        -- Set the timer for when we remove the dropship.
+                        _Session.m_Dropship1Time = _Session.m_TurnCounter + SecondsToTurns(15)
 
                         -- So we don't loop.
-                        _Session.m_DropshipTakeOffDialogPlayed = true;
+                        _Session.m_Dropship1Takeoff = true
                     end
+                elseif (_Session.m_Dropship1Remove == false and _Session.m_Dropship1Time < _Session.m_TurnCounter) then
+                    -- Remove the Dropship.
+                    RemoveObject(_Session.m_IntroShip1)
 
-                    -- This means this method is no longer needed.
-                    if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
-                        _Session.m_DropshipTakeoffCheck = false;
-                    end
+                    -- Mark this as done.
+                    _Session.m_Dropship1Remove = true
                 end
-            elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
-                ScionIntroFunctions[_Session.m_IntroState]();
+
+                if (_Session.m_Dropship2Takeoff == false) then
+                    local distCheck2 = CountUnitsNearObject(_Session.m_IntroShip2, 30, _Session.m_PlayerTeam, nil)
+
+                    if (distCheck2 == 1) then
+                        -- Start the take-off sequence.
+                        SetAnimation(_Session.m_IntroShip2, "takeoff", 1)
+
+                        -- Engine sound.
+                        local engineSound = StartAudio3D("dropleav.wav", _Session.m_IntroShip2)
+                        SetVolume(engineSound, 0.3)
+
+                        -- Set the timer for when we remove the dropship.
+                        _Session.m_Dropship2Time = _Session.m_TurnCounter + SecondsToTurns(15)
+
+                        -- So we don't loop.
+                        _Session.m_Dropship2Takeoff = true
+                    end
+                elseif (_Session.m_Dropship2Remove == false and _Session.m_Dropship2Time < _Session.m_TurnCounter) then
+                    -- Remove the Dropship.
+                    RemoveObject(_Session.m_IntroShip2)
+
+                    -- Mark this as done.
+                    _Session.m_Dropship2Remove = true
+                end
+
+                if (_Session.m_DropshipTakeOffDialogPlayed == false and _Session.m_Dropship1Takeoff and _Session.m_Dropship2Takeoff) then
+                    -- "Condor": "We are returning to base."
+                    _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav")
+
+                    -- So we don't loop.
+                    _Session.m_DropshipTakeOffDialogPlayed = true
+                end
+
+                -- This means this method is no longer needed.
+                if (_Session.m_Dropship1Remove and _Session.m_Dropship2Remove) then
+                    _Session.m_DropshipTakeoffCheck = false
+                end
             end
+        elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
+            ScionIntroFunctions[_Session.m_IntroState]()
         end
     end
 
+    -- Managers
     if (_Session.m_AIController ~= nil) then
-        _Session.m_AIController:Run(_Session.m_TurnCounter);
+        _Session.m_AIController:Run(_Session.m_TurnCounter)
     end
 
-    if (_Session.m_AnimalController ~= nil) then
-        _Session.m_AnimalController:Run(_Session.m_TurnCounter);
-    end
+    _AnimalManager.Run(_Session.m_TurnCounter)
 
     if (_Session.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
-        GameConditions();
+        GameConditions()
 
         if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
-            local condorObj = _Session.m_CarrierItemsToRemove[1];
+            local condorObj = _Session.m_CarrierItemsToRemove[1]
 
             if (condorObj.TimeToDelete < _Session.m_TurnCounter) then
-                RemoveObject(condorObj.ItemHandle);
-                table.remove(_Session.m_CarrierItemsToRemove, 1);
+                RemoveObject(condorObj.ItemHandle)
+                table.remove(_Session.m_CarrierItemsToRemove, 1)
             end
 
-            _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1);
+            _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1)
         end
 
         -- Checks to see if we have any dropships that need sending.
-        if (_Session.m_HumanTeamRace == CHAR_RACE_ISDF) then
+        if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
             if (#_Session.m_Condors > 0) then
                 if (_Session.m_PlayerCondor == nil) then
-                    _Session.m_PlayerCondor = _Session.m_Condors[1];
+                    _Session.m_PlayerCondor = _Session.m_Condors[1]
                 else
                     if (_Session.m_PlayerCondor.ReadyToDelete == false) then
-                        _Session.m_PlayerCondor:Run(_Session.m_TurnCounter);
+                        _Session.m_PlayerCondor:Run(_Session.m_TurnCounter)
                     else
-                        table.remove(_Session.m_Condors, 1);
-                        _Session.m_PlayerCondor = nil;
+                        table.remove(_Session.m_Condors, 1)
+                        _Session.m_PlayerCondor = nil
                     end
                 end
             end
-        elseif (_Session.m_HumanTeamRace == CHAR_RACE_SCION) then
+        elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
             if (#_Session.m_Portals > 0) then
                 if (_Session.m_PlayerPortal == nil) then
-                    _Session.m_PlayerPortal = _Session.m_Portals[1];
+                    _Session.m_PlayerPortal = _Session.m_Portals[1]
                 else
                     if (_Session.m_PlayerPortal.ReadyToDelete == false) then
-                        _Session.m_PlayerPortal:Run(_Session.m_TurnCounter);
+                        _Session.m_PlayerPortal:Run(_Session.m_TurnCounter)
                     else
-                        table.remove(_Session.m_Portals, 1);
-                        _Session.m_PlayerPortal = nil;
+                        table.remove(_Session.m_Portals, 1)
+                        _Session.m_PlayerPortal = nil
                     end
                 end
             end
         end
 
         -- Start running the scrap cheat for the CPU.
-        if (_Session.m_Difficulty >= DIFFICULTY_MEDIUM) then
-            if (_Session.m_NextCPUScrapTime <= _Session.m_TurnCounter) then
-                _Session.m_NextCPUScrapTime = _Session.m_TurnCounter + SecondsToTurns(_Session.m_CPUScrapDelay);
-                AddScrap(_Session.m_CompTeam, _Session.m_CPUScrapAmount);
-            end
+        if (_Session.m_NextCPUScrapTime <= _Session.m_TurnCounter) then
+            _Session.m_NextCPUScrapTime = _Session.m_TurnCounter + SecondsToTurns(_Session.m_CPUScrapDelay)
+            AddScrap(_Session.m_CompTeam, _Session.m_CPUScrapAmount)
         end
     end
 end
 
 function PlayerEjected(DeadObjectHandle)
-    return DoEjectPilot;
+    return DoEjectPilot
 end
 
 function PlayerDied(DeadObjectHandle, bSniped)
     if (IsPerson(DeadObjectHandle) == false and bSniped == false) then
-        return DoEjectPilot;
+        return DoEjectPilot
     end
 
     if (_Session.m_CanRespawn == 1 and IsAlive(_Session.m_Recycler)) then
-        RespawnPlayer(false);
+        RespawnPlayer(false)
     else
-        FailMission(GetTime() + 3.0);
+        FailMission(GetTime() + 3.0)
     end
 
-    return DLLHandled;
+    return DLLHandled
 end
 
 function ObjectKilled(DeadObjectHandle, KillersHandle)
     if (IsPlayer(DeadObjectHandle) == false) then
-        local bWasDeadPilot = IsPerson(DeadObjectHandle);
+        local bWasDeadPilot = IsPerson(DeadObjectHandle)
 
         if (bWasDeadPilot == false) then
-            return DoEjectPilot;
+            return DoEjectPilot
         end
 
-        return DLLHandled;
+        return DLLHandled
     end
 
-    return PlayerDied(DeadObjectHandle, false);
+    return PlayerDied(DeadObjectHandle, false)
 end
 
 function ObjectSniped(DeadObjectHandle, KillersHandle)
     if (IsPlayer(DeadObjectHandle) == false) then
-        return DLLHandled;
+        return DLLHandled
     end
 
-    return PlayerDied(DeadObjectHandle, true);
+    return PlayerDied(DeadObjectHandle, true)
 end
 
 function PreGetIn(cutWorld, pilotHandle, emptyCraftHandle)
     -- Apply a skin to the unit if it is a player.
     if (IsPlayer(pilotHandle)) then
-        ApplySkinToHandle(GetPlayerName(pilotHandle), emptyCraftHandle, GetTeamNum(pilotHandle));
+        ApplySkinToHandle(GetPlayerName(pilotHandle), emptyCraftHandle, GetTeamNum(pilotHandle))
     end
 
     -- Run our replacement script logic.
-    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle);
+    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
 
     -- Always allow the entry
-    return PREGETIN_ALLOW;
+    return PREGETIN_ALLOW
 end
 
 function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (GetClassSig(VictimHandle) == "CLASS_ID_ANIMAL") then
-        _Session.m_AnimalController:AnimalShot(_Session.m_TurnCounter, VictimHandle, ShooterHandle);
+        _AnimalManager.AnimalShot(_Session.m_TurnCounter, VictimHandle, ShooterHandle)
     end
 
     if (OrdnanceTeam ~= _Session.m_CompTeam) then
         if (GetTeamNum(VictimHandle) == _Session.m_CompTeam) then
-            local objClass = GetClassLabel(VictimHandle);
+            local objClass = GetClassLabel(VictimHandle)
 
             if (objClass == "CLASS_TURRETTANK") then
-                _Session.m_AIController:TurretShot(VictimHandle, _Session.m_TurnCounter);
+                _Session.m_AIController:TurretShot(VictimHandle, _Session.m_TurnCounter)
             elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
-                _Session.m_AIController:ScavengerShot(VictimHandle);
+                _Session.m_AIController:ScavengerShot(VictimHandle)
             end
         end
     end
@@ -888,121 +858,119 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 function DisableIntro()
-    RemoveScionIntroUnits();
-    RemoveISDFIntroUnits();
-    _Session.m_IntroDone = true;
+    RemoveScionIntroUnits()
+    RemoveISDFIntroUnits()
+    _Session.m_IntroDone = true
 end
 
 function RespawnPlayer(isGameStart)
-    local recyclerPosition = GetPosition(_Session.m_Recycler);
-    local respawnPosition = GetPositionNear(recyclerPosition, 10, 50);
+    local recyclerPosition = GetPosition(_Session.m_Recycler)
+    local respawnPosition = GetPositionNear(recyclerPosition, 10, 50)
 
     -- Prevent spawning within stuff.
-    local PlayerODF = "";
+    local PlayerODF = ""
 
     if (isGameStart) then
-        PlayerODF = _Session.m_HumanTeamRace .. "vscout";
+        PlayerODF = _Session.m_HumanTeamRace .. "vscout"
     else
-        respawnPosition.y = respawnPosition.y + 50;
-        PlayerODF = _Session.m_HumanTeamRace .. "spilo";
+        respawnPosition.y = respawnPosition.y + 50
+        PlayerODF = _Session.m_HumanTeamRace .. "spilo"
     end
 
-    local PlayerH = BuildObject(PlayerODF, _Session.m_PlayerTeam, respawnPosition);
-    SetAsUser(PlayerH, _Session.m_PlayerTeam);
-    AddPilotByHandle(PlayerH);
+    local PlayerH = BuildObject(PlayerODF, _Session.m_PlayerTeam, respawnPosition)
+    SetAsUser(PlayerH, _Session.m_PlayerTeam)
+    AddPilotByHandle(PlayerH)
 
     -- Taunt.
     if (isGameStart == false) then
-        DoTaunt(TAUNTS_HumanShipDestroyed);
+        DoTaunt(TAUNTS_HumanShipDestroyed)
     end
 end
 
 function BuildStartingVehicle(aTeam, aRace, ODF1, ODF2, Where)
-    local TempODF = ReplaceCharacter(1, ODF1, aRace);
+    local TempODF = ReplaceCharacter(1, ODF1, aRace)
 
     if (DoesODFExist(TempODF) == false) then
-        TempODF = ReplaceCharacter(1, ODF2, aRace);
+        TempODF = ReplaceCharacter(1, ODF2, aRace)
     end
 
-    local h = BuildObject(TempODF, aTeam, Where);
+    local h = BuildObject(TempODF, aTeam, Where)
 
     if (aTeam == _Session.m_PlayerTeam) then
-        SetBestGroup(h);
+        SetBestGroup(h)
     end
 
-    return h;
+    return h
 end
 
 function GameConditions()
     if (_Session.m_GameOver == false) then
         if (IsAlive(_Session.m_EnemyRecycler) == false) then
-            local DLLHandle = GetObjectByTeamSlot(_Session.m_CompTeam, DLL_TEAM_SLOT_RECYCLER);
+            local DLLHandle = GetObjectByTeamSlot(_Session.m_CompTeam, DLL_TEAM_SLOT_RECYCLER)
 
             if (IsAround(DLLHandle)) then
-                _Session.m_EnemyRecycler = DLLHandle;
+                _Session.m_EnemyRecycler = DLLHandle
             else
-                DoTaunt(TAUNTS_CPURecyDestroyed);
-                SucceedMission(GetTime() + 5, "instantw.txt");
-                _Session.m_GameOver = true;
+                DoTaunt(TAUNTS_CPURecyDestroyed)
+                SucceedMission(GetTime() + 5, "instantw.txt")
+                _Session.m_GameOver = true
             end
         elseif (IsAlive(_Session.m_Recycler) == false) then
-            local DLLHandle = GetObjectByTeamSlot(_Session.m_StratTeam, DLL_TEAM_SLOT_RECYCLER);
+            local DLLHandle = GetObjectByTeamSlot(_Session.m_StratTeam, DLL_TEAM_SLOT_RECYCLER)
 
             if (IsAround(DLLHandle)) then
-                _Session.m_Recycler = DLLHandle;
+                _Session.m_Recycler = DLLHandle
             else
                 if (_Session.m_TurnCounter < _Session.m_VSRTauntEasterEggTime) then
-                    DoTaunt(TAUNTS_VSR_EasterEgg);
+                    DoTaunt(TAUNTS_VSR_EasterEgg)
                 else
-                    DoTaunt(TAUNTS_HumanRecyDestroyed);
+                    DoTaunt(TAUNTS_HumanRecyDestroyed)
                 end
 
-                SucceedMission(GetTime() + 5, "instantl.txt");
-                _Session.m_GameOver = true;
+                SucceedMission(GetTime() + 5, "instantl.txt")
+                _Session.m_GameOver = true
             end
         end
     end
 end
 
 function BuildPlayerRecycler(pos)
-    local customHumanRecycler = IFace_GetString("options.instant.string1");
+    local customHumanRecycler = IFace_GetString("options.instant.string1")
 
     if (customHumanRecycler ~= nil) then
         _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, customHumanRecycler,
-            "*vrecy", pos);
+            "*vrecy", pos)
     else
         _Session.m_Recycler = BuildStartingVehicle(_Session.m_StratTeam, _Session.m_HumanTeamRace, "*vrecy", "*vrecy",
-            pos);
+            pos)
     end
 
-    SetScrap(_Session.m_StratTeam, 40);
+    SetScrap(_Session.m_StratTeam, 40)
 end
 
 function BuildCarriers()
     -- Grab the position of the Carrier path for spawning.
-    local carrierPath = GetPosition("Carrier");
-    local carrierEnemyPath = GetPosition("CarrierEnemy");
+    local carrierPath = GetPosition("Carrier")
+    local carrierEnemyPath = GetPosition("CarrierEnemy")
 
     -- Spawn Carriers for both teams.
-    BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam,
-        SetVector(carrierPath.x, 800, carrierPath.z));
-    BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam,
-        SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z));
+    BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam, SetVector(carrierPath.x, 800, carrierPath.z))
+    BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam, SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z))
 end
 
 function RemoveISDFIntroUnits()
-    RemoveObject(_Session.m_IntroShip1);
-    RemoveObject(_Session.m_IntroShip2);
-    RemoveObject(_Session.m_IntroTurret1);
-    RemoveObject(_Session.m_IntroTurret2);
+    RemoveObject(_Session.m_IntroShip1)
+    RemoveObject(_Session.m_IntroShip2)
+    RemoveObject(_Session.m_IntroTurret1)
+    RemoveObject(_Session.m_IntroTurret2)
 end
 
 function RemoveScionIntroUnits()
-    RemoveObject(_Session.m_ScionIntroHangar);
-    RemoveObject(_Session.m_ScionIntroMatriarch);
-    RemoveObject(_Session.m_ScionIntroPlayer);
-    RemoveObject(_Session.m_ScionIntroTurret1);
-    RemoveObject(_Session.m_ScionIntroTurret2);
+    RemoveObject(_Session.m_ScionIntroHangar)
+    RemoveObject(_Session.m_ScionIntroMatriarch)
+    RemoveObject(_Session.m_ScionIntroPlayer)
+    RemoveObject(_Session.m_ScionIntroTurret1)
+    RemoveObject(_Session.m_ScionIntroTurret2)
 end
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -1010,360 +978,359 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 ISDFIntroFunctions[1] = function()
-    RemoveScionIntroUnits();
+    RemoveScionIntroUnits()
 
-    SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255));
-    StartEarthQuake(5);
+    SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255))
+    StartEarthQuake(5)
 
-    _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music");
-    IFace_SetInteger("options.audio.music", 0);
+    _Session.m_MusicOptionValue = GetVarItemInt("options.audio.music")
+    IFace_SetInteger("options.audio.music", 0)
 
-    SetAnimation(_Session.m_IntroShip2, "deploy", 1);
+    SetAnimation(_Session.m_IntroShip2, "deploy", 1)
 
-    _Session.m_IntroMusic = StartSoundEffect("IA_Intro.wav");
-    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
-    _Session.m_IntroState = _Session.m_IntroState + 1;
+    _Session.m_IntroMusic = StartSoundEffect("IA_Intro.wav")
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4)
+    _Session.m_IntroState = _Session.m_IntroState + 1
 end
 
 ISDFIntroFunctions[2] = function()
     if (_Session.m_SetIntroMusicVolume == false) then
-        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume);
-        _Session.m_SetIntroMusicVolume = true;
+        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume)
+        _Session.m_SetIntroMusicVolume = true
     end
 
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav");
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(10);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_1.wav")
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(10)
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[3] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.2);
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.2)
 
-        UpdateEarthQuake(30);
+        UpdateEarthQuake(30)
 
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[4] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        StopEarthQuake();
+        StopEarthQuake()
 
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4)
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[5] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav");
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(6);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_2.wav")
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(6)
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[6] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        SetAnimation(_Session.m_IntroShip1, "deploy", 1);
+        SetAnimation(_Session.m_IntroShip1, "deploy", 1)
 
-        BuildPlayerRecycler(GetTransform(_Session.m_IntroShip2));
-        SetPosition(_Session.m_Recycler, GetPosition("Recycler"));
+        BuildPlayerRecycler(GetTransform(_Session.m_IntroShip2))
+        SetPosition(_Session.m_Recycler, GetPosition("Recycler"))
 
         -- Give reinforcements to the player based on difficulty.
-        if (_Session.m_Difficulty < DIFFICULTY_HARD) then
-            local recyclerPos = GetPosition(_Session.m_Recycler);
+        if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_HARD) then
+            local recyclerPos = GetPosition(_Session.m_Recycler)
 
-            local tank1 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
-            local tank2 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+            local tank1 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
+            local tank2 = BuildObject("ivtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
 
-            SetBestGroup(tank1);
-            SetBestGroup(tank2);
+            SetBestGroup(tank1)
+            SetBestGroup(tank2)
 
-            Defend2(tank1, _Session.m_Recycler, 0);
-            Defend2(tank2, _Session.m_Recycler, 0);
+            Defend2(tank1, _Session.m_Recycler, 0)
+            Defend2(tank2, _Session.m_Recycler, 0)
 
-            if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
-                GiveWeapon(tank1, "gspstab_c");
-                GiveWeapon(tank2, "gspstab_c");
+            if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_MEDIUM) then
+                GiveWeapon(tank1, "gspstab_c")
+                GiveWeapon(tank2, "gspstab_c")
 
-                local truck1 = BuildObject("ivserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
-                SetBestGroup(truck1);
-                Follow(truck1, _Session.m_Recycler, 0);
+                local truck1 = BuildObject("ivserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
+                SetBestGroup(truck1)
+                Follow(truck1, _Session.m_Recycler, 0)
             end
         end
 
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5);
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(2.5)
 
-        SetVerbose(_Session.m_Recycler, false);
-        Goto(_Session.m_Recycler, "recycler_go", 0);
-        SetVerbose(_Session.m_Recycler, true);
-        Goto(_Session.m_IntroTurret1, "turret_1_go", 1);
-        Goto(_Session.m_IntroTurret2, "turret_2_go", 1);
+        SetVerbose(_Session.m_Recycler, false)
+        Goto(_Session.m_Recycler, "recycler_go", 0)
+        SetVerbose(_Session.m_Recycler, true)
+        Goto(_Session.m_IntroTurret1, "turret_1_go", 1)
+        Goto(_Session.m_IntroTurret2, "turret_2_go", 1)
 
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[7] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        StartSoundEffect("dropdoor.wav", _Session.m_IntroShip1);
+        StartSoundEffect("dropdoor.wav", _Session.m_IntroShip1)
 
-        _Session.m_DropshipTakeoffCheck = true;
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_3.wav");
-
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_DropshipTakeoffCheck = true
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_3.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[8] = function()
-    CheckIntroEnemiesKilled();
+    CheckIntroEnemiesKilled()
 end
 
 ISDFIntroFunctions[9] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        SetBestGroup(_Session.m_IntroTurret1);
-        SetBestGroup(_Session.m_IntroTurret2);
-        Defend(_Session.m_IntroTurret1, 0);
-        Defend(_Session.m_IntroTurret2, 0);
+        SetBestGroup(_Session.m_IntroTurret1)
+        SetBestGroup(_Session.m_IntroTurret2)
+        Defend(_Session.m_IntroTurret1, 0)
+        Defend(_Session.m_IntroTurret2, 0)
 
-        BuildCarriers();
+        BuildCarriers()
 
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_1.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[10] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Carrier_2.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ISDFIntroFunctions[11] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02;
+        _Session.m_IntroMusicVolume = _Session.m_IntroMusicVolume - 0.02
 
-        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume);
+        SetVolume(_Session.m_IntroMusic, _Session.m_IntroMusicVolume)
 
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.3);
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(0.3)
 
         if (_Session.m_IntroMusicVolume <= 0) then
-            StopAudio(_Session.m_IntroMusic);
+            StopAudio(_Session.m_IntroMusic)
 
-            IFace_SetInteger("options.audio.music", _Session.m_MusicOptionValue);
+            IFace_SetInteger("options.audio.music", _Session.m_MusicOptionValue)
 
-            _Session.m_IntroDone = true;
+            _Session.m_IntroDone = true
         end
     end
 end
 
 ScionIntroFunctions[1] = function()
-    RemoveISDFIntroUnits();
+    RemoveISDFIntroUnits()
 
     -- Start a small earthquake.
-    StartEarthQuake(1);
+    StartEarthQuake(1)
 
     -- Temp so the player can't control the intro units.
-    Stop(_Session.m_ScionIntroMatriarch, 1);
-    Stop(_Session.m_ScionIntroTurret1, 1);
-    Stop(_Session.m_ScionIntroTurret2, 1);
+    Stop(_Session.m_ScionIntroMatriarch, 1)
+    Stop(_Session.m_ScionIntroTurret1, 1)
+    Stop(_Session.m_ScionIntroTurret2, 1)
 
     -- Attempt to mask the emitters on the portal.
-    MaskEmitter(_Session.m_ScionIntroPortal, 0);
+    MaskEmitter(_Session.m_ScionIntroPortal, 0)
 
-    RemoveObject(_Session.m_Player);
-    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
-    SetAsUser(_Session.m_ScionIntroPlayer, _Session.m_PlayerTeam);
+    RemoveObject(_Session.m_Player)
+    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255))
+    SetAsUser(_Session.m_ScionIntroPlayer, _Session.m_PlayerTeam)
 
-    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4);
-    _Session.m_IntroState = _Session.m_IntroState + 1;
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(4)
+    _Session.m_IntroState = _Session.m_IntroState + 1
 end
 
 ScionIntroFunctions[2] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_1.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_1.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[3] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_2.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_2.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[4] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
         if (FindInTable(_BZCCDatabase.MireMaps, _Session.m_MapName)) then
-            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav");
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3B.wav")
         elseif (FindInTable(_BZCCDatabase.BaneMaps, _Session.m_MapName)) then
-            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav");
+            _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3A.wav")
         end
 
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[5] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_3.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[6] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_4.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Tech_4.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[7] = function()
-    StartEmitter(_Session.m_ScionIntroPortal, 1);
+    StartEmitter(_Session.m_ScionIntroPortal, 1)
 
-    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(1);
-    _Session.m_IntroState = _Session.m_IntroState + 1;
+    _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(1)
+    _Session.m_IntroState = _Session.m_IntroState + 1
 end
 
 ScionIntroFunctions[8] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        Follow(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal, 1);
-        Follow(_Session.m_ScionIntroTurret1, _Session.m_ScionIntroPortal, 1);
-        Follow(_Session.m_ScionIntroTurret2, _Session.m_ScionIntroPortal, 1);
+        Follow(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal, 1)
+        Follow(_Session.m_ScionIntroTurret1, _Session.m_ScionIntroPortal, 1)
+        Follow(_Session.m_ScionIntroTurret2, _Session.m_ScionIntroPortal, 1)
 
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[9] = function()
     if (GetDistance(_Session.m_ScionIntroMatriarch, _Session.m_ScionIntroPortal) < 25 and _Session.m_IntroMatriarchTeleported == false) then
-        local recyOdf = nil;
-        local customHumanRecycler = IFace_GetString("options.instant.string1");
+        local recyOdf = nil
+        local customHumanRecycler = IFace_GetString("options.instant.string1")
 
         if (customHumanRecycler ~= nil) then
-            recyOdf = ReplaceCharacter(1, customHumanRecycler, "f");
+            recyOdf = ReplaceCharacter(1, customHumanRecycler, "f")
         else
-            recyOdf = ReplaceCharacter(1, "vrecy", "f");
+            recyOdf = ReplaceCharacter(1, "vrecy", "f")
         end
 
-        TeleportOut(_Session.m_ScionIntroMatriarch);
+        TeleportOut(_Session.m_ScionIntroMatriarch)
 
-        _Session.m_PlayerRecycler = TeleportIn(recyOdf, _Session.m_StratTeam, "Recycler");
-        SetBestGroup(_Session.m_PlayerRecycler);
-        SetScrap(_Session.m_StratTeam, 40);
+        _Session.m_PlayerRecycler = TeleportIn(recyOdf, _Session.m_StratTeam, "Recycler")
+        SetBestGroup(_Session.m_PlayerRecycler)
+        SetScrap(_Session.m_StratTeam, 40)
 
         -- Give reinforcements to the player based on difficulty.
-        if (_Session.m_Difficulty < DIFFICULTY_HARD) then
-            local recyclerPos = GetPosition(_Session.m_Recycler);
+        if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_HARD) then
+            local recyclerPos = GetPosition(_Session.m_Recycler)
 
-            local tank1 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
-            local tank2 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
+            local tank1 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
+            local tank2 = BuildObject("fvtank_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
 
-            SetBestGroup(tank1);
-            SetBestGroup(tank2);
+            SetBestGroup(tank1)
+            SetBestGroup(tank2)
 
-            if (_Session.m_Difficulty < DIFFICULTY_MEDIUM) then
-                GiveWeapon(tank1, "garc_c");
-                GiveWeapon(tank2, "garc_c");
-                GiveWeapon(tank1, "gabsorb");
-                GiveWeapon(tank2, "gabsorb");
+            if (_Session.m_Difficulty < _BZCCDatabase.Difficulty.DIFFICULTY_MEDIUM) then
+                GiveWeapon(tank1, "garc_c")
+                GiveWeapon(tank2, "garc_c")
+                GiveWeapon(tank1, "gabsorb")
+                GiveWeapon(tank2, "gabsorb")
 
-                local truck1 = BuildObject("fvserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10));
-                SetBestGroup(truck1);
-                SetRandomHeadingAngle(truck1);
+                local truck1 = BuildObject("fvserv_x", _Session.m_PlayerTeam, GetPositionNear(recyclerPos, 10, 10))
+                SetBestGroup(truck1)
+                SetRandomHeadingAngle(truck1)
             end
         end
 
-        _Session.m_IntroMatriarchTeleported = true;
+        _Session.m_IntroMatriarchTeleported = true
     end
 
     if (GetDistance(_Session.m_ScionIntroTurret1, _Session.m_ScionIntroPortal) < 30 and _Session.m_IntroTurret1Teleported == false) then
-        TeleportOut(_Session.m_ScionIntroTurret1);
-        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"));
-        _Session.m_IntroTurret1Teleported = true;
+        TeleportOut(_Session.m_ScionIntroTurret1)
+        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"))
+        _Session.m_IntroTurret1Teleported = true
     end
 
     if (GetDistance(_Session.m_ScionIntroTurret2, _Session.m_ScionIntroPortal) < 30 and _Session.m_IntroTurret2Teleported == false) then
-        TeleportOut(_Session.m_ScionIntroTurret2);
-        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"));
-        _Session.m_IntroTurret2Teleported = true;
+        TeleportOut(_Session.m_ScionIntroTurret2)
+        SetBestGroup(TeleportIn("fvturr_x", _Session.m_StratTeam, "Recycler"))
+        _Session.m_IntroTurret2Teleported = true
     end
 
     if (_Session.m_IntroMatriarchTeleported == true and _Session.m_IntroTurret1Teleported == true and _Session.m_IntroTurret2Teleported == true) then
-        _Session.m_IntroForcePlayerTeleportDelay = _Session.m_TurnCounter + SecondsToTurns(25);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroForcePlayerTeleportDelay = _Session.m_TurnCounter + SecondsToTurns(25)
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[10] = function()
     -- Teleport the player to the Recycler.
     if (_Session.m_IntroForcePlayerTeleportDelay < _Session.m_TurnCounter or GetDistance(_Session.m_Player, _Session.m_ScionIntroPortal) < 25) then
-        Teleport(_Session.m_Player, "Recycler", 50);
+        Teleport(_Session.m_Player, "Recycler", 50)
 
         -- Remove the intro stuff.
-        RemoveObject(_Session.m_ScionIntroHangar);
+        RemoveObject(_Session.m_ScionIntroHangar)
 
         -- Stop the earthquake.
-        StopEarthQuake();
+        StopEarthQuake()
 
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[11] = function()
     -- Spawn and check if the enemies are dead.
-    CheckIntroEnemiesKilled();
+    CheckIntroEnemiesKilled()
 end
 
 ScionIntroFunctions[12] = function()
     if (_Session.m_IntroDelay < _Session.m_TurnCounter) then
-        BuildCarriers();
+        BuildCarriers()
 
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_1.wav");
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_1.wav")
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end
 
 ScionIntroFunctions[13] = function()
     if (IsAudioMessageDone(_Session.m_IntroAudio)) then
-        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_2.wav");
-        _Session.m_IntroDone = true;
+        _Session.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Scion_Carrier_2.wav")
+        _Session.m_IntroDone = true
     end
 end
 
 function CheckIntroEnemiesKilled()
     if (_Session.m_IntroEnemiesSpawned == false) then
         for i = 1, _Session.m_Difficulty + 1 do
-            local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i);
+            local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i)
 
-            SetSkill(enemy, _Session.m_Difficulty + 1);
+            SetSkill(enemy, _Session.m_Difficulty + 1)
 
             if (i == 1) then
-                _Session.m_IntroEnemy1 = enemy;
-                Attack(enemy, _Session.m_Player, 1);
+                _Session.m_IntroEnemy1 = enemy
+                Attack(enemy, _Session.m_Player, 1)
             elseif (i == 2) then
-                _Session.m_IntroEnemy2 = enemy;
-                Attack(enemy, _Session.m_Recycler, 1);
+                _Session.m_IntroEnemy2 = enemy
+                Attack(enemy, _Session.m_Recycler, 1)
             elseif (i == 3) then
-                _Session.m_IntroEnemy3 = enemy;
-                Attack(enemy, _Session.m_Player, 1);
+                _Session.m_IntroEnemy3 = enemy
+                Attack(enemy, _Session.m_Player, 1)
             end
         end
 
-        _Session.m_IntroEnemiesSpawned = true;
+        _Session.m_IntroEnemiesSpawned = true
     end
 
-    local check1 = IsAliveAndEnemy(_Session.m_IntroEnemy1, _Session.m_CompTeam);
-    local check2 = IsAliveAndEnemy(_Session.m_IntroEnemy2, _Session.m_CompTeam);
-    local check3 = IsAliveAndEnemy(_Session.m_IntroEnemy3, _Session.m_CompTeam);
+    local check1 = IsAliveAndEnemy(_Session.m_IntroEnemy1, _Session.m_CompTeam)
+    local check2 = IsAliveAndEnemy(_Session.m_IntroEnemy2, _Session.m_CompTeam)
+    local check3 = IsAliveAndEnemy(_Session.m_IntroEnemy3, _Session.m_CompTeam)
 
     if (check1 == false and check2 == false and check3 == false) then
-        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(3);
-        _Session.m_IntroState = _Session.m_IntroState + 1;
+        _Session.m_IntroDelay = _Session.m_TurnCounter + SecondsToTurns(3)
+        _Session.m_IntroState = _Session.m_IntroState + 1
     end
 end

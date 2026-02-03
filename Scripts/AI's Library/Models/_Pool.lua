@@ -1,26 +1,16 @@
--- Return this to whatever file calls it.
-Pool =
-{
-    -- Handle for generic use.
-    Handle = 0,
+---@class PoolClass
+---@field Handle Handle
+---@field Position Vector
+---@field DistanceFromCPURecycler integer
 
-    -- So we don't need to call GetPosition() multiple times, we can just store it.
-    Position = 0,
+Pool = {}
 
-    -- Another CPU only variable. We want this so we can calculate the distance between the pool and the CPU Recycler for priority use.
-    DistanceFromCPURecycler = 0,
-}
-
-function Pool:New(Handle, Position, DistanceFromCPURecycler)
-    local o = {}
-
-    o.Handle = Handle or 0;
-    o.Position = Position or 0;
-    o.DistanceFromCPURecycler = DistanceFromCPURecycler or 0;
-
-    setmetatable(o, { __index = self });
-
-    return o;
+function Pool.New(handle, position)
+    return {
+        Handle = handle,
+        Position = position,
+        DistanceFromCPURecycler = 0
+    }
 end
 
-return Pool;
+return Pool

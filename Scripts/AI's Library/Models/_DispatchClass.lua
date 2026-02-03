@@ -8,7 +8,7 @@ DispatchClass = {}
 ---@field DispatchDelay number
 ---@field Command number
 
----Creates and returns a new object with the intention of being dispatched by a script.
+---Creates and returns a new dispatch class with the intention of being dispatched by a script.
 ---@param Handle Handle
 ---@param MissionTurn number
 ---@param Team number

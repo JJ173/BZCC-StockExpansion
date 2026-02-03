@@ -6,11 +6,11 @@ local _library = require("library")
 
 Discord = {}
 
-function Discord:Start(mode, mapTrn)
+function Discord.Start(mode, mapTrn)
     _library.Start("1395004339231395920", mode, mapTrn)
 end
 
-function Discord:Update()
+function Discord.Update()
     _library.Update()
 end
 

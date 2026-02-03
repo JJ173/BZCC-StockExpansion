@@ -1,0 +1,3 @@
+DropshipManager = {}
+
+return DropshipManager

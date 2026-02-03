@@ -153,6 +153,12 @@ function InitialSetup()
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
+
+    -- Preload assets to stop lag spikes on spawn.
+    PreloadODF("p1scout");
+    PreloadODF("fvsent_x");
+    PreloadODF("fvscout_x");
+    PreloadODF("ivserv_x");
 end
 
 function Save()
@@ -170,7 +176,9 @@ function Load(CoopData, MissionData)
     _Cooperative.Load(CoopData);
 
     -- Load mission data.
-    Mission = MissionData;
+    for k, v in pairs(MissionData) do
+        Mission[k] = v
+    end
 end
 
 function AddObject(h)
@@ -385,7 +393,7 @@ Functions[1] = function()
     SetTeamColor(Mission.m_AlliedTeam, 255, 50, 50);
 
     -- Start our Earthquake.
-    StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
+    StartEarthQuake(5); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
     -- If there's only one player, remove the third dropship.
     if (_Cooperative.m_TotalPlayerCount == 1) then
@@ -394,7 +402,7 @@ Functions[1] = function()
 
     -- Do the fade in if we are not in coop mode.
     if (not Mission.m_IsCooperativeMode) then
-        SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+        SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255));
     end
 
     -- Create our holding objects.
@@ -1465,7 +1473,7 @@ Functions[49] = function()
     for i = 1, _Cooperative.GetTotalPlayers() do
         local p = GetPlayerHandle(i);
 
-        if (IsOdf(p, Mission.m_PlayerPilotODF)) then
+        if (IsPerson(p)) then
             Mission.m_LeaveShipWarningActive = false;
         else
             Mission.m_LeaveShipWarningActive = true;
@@ -1881,8 +1889,6 @@ Functions[59] = function()
 
         -- Remove the player lost check.
         Mission.m_PlayerLostCheckActive = false;
-        Mission.m_PlayerLostFirstDialog = false;
-        Mission.m_PlayerLost = false;
 
         -- Spawns more enemies.
         Mission.m_Scion1 = BuildObject("fvscout_x", Mission.m_EnemyTeam, "bad_spawn1");
@@ -1949,11 +1955,11 @@ Functions[62] = function()
 
         -- This checks to see if the player has ignored the order to attack.
         if (check1 or check2) then
-            if (GetCurrentCommand(Mission.m_Scion1) ~= AiCommand.CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Scion1) ~= _BZCCDatabase.AICommands.CMD_ATTACK) then
                 Attack(Mission.m_Scion1, GetPlayerHandle(i), 1);
             end
 
-            if (GetCurrentCommand(Mission.m_Scion2) ~= AiCommand.CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Scion2) ~= _BZCCDatabase.AICommands.CMD_ATTACK) then
                 Attack(Mission.m_Scion2, GetPlayerHandle(i), 1);
             end
         end
@@ -1996,12 +2002,6 @@ Functions[64] = function()
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(5.5);
 
-            -- Remove the player lost check.
-            Mission.m_PlayerLostFirstTime = true;
-            Mission.m_PlayerLost = false;
-            Mission.m_PlayerLostCheckActive = false;
-            Mission.m_PlayerLostFirstDialog = false;
-
             -- Advance the mission state...
             Mission.m_MissionState = Mission.m_MissionState + 1;
         elseif (not Mission.m_ReturnToBaseDialogPlayed) then
@@ -2014,11 +2014,6 @@ Functions[64] = function()
 
             -- Set the timer for this audio clip.
             Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(4.5);
-
-            -- Do the player lost check here.
-            Mission.m_PlayerLostCheckActive = true;
-            Mission.m_PlayerLostFirstDialog = true;
-            Mission.m_PlayerLostTime = Mission.m_MissionTime + SecondsToTurns(25);
 
             -- So we don't loop.
             Mission.m_ReturnToBaseDialogPlayed = true;
@@ -2064,20 +2059,25 @@ Functions[65] = function()
         SetCurHealth(Mission.m_Red2, 1500);
         SetCurHealth(Mission.m_Red3, 900);
 
-        -- This stops the Scions.
-        Stop(Mission.m_Scion1, 1);
-        Stop(Mission.m_Scion2, 1);
-        Stop(Mission.m_Scion3, 1);
-
         -- Have everyone look at the player.
         LookAt(Mission.m_Red1, p, 1);
         LookAt(Mission.m_Red2, p, 1);
         LookAt(Mission.m_Red3, p, 1);
         LookAt(Mission.m_Truck, p, 1);
 
+        -- Have the Scions look at Red 1.
+        LookAt(Mission.m_Scion1, Mission.m_Red1);
+        LookAt(Mission.m_Scion2, Mission.m_Red2);
+        LookAt(Mission.m_Scion3, Mission.m_Red3);
+
         -- Change Red 1's name.
         SetObjectiveName(Mission.m_Red1, "Red 1");
         SetObjectiveOn(Mission.m_Red1);
+
+        -- Enable Shab's look logic so she looks correctly at Simms.
+        Mission.m_ShabLookSwitchTime = Mission.m_MissionTime + SecondsToTurns(1.5);
+        Mission.m_ShabLookLogicEnabled = true;
+        Mission.m_ShabLookAtPlayer = true;
 
         -- Advance the mission state...
         Mission.m_MissionState = Mission.m_MissionState + 1;
@@ -2120,6 +2120,9 @@ Functions[68] = function()
     if (IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- Show Objectives.
         AddObjectiveOverride("isdf0102.otf", "WHITE", 10, true);
+
+        -- Stop her look logic.
+        Mission.m_ShabLookLogicEnabled = false;
 
         -- Move Simms to the base centre.
         Goto(Mission.m_Simms, "base_center", 1);
@@ -2432,7 +2435,7 @@ Functions[82] = function()
     -- This will get Shabayev to attack when she is near.
     if (not check1) then
         if (GetDistance(Mission.m_Shabayev, Mission.m_Truck) < 100) then
-            if (GetCurrentCommand(Mission.m_Shabayev) ~= AiCommand.CMD_ATTACK) then
+            if (GetCurrentCommand(Mission.m_Shabayev) ~= _BZCCDatabase.AICommands.CMD_ATTACK) then
                 if (IsAlive(Mission.m_Scion1)) then
                     -- Have her attack.
                     Attack(Mission.m_Shabayev, Mission.m_Scion1, 1);
@@ -2636,7 +2639,7 @@ function ShabayevBrain()
                 -- Check to see if this player needs supplies.
                 local p = GetPlayerHandle(i);
 
-                if (GetCurHealth(p) < 1800 or GetCurAmmo(p) < 750) then
+                if (GetHealth(p) < 0.5 or GetAmmo(p) < 0.5) then
                     -- Do the talk.
                     Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("isdf0147.wav");
 
@@ -2760,7 +2763,7 @@ function SimmsBrain()
     end
 
     -- This checks to see if Simms should look at the turret or not.
-    if (not Mission.m_SimmsLookAtTurret and GetCurrentCommand(Mission.m_ScionTurret) == AiCommand.CMD_ATTACK and GetDistance(Mission.m_Simms, Mission.m_ScionTurret) < 50) then
+    if (not Mission.m_SimmsLookAtTurret and GetCurrentCommand(Mission.m_ScionTurret) == _BZCCDatabase.AICommands.CMD_ATTACK and GetDistance(Mission.m_Simms, Mission.m_ScionTurret) < 50) then
         -- Have him look at the turret.
         LookAt(Mission.m_Simms, Mission.m_Turret, 1);
 
@@ -2878,14 +2881,6 @@ function HandleFailureConditions()
 
                 local check1 = ((not Mission.m_ShabMoveToBaseCentre or (Mission.m_ShabMoveToBaseCentre and Mission.m_ShabLeftBase)) and GetDistance(p, Mission.m_Shabayev) > 150);
                 local check2 = (Mission.m_ShabMoveToBaseCentre and not Mission.m_ShabLeftBase and GetDistance(p, "base_center") > 250);
-
-                if (check1) then
-                    print("check1 true");
-                end
-
-                if (check2) then
-                    print("check2 true");
-                end
 
                 if (check1 or check2) then
                     -- Set the lost player handle so Shabayev yells.

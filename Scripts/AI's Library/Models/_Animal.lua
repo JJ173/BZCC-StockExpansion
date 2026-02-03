@@ -1,21 +1,20 @@
----@class Animal
+---@class AnimalClass
 ---@field Handle userdata | nil
 ---@field State string -- Possible states: Grazing, Attacking, Fleeing, Following
 ---@field FleePath string -- Path to flee to
-Animal = {
-    Handle = nil,
-    State = "", -- Possible states: Grazing, Attacking, Fleeing, Following
-    FleePath = "" -- Path to flee to
-}
 
-function Animal:CreateNewAnimal(handle, state)
-    local newModel = {};
-    setmetatable(newModel, { __index = Animal });
+Animal = {}
 
-    newModel.Handle = handle;
-    newModel.State = state;
-
-    return newModel;
+---Creates and returns a new animal class.
+---@param handle Handle
+---@param state string
+---@return AnimalClass
+function Animal.CreateNewAnimal(handle, state)
+    return {
+        Handle = handle,
+        State = state,
+        FleePath = ''
+    }
 end
 
-return Animal;
+return Animal

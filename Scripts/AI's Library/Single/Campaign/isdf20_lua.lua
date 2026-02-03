@@ -885,7 +885,7 @@ function RebelBrain()
                 local cmd = GetCurrentCommand(unit);
 
                 -- Give it a target to move towards.
-                if (cmd == AiCommand.CMD_NONE) then
+                if (cmd == _BZCCDatabase.AICommands.CMD_NONE) then
                     -- Run a check to see if any of our players are in a ship.
                     for j = 1, _Cooperative.GetTotalPlayers() do
                         local p = GetPlayerHandle(j);

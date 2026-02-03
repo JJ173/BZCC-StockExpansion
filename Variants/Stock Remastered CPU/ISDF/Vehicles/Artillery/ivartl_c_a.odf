@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "ivartl_gh_a"
 
-scrapCost = 43 // Original Scrap Cost (85) / 2 = 42.5, round up to 43.
-
 /////// PROVIDES ///////////////////
 provideName1 = "ivartl_c_a"
 ////////////////////////////////////

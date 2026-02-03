@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "fvpscout_gh"
 
-scrapCost = 28 // Original Scrap Cost (55) / 2 = 27.5, round up to 28.
-
 [CraftClass]
 
 [HoverCraftClass]

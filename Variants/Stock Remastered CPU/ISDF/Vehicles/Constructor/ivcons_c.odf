@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "ivcons_x"
 
-scrapCost = 20 // Scrap cost is reduced by 50%.
-
 [CraftClass]
 CanAIPForceIdle = false
 DoIdleDispatch = false

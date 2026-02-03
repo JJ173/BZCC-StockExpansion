@@ -1,9 +1,5 @@
 [GameObjectClass]
 classLabel = "fvsav_gh"
-
-scrapValue = 25
-scrapCost = 50
-
 playerOnly = false
 
 /////// PROVIDES ///////////////////

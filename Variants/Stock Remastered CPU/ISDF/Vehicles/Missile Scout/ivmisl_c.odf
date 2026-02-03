@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "ivmisl_x"
 
-scrapCost = 23 // Original Scrap Cost (45) / 2 = 22.5, round up to 23.
-
 [CraftClass]
 CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
 

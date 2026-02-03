@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "ivhscav_gh"
 
-scrapCost = 10 // Scrap cost is reduced by 50%.
-
 unitName = "H. Scavenger"
 
 /////// PROVIDES ///////////////////

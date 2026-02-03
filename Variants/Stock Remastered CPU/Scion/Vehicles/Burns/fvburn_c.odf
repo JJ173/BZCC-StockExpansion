@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "fvburn_gh"
 
-scrapCost = 50 // Scrap cost is reduced by 50%.
-
 /////// PROVIDES ///////////////////
 provideName1 = "fvburn_c"
 ////////////////////////////////////

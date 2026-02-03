@@ -1,8 +1,6 @@
 [GameObjectClass]
 classLabel = "fvgship_gh"
 
-scrapCost = 38 // Original Scrap Cost (75) / 2 = 37.5, round up to 38.
-
 /////// PROVIDES ///////////////////
 provideCount = 5
 provideName1 = "fvgship_c"

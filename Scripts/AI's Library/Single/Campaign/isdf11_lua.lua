@@ -178,7 +178,6 @@ local Mission =
     m_IceAttackerTime = 0,
     m_RecyclerMazeCheckpointCount = 0,
     m_CameraTime = 0,
-    m_WaterCheckCounter = 0,
     m_TurretDistpacherTimer = 0,
     m_LandTimer = 0,
     m_DropshipDoorSoundTimer = 0,
@@ -400,39 +399,6 @@ function Update()
             -- Check failure conditions over everything else.
             if (Mission.m_MissionState > 1) then
                 HandleFailureConditions();
-            end
-
-            -- BZCC introduced a hypothermia mechanic here. Replicate it.
-            Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
-
-            -- For each player in the mission, check their location and if they are under water.
-            for i = 1, _Cooperative.GetTotalPlayers() do
-                -- Grab the player handle.
-                local p = GetPlayerHandle(i);
-
-                -- Check the timer.
-                if (Mission.m_WaterCheckCounter % SecondsToTurns(0.5) == 0 and IsPerson(p)) then
-                    -- Grab the position of the player.
-                    local pos = GetPosition(p);
-
-                    -- Check if the terrain is water.
-                    if (TerrainIsWater(pos)) then
-                        -- Testing, not sure if Lua will like this.
-                        local waterHeight = 0;
-
-                        -- Check to see if this assigns the right variables.
-                        waterHeight = GetTerrainHeightAndNormal(pos, true);
-
-                        -- Grab the height of the terrain.
-                        local terrainHeight = TerrainFindFloor(pos.x, pos.z);
-
-                        -- Check if the player is under water.
-                        if (waterHeight > terrainHeight and pos.y < (waterHeight - 15)) then
-                            -- Kill the player.
-                            SelfDamage(p, 20);
-                        end
-                    end
-                end
             end
 
             -- Run a check to see if any player is near Shab's downed dropship.
@@ -692,11 +658,11 @@ Functions[2] = function()
         end
 
         -- Start our Earthquake.
-        StartEarthQuake(1); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
+        StartEarthQuake(5); -- Reset to 5 when advised by devs. 5 is way too loud and not at all friendly to the ears.
 
         -- Do the fade in if we are not in coop mode.
         if (not Mission.m_IsCooperativeMode) then
-            SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255));
+            SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255));
         end
 
         -- Allow a couple of seconds before advancing the mission.

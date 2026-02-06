@@ -118,7 +118,6 @@ local Mission =
     m_TurretDistpacherTimer = 0,
     m_PlayerCaveCheckTimer = 0,
     m_ReturnTimer = 0,
-    m_WaterCheckCounter = 0,
     m_TransmissionSearchMessageCounter = 0,
     m_CondorRemoveTime = 15,
     m_WarningCount = 0,
@@ -303,39 +302,6 @@ function Update()
     -- Start mission logic.
     if (Mission.m_MissionOver == false) then
         if (Mission.m_StartDone) then
-            -- BZCC introduced a hypothermia mechanic here. Replicate it.
-            Mission.m_WaterCheckCounter = Mission.m_WaterCheckCounter + 1;
-
-            -- For each player in the mission, check their location and if they are under water.
-            for i = 1, _Cooperative.GetTotalPlayers() do
-                -- Grab the player handle.
-                local p = GetPlayerHandle(i);
-
-                -- Check the timer.
-                if (Mission.m_WaterCheckCounter % SecondsToTurns(0.5) == 0 and IsPerson(p)) then
-                    -- Grab the position of the player.
-                    local pos = GetPosition(p);
-
-                    -- Check if the terrain is water.
-                    if (TerrainIsWater(pos)) then
-                        -- Testing, not sure if Lua will like this.
-                        local waterHeight = 0;
-
-                        -- Check to see if this assigns the right variables.
-                        waterHeight = GetTerrainHeightAndNormal(pos, true);
-
-                        -- Grab the height of the terrain.
-                        local terrainHeight = TerrainFindFloor(pos.x, pos.z);
-
-                        -- Check if the player is under water.
-                        if (waterHeight > terrainHeight and pos.y < (waterHeight - 10)) then
-                            -- Kill the player.
-                            SelfDamage(p, 20);
-                        end
-                    end
-                end
-            end
-
             -- Check failure conditions over everything else.
             if (Mission.m_MissionState > 1) then
                 HandleFailureConditions();

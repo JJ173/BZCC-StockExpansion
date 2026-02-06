@@ -36,7 +36,7 @@ function CPUManager.NewTeam(team, faction, pools, spawnPath)
     -- Fill in the distance of the pools from the Recycler spawn point.
     for i = 1, #pools do
         local pool = pool[i]
-        pool.DistanceFromCPURecycler = GetDistance(spawnPath, pool)
+        pool.DistanceFromCPURecycler = GetDistance(pool, spawnPath)
     end
 
     -- Sort pools that are given by distance of Recycler.

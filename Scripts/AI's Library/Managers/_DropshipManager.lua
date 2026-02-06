@@ -1,3 +1,0 @@
-DropshipManager = {}
-
-return DropshipManager

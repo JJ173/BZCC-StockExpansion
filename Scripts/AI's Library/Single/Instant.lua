@@ -10,9 +10,6 @@ require("_HelperFunctions")
 -- Required Skins Logic.
 require("_Skins")
 
--- Controllers.
-local _AIController = require("_AIController")
-
 -- Database.
 local _BZCCDatabase = require("_BZCCDatabase")
 
@@ -29,6 +26,7 @@ local _Subtitles = require('_Subtitles')
 
 -- Managers
 local _AnimalManager = require("_AnimalManager")
+local _CPUManager = require("_CPUManager")
 local _VoiceManager = require('_VoiceManager')
 
 local _Session = {
@@ -121,11 +119,8 @@ local _Session = {
     m_CanRespawn = false,
     m_GameOver = false,
     m_IntroCutsceneEnabled = false,
-    m_AICommanderEnabled = false,
     m_RTSModeEnabled = false,
     m_WildlifeEnabled = false,
-
-    m_AIController = nil,
 
     m_Pools = {},
 
@@ -349,11 +344,6 @@ function AddObject(handle)
         elseif (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm" or objCfg == _Session.m_CPUTeamRace .. "bport_xm") then
             _Session.m_CPULandingPad = handle
         end
-
-        -- Add the objects to the AI Controller.
-        if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:AddObject(handle, classLabel, objCfg, objBase, _Session.m_TurnCounter)
-        end
     elseif (teamNum == _Session.m_StratTeam) then
         -- Max out skills.
         SetSkill(handle, 3)
@@ -416,10 +406,7 @@ end
 
 function DeleteObject(handle)
     if (GetTeamNum(handle) == _Session.m_CompTeam) then
-        -- Remove the objects from the AI Controller.
-        if (_Session.m_AIController ~= nil) then
-            _Session.m_AIController:DeleteObject(handle, GetClassLabel(handle), GetCfg(handle), GetBase(handle))
-        end
+
     end
 end
 
@@ -481,15 +468,6 @@ function Update()
             -- To deploy the CPU Recycler so I can see where the base will face.
             SetAIP('debug.aip', _Session.m_CompTeam)
 
-            if (debug_contoller) then
-                -- Create the CPU team model to keep track of what's in the world.
-                _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session
-                    .m_Pools)
-
-                -- Setup the AI Controller.
-                _Session.m_AIController:Setup(_Session.m_CompTeam)
-            end
-
             -- So we don't spawn infinite bases.
             debug_base_built = true
         end
@@ -534,12 +512,6 @@ function Update()
         elseif (_Session.m_CPUTeamRace == _BZCCDatabase.Factions.SCION and _Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
             SetTeamColor(_Session.m_CompTeam, 85, 255, 85) -- Green (Rebels) like in the campaign.
         end
-
-        -- Create the CPU team model to keep track of what's in the world.
-        _Session.m_AIController = _AIController:New(_Session.m_CompTeam, _Session.m_CPUTeamRace, _Session.m_Pools)
-
-        -- Setup the AI Controller.
-        _Session.m_AIController:Setup(_Session.m_CompTeam)
 
         -- Setup the animal herd controller.
         if (_Session.m_WildlifeEnabled == 1) then
@@ -724,11 +696,8 @@ function Update()
     end
 
     -- Managers
-    if (_Session.m_AIController ~= nil) then
-        _Session.m_AIController:Run(_Session.m_TurnCounter)
-    end
-
     _AnimalManager.Run(_Session.m_TurnCounter)
+    _CPUManager.Run(_Session.m_TurnCounter)
 
     if (_Session.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
@@ -845,9 +814,9 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
             local objClass = GetClassLabel(VictimHandle)
 
             if (objClass == "CLASS_TURRETTANK") then
-                _Session.m_AIController:TurretShot(VictimHandle, _Session.m_TurnCounter)
+
             elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
-                _Session.m_AIController:ScavengerShot(VictimHandle)
+
             end
         end
     end

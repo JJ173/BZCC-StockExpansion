@@ -2,19 +2,12 @@
 classLabel = "ivrckt_vsr"
 PilotConfig = "ispilo_x"
 
-aiName = "AssaultTankProcess"
-aiName2 = "AssaultTankProcess"
-
 [CraftClass]
 OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 AttackTaskUsesGroups = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit
 
 LookAtPitchFactor = 1.0
-
-attackTask = "AssaultTankAttack"
-subAttackTask = "SupportSubAttack"
-subAttackClass = "ANS"
 
 [TrackedVehicleClass]
 

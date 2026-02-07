@@ -7,16 +7,35 @@ AnimalManager = {
     EnableHerdLogic = false
 }
 
+---@param path string
+---@return boolean
+local function VerifyAnimalPath(path)
+    local testObj = BuildObject("npscrx", 0, path)
+
+    if (not IsAround(testObj)) then
+        return false
+    end
+
+    RemoveObject(testObj)
+
+    return true
+end
+
+---@return table
 function AnimalManager.Save()
     return AnimalManager
 end
 
+---@param animalData table
 function AnimalManager.Load(animalData)
     for k, v in pairs(animalData) do
+        PrintConsoleMessage("Loading AnimalManager. Field: " .. k .. " Value: " .. v)
         AnimalManager[k] = v
     end
 end
 
+---@param motherODF string
+---@param babyODF string
 function AnimalManager.SetupMapHerds(motherODF, babyODF)
     for i = 1, MAX_HERD_COUNT do
         local herdPath = "AnimalHerd" .. i
@@ -59,6 +78,7 @@ function AnimalManager.SetupMireMapHerds()
     end
 end
 
+---@param missionTurn integer
 function AnimalManager.Run(missionTurn)
     if (not AnimalManager.EnableHerdLogic) then
         return
@@ -69,6 +89,9 @@ function AnimalManager.Run(missionTurn)
     end
 end
 
+---@param shotTurn integer
+---@param animalHandle Handle
+---@param threat Handle
 function AnimalManager.AnimalShot(shotTurn, animalHandle, threat)
     local herdIndex = GetLabel(animalHandle)
 
@@ -83,18 +106,6 @@ function AnimalManager.AnimalShot(shotTurn, animalHandle, threat)
     end
 
     _AnimalHerd.AnimalShot(herd, shotTurn, threat)
-end
-
-function VerifyAnimalPath(path)
-    local testObj = BuildObject("npscrx", 0, path)
-
-    if (not IsAround(testObj)) then
-        return false
-    end
-
-    RemoveObject(testObj)
-
-    return true
 end
 
 return AnimalManager

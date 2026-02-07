@@ -15,6 +15,10 @@ isAssault = 1
 buildSupport = "A"
 buildRequire = "F"
 
+/////// REIMAGINED  ////////////////
+AIUnitType = "LandingPad"
+////////////////////////////////////
+
 /////// PROVIDES ///////////////////
 provideName1 = "iblandingpad_xm"
 provideName2 = "LandingPad"

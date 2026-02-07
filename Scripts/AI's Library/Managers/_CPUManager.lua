@@ -6,23 +6,32 @@
 ---@field AIPString string
 ---@field CommanderEnabled boolean
 ---@field Commander Handle | nil
----@field Carrier Handle | nil
----@field LandingPad Handle | nil
 ---@field DispatchList DispatchClass[]
 
 local _BZCCDatabase = require("_BZCCDatabase")
 local _DispatchClass = require("_DispatchClass")
 
 CPUManager = {
+    ---@type CPUTeam[]
     CPUTeams = {}
 }
 
+---@param a PoolClass
+---@param b PoolClass
+---@return boolean
+local function Compare(a, b)
+    return a.DistanceFromCPURecycler < b.DistanceFromCPURecycler;
+end
+
+---@return table
 function CPUManager.Save()
     return CPUManager
 end
 
-function CPUManager.Load(CPUTeamData)
-    for k, v in pairs(CPUTeamData) do
+---@param CPUData table
+function CPUManager.Load(CPUData)
+    for k, v in pairs(CPUData) do
+        PrintConsoleMessage("Loading CPUManager. Field: " .. k .. " Value: " .. v)
         CPUManager[k] = v
     end
 end
@@ -51,8 +60,6 @@ function CPUManager.NewTeam(team, faction, pools, spawnPath)
         AIPString = IFace_GetString(_BZCCDatabase.ShellVariables.AIP_STRING),
         CommanderEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.COMMANDER_ENABLED) == 1,
         Commander = nil,
-        Carrier = nil,
-        LandingPad = nil,
         DispatchList = {}
     }
 
@@ -65,12 +72,12 @@ function CPUManager.NewTeam(team, faction, pools, spawnPath)
     DoTaunt(TAUNTS_GameStart)
 end
 
----comment
----@param missionTurnCount any
+---@param missionTurnCount integer
 function CPUManager.Run(missionTurnCount)
 
 end
 
+---@param type integer
 function CPUManager.SetPlan(type)
     if (type < AIPType0 or type >= MAX_AIP_TYPE) then
         type = AIPType3
@@ -90,21 +97,19 @@ function CPUManager.SetPlan(type)
     DoTaunt(TAUNTS_Random)
 end
 
-
-function CPUManager.AddObject(handle, missionTurnCount)
-
+---@param handle Handle
+---@param missionTurnCount integer
+---@param teamNum integer
+---@param aiCraftType string
+function CPUManager.AddUnit(handle, missionTurnCount, teamNum, aiCraftType)
+    if (AICraftType == nil) then
+        return
+    end
 end
 
-function CPUManager.DeleteObject(handle)
+---@param handle Handle
+function CPUManager.RemoveUnit(handle)
 
-end
-
----comment
----@param a PoolClass
----@param b PoolClass
----@return boolean
-function Compare(a, b)
-    return a.DistanceFromCPURecycler < b.DistanceFromCPURecycler;
 end
 
 return CPUManager

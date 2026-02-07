@@ -1,6 +1,6 @@
 -- local _DLLLoader = require("DLLLoader");
 
-package.cpath = package.cpath .. ";C:\\Program Files (x86)\\Steam\\steamapps\\common\\BZ2R\\BZCC-StockExpansion\\Scripts\\AI's Library\\DLLs\\?.dll" -- note the last directory is "?.dll" to instruct lua to search for dll modules 
+package.cpath = package.cpath .. ";C:\\Users\\jjgam\\Documents\\Development\\Battlezone\\BZCC-StockExpansion\\Scripts\\AI's Library\\DLLs\\library.dll" -- note the last directory is "?.dll" to instruct lua to search for dll modules 
 
 local _library = require("library")
 

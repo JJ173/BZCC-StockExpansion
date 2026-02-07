@@ -1,5 +1,17 @@
 local _HelperFunctions = {};
 
+function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
+    if (clearExisting) then
+        ClearObjectives();
+    end
+
+    if (isCoop) then
+        AddToMessagesBox(TranslateString(objective), colour);
+    else
+        AddObjective(objective, colour, time);
+    end
+end
+
 function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers)
     -- Mark if the path is safe for spawn use.
     local isSafe = true;
@@ -17,20 +29,38 @@ function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers
     end
 end
 
-function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
-    if (clearExisting) then
-        ClearObjectives();
+function FindInTable(table, value)
+    for i, v in ipairs(table) do
+        if (v == value) then
+            return i;
+        end
+    end
+end
+
+function GetRandomInt(Min, Max)
+    local retVal = GetRandomFloat(Min, Max + 1);
+
+    if (retVal > Max) then
+        return Max;
     end
 
-    if (isCoop) then
-        AddToMessagesBox(TranslateString(objective), colour);
-    else
-        AddObjective(objective, colour, time);
-    end
+    return math.floor(retVal);
 end
 
 function IsAliveAndEnemy(handle, enemyTeam)
     return (IsAlive(handle) and GetTeamNum(handle) == enemyTeam);
+end
+
+function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
+    if (audioClip == nil) then
+        return true;
+    end
+
+    if (isCoop) then
+        return audioDelayTime < missionTime;
+    else
+        return IsAudioMessageDone(audioClip);
+    end
 end
 
 function IsPlayerWithinDistance(handleOrPath, distance, totalPlayers)
@@ -57,28 +87,10 @@ function IsPlayerInBuilding(totalPlayers)
     end
 end
 
--- Credit to Rhade for this.
--- TODO: This is a bit of a hack, find a better way to do this.
-function TableRemoveByHandle(table, handle)
-    local length = #table;
-
-    -- Return early if the last handle is what we need to remove.
-    if (table[length] == handle) then
-        table[length] = nil;
-        return
-    end
-
-    -- Check the rest of the table.
-    for i = 1, length - 1 do
-        if (table[i] == handle) then
-            table[i] = table[length];
-            table[length] = nil;
-            return;
-        end
-    end
+function ReplaceCharacter(pos, str, r)
+    return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
 end
 
----Function to specificly squelch a table of dispatch objects.
 ---@param table DispatchClass[]
 ---@param obj DispatchClass
 ---@return DispatchClass[]
@@ -98,65 +110,23 @@ function SquelchDispatchTable(table, obj)
     return newTable
 end
 
-function RemoveHandleFromTable(table, handle)
-    if (not table or not handle) then
-        return false
+function TableRemoveByHandle(table, handle)
+    local length = #table;
+
+    if (table[length] == handle) then
+        table[length] = nil;
+        return
     end
 
-    for i, v in ipairs(table) do
-        if (v.Handle == handle) then
-            table[i] = dispatchTable[#table]
-            table[#table] = nil
-        end
-    end
-
-    return false
-end
-
--- Credit to Nielk1 for this.
-function GetRandomInt(Min, Max)
-    local retVal = GetRandomFloat(Min, Max + 1);
-
-    if (retVal > Max) then
-        return Max;
-    end
-
-    return math.floor(retVal);
-end
-
-function IsAudioMessageFinished(audioClip, audioDelayTime, missionTime, isCoop)
-    if (audioClip == nil) then
-        return true;
-    end
-
-    if (isCoop) then
-        return audioDelayTime < missionTime;
-    else
-        return IsAudioMessageDone(audioClip);
-    end
-end
-
-function ReplaceCharacter(pos, str, r)
-    return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
-end
-
-function FindInTable(table, value)
-    for i, v in ipairs(table) do
-        if (v == value) then
-            return i;
+    for i = 1, length - 1 do
+        if (table[i] == handle) then
+            table[i] = table[length]
+            table[length] = nil
+            return
         end
     end
 end
 
-function GetDifficulty()
-    if IsNetworkOn() then
-        -- return ???? MP difficulty setting, possibly from ivar?
-    else
-        return GetVarItemInt("options.play.difficulty");
-    end
-end
-
--- Teleports Handle h to Handle dest, with optional offset.
 function Teleport(h, dest, offset)
     if (not IsAround(h)) then
         return false;
@@ -190,7 +160,6 @@ function Teleport(h, dest, offset)
     return true;
 end
 
--- Teleports In (spawns) an ODF at a Portal Handle dest.
 function TeleportIn(odf, team, dest)
     local pos = GetPosition(dest);
 
@@ -201,7 +170,6 @@ function TeleportIn(odf, team, dest)
     return BuildObject(odf, team, randPos);
 end
 
--- Teleports Out (despawns) an ODF at a Portal Handle dest.
 function TeleportOut(h)
     BuildObject("teleportout", 0, BuildDirectionalMatrix(GetPosition(h)));
     RemoveObject(h);

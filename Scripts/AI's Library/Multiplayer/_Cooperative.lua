@@ -23,14 +23,17 @@ local m_BaneMissions = {
     _BZCCDatabase.Missions.SCION06
 }
 
-function _Cooperative.Load(CoopData)
+function _Cooperative.Load(CoopData, WorldManagerData)
     for k, v in pairs(CoopData) do
+        PrintConsoleMessage("Loading CoopData. Field: " .. k .. " Value: " .. v)
         _Cooperative[k] = v
     end
+
+    _WorldManager.Load(WorldManagerData)
 end
 
 function _Cooperative.Save()
-    return _Cooperative
+    return _Cooperative, _WorldManager.Save()
 end
 
 function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, SpawnPilotOnly, HeightOffset)

@@ -66,7 +66,9 @@ BZCCDatabase = {
         BASE_PATROL = "BasePatrol",
         ANTI_AIR = "AntiAir",
         MINION = "Minion",
-        ASSAULT_SERVICE = "AssaultService"
+        ASSAULT_SERVICE = "AssaultService",
+        LANDING_PAD = "LandingPad",
+        DROPSHIP_REQUEST = "DropshipRequest"
     },
     AnimalStates = {
         GRAZING = "Grazing",
@@ -135,6 +137,20 @@ BZCCDatabase = {
         5 * 60,
         7.5 * 60,
         10 * 60
+    },
+    DropshipStates = {
+        CONDOR_LANDING = 1,
+        CONDOR_REPLACE = 2,
+        CONDOR_BUILD_UNITS = 3,
+        CONDOR_OFFLOAD_UNITS = 4,
+        CONDOR_LEAVE = 5,
+        CONDOR_REMOVE = 6
+    },
+    DropshipUnits = {
+        ["ScavengerDropship"] = "ivscav_x",
+        ["ScrapDropship"] = "ivscrap_x",
+        ["LightDropship"] = "ivmisl_x",
+        ["TurretDropship"] = "ivturr_x"
     },
     EventReturnCodes = {
         DoEjectPilot = 0,           -- Do 'standard' eject
@@ -208,6 +224,12 @@ BZCCDatabase = {
         SCION05 = "An Unlikely Rescue",
         SCION06 = "The AAN",
         SCION07 = "Braddock"
+    },
+    PortalUnits = {
+        ["ScavengerDropship"] = "fvscav_x",
+        ["ScrapDropship"] = "fvscrap_x",
+        ["LightDropship"] = "fvsent_x",
+        ["TurretDropship"] = "fvturr_x"
     },
     ScionWeaponTable = {
         -- Cannons

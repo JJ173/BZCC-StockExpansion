@@ -14,18 +14,17 @@ require("_Skins")
 local _BZCCDatabase = require("_BZCCDatabase")
 
 -- Discord
-local _Discord = require("_Discord")
+-- local _Discord = require("_Discord")
 
 -- Models
 local _Pool = require("_Pool")
-local _Condor = require("_Condor")
-local _Portal = require("_Portal")
 
 -- Subtitles.
 local _Subtitles = require('_Subtitles')
 
 -- Managers
 local _AnimalManager = require("_AnimalManager")
+local _CarrierManager = require("_CarrierManager")
 local _CPUManager = require("_CPUManager")
 local _VoiceManager = require('_VoiceManager')
 
@@ -93,15 +92,6 @@ local _Session = {
     m_PlayerTurret1 = nil,
     m_PlayerTurret2 = nil,
 
-    m_PlayerCarrier = nil,
-    m_CPUCarrier = nil,
-
-    m_PlayerLandingPad = nil,
-    m_CPULandingPad = nil,
-
-    m_PlayerDropship = nil,
-    m_CPUDropship = nil,
-
     m_DropshipTakeOffDialogPlayed = false,
     m_DropshipTakeoffCheck = false,
     m_Dropship1Takeoff = false,
@@ -122,15 +112,7 @@ local _Session = {
     m_RTSModeEnabled = false,
     m_WildlifeEnabled = false,
 
-    m_Pools = {},
-
-    -- This keeps track of how long it has been since the player built a carrier object.
-    -- Idea is to remove them after 10 minutes.
-    m_Condors = {},
-    m_CarrierItemsToRemove = {},
-    m_Portals = {},
-
-    m_CarrierObjectCheckDelay = 0
+    m_Pools = {}
 }
 
 -- Functions Table
@@ -311,96 +293,68 @@ function InitialSetup()
 end
 
 function Save()
-    return _Session, _AnimalManager.Save()
+    return _Session, _AnimalManager.Save(), _CPUManager.Save()
 end
 
-function Load(Session, AnimalData)
+function Load(Session, AnimalData, CPUData)
     _Session = Session
     _AnimalManager.Load(AnimalData)
+    _CPUManager.Load(CPUData)
 end
 
 function AddObject(handle)
     local classLabel = GetClassLabel(handle)
-    local teamNum = GetTeamNum(handle)
-    local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH")
     local objCfg = GetCfg(handle)
-    local objBase = GetBase(handle)
 
     if (classLabel == "CLASS_DEPOSIT") then
         _Session.m_Pools[#_Session.m_Pools + 1] = _Pool.New(handle, GetPosition(handle))
+        return
     end
 
     if (_Session.m_IntroDone == false) then
         if (objCfg == "fbportb_ark") then
             _Session.m_ScionIntroPortal = handle
+            return
         end
     end
 
+    local AICraftType = GetODFString(handle, "GameObjectClass", "AIUnitType", nil)
+    local isRecyclerVehicle = (classLabel == "CLASS_RECYCLERVEHICLE" or classLabel == "CLASS_RECYCLERVEHICLEH")
+    local teamNum = GetTeamNum(handle)
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.LANDING_PAD) then
+        _CarrierManager.RegisterLandingPad(handle, teamNum)
+        return
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.DROPSHIP_REQUEST) then
+        _CarrierManager.RegisterDropshipRequest(handle, teamNum,
+            _Session.m_TurnCounter + SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]))
+        return
+    end
+
     if (teamNum == _Session.m_CompTeam) then
-        SetSkill(handle, _Session.m_Difficulty)
+        SetSkill(h, _Session.m_Difficulty)
 
         if (isRecyclerVehicle) then
             _Session.m_EnemyRecycler = handle
-        elseif (objCfg == _Session.m_CPUTeamRace .. "blandingpad_xm" or objCfg == _Session.m_CPUTeamRace .. "bport_xm") then
-            _Session.m_CPULandingPad = handle
+            return
         end
-    elseif (teamNum == _Session.m_StratTeam) then
+
+        _CPUManager.AddUnit(handle, _Session.m_TurnCounter, teamNum, AICraftType)
+        return
+    end
+
+    if (teamNum == _Session.m_StratTeam) then
         -- Max out skills.
         SetSkill(handle, 3)
 
         if (isRecyclerVehicle) then
             _Session.m_Recycler = handle
-        elseif (objCfg == _Session.m_HumanTeamRace .. "blandingpad_xm" or objCfg == _Session.m_HumanTeamRace .. "bport_xm") then
-            _Session.m_PlayerLandingPad = handle
-        elseif (objBase == "TurretDropship" or objBase == "LightDropship" or objBase == "ScavengerDropship" or objBase == "ScrapDropship") then
-            local dropshipRequestItem =
-            {
-                ItemHandle = handle,
-                TimeToDelete = _Session.m_TurnCounter +
-                    SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]),
-            }
-
-            _Session.m_CarrierItemsToRemove[#_Session.m_CarrierItemsToRemove + 1] = dropshipRequestItem
-
-            if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
-                local condorModel
-
-                if (objBase == "ScrapDropship") then
-                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 2)
-                else
-                    condorModel = _Condor:New(handle, teamNum, objBase, _Session.m_PlayerLandingPad, 3)
-                end
-
-                if (condorModel ~= nil) then
-                    _Session.m_Condors[#_Session.m_Condors + 1] = condorModel
-                end
-            elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
-                local portalModel
-
-                if (objBase == "ScrapDropship") then
-                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 2)
-                else
-                    portalModel = _Portal:New(teamNum, objBase, _Session.m_PlayerLandingPad, 3)
-                end
-
-                if (portalModel ~= nil) then
-                    _Session.m_Portals[#_Session.m_Portals + 1] = portalModel
-                end
-            end
+            return
         end
 
-        if (_Session.m_MyGoal == 0) then
-            if (classLabel == "CLASS_WINGMAN" or classLabel == "CLASS_MORPHTANK" or classLabel == "CLASS_ASSAULTTANK" or classLabel == "CLASS_SERVICE" or classLabel == "CLASS_WALKER") then
-                SetTeamNum(handle, _Session.m_PlayerTeam)
-                SetBestGroup(handle)
-            end
-        end
-    elseif (_Session.m_AwareV13 == 0 and teamNum == _Session.m_PlayerTeam) then
-        -- This block should never happen in normal IA mode, but if for some reason the player has a Scavenger in Pilot mode,
-        -- we should switch the extractor to the right team when it's deployed to prevent breaking.
-        if (classLabel == "CLASS_EXTRACTOR") then
-            SetTeamNum(handle, _Session.m_StratTeam)
-        end
+        return
     end
 end
 
@@ -436,7 +390,7 @@ function Start()
     _Session.m_CPUScrapDelay = (4 - _Session.m_Difficulty)
 
     -- Start up Discord RPC.
-    _Discord.Start("Instant Action 2.0", _Session.m_MapName)
+    -- _Discord.Start("Instant Action 2.0", _Session.m_MapName)
 end
 
 function Update()
@@ -444,7 +398,7 @@ function Update()
     _Session.m_TurnCounter = _Session.m_TurnCounter + 1
 
     -- Update Discord.
-    _Discord.Update()
+    -- _Discord.Update()
 
     if (debug_stop_script) then
         if (debug_base and debug_base_built == false) then
@@ -697,51 +651,12 @@ function Update()
 
     -- Managers
     _AnimalManager.Run(_Session.m_TurnCounter)
+    _CarrierManager.Run(_Session.m_TurnCounter)
     _CPUManager.Run(_Session.m_TurnCounter)
 
     if (_Session.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions()
-
-        if (#_Session.m_CarrierItemsToRemove > 0 and _Session.m_CarrierObjectCheckDelay < _Session.m_TurnCounter) then
-            local condorObj = _Session.m_CarrierItemsToRemove[1]
-
-            if (condorObj.TimeToDelete < _Session.m_TurnCounter) then
-                RemoveObject(condorObj.ItemHandle)
-                table.remove(_Session.m_CarrierItemsToRemove, 1)
-            end
-
-            _Session.m_CarrierObjectCheckDelay = _Session.m_TurnCounter + SecondsToTurns(1)
-        end
-
-        -- Checks to see if we have any dropships that need sending.
-        if (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
-            if (#_Session.m_Condors > 0) then
-                if (_Session.m_PlayerCondor == nil) then
-                    _Session.m_PlayerCondor = _Session.m_Condors[1]
-                else
-                    if (_Session.m_PlayerCondor.ReadyToDelete == false) then
-                        _Session.m_PlayerCondor:Run(_Session.m_TurnCounter)
-                    else
-                        table.remove(_Session.m_Condors, 1)
-                        _Session.m_PlayerCondor = nil
-                    end
-                end
-            end
-        elseif (_Session.m_HumanTeamRace == _BZCCDatabase.Factions.SCION) then
-            if (#_Session.m_Portals > 0) then
-                if (_Session.m_PlayerPortal == nil) then
-                    _Session.m_PlayerPortal = _Session.m_Portals[1]
-                else
-                    if (_Session.m_PlayerPortal.ReadyToDelete == false) then
-                        _Session.m_PlayerPortal:Run(_Session.m_TurnCounter)
-                    else
-                        table.remove(_Session.m_Portals, 1)
-                        _Session.m_PlayerPortal = nil
-                    end
-                end
-            end
-        end
 
         -- Start running the scrap cheat for the CPU.
         if (_Session.m_NextCPUScrapTime <= _Session.m_TurnCounter) then
@@ -918,13 +833,8 @@ function BuildPlayerRecycler(pos)
 end
 
 function BuildCarriers()
-    -- Grab the position of the Carrier path for spawning.
-    local carrierPath = GetPosition("Carrier")
-    local carrierEnemyPath = GetPosition("CarrierEnemy")
-
-    -- Spawn Carriers for both teams.
-    BuildObject(_Session.m_HumanTeamRace .. "bcarrier_xm", _Session.m_PlayerTeam, SetVector(carrierPath.x, 800, carrierPath.z))
-    BuildObject(_Session.m_CPUTeamRace .. "bcarrier_xm", _Session.m_CompTeam, SetVector(carrierEnemyPath.x, 800, carrierEnemyPath.z))
+    _CarrierManager.SetupCarrier(_Session.m_PlayerTeam, _Session.m_HumanTeamRace)
+    _CarrierManager.SetupCarrier(_Session.m_CompTeam, _Session.m_CPUTeamRace)
 end
 
 function RemoveISDFIntroUnits()

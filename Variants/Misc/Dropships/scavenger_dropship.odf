@@ -18,6 +18,10 @@ isSingle = true
 // We don't need groups for the crate.
 needGroup = false
 
+/////// REIMAGINED  ////////////////
+AIUnitType = "DropshipRequest"
+////////////////////////////////////
+
 /////// REQUIREMENTS ///////////////
 requireCount = 2
 requireName1 = "Carrier"

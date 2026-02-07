@@ -7,6 +7,21 @@ WorldManager = {
     PlayerTotal = 0
 }
 
+---@return table
+function WorldManager.Save()
+    return WorldManager
+end
+
+---@param WorldManagerData table
+function WorldManager.Load(WorldManagerData)
+    for k, v in pairs(WorldManagerData) do
+        PrintConsoleMessage("Loading WorldManagerData. Field: " .. k .. " Value: " .. v)
+        WorldManager[k] = v
+    end
+end
+
+---@param enableHypothermia boolean
+---@param playerTotal integer
 function WorldManager.Setup(enableHypothermia, playerTotal)
     WorldManager.EnableHypothermia = enableHypothermia
     WorldManager.PlayerTotal = playerTotal

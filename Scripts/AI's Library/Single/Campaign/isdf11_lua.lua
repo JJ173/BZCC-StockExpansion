@@ -215,13 +215,18 @@ function InitialSetup()
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
+    WantBotKillMessages();
 
     -- Preload to save load times.
     PreloadODF("ivrecy_x");
     PreloadODF("fvrecy_x");
+
+    -- Set difficulty based on whether it's coop or not.
+    if (Mission.m_IsCooperativeMode) then
+        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
+    else
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
+    end
 end
 
 function Save()
@@ -367,13 +372,6 @@ function DeleteObject(h)
 end
 
 function Start()
-    -- Set difficulty based on whether it's coop or not.
-    if (Mission.m_IsCooperativeMode) then
-        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
-    else
-        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
-    end
-
     -- Call generic start logic in coop.
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 

@@ -114,13 +114,18 @@ function InitialSetup()
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
-    if (Mission.m_IsCooperativeMode) then
-        WantBotKillMessages();
-    end
+    WantBotKillMessages();
 
     -- Preload to save load times.
     PreloadODF("ivrecy_x");
     PreloadODF("fvrecy_x");
+
+    -- Set difficulty based on whether it's coop or not.
+    if (Mission.m_IsCooperativeMode) then
+        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
+    else
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
+    end
 end
 
 function Save()
@@ -227,13 +232,6 @@ function DeleteObject(h)
 end
 
 function Start()
-    -- Set difficulty based on whether it's coop or not.
-    if (Mission.m_IsCooperativeMode) then
-        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
-    else
-        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
-    end
-
     -- Call generic start logic in coop.
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
@@ -501,21 +499,13 @@ Functions[3] = function()
             end
         end
 
-        print("APC Count: ", #Mission.m_APCs);
-
         -- Give the APCs to the team.
         for i = 1, #Mission.m_APCs do
             -- Grab the APC.
             local apc = Mission.m_APCs[i];
 
-            print("APC: ", apc);
-
             -- Safely check if this is populated.
             if (IsAround(apc)) then
-                -- Debug
-                print("Assigning APC to Team: ", team);
-                print("Assigning APC to Group: ", grp);
-
                 -- Set the APC to the right team.
                 SetTeamNum(apc, team);
 
@@ -608,7 +598,8 @@ end
 Functions[6] = function()
     if (Mission.m_ShabRescued and IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then
         -- This is Braddock's big speech.
-        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cin0601.wav", _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge);
+        Mission.m_Audioclip = _Subtitles.AudioWithSubtitles("cin0601.wav",
+        _BZCCDatabase.SubtitlePanelSizes.SubtitlesPanelLarge);
 
         -- Timer for this audio clip.
         Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(45.5);

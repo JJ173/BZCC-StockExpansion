@@ -101,6 +101,13 @@ function InitialSetup()
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
+
+    -- Set difficulty based on whether it's coop or not.
+    if (Mission.m_IsCooperativeMode) then
+        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
+    else
+        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
+    end
 end
 
 function Save()
@@ -134,13 +141,6 @@ function AddObject(h)
 end
 
 function Start()
-    -- Set difficulty based on whether it's coop or not.
-    if (Mission.m_IsCooperativeMode) then
-        Mission.m_MissionDifficulty = GetVarItemInt("network.session.ivar102") + 1;
-    else
-        Mission.m_MissionDifficulty = IFace_GetInteger("options.play.difficulty") + 1;
-    end
-
     -- Call generic start logic in coop.
     _Cooperative.Start(m_MissionName, Mission.m_PlayerShipODF, Mission.m_PlayerPilotODF, Mission.m_IsCooperativeMode);
 
@@ -323,7 +323,7 @@ Functions[1] = function()
     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(25.5);
 
     -- Have her animate.
-    SetAnimation(Mission.m_Shabayev, "speak");
+    SetAnimation(Mission.m_Shabayev, "speak", 0);
 
     -- Advance the mission state...
     Mission.m_MissionState = Mission.m_MissionState + 1;

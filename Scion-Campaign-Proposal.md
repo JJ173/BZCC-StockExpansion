@@ -4,11 +4,11 @@ The current Scion campaign in stock is riddled with plot holes and rushed ideas,
 The proposal is to take the existing story in the current stock campaign and restructure the missions to better tie everything together while addressing the issues that make the narrative feel disjointed.
 
 For example, the Rend missions are a complete mess. The location of the Alchemator changes every time the player attempts to reach it. There are three separate locations where the Rend Alchemator appears:
-ISDF 13 (Payback)
+
 <img width="2504" height="1363" alt="Pasted image 20260211152526" src="https://github.com/user-attachments/assets/88e26bec-70fd-446c-a150-a75772cd9aad" />
-Scion 04 (Escort)
+
 <img width="3822" height="2079" alt="Pasted image 20260211152713" src="https://github.com/user-attachments/assets/eeeac3c4-9eb2-41be-b565-128b00d753d4" />
-Scion 07 (Braddock)
+
 <img width="2284" height="1219" alt="Pasted image 20260211152743" src="https://github.com/user-attachments/assets/f6c1ce91-9d95-4c23-8281-164666349c98" />
 
 As shown, all three Alchemators are placed on different maps, which makes no sense. Ideally, the original designers should have reused the map from Payback and had Braddock make his last stand there, rather than creating entirely new maps.

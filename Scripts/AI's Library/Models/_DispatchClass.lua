@@ -6,22 +6,29 @@ DispatchClass = {}
 ---@field Team number
 ---@field Class string
 ---@field DispatchDelay number
----@field Command number
+---@field MaxHealth? integer
+---@field MaxAmmo? integer
+---@field DispatchTarget? Handle
+---@field DispatchSpot? Vector
+---@field DispatchPath? string
 
 ---Creates and returns a new dispatch class with the intention of being dispatched by a script.
----@param Handle Handle
----@param MissionTurn number
----@param Team number
+---@param handle Handle
+---@param missionTurn number
+---@param team number
 ---@param objClass string
 ---@return DispatchClass
-function DispatchClass.New(Handle, MissionTurn, Team, objClass)
+function DispatchClass.New(handle, missionTurn, team, objClass)
+    ---@type DispatchClass
     return {
-        Handle = Handle,
-        MissionTurn = MissionTurn,
-        Team = Team,
+        Handle = handle,
+        MissionTurn = missionTurn,
+        Team = team,
         Class = objClass,
-        DispatchDelay = MissionTurn + SecondsToTurns(5),
-        Command = CMD_NONE
+        DispatchDelay = missionTurn + SecondsToTurns(10),
+        Command = CMD_NONE,
+        MaxHealth = GetMaxHealth(handle),
+        MaxAmmo = GetMaxAmmo(handle)
     }
 end
 
@@ -29,7 +36,19 @@ end
 ---@param dispatchObject DispatchClass
 ---@param MissionTurn number
 function DispatchClass.IsAvailable(dispatchObject, MissionTurn)
-    return dispatchObject == nil or dispatchObject.DispatchDelay > MissionTurn or dispatchObject.Command == CMD_NONE
+    if (dispatchObject == nil) then
+        return false
+    end
+
+    if (dispatchObject.DispatchDelay > MissionTurn) then
+        return false
+    end
+
+    if (not IsIdle(dispatchObject.Handle)) then
+        return false
+    end
+
+    return true
 end
 
 return DispatchClass;

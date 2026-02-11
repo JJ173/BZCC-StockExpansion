@@ -16,9 +16,6 @@ local _BZCCDatabase = require("_BZCCDatabase")
 -- Discord
 -- local _Discord = require("_Discord")
 
--- Models
-local _Pool = require("_Pool")
-
 -- Subtitles.
 local _Subtitles = require('_Subtitles')
 
@@ -31,8 +28,8 @@ local _VoiceManager = require('_VoiceManager')
 local _Session = {
     m_GameTPS = 20,
 
-    m_CPUTeamRace = 0,
-    m_HumanTeamRace = 0,
+    m_CPUTeamRace = '',
+    m_HumanTeamRace = '',
 
     m_MusicOptionValue = 0,
 
@@ -110,9 +107,7 @@ local _Session = {
     m_GameOver = false,
     m_IntroCutsceneEnabled = false,
     m_RTSModeEnabled = false,
-    m_WildlifeEnabled = false,
-
-    m_Pools = {}
+    m_WildlifeEnabled = false
 }
 
 -- Functions Table
@@ -306,16 +301,21 @@ function AddObject(handle)
     local classLabel = GetClassLabel(handle)
     local objCfg = GetCfg(handle)
 
-    if (classLabel == "CLASS_DEPOSIT") then
-        _Session.m_Pools[#_Session.m_Pools + 1] = _Pool.New(handle, GetPosition(handle))
-        return
-    end
-
     if (_Session.m_IntroDone == false) then
         if (objCfg == "fbportb_ark") then
             _Session.m_ScionIntroPortal = handle
             return
         end
+    end
+
+    if (classLabel == "CLASS_DEPOSIT") then
+        _CPUManager.AddPool(handle)
+        return
+    end
+
+    if (classLabel == "CLASS_RESOURCE") then
+        _CPUManager.AddScrap(handle)
+        return
     end
 
     local AICraftType = GetODFString(handle, "GameObjectClass", "AIUnitType", nil)
@@ -387,7 +387,7 @@ function Start()
     _Session.m_VSRTauntEasterEggTime = _Session.m_TurnCounter + SecondsToTurns(600)
 
     _Session.m_CPUScrapAmount = _Session.m_Difficulty
-    _Session.m_CPUScrapDelay = (4 - _Session.m_Difficulty)
+    _Session.m_CPUScrapDelay = ((4 - _Session.m_Difficulty) * 2)
 
     -- Start up Discord RPC.
     -- _Discord.Start("Instant Action 2.0", _Session.m_MapName)
@@ -489,6 +489,9 @@ function Update()
                 _AnimalManager.SetupMapHerds(motherODF, babyODF)
             end
         end
+
+        -- Register the CPU team with the new manager.
+        _CPUManager.NewTeam(_Session.m_CompTeam, _Session.m_CPUTeamRace, "RecyclerEnemy")
 
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1")

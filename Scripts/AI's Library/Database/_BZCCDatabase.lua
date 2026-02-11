@@ -58,6 +58,16 @@ BZCCDatabase = {
         CMD_CMDPANEL_SELECT = 52,
         CMD_CMDPANEL_DESELECT = 53
     },
+    AIPTypes = {
+        AIPType0 = 0,
+        AIPType1 = 1,
+        AIPType2 = 2,
+        AIPType3 = 3,
+        AIPTypeA = 4,
+        AIPTypeL = 5,
+        AIPTypeS = 6,
+        MAX_AIP_TYPE = 7
+    },
     AIUnitTypes = {
         COMMANDER = "Commander",
         CARRIER = "Carrier",
@@ -112,6 +122,17 @@ BZCCDatabase = {
         TEAM_SLOT_SCAVENGER = 25,
         TEAM_SLOT_CONSTRUCT = 26,
         TEAM_SLOT_BOMBER = 27
+    },
+    Controls = {
+        CTRL_BRACCEL = bit32.lshift(1, 0),
+        CTRL_STEER = bit32.lshift(1, 1),
+        CTRL_PITCH = bit32.lshift(1, 2),
+        CTRL_STRAFE = bit32.lshift(1, 3),
+        CTRL_JUMP = bit32.lshift(1, 4),
+        CTRL_DEPLOY = bit32.lshift(1, 5),
+        CTRL_EJECT = bit32.lshift(1, 6),
+        CTRL_ABANDON = bit32.lshift(1, 7),
+        CTRL_FIRE = bit32.lshift(1, 8)
     },
     CPUNames = {
         "SIR BRAMBLEY",
@@ -189,6 +210,7 @@ BZCCDatabase = {
         Splinter = 'gsplint',
         MDM = 'gmdmgun'
     },
+    MAX_FLOAT = 3.402823466e+38,
     MireMaps = {
         "bridges.trn",
         "mpicanyons.trn",
@@ -264,6 +286,24 @@ BZCCDatabase = {
         SubtitlesPanel = 0,
         SubtitlesPanelMedium = 1,
         SubtitlesPanelLarge = 2
+    },
+    TauntTypes = {
+        TAUNTS_GameStart = 0,
+        TAUNTS_NewHuman = 1,
+        TAUNTS_LeftHuman = 2,
+        TAUNTS_HumanShipDestroyed = 3,
+        TAUNTS_HumanRecyDestroyed = 4,
+        TAUNTS_CPURecyDestroyed = 5,
+        TAUNTS_Random = 6,
+        TAUNTS_VSR_EasterEgg = 7,
+        TAUNTS_Category8 = 8, -- Custom taunts headers, not used yet, but code now expects a max of 16 types for modding via Taunt ODFs. -GBD
+        TAUNTS_Category9 = 9,
+        TAUNTS_Category10 = 10,
+        TAUNTS_Category11 = 11,
+        TAUNTS_Category12 = 12,
+        TAUNTS_Category13 = 13,
+        TAUNTS_Category14 = 14,
+        TAUNTS_Category15 = 15
     },
     TeamRelationships = {
         TEAMRELATIONSHIP_INVALIDHANDLE = 0, -- One or both handles is invalid

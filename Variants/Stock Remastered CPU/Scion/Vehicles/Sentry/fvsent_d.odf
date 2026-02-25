@@ -6,12 +6,12 @@ scrapCost = 0 // Original Scrap Cost (55).
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
 /////// REIMAGINED  ////////////////
-AIUnitType = "Minion"
+AIUnitType = "AssaultDefender"
 ////////////////////////////////////
 
 /////// PROVIDES ///////////////////
 provideCount = 4
-provideName4 = "Minion"
+provideName4 = "AssaultDefender"
 ////////////////////////////////////
 
 /////// WEAPONS ////////////////////

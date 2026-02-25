@@ -3,10 +3,6 @@ classLabel = "ivturr_x"
 
 aiAddAmmo = 40 // Stops the AI from running out of ammo.
 
-/////// REIMAGINED  ////////////////
-AIUnitType = "Turret"
-////////////////////////////////////
-
 [CraftClass]
 CanAIPForceIdle = false
 DoIdleDispatch = false

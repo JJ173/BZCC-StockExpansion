@@ -2,6 +2,10 @@
 classLabel = "fvwalk_vsr"
 PilotConfig = "fspilo_x"
 
+/////// REIMAGINED  ////////////////
+AIUnitType = "Assault"
+////////////////////////////////////
+
 [CraftClass]
 OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

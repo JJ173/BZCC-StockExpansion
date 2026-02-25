@@ -8,9 +8,9 @@ DispatchClass = {}
 ---@field DispatchDelay number
 ---@field MaxHealth? integer
 ---@field MaxAmmo? integer
----@field DispatchTarget? Handle
+---@field AssaultTarget? AssaultClass
+---@field DispatchTarget? DispatchClass
 ---@field DispatchSpot? Vector
----@field DispatchPath? string
 
 ---Creates and returns a new dispatch class with the intention of being dispatched by a script.
 ---@param handle Handle

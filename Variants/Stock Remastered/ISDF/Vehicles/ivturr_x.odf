@@ -2,6 +2,10 @@
 classLabel = "ivturr_vsr"
 PilotConfig = "ispilo_x"
 
+/////// REIMAGINED  ////////////////
+AIUnitType = "Turret"
+////////////////////////////////////
+
 [CraftClass]
 OffensiveProcessIsDistractableBySnipe = false // No parameter to stop offensive units being distracted by a sniper.
 GotoTaskHasLeader = false // Don't do the group leader behaivour. Prevents idle spinning. - AI_Unit

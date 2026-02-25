@@ -3,25 +3,25 @@ local ARMORY_SCRAP_COST = 60;
 local ASS_TOWER_COST = 70;
 local ASS_TOWER_B_COST = 95;
 local ARTILLERY_D_COST = 75;
-local BOMBER_COST = 50;
+local BOMBER_COST = 75;
 local BOMBER_BAY_COST = 100;
 local BUNKER_SCRAP_COST = 50;
-local CONST_SCRAP_COST = 20;
+local CONST_SCRAP_COST = 40;
 local FACTORY_SCRAP_COST = 55;
 local GUNTOWER_SCRAP_COST = 50;
 local LANDING_PAD_COST = 60;
-local MISL_SCRAP_COST = 23;
+local MISL_SCRAP_COST = 45;
 local POWER_SCRAP_COST = 30;
-local RCKT_SCRAP_COST = 33;
+local RCKT_SCRAP_COST = 65;
 local RCKT_TOWER_SCRAP_COST = 65;
 local SBAY_SCRAP_COST = 50;
-local SCAV_SCRAP_COST = 10;
-local SCOUT_SCRAP_COST = 25;
-local SERV_SCRAP_COST = 25;
-local TANK_SCRAP_COST = 23;
+local SCAV_SCRAP_COST = 20;
+local SCOUT_SCRAP_COST = 40;
+local SERV_SCRAP_COST = 50;
+local TANK_SCRAP_COST = 55;
 local TECH_CENTER_SCRAP_COST = 80;
 local TRAINING_SCRAP_COST = 70;
-local TURRET_SCRAP_COST = 20;
+local TURRET_SCRAP_COST = 40;
 
 function InitAIPLua(team)
     AIPUtil.print(team, "Starting Lua Conditions for ISDF AIP bzcc_x_i0");
@@ -1537,7 +1537,7 @@ function AssaultUnitCount(team, time)
 end
 
 function DefenderUnitCount(team, time)
-    return AIPUtil.CountUnits(team, "Minion", "sameteam", true);
+    return AIPUtil.CountUnits(team, "AssaultDefender", "sameteam", true);
 end
 
 function AssaultServiceUnitCount(team, time)

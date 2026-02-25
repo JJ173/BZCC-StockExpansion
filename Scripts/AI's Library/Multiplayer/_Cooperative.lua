@@ -1,5 +1,6 @@
 local _BZCCDatabase = require("_BZCCDatabase")
 local _Multiplayer = require("_Multiplayer")
+
 local _WorldManager = require("_WorldManager")
 local _VoiceManager = require("_VoiceManager")
 
@@ -101,9 +102,7 @@ end
 
 function _Cooperative.DeletePlayer(id)
     _Cooperative.m_TotalPlayerCount = _Cooperative.m_TotalPlayerCount - 1
-
     _WorldManager.UpdatePlayerTotal(_Cooperative.m_TotalPlayerCount)
-
     return true
 end
 

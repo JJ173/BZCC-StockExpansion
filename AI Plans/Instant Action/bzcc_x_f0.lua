@@ -878,7 +878,7 @@ function AssaultUnitCount(team, time)
 end
 
 function DefenderUnitCount(team, time)
-    return AIPUtil.CountUnits(team, "Minion", "sameteam", true);
+    return AIPUtil.CountUnits(team, "AssaultDefender", "sameteam", true);
 end
 
 function AssaultServiceUnitCount(team, time)

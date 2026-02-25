@@ -26,7 +26,7 @@ local _CPUManager = require("_CPUManager")
 local _VoiceManager = require('_VoiceManager')
 
 local _Session = {
-    m_GameTPS = 20,
+    m_GameTPS = GetTPS(),
 
     m_CPUTeamRace = '',
     m_HumanTeamRace = '',
@@ -298,22 +298,21 @@ function Load(Session, AnimalData, CPUData)
 end
 
 function AddObject(handle)
-    local classLabel = GetClassLabel(handle)
-    local objCfg = GetCfg(handle)
-
     if (_Session.m_IntroDone == false) then
-        if (objCfg == "fbportb_ark") then
+        if (GetCfg(handle) == "fbportb_ark") then
             _Session.m_ScionIntroPortal = handle
             return
         end
     end
+
+    local classLabel = GetClassLabel(handle)
 
     if (classLabel == "CLASS_DEPOSIT") then
         _CPUManager.AddPool(handle)
         return
     end
 
-    if (classLabel == "CLASS_RESOURCE") then
+    if (classLabel == "CLASS_SCRAP") then
         _CPUManager.AddScrap(handle)
         return
     end
@@ -328,8 +327,7 @@ function AddObject(handle)
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.DROPSHIP_REQUEST) then
-        _CarrierManager.RegisterDropshipRequest(handle, teamNum,
-            _Session.m_TurnCounter + SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]))
+        _CarrierManager.RegisterDropshipRequest(handle, teamNum, _Session.m_TurnCounter + SecondsToTurns(_BZCCDatabase.DropshipRequestItemTimeToDelete[_Session.m_Difficulty]))
         return
     end
 
@@ -341,7 +339,7 @@ function AddObject(handle)
             return
         end
 
-        _CPUManager.AddUnit(handle, _Session.m_TurnCounter, teamNum, AICraftType)
+        _CPUManager.AddTeamObject(handle, _Session.m_TurnCounter, teamNum)
         return
     end
 
@@ -359,8 +357,17 @@ function AddObject(handle)
 end
 
 function DeleteObject(handle)
-    if (GetTeamNum(handle) == _Session.m_CompTeam) then
+    local teamNum = GetTeamNum(handle)
+    local classLabel = GetClassLabel(handle)
 
+    if (classLabel == "CLASS_SCRAP") then
+        _CPUManager.AddScrap(handle)
+        return
+    end
+
+    if (teamNum == _Session.m_CompTeam) then
+        _CPUManager.RemoveTeamObject(handle, teamNum)
+        return
     end
 end
 
@@ -491,7 +498,7 @@ function Update()
         end
 
         -- Register the CPU team with the new manager.
-        _CPUManager.NewTeam(_Session.m_CompTeam, _Session.m_CPUTeamRace, "RecyclerEnemy")
+        _CPUManager.NewTeam(_Session.m_CompTeam, _Session.m_CPUTeamRace, "RecyclerEnemy", false)
 
         -- Grab dropship handles for the intro.
         _Session.m_IntroShip1 = GetHandle("intro_drop_1")

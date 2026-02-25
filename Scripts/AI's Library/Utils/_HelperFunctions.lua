@@ -91,9 +91,9 @@ function ReplaceCharacter(pos, str, r)
     return table.concat { str:sub(1, pos - 1), r, str:sub(pos + 1) }
 end
 
----@param table DispatchClass[]
----@param obj DispatchClass
----@return DispatchClass[]
+---@param table DispatchClass[] | AssaultClass[]
+---@param obj DispatchClass | AssaultClass
+---@return DispatchClass[] | AssaultClass[]
 function SquelchDispatchTable(table, obj)
     if (not table or not obj) then
         return null
@@ -101,7 +101,7 @@ function SquelchDispatchTable(table, obj)
 
     local newTable = {}
 
-    for i, v in ipairs(table) do
+    for _, v in ipairs(table) do
         if (v.Handle ~= obj.Handle) then
             newTable[#newTable + 1] = v
         end

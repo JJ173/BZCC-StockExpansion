@@ -440,7 +440,15 @@ end
 ---@param cpuTeam CPUTeam
 ---@param antiAirUnit DispatchClass
 local function HandleAntiAir(cpuTeam, antiAirUnit)
+    -- Determine patrol path
+    local path = "anti-air_" .. GetRandomInt(1, 2);
 
+    -- Send unit to position based on race
+    if (self.Race == 'i') then
+        Patrol(antiAirUnit.Handle, path);
+    else
+        Goto(antiAirUnit.Handle, path);
+    end
 end
 
 ---@param cpuTeam CPUTeam

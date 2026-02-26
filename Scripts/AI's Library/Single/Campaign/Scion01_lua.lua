@@ -9,8 +9,9 @@ assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))()
 require("_GlobalVariables")
 require("_HelperFunctions")
 
-local _BZCCDatabase = require("_BZCCDatabase");
+local _BZCCDatabase = require("_BZCCDatabase")
 local _Cooperative = require("_Cooperative")
+local _SaveLoad = require("_SaveLoad")
 local _Subtitles = require('_Subtitles')
 
 local _CPUManager = require("_CPUManager")
@@ -1050,15 +1051,27 @@ function InitialSetup()
 end
 
 function Save()
-    return _Cooperative.Save(), _CPUManager.Save(), Mission
+    return _SaveLoad.Save(), Mission
 end
 
-function Load(CoopData, CPUData, MissionData)
-    SetAutoGroupUnits(false)
-    WantBotKillMessages()
-    _Cooperative.Load(CoopData)
-    _CPUManager.Load(CPUData)
-    Mission = MissionData
+function Load(ModuleData, MissionData)
+    -- Do not auto group units.
+    SetAutoGroupUnits(false);
+
+    -- We want bot kill messages as this may be a coop mission.
+    WantBotKillMessages();
+
+    if (MissionData) then
+        for k, v in pairs(MissionData) do
+            Mission[k] = v
+        end
+    end
+
+    if (ModuleData) then
+		_SaveLoad.Load(ModuleData)
+	else
+		print("WARNING: No ModuleData provided to _SaveLoad.Load()")
+	end
 end
 
 function AddObject(handle)

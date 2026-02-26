@@ -23,6 +23,7 @@ local _Subtitles = require('_Subtitles')
 local _AnimalManager = require("_AnimalManager")
 local _CarrierManager = require("_CarrierManager")
 local _CPUManager = require("_CPUManager")
+local _SaveLoad = require("_SaveLoad")
 local _VoiceManager = require('_VoiceManager')
 
 local _Session = {
@@ -288,13 +289,21 @@ function InitialSetup()
 end
 
 function Save()
-    return _Session, _AnimalManager.Save(), _CPUManager.Save()
+    return _SaveLoad.Save(), _Session
 end
 
-function Load(Session, AnimalData, CPUData)
-    _Session = Session
-    _AnimalManager.Load(AnimalData)
-    _CPUManager.Load(CPUData)
+function Load(ModuleData, SessionData)
+    if (SessionData) then
+        for k, v in pairs(SessionData) do
+            _Session[k] = v
+        end
+    end
+
+    if (ModuleData) then
+		_SaveLoad.Load(ModuleData)
+	else
+		print("WARNING: No ModuleData provided to _SaveLoad.Load()")
+	end
 end
 
 function AddObject(handle)
@@ -332,7 +341,7 @@ function AddObject(handle)
     end
 
     if (teamNum == _Session.m_CompTeam) then
-        SetSkill(h, _Session.m_Difficulty)
+        SetSkill(handle, _Session.m_Difficulty)
 
         if (isRecyclerVehicle) then
             _Session.m_EnemyRecycler = handle
@@ -395,6 +404,8 @@ function Start()
 
     _Session.m_CPUScrapAmount = _Session.m_Difficulty
     _Session.m_CPUScrapDelay = ((4 - _Session.m_Difficulty) * 2)
+
+    PrintConsoleMessage("Loading Instant Action 2.0. Welcome! Chosen Difficulty: " .. _Session.m_Difficulty)
 
     -- Start up Discord RPC.
     -- _Discord.Start("Instant Action 2.0", _Session.m_MapName)
@@ -695,7 +706,7 @@ function PlayerDied(DeadObjectHandle, bSniped)
 end
 
 function ObjectKilled(DeadObjectHandle, KillersHandle)
-    if (IsPlayer(DeadObjectHandle) == false) then
+    if (not IsPlayer(DeadObjectHandle)) then
         local bWasDeadPilot = IsPerson(DeadObjectHandle)
 
         if (bWasDeadPilot == false) then
@@ -705,11 +716,13 @@ function ObjectKilled(DeadObjectHandle, KillersHandle)
         return DLLHandled
     end
 
+    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_HumanShipDestroyed)
+
     return PlayerDied(DeadObjectHandle, false)
 end
 
 function ObjectSniped(DeadObjectHandle, KillersHandle)
-    if (IsPlayer(DeadObjectHandle) == false) then
+    if (not IsPlayer(DeadObjectHandle)) then
         return DLLHandled
     end
 
@@ -739,9 +752,13 @@ function PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
             local objClass = GetClassLabel(VictimHandle)
 
             if (objClass == "CLASS_TURRETTANK") then
-
+                if (GetCurrentCommand(VictimHandle) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
+                    Stop(VictimHandle, 0)
+                end
             elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
-
+                if (IsIdle(VictimHandle)) then
+                    Goto(VictimHandle, GetPositionNear("RecyclerEnemy", 40, 60), 0)
+                end
             end
         end
     end
@@ -765,20 +782,15 @@ function RespawnPlayer(isGameStart)
     local PlayerODF = ""
 
     if (isGameStart) then
-        PlayerODF = _Session.m_HumanTeamRace .. "vscout"
+        PlayerODF = _Session.m_HumanTeamRace .. "vscout_x"
     else
         respawnPosition.y = respawnPosition.y + 50
-        PlayerODF = _Session.m_HumanTeamRace .. "spilo"
+        PlayerODF = _Session.m_HumanTeamRace .. "spilo_x"
     end
 
     local PlayerH = BuildObject(PlayerODF, _Session.m_PlayerTeam, respawnPosition)
     SetAsUser(PlayerH, _Session.m_PlayerTeam)
     AddPilotByHandle(PlayerH)
-
-    -- Taunt.
-    if (isGameStart == false) then
-        DoTaunt(TAUNTS_HumanShipDestroyed)
-    end
 end
 
 function BuildStartingVehicle(aTeam, aRace, ODF1, ODF2, Where)
@@ -805,7 +817,7 @@ function GameConditions()
             if (IsAround(DLLHandle)) then
                 _Session.m_EnemyRecycler = DLLHandle
             else
-                DoTaunt(TAUNTS_CPURecyDestroyed)
+                DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
                 SucceedMission(GetTime() + 5, "instantw.txt")
                 _Session.m_GameOver = true
             end
@@ -816,9 +828,9 @@ function GameConditions()
                 _Session.m_Recycler = DLLHandle
             else
                 if (_Session.m_TurnCounter < _Session.m_VSRTauntEasterEggTime) then
-                    DoTaunt(TAUNTS_VSR_EasterEgg)
+                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_VSR_EasterEgg)
                 else
-                    DoTaunt(TAUNTS_HumanRecyDestroyed)
+                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
                 end
 
                 SucceedMission(GetTime() + 5, "instantl.txt")
@@ -1197,7 +1209,7 @@ function CheckIntroEnemiesKilled()
         for i = 1, _Session.m_Difficulty + 1 do
             local enemy = BuildObject(_Session.m_CPUTeamRace .. "vscout_c", _Session.m_CompTeam, "intro_attacker_" .. i)
 
-            SetSkill(enemy, _Session.m_Difficulty + 1)
+            SetSkill(enemy, _Session.m_Difficulty)
 
             if (i == 1) then
                 _Session.m_IntroEnemy1 = enemy

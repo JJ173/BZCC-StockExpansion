@@ -1,3 +1,5 @@
+local _SaveLoad = require("_SaveLoad")
+
 WorldManager = {
     EnableHypothermia = false,
     HypothermiaCounter = 0,
@@ -11,6 +13,21 @@ WorldManager = {
     Depth = 4096,
     Height = 100
 }
+
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("_WorldManager", function()
+    return WorldManager
+end)
+
+_SaveLoad.RegisterLoad("_WorldManager", function(WorldManagerData)
+    if (WorldManagerData ~= nil) then
+        for k, v in pairs(WorldManagerData) do
+            WorldManager[k] = v
+        end
+    else
+        print("WARNING: _WorldManager Load called with nil data")
+    end
+end)
 
 local function Hypothermia()
     if (WorldManager.PlayerTotal <= 0) then return end
@@ -30,19 +47,6 @@ local function Hypothermia()
                 end
             end
         end
-    end
-end
-
----@return table
-function WorldManager.Save()
-    return WorldManager
-end
-
----@param WorldManagerData table
-function WorldManager.Load(WorldManagerData)
-    for k, v in pairs(WorldManagerData) do
-        PrintConsoleMessage("Loading WorldManagerData. Field: " .. k .. " Value: " .. v)
-        WorldManager[k] = v
     end
 end
 

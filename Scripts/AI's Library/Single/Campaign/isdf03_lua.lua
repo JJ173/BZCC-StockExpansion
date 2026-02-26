@@ -11,6 +11,7 @@ require("_HelperFunctions");
 
 local _BZCCDatabase = require("_BZCCDatabase");
 local _Cooperative = require("_Cooperative");
+local _SaveLoad = require("_SaveLoad");
 local _Subtitles = require('_Subtitles');
 
 -- Game TPS.
@@ -178,21 +179,27 @@ function InitialSetup()
 end
 
 function Save()
-    return _Cooperative.Save(), Mission;
+    return _SaveLoad.Save(), Mission
 end
 
-function Load(CoopData, MissionData)
+function Load(ModuleData, MissionData)
     -- Do not auto group units.
     SetAutoGroupUnits(false);
 
     -- We want bot kill messages as this may be a coop mission.
     WantBotKillMessages();
 
-    -- Load Coop.
-    _Cooperative.Load(CoopData);
+    if (MissionData) then
+        for k, v in pairs(MissionData) do
+            Mission[k] = v
+        end
+    end
 
-    -- Load mission data.
-    Mission = MissionData;
+    if (ModuleData) then
+		_SaveLoad.Load(ModuleData)
+	else
+		print("WARNING: No ModuleData provided to _SaveLoad.Load()")
+	end
 end
 
 function AddObject(h)

@@ -35,11 +35,27 @@
 ---@field ReadyToDelete boolean
 
 local _BZCCDatabase = require("_BZCCDatabase")
+local _SaveLoad = require("_SaveLoad")
 
 CarrierManager = {
     ---@type Carrier[]
     Carriers = {},
 }
+
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("_CarrierManager", function()
+    return CarrierManager
+end)
+
+_SaveLoad.RegisterLoad("_CarrierManager", function(CarrierManagerData)
+    if (CarrierManagerData ~= nil) then
+        for k, v in pairs(CarrierManagerData) do
+            CarrierManager[k] = v
+        end
+    else
+        print("WARNING: _CarrierManager Load called with nil data")
+    end
+end)
 
 ---@param team integer
 ---@return Carrier | nil
@@ -216,19 +232,6 @@ local function HandlePortal(portal, missionTurnCount)
 
     -- Create a small delay for the next unit.
     portal.DelayTime = missionTurnCount + SecondsToTurns(1)
-end
-
----@return table
-function CarrierManager.Save()
-    return CarrierManager
-end
-
----@param CarrierData table
-function CarrierManager.Load(CarrierData)
-    for k, v in pairs(CarrierData) do
-        PrintConsoleMessage("Loading CarrierManager. Field: " .. k .. " Value: " .. v)
-        CarrierManager[k] = v
-    end
 end
 
 ---@param missionTurnCount integer

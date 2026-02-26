@@ -149,7 +149,9 @@ BZCCDatabase = {
         "Ultraken",
         "Darkvale",
         "Econchump",
-        "Sev"
+        "Sev",
+        "TheBonelord",
+        "Lithium"
     },
     Difficulty = {
         DIFFICULTY_EASY = 1,

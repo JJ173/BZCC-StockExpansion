@@ -1,4 +1,5 @@
 local _AnimalHerd = require("_AnimalHerd")
+local _SaveLoad = require("_SaveLoad")
 
 local MAX_HERD_COUNT = 5
 
@@ -6,6 +7,21 @@ AnimalManager = {
     AnimalHerds = {},
     EnableHerdLogic = false
 }
+
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("_AnimalManager", function()
+    return AnimalManager
+end)
+
+_SaveLoad.RegisterLoad("_AnimalManager", function(AnimalManagerData)
+    if (AnimalManagerData ~= nil) then
+        for k, v in pairs(AnimalManagerData) do
+            AnimalManager[k] = v
+        end
+    else
+        print("WARNING: _AnimalManager Load called with nil data")
+    end
+end)
 
 ---@param path string
 ---@return boolean
@@ -19,19 +35,6 @@ local function VerifyAnimalPath(path)
     RemoveObject(testObj)
 
     return true
-end
-
----@return table
-function AnimalManager.Save()
-    return AnimalManager
-end
-
----@param animalData table
-function AnimalManager.Load(animalData)
-    for k, v in pairs(animalData) do
-        PrintConsoleMessage("Loading AnimalManager. Field: " .. k .. " Value: " .. v)
-        AnimalManager[k] = v
-    end
 end
 
 ---@param motherODF string

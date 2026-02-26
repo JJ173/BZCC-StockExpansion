@@ -1,6 +1,7 @@
 local _BZCCDatabase = require("_BZCCDatabase")
 local _Multiplayer = require("_Multiplayer")
 
+local _SaveLoad = require("_SaveLoad")
 local _WorldManager = require("_WorldManager")
 local _VoiceManager = require("_VoiceManager")
 
@@ -24,18 +25,20 @@ local m_BaneMissions = {
     _BZCCDatabase.Missions.SCION06
 }
 
-function _Cooperative.Load(CoopData, WorldManagerData)
-    for k, v in pairs(CoopData) do
-        PrintConsoleMessage("Loading CoopData. Field: " .. k .. " Value: " .. v)
-        _Cooperative[k] = v
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("_Cooperative", function()
+    return _Cooperative
+end)
+
+_SaveLoad.RegisterLoad("_Cooperative", function(CoopData)
+    if (CoopData ~= nil) then
+        for k, v in pairs(CoopData) do
+            _Cooperative[k] = v
+        end
+    else
+        print("WARNING: _Cooperative Load called with nil data")
     end
-
-    _WorldManager.Load(WorldManagerData)
-end
-
-function _Cooperative.Save()
-    return _Cooperative, _WorldManager.Save()
-end
+end)
 
 function _Cooperative.Start(MissionName, PlayerShipODF, PlayerPilotODF, IsCoop, SpawnPilotOnly, HeightOffset)
     local difficulty

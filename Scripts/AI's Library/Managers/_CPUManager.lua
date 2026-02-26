@@ -2,7 +2,7 @@ local _BZCCDatabase = require("_BZCCDatabase")
 
 local _AssaultClass = require("_AssaultClass")
 local _DispatchClass = require("_DispatchClass")
-
+local _SaveLoad = require("_SaveLoad")
 local _WorldManager = require("_WorldManager")
 
 ---@class CPUTeam
@@ -28,10 +28,25 @@ CPUManager = {
     ---@type CPUTeam[]
     CPUTeams = {},
     ---@type Handle[]
-    Pool = {},
+    Pools = {},
     ---@type Handle[]
     Scrap = {}
 }
+
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("_CPUManager", function()
+    return CPUManager
+end)
+
+_SaveLoad.RegisterLoad("_CPUManager", function(CPUManagerData)
+    if (CPUManagerData ~= nil) then
+        for k, v in pairs(CPUManagerData) do
+            CPUManager[k] = v
+        end
+    else
+        print("WARNING: _CPUManager Load called with nil data")
+    end
+end)
 
 local TurretDispatchMode = {
     POOL = 1,
@@ -155,7 +170,7 @@ local function HandleTurret(cpuTeam, turretUnit)
 
     if (dispatchMode == TurretDispatchMode.POOL) then -- Start with pools.
         -- Driving into the player base is stupid. Skip the last pool in the list.
-        local maxPoolRange = #CPUManager.PoolPositions - 1
+        local maxPoolRange = #CPUManager.Pools - 1
 
         if (dispatchMethod == TurretDispatchMethod.CLOSEST) then
             local tempDist = _BZCCDatabase.MAX_FLOAT
@@ -163,7 +178,7 @@ local function HandleTurret(cpuTeam, turretUnit)
             -- Check the pool range.
             for i = 1, maxPoolRange do
                 -- Get the pool from the table of pools based on index.
-                local poolPos = CPUManager.PoolPositions[i]
+                local poolPos = GetPosition(CPUManager.Pools[i])
 
                 -- Check the distance of the pool and compare it to the tempDist to see which is closer.
                 local dist = GetDistance(turretUnit.Handle, poolPos)
@@ -175,14 +190,15 @@ local function HandleTurret(cpuTeam, turretUnit)
                 end
             end
         elseif (dispatchMethod == TurretDispatchMethod.RANDOM) then
-            turretUnit.DispatchSpot = GetPositionNear(CPUManager.PoolPositions[GetRandomInt(1, maxPoolRange)], 15, 35)
+            local chosenPool = CPUManager.Pools[GetRandomInt(1, maxPoolRange)]
+            turretUnit.DispatchSpot = GetPositionNear(GetPosition(chosenPool), 15, 35)
         elseif (dispatchMethod == TurretDispatchMethod.FURTHEST) then
             local tempDist = 0
 
             -- Check the pool range.
             for i = 1, maxPoolRange do
                 -- Get the pool from the table of pools based on index.
-                local poolPos = CPUManager.PoolPositions[i]
+                local poolPos = GetPosition(CPUManager.Pools[i])
 
                 -- Check the distance of the pool and compare it to the tempDist to see which is closer.
                 local dist = GetDistance(turretUnit.Handle, poolPos)
@@ -234,7 +250,7 @@ local function HandleTurret(cpuTeam, turretUnit)
         .. " and method: " .. dispatchMethod)
 
     -- Pool found. Send the turret off to defend.
-    Goto(turretUnit.Handle, turretUnit.DispatchSpot, 0)
+    Goto(turretUnit.Handle, turretUnit.DispatchSpot, 1)
 end
 
 ---@param cpuTeam CPUTeam
@@ -410,28 +426,27 @@ end
 
 ---@param cpuTeam CPUTeam
 local function HandleCommander(cpuTeam)
-    if (not cpuTeam.Commander or not cpuTeam.CommanderEnabled) then return end
-
     -- Basic commander behavior
     if (IsIdle(cpuTeam.Commander)) then
         -- Check for nearby threats
-        local nearestEnemy = GetNearestEnemy(cpuTeam.Commander, true, false, 200);
+        local nearestEnemy = GetNearestEnemy(cpuTeam.Commander, true, false, 200)
         if (nearestEnemy) then
             -- If enemy is nearby, engage or retreat based on health
-            local health = GetHealth(cpuTeam.Commander);
+            local health = GetHealth(cpuTeam.Commander)
             if (health < 0.3) then
                 -- Retreat if low health
                 local retreatPos = GetPositionNear(cpuTeam.spawnPath, 40, 60);
-                Goto(cpuTeam.Commander, retreatPos);
+                Goto(cpuTeam.Commander, retreatPos, 0)
             else
                 -- Engage if healthy
-                Attack(cpuTeam.Commander, nearestEnemy);
+                Attack(cpuTeam.Commander, nearestEnemy, 0)
             end
         else
             -- Patrol if no immediate threats. Don't patrol into the enemy base.
-            local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)];
+            local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)]
             if (patrolPoint) then
-                Goto(cpuTeam.Commander, GetPositionNear(patrolPoint.Position, 30, 50));
+                local pos = GetPosition(patrolPoint)
+                Goto(cpuTeam.Commander, GetPositionNear(pos, 30, 50), 0)
             end
         end
     end
@@ -454,19 +469,6 @@ end
 ---@param cpuTeam CPUTeam
 local function HandleCarrier(cpuTeam)
 
-end
-
----@return table
-function CPUManager.Save()
-    return CPUManager
-end
-
----@param CPUData table
-function CPUManager.Load(CPUData)
-    for k, v in pairs(CPUData) do
-        PrintConsoleMessage("Loading CPUManager. Field: " .. k .. " Value: " .. v)
-        CPUManager[k] = v
-    end
 end
 
 ---Creates a new CPU Team object.
@@ -510,8 +512,7 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
             "CommanderEnabled: " .. tostring(newTeam.CommanderEnabled))
 
         if (newTeam.CommanderEnabled) then
-            newTeam.Commander = BuildObject(faction .. "vcmdr_s", team, GetPositionNear(spawnPath, 30, 60))
-            SetObjectiveName(newTeam.Commander, "Cmd. " .. newTeam.Name)
+            BuildObject(faction .. "vcmdr_s", team, GetPositionNear(spawnPath, 30, 60))
         end
 
         SetCPUPlan(_BZCCDatabase.AIPTypes.AIPType0, newTeam)
@@ -533,7 +534,7 @@ function CPUManager.Run(missionTurnCount)
             if (not cpuTeam.TauntSetupDone) then
                 if (missionTurnCount == 2) then
                     SetTauntCPUTeamName(cpuTeam.Name)
-                elseif (missionTurnCount == 3) then
+                elseif (missionTurnCount == 4) then
                     DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_GameStart)
                     cpuTeam.TauntSetupDone = true
                 end
@@ -544,7 +545,7 @@ function CPUManager.Run(missionTurnCount)
                 end
             end
 
-            if (cpuTeam.CommanderEnabled and IsAlive(cpuTeam.Commander) and GetTeamNum(cpuTeam.Commander) == cpuTeam.Team) then
+            if (cpuTeam.CommanderEnabled and IsAlive(cpuTeam.Commander)) then
                 HandleCommander(cpuTeam)
             end
         end
@@ -620,6 +621,12 @@ function CPUManager.AddTeamObject(handle, missionTurnCount, teamNum)
 
     if (AICraftType == nil or AICraftType == _BZCCDatabase.AIUnitTypes.CARRIER) then
         return -- Don't process any units that don't have an appropriate type.
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.COMMANDER) then
+        cpuTeam.Commander = handle
+        SetObjectiveName(cpuTeam.Commander, "Cmd. " .. cpuTeam.Name)
+        return
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT) then
@@ -722,7 +729,7 @@ end
 
 ---@param poolHandle Handle
 function CPUManager.AddPool(poolHandle)
-    CPUManager.Pool[#CPUManager.Pool + 1] = poolHandle
+    CPUManager.Pools[#CPUManager.Pools + 1] = poolHandle
 end
 
 return CPUManager

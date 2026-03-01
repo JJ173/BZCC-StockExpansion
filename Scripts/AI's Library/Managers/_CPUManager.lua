@@ -459,7 +459,7 @@ local function HandleAntiAir(cpuTeam, antiAirUnit)
     local path = "anti-air_" .. GetRandomInt(1, 2);
 
     -- Send unit to position based on race
-    if (self.Race == 'i') then
+    if (cpuTeam.Faction == 'i') then
         Patrol(antiAirUnit.Handle, path);
     else
         Goto(antiAirUnit.Handle, path);

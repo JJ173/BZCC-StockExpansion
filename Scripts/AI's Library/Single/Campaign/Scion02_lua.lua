@@ -23,6 +23,13 @@ local m_MissionName = _BZCCDatabase.Missions.SCION02;
 -- Difficulty tables
 local m_ScoutCooldownTimeTable = { 60, 45, 30 };
 
+-- States for the Scout.
+local m_ScoutState = {
+    PATROL = 0,
+    ATTACK = 1,
+    RETREAT = 2
+}
+
 -- Mission important variables.
 local Mission =
 {
@@ -66,7 +73,6 @@ local Mission =
     m_IsCooperativeMode = false,
     m_StartDone = false,
     m_MissionOver = false,
-    m_ScoutRetreating = false,
     m_PlayerHasArcher = false,
 
     m_Audioclip = nil,
@@ -74,6 +80,7 @@ local Mission =
 
     m_TurretDistpacherTimer = 0,
     m_ScoutDispatchCooldown = 0,
+    m_ScoutState = 0,
 
     -- Steps for each section.
     m_MissionState = 1,
@@ -142,14 +149,11 @@ function AddObject(h)
                 Mission.m_EnemyTurret3 = h;
             end
         elseif (ODFName == "ivscout_x") then
-            -- Try and prevent the AIP from using it.
-            SetIndependence(h, 1);
-
             -- So we can send it down a patrol path.
             Mission.m_EnemyScout1 = h;
 
             -- Repeat the retreat process.
-            Mission.m_ScoutRetreating = false;
+            Mission.m_ScoutState = m_ScoutState.PATROL;
 
             -- Set a timer for dispatch.
             Mission.m_ScoutDispatchCooldown = Mission.m_MissionTime +
@@ -207,7 +211,7 @@ function DeleteObject(h)
             elseif (h == Mission.m_EnemyTurret3) then
                 Mission.m_EnemyTurret3 = nil;
             end
-        elseif (ODFName == "ivscout_x") then
+        elseif (h == Mission.m_EnemyScout1) then
             Mission.m_EnemyScout1 = nil;
         elseif (ODFName == "ibpgen_x") then
             if (h == Mission.m_EnemyPower1) then
@@ -652,21 +656,24 @@ end
 -- Handles the path choosing and scout logic for the ISDF.
 function ISDFScoutDistpatcher()
     if (IsAlive(Mission.m_EnemyScout1) and Mission.m_ScoutDispatchCooldown < Mission.m_MissionTime) then
-        if (not Mission.m_ScoutRetreating) then
-            -- Check if the Scout gets shot
-            local unitWhoShotTeam = GetTeamNum(GetWhoShotMe(Mission.m_EnemyScout1));
+        -- Keep track of the shooter.
+        local shooter = GetWhoShotMe(Mission.m_EnemyScout1);
 
-            if (GetCurrentCommand(Mission.m_EnemyScout1) == _BZCCDatabase.AICommands.CMD_NONE) then
+        -- Check if the Scout gets shot
+        local unitWhoShotTeam = GetTeamNum(shooter);
+
+        if (Mission.m_ScoutState == m_ScoutState.PATROL) then
+            if (IsIdle(Mission.m_EnemyScout1)) then
                 -- Send the scout out to do it's job.
                 local rand = math.ceil(GetRandomFloat(0, 2));
                 local chosenPath = "route" .. rand;
 
                 -- Send the Scout down one of the 2 paths.
                 Goto(Mission.m_EnemyScout1, chosenPath, 1);
-            elseif (GetDistance(Mission.m_EnemyScout1, "tank_1") < 175 or (unitWhoShotTeam > 0 and unitWhoShotTeam < Mission.m_EnemyTeam)) then
+            elseif (GetDistance(Mission.m_EnemyScout1, "tank_1") < 150 or (unitWhoShotTeam > 0 and unitWhoShotTeam < Mission.m_EnemyTeam)) then
                 if (DoesBaseJammerExist()) then
-                    -- Tell it to retreat.
-                    Retreat(Mission.m_EnemyScout1, GetPosition(Mission.m_EnemyRecycler), 1);
+                    -- Give the player a chance to attack the scout. Make it engage the target before retreating.
+                    Attack(Mission.m_EnemyScout1, shooter, 1);
 
                     -- Highlight it.
                     SetObjectiveOn(Mission.m_EnemyScout1);
@@ -678,12 +685,20 @@ function ISDFScoutDistpatcher()
                     Mission.m_AudioTimer = Mission.m_MissionTime + SecondsToTurns(7.5);
 
                     -- Set it to retreat to the base
-                    Mission.m_ScoutRetreating = true;
+                    Mission.m_ScoutState = m_ScoutState.ATTACK;
                 else
                     PlayerDetected();
                 end
             end
-        elseif (GetDistance(Mission.m_EnemyScout1, Mission.m_EnemyRecycler) < 75) then
+        elseif (Mission.m_ScoutState == m_ScoutState.ATTACK) then
+            if (not IsAlive(shooter)) then
+                -- Tell it to retreat.
+                Retreat(Mission.m_EnemyScout1, GetPosition(Mission.m_EnemyRecycler), 1);
+
+                -- So we don't repeat, make sure we're in the right state.
+                Mission.m_ScoutState = m_ScoutState.RETREAT;
+            end
+        elseif (Mission.m_ScoutState == m_ScoutState.RETREAT and GetDistance(Mission.m_EnemyScout1, Mission.m_EnemyRecycler) < 75) then
             PlayerDetected();
         end
     end

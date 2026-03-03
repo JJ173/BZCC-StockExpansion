@@ -13,6 +13,14 @@ require("_Skins")
 -- Database.
 local _BZCCDatabase = require("_BZCCDatabase")
 
+-- Managers
+local _AnimalManager = require("_AnimalManager")
+local _CarrierManager = require("_CarrierManager")
+local _CPUManager = require("_CPUManager")
+
+-- Subtitles
+local _Subtitles = require("_Subtitles")
+
 InstantCommon = {
     m_GameTPS = GetTPS(),
 
@@ -146,7 +154,7 @@ local PreloadAudios = {
 
 ---@return Handle
 function InstantCommon.GetPlayerRecycler()
-    return InstantCommon.m_PlayerRecycler
+    return InstantCommon.m_Recycler
 end
 
 ---@return string

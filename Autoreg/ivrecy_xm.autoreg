@@ -1,3 +1,7 @@
 [IAHumanRecyclerList]
 ODFName = "ivrecy_xm"
 Description = "BZCC Reimagined MPI"
+
+[RecyclerListMPI]
+ODFName = "ivrecy_xm"
+Description = "BZCC Reimagined MPI"

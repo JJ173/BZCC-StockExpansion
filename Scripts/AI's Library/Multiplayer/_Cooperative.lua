@@ -135,7 +135,6 @@ function _Cooperative.ObjectKilled(DeadObjectHandle, KillersHandle, MissionPilot
     local deadObjectTeam = GetTeamNum(DeadObjectHandle)
 
     if (deadObjectTeam == 0) then
-        print("Returning DoEjectPilot: ", _BZCCDatabase.EventReturnCodes.DoEjectPilot)
         return _BZCCDatabase.EventReturnCodes.DoEjectPilot
     end
 

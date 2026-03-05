@@ -7,9 +7,6 @@ require("_GlobalVariables")
 -- Required helper functions.
 require("_HelperFunctions")
 
--- Required Skins Logic.
-require("_Skins")
-
 -- Database.
 local _BZCCDatabase = require("_BZCCDatabase")
 
@@ -17,89 +14,96 @@ local _BZCCDatabase = require("_BZCCDatabase")
 local _AnimalManager = require("_AnimalManager")
 local _CarrierManager = require("_CarrierManager")
 local _CPUManager = require("_CPUManager")
+local _SaveLoad = require("_SaveLoad")
+local _SkinManager = require("_SkinManager")
 
 -- Subtitles
 local _Subtitles = require("_Subtitles")
 
 InstantCommon = {
-    m_GameTPS = GetTPS(),
+    m_GameTPS                       = GetTPS(),
 
-    m_CPUTeamRace = '',
-    m_HumanTeamRace = '',
+    m_CPUTeamRace                   = '',
+    m_HumanTeamRace                 = '',
+
+    -- Keep track of player count.
+    m_PlayerCount                   = 0,
+    m_TeamIsSetUp                   = { false, false, false, false },
+    m_TeamPos                       = {},
 
     -- This is constantly 1.
-    m_PlayerTeam = 1,
+    m_PlayerTeam                    = 1,
     -- This may change if 1.2 features "Like Pilot" are enabled.
     -- If 1.2 is enabled, m_StratTeam will be set to 3.
-    m_StratTeam = 1,
-    m_CompTeam = 6,
-    m_TurnCounter = 0,
-    m_MyGoal = 0,
-    m_AwareV13 = 0,
-    m_MyForce = 0,
-    m_CompForce = 0,
-    m_Difficulty = 0,
+    m_StratTeam                     = 1,
+    m_CompTeam                      = 6,
+    m_TurnCounter                   = 0,
+    m_Difficulty                    = 0,
 
-    m_CPUScrapDelay = 0,
-    m_CPUScrapAmount = 0,
-    m_NextCPUScrapTime = 0,
-    m_VSRTauntEasterEggTime = 0,
+    m_CPUScrapDelay                 = 0,
+    m_CPUScrapAmount                = 0,
+    m_NextCPUScrapTime              = 0,
+    m_VSRTauntEasterEggTime         = 0,
 
     m_IntroForcePlayerTeleportDelay = 0,
-    m_IntroState = 1,
-    m_IntroDelay = 0,
-    m_IntroAudio = 0,
-    m_IntroMusic = 0,
-    m_IntroMusicVolume = 1,
-    m_SetIntroMusicVolume = false,
-    m_IntroEnemiesSpawned = false,
-    m_IntroEnemy1 = nil,
-    m_IntroEnemy2 = nil,
-    m_IntroEnemy3 = nil,
+    m_IntroState                    = 1,
+    m_IntroDelay                    = 0,
+    m_IntroAudio                    = 0,
+    m_IntroMusic                    = 0,
+    m_IntroMusicVolume              = 1,
+    m_SetIntroMusicVolume           = false,
+    m_IntroEnemiesSpawned           = false,
+    m_IntroEnemy1                   = nil,
+    m_IntroEnemy2                   = nil,
+    m_IntroEnemy3                   = nil,
 
-    m_IntroMatriarchTeleported = false,
-    m_IntroTurret1Teleported = false,
-    m_IntroTurret2Teleported = false,
+    m_IntroMatriarchTeleported      = false,
+    m_IntroTurret1Teleported        = false,
+    m_IntroTurret2Teleported        = false,
 
-    m_CustomAIPStr = nil,
-    m_MapName = nil,
+    m_CustomAIPStr                  = nil,
+    m_MapName                       = nil,
 
-    m_EnemyRecycler = nil,
-    m_Recycler = nil,
-    m_Player = nil,
+    m_EnemyRecycler                 = nil,
+    m_Recycler                      = nil,
 
-    m_IntroShip1 = nil,
-    m_IntroShip2 = nil,
+    m_IntroShip1                    = nil,
+    m_IntroShip2                    = nil,
+    m_IntroShip3                    = nil,
 
-    m_IntroScionTurret1 = nil,
-    m_IntroScionTurret2 = nil,
-    m_ScionIntroHangar = nil,
-    m_ScionIntroMatriarch = nil,
-    m_ScionIntroPlayer = nil,
+    m_IntroScionTurret1             = nil,
+    m_IntroScionTurret2             = nil,
+    m_ScionIntroHangar              = nil,
+    m_ScionIntroMatriarch           = nil,
 
-    m_IntroTurret1 = nil,
-    m_IntroTurret2 = nil,
+    m_IntroTurret1                  = nil,
+    m_IntroTurret2                  = nil,
 
-    m_PlayerTurret1 = nil,
-    m_PlayerTurret2 = nil,
+    m_PlayerTurret1                 = nil,
+    m_PlayerTurret2                 = nil,
 
-    m_DropshipTakeOffDialogPlayed = false,
-    m_DropshipTakeoffCheck = false,
-    m_Dropship1Takeoff = false,
-    m_Dropship1Remove = false,
-    m_Dropship1Time = 0,
+    m_DropshipTakeOffDialogPlayed   = false,
+    m_DropshipTakeoffCheck          = false,
 
-    m_Dropship2Takeoff = false,
-    m_Dropship2Remove = false,
-    m_Dropship2Time = 0,
+    m_Dropship1Takeoff              = false,
+    m_Dropship1Remove               = false,
+    m_Dropship1Time                 = 0,
 
-    m_TauntTimer = 0,
+    m_Dropship2Takeoff              = false,
+    m_Dropship2Remove               = false,
+    m_Dropship2Time                 = 0,
 
-    m_IntroDone = false,
-    m_StartDone = false,
-    m_GameOver = false,
-    m_IntroCutsceneEnabled = false,
-    m_WildlifeEnabled = false
+    m_Dropship3Takeoff              = false,
+    m_Dropship3Remove               = false,
+    m_Dropship3Time                 = 0,
+
+    m_TauntTimer                    = 0,
+
+    m_IntroDone                     = false,
+    m_StartDone                     = false,
+    m_GameOver                      = false,
+    m_IntroCutsceneEnabled          = false,
+    m_WildlifeEnabled               = false
 }
 
 -- Functions Table
@@ -148,6 +152,21 @@ local PreloadAudios = {
     "dropdoor.wav"
 }
 
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("InstantCommon", function()
+    return InstantCommon
+end)
+
+_SaveLoad.RegisterLoad("InstantCommon", function(InstantData)
+    if (InstantData ~= nil) then
+        for k, v in pairs(InstantData) do
+            InstantCommon[k] = v
+        end
+    else
+        print("WARNING: InstantCommon Load called with nil data")
+    end
+end)
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------- Getters and Setters ---------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -162,6 +181,7 @@ function InstantCommon.GetHumanTeamRace()
     return InstantCommon.m_HumanTeamRace
 end
 
+---@return integer
 function InstantCommon.GetHumanTeam()
     return InstantCommon.m_PlayerTeam
 end
@@ -189,16 +209,24 @@ end
 local function RemoveISDFIntroUnits()
     RemoveObject(InstantCommon.m_IntroShip1)
     RemoveObject(InstantCommon.m_IntroShip2)
+    RemoveObject(InstantCommon.m_IntroShip3)
     RemoveObject(InstantCommon.m_IntroTurret1)
     RemoveObject(InstantCommon.m_IntroTurret2)
+
+    for i = 1, InstantCommon.m_PlayerCount do
+        RemoveObject(GetHandle("player_spawn_i_" .. i))
+    end
 end
 
 local function RemoveScionIntroUnits()
     RemoveObject(InstantCommon.m_ScionIntroHangar)
     RemoveObject(InstantCommon.m_ScionIntroMatriarch)
-    RemoveObject(InstantCommon.m_ScionIntroPlayer)
     RemoveObject(InstantCommon.m_ScionIntroTurret1)
     RemoveObject(InstantCommon.m_ScionIntroTurret2)
+
+    for i = 1, InstantCommon.m_PlayerCount do
+        RemoveObject(GetHandle("player_spawn_f_" .. i))
+    end
 end
 
 local function DisableIntro()
@@ -246,19 +274,22 @@ end
 local function CheckIntroEnemiesKilled()
     if (InstantCommon.m_IntroEnemiesSpawned == false) then
         for i = 1, InstantCommon.m_Difficulty + 1 do
-            local enemy = BuildObject(InstantCommon.m_CPUTeamRace .. "vscout_c", InstantCommon.m_CompTeam, "intro_attacker_" .. i)
+            local enemy = BuildObject(InstantCommon.m_CPUTeamRace .. "vscout_c", InstantCommon.m_CompTeam,
+                "intro_attacker_" .. i)
 
             SetSkill(enemy, InstantCommon.m_Difficulty)
 
+            local randPlayerNum = GetRandomInt(1, InstantCommon.m_PlayerCount)
+
             if (i == 1) then
                 InstantCommon.m_IntroEnemy1 = enemy
-                Attack(enemy, InstantCommon.m_Player, 1)
+                Attack(enemy, GetPlayerHandle(randPlayerNum), 1)
             elseif (i == 2) then
                 InstantCommon.m_IntroEnemy2 = enemy
                 Attack(enemy, InstantCommon.m_Recycler, 1)
             elseif (i == 3) then
                 InstantCommon.m_IntroEnemy3 = enemy
-                Attack(enemy, InstantCommon.m_Player, 1)
+                Attack(enemy, GetPlayerHandle(randPlayerNum), 1)
             end
         end
 
@@ -279,10 +310,12 @@ local function BuildPlayerRecycler(pos)
     local customHumanRecycler = IFace_GetString("options.instant.string1")
 
     if (customHumanRecycler ~= nil) then
-        InstantCommon.m_Recycler = BuildStartingVehicle(InstantCommon.m_StratTeam, InstantCommon.m_HumanTeamRace, customHumanRecycler,
+        InstantCommon.m_Recycler = BuildStartingVehicle(InstantCommon.m_StratTeam, InstantCommon.m_HumanTeamRace,
+            customHumanRecycler,
             "*vrecy", pos)
     else
-        InstantCommon.m_Recycler = BuildStartingVehicle(InstantCommon.m_StratTeam, InstantCommon.m_HumanTeamRace, "*vrecy", "*vrecy",
+        InstantCommon.m_Recycler = BuildStartingVehicle(InstantCommon.m_StratTeam, InstantCommon.m_HumanTeamRace,
+            "*vrecy", "*vrecy",
             pos)
     end
 
@@ -314,15 +347,49 @@ function InstantCommon.InitialSetup()
     end
 end
 
+function InstantCommon.Start()
+    -- Ally all the necessary teams to simulate "DefaultTeams".
+    for i = 2, 5 do
+        Ally(InstantCommon.m_PlayerTeam, i);
+    end
+
+    -- TODO: Add a check to see if we're an MPI session for these as the variables will be different.
+    InstantCommon.m_GameTPS = GetTPS()
+    InstantCommon.m_TurnCounter = 0
+    InstantCommon.m_StartDone = false
+    InstantCommon.m_GameOver = false
+    InstantCommon.m_CompTeam = 6
+    InstantCommon.m_StratTeam = 1
+    InstantCommon.m_MapName = GetMapTRNFilename()
+
+    if (IsNetworkOn()) then
+    else
+        InstantCommon.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED)
+        InstantCommon.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED)
+        InstantCommon.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE))
+        InstantCommon.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE))
+        InstantCommon.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1
+    end
+
+    InstantCommon.m_VSRTauntEasterEggTime = InstantCommon.m_TurnCounter + SecondsToTurns(600)
+    InstantCommon.m_CPUScrapAmount = InstantCommon.m_Difficulty
+    InstantCommon.m_CPUScrapDelay = ((4 - InstantCommon.m_Difficulty) * 2)
+
+    local PlayerEntryH = GetPlayerHandle()
+
+    if (PlayerEntryH ~= nil) then
+        RemoveObject(PlayerEntryH)
+    end
+
+    PrintConsoleMessage("Loading Instant Action 2.0. Welcome! Chosen Difficulty: " .. InstantCommon.m_Difficulty)
+end
+
 function InstantCommon.Update()
     -- Keep track of our turn counter.
     InstantCommon.m_TurnCounter = InstantCommon.m_TurnCounter + 1
 
     -- Subtitles.
     _Subtitles.Run()
-
-    -- Keep track of our player.
-    InstantCommon.m_Player = GetPlayerHandle(1)
 
     if (InstantCommon.m_StartDone == false) then
         InstantCommon.m_StartDone = true
@@ -342,6 +409,9 @@ function InstantCommon.Update()
             "TurretEnemy1")
         BuildStartingVehicle(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace, "*vturr_x", "*vturr_c",
             "TurretEnemy2")
+
+        -- No team colours for MP. Don't care for them.
+        ClearTeamColors()
 
         -- Checks for team colour differences.
         if (InstantCommon.m_CPUTeamRace == _BZCCDatabase.Factions.ISDF and InstantCommon.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
@@ -379,6 +449,7 @@ function InstantCommon.Update()
         -- Grab dropship handles for the intro.
         InstantCommon.m_IntroShip1 = GetHandle("intro_drop_1")
         InstantCommon.m_IntroShip2 = GetHandle("intro_drop_2")
+        InstantCommon.m_IntroShip2 = GetHandle("intro_drop_3")
 
         -- Grab all Scion intro units.
         InstantCommon.m_ScionIntroHangar = GetHandle("scion_intro_hangar")
@@ -394,6 +465,10 @@ function InstantCommon.Update()
         -- Stop them so they can't be commanded for now.
         Stop(InstantCommon.m_IntroTurret1, 1)
         Stop(InstantCommon.m_IntroTurret2, 1)
+
+        local LocalTeamNum = GetLocalPlayerTeamNumber() -- Query this from game
+        local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
+        SetAsUser(PlayerH, LocalTeamNum)
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.
@@ -448,26 +523,19 @@ function InstantCommon.Update()
 
             -- Create carriers.
             BuildCarriers()
-
-            -- Remove any pre-placed player handles on the map.
-            RemoveObject(InstantCommon.m_Player)
-
-            -- Respawn the player.
-            RespawnPlayer(true)
         end
 
         return
     end
 
-    if (InstantCommon.m_IntroCutsceneEnabled == 1 and InstantCommon.m_IntroDone == false) then
+    if (InstantCommon.m_IntroCutsceneEnabled == 1 and not InstantCommon.m_IntroDone) then
         if (InstantCommon.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
             ISDFIntroFunctions[InstantCommon.m_IntroState]()
 
             -- Check to see that the dropship is clear.
             if (InstantCommon.m_DropshipTakeoffCheck) then
-                if (InstantCommon.m_Dropship1Takeoff == false) then
-                    local distCheck1 = CountUnitsNearObject(InstantCommon.m_IntroShip1, 30, InstantCommon.m_PlayerTeam,
-                        nil)
+                if (not InstantCommon.m_Dropship1Takeoff) then
+                    local distCheck1 = CountUnitsNearObject(InstantCommon.m_IntroShip1, 30, InstantCommon.m_PlayerTeam, nil)
 
                     if (distCheck1 == 1) then
                         -- Start the take-off sequence.
@@ -483,7 +551,7 @@ function InstantCommon.Update()
                         -- So we don't loop.
                         InstantCommon.m_Dropship1Takeoff = true
                     end
-                elseif (InstantCommon.m_Dropship1Remove == false and InstantCommon.m_Dropship1Time < InstantCommon.m_TurnCounter) then
+                elseif (not InstantCommon.m_Dropship1Remove and InstantCommon.m_Dropship1Time < InstantCommon.m_TurnCounter) then
                     -- Remove the Dropship.
                     RemoveObject(InstantCommon.m_IntroShip1)
 
@@ -491,9 +559,8 @@ function InstantCommon.Update()
                     InstantCommon.m_Dropship1Remove = true
                 end
 
-                if (InstantCommon.m_Dropship2Takeoff == false) then
-                    local distCheck2 = CountUnitsNearObject(InstantCommon.m_IntroShip2, 30, InstantCommon.m_PlayerTeam,
-                        nil)
+                if (not InstantCommon.m_Dropship2Takeoff) then
+                    local distCheck2 = CountUnitsNearObject(InstantCommon.m_IntroShip2, 30, InstantCommon.m_PlayerTeam, nil)
 
                     if (distCheck2 == 1) then
                         -- Start the take-off sequence.
@@ -509,7 +576,7 @@ function InstantCommon.Update()
                         -- So we don't loop.
                         InstantCommon.m_Dropship2Takeoff = true
                     end
-                elseif (InstantCommon.m_Dropship2Remove == false and InstantCommon.m_Dropship2Time < InstantCommon.m_TurnCounter) then
+                elseif (not InstantCommon.m_Dropship2Remove and InstantCommon.m_Dropship2Time < InstantCommon.m_TurnCounter) then
                     -- Remove the Dropship.
                     RemoveObject(InstantCommon.m_IntroShip2)
 
@@ -517,7 +584,32 @@ function InstantCommon.Update()
                     InstantCommon.m_Dropship2Remove = true
                 end
 
-                if (InstantCommon.m_DropshipTakeOffDialogPlayed == false and InstantCommon.m_Dropship1Takeoff and InstantCommon.m_Dropship2Takeoff) then
+                if (not InstantCommon.m_Dropship3TakeOff) then
+                    local distCheck3 = CountUnitsNearObject(InstantCommon.m_IntroShip3, 30, InstantCommon.m_PlayerTeam, nil)
+
+                    if (distCheck3 == 1) then
+                        -- Start the take-off sequence.
+                        SetAnimation(InstantCommon.m_IntroShip3, "takeoff", 1)
+
+                        -- Engine sound.
+                        local engineSound = StartAudio3D("dropleav.wav", InstantCommon.m_IntroShip3)
+                        SetVolume(engineSound, 0.3)
+
+                        -- Set the timer for when we remove the dropship.
+                        InstantCommon.m_Dropship3Time = InstantCommon.m_TurnCounter + SecondsToTurns(15)
+
+                        -- So we don't loop.
+                        InstantCommon.m_Dropship3Takeoff = true
+                    end
+                elseif (not InstantCommon.m_Dropship3Remove and InstantCommon.m_Dropship3Time < InstantCommon.m_TurnCounter) then
+                    -- Remove the Dropship.
+                    RemoveObject(InstantCommon.m_IntroShip3)
+
+                    -- Mark this as done.
+                    InstantCommon.m_Dropship3Remove = true
+                end
+
+                if (not InstantCommon.m_DropshipTakeOffDialogPlayed and InstantCommon.m_Dropship1Takeoff and InstantCommon.m_Dropship2Takeoff and InstantCommon.m_Dropship3Takeoff) then
                     -- "Condor": "We are returning to base."
                     InstantCommon.m_IntroAudio = _Subtitles.AudioWithSubtitles("IA_Pilot_4.wav")
 
@@ -526,7 +618,7 @@ function InstantCommon.Update()
                 end
 
                 -- This means this method is no longer needed.
-                if (InstantCommon.m_Dropship1Remove and InstantCommon.m_Dropship2Remove) then
+                if (InstantCommon.m_Dropship1Remove and InstantCommon.m_Dropship2Remove and InstantCommon.m_Dropship3Remove) then
                     InstantCommon.m_DropshipTakeoffCheck = false
                 end
             end
@@ -547,7 +639,7 @@ function InstantCommon.Update()
         -- Start running the scrap cheat for the CPU.
         if (InstantCommon.m_NextCPUScrapTime <= InstantCommon.m_TurnCounter) then
             InstantCommon.m_NextCPUScrapTime = InstantCommon.m_TurnCounter +
-            SecondsToTurns(InstantCommon.m_CPUScrapDelay)
+                SecondsToTurns(InstantCommon.m_CPUScrapDelay)
             AddScrap(InstantCommon.m_CompTeam, InstantCommon.m_CPUScrapAmount)
         end
     end
@@ -631,35 +723,255 @@ function InstantCommon.DeleteObject(handle)
     end
 end
 
----@param isMpi boolean
-function InstantCommon.Start(isMpi)
-    -- TODO: Add a check to see if we're an MPI session for these as the variables will be different.
-    InstantCommon.m_GameTPS = GetTPS()
-    InstantCommon.m_TurnCounter = 0
-    InstantCommon.m_StartDone = false
-    InstantCommon.m_GameOver = false
-    InstantCommon.m_CompTeam = 6
-    InstantCommon.m_StratTeam = 1
-    InstantCommon.m_MapName = GetMapTRNFilename()
+---@param id integer
+---@param Team integer
+---@param IsNewPlayer boolean
+function InstantCommon.AddPlayer(id, Team, IsNewPlayer)
+    return true
+end
 
-    InstantCommon.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED)
-    InstantCommon.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED)
+---@param id integer
+function InstantCommon.DeletePlayer(id)
+    return true
+end
 
-    InstantCommon.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE))
-    InstantCommon.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE))
-    InstantCommon.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1
-    InstantCommon.m_VSRTauntEasterEggTime = InstantCommon.m_TurnCounter + SecondsToTurns(600)
+---@param Team integer
+function InstantCommon.SetupPlayer(Team)
+    InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount + 1
 
-    InstantCommon.m_CPUScrapAmount = InstantCommon.m_Difficulty
-    InstantCommon.m_CPUScrapDelay = ((4 - InstantCommon.m_Difficulty) * 2)
+    if (IsTeamplayOn()) then
+        local cmdTeam = GetCommanderTeam(Team)
 
-    PrintConsoleMessage("Loading Instant Action 2.0. Welcome! Chosen Difficulty: " .. InstantCommon.m_Difficulty)
+        if (not InstantCommon.m_TeamIsSetUp[cmdTeam]) then
+            SetMPTeamRace(WhichTeamGroup(cmdTeam), GetRaceOfTeam(cmdTeam))
+            InstantCommon.m_TeamIsSetUp[cmdTeam] = true
+        end
+    end
+
+    local spawnpointPosition = GetSafestSpawnpoint()
+    InstantCommon.m_TeamPos[Team] = spawnpointPosition
+
+    local PlayerH
+
+    if (InstantCommon.m_IntroCutsceneEnabled == 1) then
+        if (IsNetworkOn()) then
+            PlayerH = GetHandle("player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. InstantCommon.m_PlayerCount)
+        else
+            PlayerH = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. InstantCommon.m_PlayerCount)
+        end
+    end
+
+    if (PlayerH == nil) then
+        local curFloor = TerrainFindFloor(spawnpointPosition.x, spawnpointPosition.z) + 2.5
+
+        if (spawnpointPosition.y < curFloor) then
+            spawnpointPosition.y = curFloor
+        end
+
+        -- Build a new ODF if no spawns are found.
+        if (IsNetworkOn()) then
+            PlayerH = BuildObject(GetPlayerODF(Team), Team, spawnpointPosition)
+        else
+            PlayerH = BuildObject(InstantCommon.m_HumanTeamRace .. "vscout_x", Team, spawnpointPosition)
+        end
+    end
+
+    local TempODFName
+
+    if (IsNetworkOn()) then
+        TempODFName = GetRaceOfTeam(Team) .. "spilo_x"
+    else
+        TempODFName = InstantCommon.m_HumanTeamRace .. "spilo_x"
+    end
+
+    SetPilotClass(PlayerH, TempODFName)
+    AddPilotByHandle(PlayerH)
+
+    InstantCommon.m_TeamIsSetUp[Team] = true
+    return PlayerH
+end
+
+---@param DeadObjectHandle Handle
+function InstantCommon.PlayerEjected(DeadObjectHandle)
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
+
+    if (deadObjectTeam == 0) then
+        return _BZCCDatabase.EventReturnCodes.DLLHandled
+    end
+
+    if (IsPlayer(DeadObjectHandle)) then
+        AddScore(DeadObjectHandle, -GetActualScrapCost(DeadObjectHandle))
+    end
+
+    return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+end
+
+---@param DeadObjectHandle Handle
+---@param KillersHandle Handle
+function InstantCommon.ObjectKilled(DeadObjectHandle, KillersHandle)
+    if (GetCurWorld() ~= 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
+
+    local isDeadAI = not IsPlayer(DeadObjectHandle)
+    local isDeadPerson = IsPerson(DeadObjectHandle)
+
+    -- Someone on neutral team always gets default behavior
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
+
+    if (deadObjectTeam == 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
+
+    return InstantCommon.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
+end
+
+---@param DeadObjectHandle Handle
+---@param KillersHandle Handle
+function InstantCommon.ObjectSniped(DeadObjectHandle, KillersHandle)
+    if (GetCurWorld() ~= 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
+
+    return InstantCommon.DeadObject(DeadObjectHandle, KillersHandle, true, not IsPlayer(DeadObjectHandle))
+end
+
+---@param DeadObjectHandle Handle
+---@param Team integer
+function InstantCommon.RespawnPilot(DeadObjectHandle, Team)
+    local spawnpointPosition = SetVector(0, 0, 0)
+    local RespawnDistanceAwayXZRange = 32.0
+
+    if (Team < 1 or Team >= MAX_TEAMS) then
+        spawnpointPosition = GetSafestspawnpoint()
+    else
+        spawnpointPosition = InstantCommon.m_TeamPos[Team]
+    end
+
+    spawnpointPosition.x = spawnpointPosition.x + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange)
+    spawnpointPosition.z = spawnpointPosition.z + (GetRandomFloat(1.0) - 0.5) * (2.0 * RespawnDistanceAwayXZRange)
+
+    local curFloor = TerrainFindFloor(spawnpointPosition.x, spawnpointPosition.z) + 2.5
+
+    if (spawnpointPosition.y < curFloor) then
+        spawnpointPosition.y = curFloor
+    end
+
+    spawnpointPosition.y = spawnpointPosition.y + 200.0
+    spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * 8.0
+
+    local NewPilot = BuildObject(MissionPilotODF, Team, spawnpointPosition)
+    SetAsUser(NewPilot, Team)
+    AddPilotByHandle(NewPilot)
+    SetRandomHeadingAngle(NewPilot)
+
+    if (Team == 0) then
+        MakeInert(NewPilot)
+    end
+
+    return _BZCCDatabase.EventReturnCodes.DLLHandled
+end
+
+---@param DeadObjectHandle Handle
+---@param KillersHandle Handle
+---@param isDeadPerson boolean
+---@param isDeadAI boolean
+function InstantCommon.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson, isDeadAI)
+    local deadObjectTeam = GetTeamNum(DeadObjectHandle)
+    local deadObjectIsPlayer = IsPlayer(DeadObjectHandle)
+    local killerObjectIsPlayer = IsPlayer(KillersHandle)
+    local relationship = GetTeamRelationship(DeadObjectHandle, KillersHandle)
+    local deadObjectScrapCost = GetActualScrapCost(DeadObjectHandle)
+
+    if (deadObjectTeam == 0) then
+        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+    end
+
+    if (deadObjectIsPlayer) then
+        AddScore(DeadObjectHandle, -deadObjectScrapCost)
+
+        if (isDeadPerson) then
+            AddDeaths(DeadObjectHandle, 1)
+        end
+    else
+        AddDeaths(DeadObjectHandle, 1)
+        AddScore(DeadObjectHandle, -deadObjectScrapCost)
+    end
+
+    if (killerObjectIsPlayer) then
+        if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_SAMETEAM or relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
+            AddKills(KillersHandle, -1)
+            AddScore(KillersHandle, -deadObjectScrapCost)
+        else
+            AddKills(KillersHandle, 1)
+            AddScore(KillersHandle, deadObjectScrapCost)
+        end
+    else
+        if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_SAMETEAM or relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
+            AddKills(KillersHandle, -1)
+            AddScore(KillersHandle, -deadObjectScrapCost)
+        else
+            AddKills(KillersHandle, 1)
+            AddScore(KillersHandle, deadObjectScrapCost)
+        end
+    end
+
+    if (isDeadAI) then
+        if (isDeadPerson) then
+            return _BZCCDatabase.EventReturnCodes.DLLHandled
+        else
+            return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+        end
+    else
+        if (isDeadPerson) then
+            return InstantCommon.RespawnPilot(DeadObjectHandle, deadObjectTeam)
+        else
+            return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+        end
+    end
+end
+
+---@param curWorld integer
+---@param shooterHandle Handle
+---@param victimHandle Handle
+---@param ordnanceTeam integer
+---@param pOrdnanceODF string
+function InstantCommon.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
+    if (curWorld ~= 0) then
+        return
+    end
+
+    local relationship = GetTeamRelationship(shooterHandle, victimHandle)
+
+    if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
+        if (IsPlayer(victimHandle) or (GetTeamNum(victimHandle) ~= 0)) then
+            return _BZCCDatabase.EventReturnCodes.PRESNIPE_ONLYBULLETHIT
+        end
+    end
+
+    SetPerceivedTeam(victimHandle, 0)
+
+    return _BZCCDatabase.EventReturnCodes.PRESNIPE_KILLPILOT
+end
+
+---@param curWorld integer
+---@param pilotHandle Handle
+---@param emptyCraftHandle Handle
+function InstantCommon.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
+    if (curWorld ~= 0) then
+        return
+    end
+
+    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
+
+    return _BZCCDatabase.EventReturnCodes.PREGETIN_ALLOW
 end
 
 ---@param ShooterHandle Handle
 ---@param VictimHandle Handle
----@param OrdnanceTeam number
-function InstantCommon.RegisterHandleShot(ShooterHandle, VictimHandle, OrdnanceTeam)
+---@param OrdnanceTeam integer
+---@param OrdnanceODF Handle
+function InstantCommon.PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam, OrdnanceODF)
     if (GetClassSig(VictimHandle) == "CLASS_ID_ANIMAL") then
         _AnimalManager.AnimalShot(InstantCommon.m_TurnCounter, VictimHandle, ShooterHandle)
     end
@@ -849,9 +1161,7 @@ ScionIntroFunctions[1] = function()
 
     -- Attempt to mask the emitters on the portal.
     MaskEmitter(InstantCommon.m_ScionIntroPortal, 0)
-
-    RemoveObject(InstantCommon.m_Player)
-    SetColorFade(1, 0.5, Make_RGB(0, 0, 0, 255))
+    SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255))
     SetAsUser(InstantCommon.m_ScionIntroPlayer, InstantCommon.m_PlayerTeam)
 
     InstantCommon.m_IntroDelay = InstantCommon.m_TurnCounter + SecondsToTurns(4)
@@ -976,17 +1286,24 @@ ScionIntroFunctions[9] = function()
 end
 
 ScionIntroFunctions[10] = function()
-    -- Teleport the player to the Recycler.
-    if (InstantCommon.m_IntroForcePlayerTeleportDelay < InstantCommon.m_TurnCounter or GetDistance(InstantCommon.m_Player, InstantCommon.m_ScionIntroPortal) < 25) then
-        Teleport(InstantCommon.m_Player, "Recycler", 50)
+    -- For all players in the lobby.
+    for i = 1, InstantCommon.m_PlayerCount do
+        local pHandle = GetPlayerHandle(i)
 
-        -- Remove the intro stuff.
-        RemoveObject(InstantCommon.m_ScionIntroHangar)
+        -- Teleport the player to the Recycler.
+        if (InstantCommon.m_IntroForcePlayerTeleportDelay < InstantCommon.m_TurnCounter or GetDistance(pHandle, InstantCommon.m_ScionIntroPortal) < 25) then
+            -- Teleport the player to the Recycler.
+            Teleport(pHandle, "Recycler", 50)
 
-        -- Stop the earthquake.
-        StopEarthQuake()
+            -- Remove the intro stuff.
+            RemoveObject(InstantCommon.m_ScionIntroHangar)
 
-        InstantCommon.m_IntroState = InstantCommon.m_IntroState + 1
+            -- Stop the earthquake.
+            StopEarthQuake()
+
+            -- Advance to the next state.
+            InstantCommon.m_IntroState = InstantCommon.m_IntroState + 1
+        end
     end
 end
 

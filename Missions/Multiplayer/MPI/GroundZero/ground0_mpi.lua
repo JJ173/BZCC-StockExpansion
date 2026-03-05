@@ -2,4 +2,4 @@
 assert(load(assert(LoadFile("_requirefix.lua")), "_requirefix.lua"))();
 
 -- Required MPI.
-require("_MPI");
+require("Instant");

@@ -8,7 +8,7 @@ local skinData = {
     }
 }
 
-function ApplySkinToHandle(playerName, emptyCraftHandle, team)
+function _Skins.ApplySkinToHandle(playerName, emptyCraftHandle, team)
     -- Do a loop to find which table has the correct Steam ID.
     for i = 1, #skinData do
         -- Check to see if the steam ID matches.
@@ -24,7 +24,7 @@ function ApplySkinToHandle(playerName, emptyCraftHandle, team)
                 local skin = skinDataSubset[3];
                 local ODF = GetCfg(emptyCraftHandle);
 
-                if (ODF:find(unitODF)) then
+                if (ODF ~= nil and ODF:find(unitODF)) then
                     -- Check to see if this is the ST variant or not.
                     local lastCharacter = string.sub(unitODF, string.len(unitODF));
                     local unit = nil;

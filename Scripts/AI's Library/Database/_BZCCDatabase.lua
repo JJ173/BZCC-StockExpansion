@@ -249,6 +249,17 @@ BZCCDatabase = {
         SCION04 = "Escort",
         SCION05 = "Braddock"
     },
+    NetlistVars = {
+        NETLIST_MPVehicles = 0,
+        NETLIST_StratStarting = 1,
+        NETLIST_Recyclers = 2,
+        NETLIST_AIPs = 3,
+        NETLIST_Animals = 4,
+        NETLIST_STCTFGoals = 5,
+        NETLIST_IAHumanRecyList = 6,
+        NETLIST_IACPURecyclers = 7,
+        NETLIST_IAAIPs = 8
+    },
     PortalUnits = {
         ["ScavengerDropship"] = "fvscav_x",
         ["ScrapDropship"] = "fvscrap_x",
@@ -282,7 +293,13 @@ BZCCDatabase = {
         MY_RACE = "options.instant.myrace",
         DIFFICULTY = "options.instant.difficulty",
         AIP_STRING = "options.instant.string0",
-        COMMANDER_ENABLED = "options.instant.aiCommander"
+        COMMANDER_ENABLED = "options.instant.aiCommander",
+        MPI_DIFFICULTY = "network.session.ivar127",
+        MPI_INTRO_SCENE_ENABLED = "network.session.ivar126",
+        MPI_WILDLIFE_ENABLED = "network.session.ivar125",
+        MPI_COMMANDER_ENABLED = "network.session.ivar124",
+        MPI_SNIPEABLE_ENEMIES = "network.session.ivar123",
+        MPI_CPU_TEAM_RACE = "network.session.ivar13"
     },
     SubtitlePanelSizes = {
         SubtitlesPanel = 0,

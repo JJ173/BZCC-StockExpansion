@@ -4,12 +4,13 @@ local _AssaultClass = require("_AssaultClass")
 local _DispatchClass = require("_DispatchClass")
 local _SaveLoad = require("_SaveLoad")
 local _WorldManager = require("_WorldManager")
+local _DLLUtils = require("_DLLUtils")
 
 ---@class CPUTeam
 ---@field Name string
 ---@field Team number
 ---@field Faction string
----@field AIPString string
+---@field AIPString string | nil
 ---@field CommanderEnabled boolean
 ---@field AssaultUnits AssaultClass[]
 ---@field DispatchList DispatchClass[]
@@ -501,8 +502,13 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
     CPUManager.CPUTeams[#CPUManager.CPUTeams + 1] = newTeam
 
     if (not newTeam.isCampaign) then
-        newTeam.AIPString = IFace_GetString(_BZCCDatabase.ShellVariables.AIP_STRING)
-        newTeam.CommanderEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.COMMANDER_ENABLED) == 1
+        if (IsNetworkOn()) then
+            newTeam.AIPString = _DLLUtils.GetCheckedNetworkSvar(3, _BZCCDatabase.NetlistVars.NETLIST_AIPs)
+            newTeam.CommanderEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_COMMANDER_ENABLED) == 1
+        else
+            newTeam.AIPString = IFace_GetString(_BZCCDatabase.ShellVariables.AIP_STRING)
+            newTeam.CommanderEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.COMMANDER_ENABLED) == 1
+        end
 
         PrintConsoleMessage("New CPU Team created with values: " ..
             "Name: " .. newTeam.Name .. ", " ..

@@ -15,7 +15,8 @@ local _AnimalManager = require("_AnimalManager")
 local _CarrierManager = require("_CarrierManager")
 local _CPUManager = require("_CPUManager")
 local _SaveLoad = require("_SaveLoad")
-local _SkinManager = require("_SkinManager")
+local _DLLUtils = require("_DLLUtils")
+local _Multiplayer = require("_Multiplayer")
 
 -- Subtitles
 local _Subtitles = require("_Subtitles")
@@ -97,13 +98,13 @@ InstantCommon = {
     m_Dropship3Remove               = false,
     m_Dropship3Time                 = 0,
 
-    m_TauntTimer                    = 0,
-
     m_IntroDone                     = false,
     m_StartDone                     = false,
     m_GameOver                      = false,
     m_IntroCutsceneEnabled          = false,
-    m_WildlifeEnabled               = false
+    m_WildlifeEnabled               = false,
+    m_SnipeableEnemies              = false,
+    m_CanRespawn                    = false,
 }
 
 -- Functions Table
@@ -213,7 +214,7 @@ local function RemoveISDFIntroUnits()
     RemoveObject(InstantCommon.m_IntroTurret1)
     RemoveObject(InstantCommon.m_IntroTurret2)
 
-    for i = 1, InstantCommon.m_PlayerCount do
+    for i = 1, 4 do
         RemoveObject(GetHandle("player_spawn_i_" .. i))
     end
 end
@@ -224,7 +225,7 @@ local function RemoveScionIntroUnits()
     RemoveObject(InstantCommon.m_ScionIntroTurret1)
     RemoveObject(InstantCommon.m_ScionIntroTurret2)
 
-    for i = 1, InstantCommon.m_PlayerCount do
+    for i = 1, 4 do
         RemoveObject(GetHandle("player_spawn_f_" .. i))
     end
 end
@@ -307,7 +308,13 @@ local function CheckIntroEnemiesKilled()
 end
 
 local function BuildPlayerRecycler(pos)
-    local customHumanRecycler = IFace_GetString("options.instant.string1")
+    local customHumanRecycler
+
+    if (IsNetworkOn()) then
+        customHumanRecycler = _DLLUtils.GetCheckedNetworkSvar(5, _BZCCDatabase.NetlistVars.NETLIST_Recyclers)
+    else
+        customHumanRecycler = IFace_GetString("options.instant.string1")
+    end
 
     if (customHumanRecycler ~= nil) then
         InstantCommon.m_Recycler = BuildStartingVehicle(InstantCommon.m_StratTeam, InstantCommon.m_HumanTeamRace,
@@ -350,10 +357,9 @@ end
 function InstantCommon.Start()
     -- Ally all the necessary teams to simulate "DefaultTeams".
     for i = 2, 5 do
-        Ally(InstantCommon.m_PlayerTeam, i);
+        Ally(InstantCommon.m_PlayerTeam, i)
     end
 
-    -- TODO: Add a check to see if we're an MPI session for these as the variables will be different.
     InstantCommon.m_GameTPS = GetTPS()
     InstantCommon.m_TurnCounter = 0
     InstantCommon.m_StartDone = false
@@ -363,17 +369,24 @@ function InstantCommon.Start()
     InstantCommon.m_MapName = GetMapTRNFilename()
 
     if (IsNetworkOn()) then
+        InstantCommon.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_INTRO_SCENE_ENABLED)
+        InstantCommon.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_WILDLIFE_ENABLED)
+        InstantCommon.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_CPU_TEAM_RACE))
+        InstantCommon.m_HumanTeamRace = GetRaceOfTeam(InstantCommon.m_PlayerTeam)
+        InstantCommon.m_SnipeableEnemies = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_SNIPEABLE_ENEMIES)
+        InstantCommon.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_DIFFICULTY) + 1
     else
         InstantCommon.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.INTRO_SCENE_ENABLED)
         InstantCommon.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.WILDLIFE_ENABLED)
         InstantCommon.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.HIS_RACE))
         InstantCommon.m_HumanTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MY_RACE))
         InstantCommon.m_Difficulty = IFace_GetInteger(_BZCCDatabase.ShellVariables.DIFFICULTY) + 1
+        InstantCommon.m_CanRespawn = IFace_GetInteger(_BZCCDatabase.ShellVariables.CAN_RESPAWN) > 0
     end
 
     InstantCommon.m_VSRTauntEasterEggTime = InstantCommon.m_TurnCounter + SecondsToTurns(600)
     InstantCommon.m_CPUScrapAmount = InstantCommon.m_Difficulty
-    InstantCommon.m_CPUScrapDelay = ((4 - InstantCommon.m_Difficulty) * 2)
+    InstantCommon.m_CPUScrapDelay = ((1 + InstantCommon.m_Difficulty) * CountPlayers()) * 2
 
     local PlayerEntryH = GetPlayerHandle()
 
@@ -381,7 +394,7 @@ function InstantCommon.Start()
         RemoveObject(PlayerEntryH)
     end
 
-    PrintConsoleMessage("Loading Instant Action 2.0. Welcome! Chosen Difficulty: " .. InstantCommon.m_Difficulty)
+    PrintConsoleMessage("Loading Instant Action 2.0. Welcome! Chosen Difficulty: " .. InstantCommon.m_Difficulty .. ".")
 end
 
 function InstantCommon.Update()
@@ -390,6 +403,9 @@ function InstantCommon.Update()
 
     -- Subtitles.
     _Subtitles.Run()
+
+    -- Update Game Time.
+    _Multiplayer.UpdateGameTime(InstantCommon.m_GameTPS)
 
     if (InstantCommon.m_StartDone == false) then
         InstantCommon.m_StartDone = true
@@ -449,12 +465,11 @@ function InstantCommon.Update()
         -- Grab dropship handles for the intro.
         InstantCommon.m_IntroShip1 = GetHandle("intro_drop_1")
         InstantCommon.m_IntroShip2 = GetHandle("intro_drop_2")
-        InstantCommon.m_IntroShip2 = GetHandle("intro_drop_3")
+        InstantCommon.m_IntroShip3 = GetHandle("intro_drop_3")
 
         -- Grab all Scion intro units.
         InstantCommon.m_ScionIntroHangar = GetHandle("scion_intro_hangar")
         InstantCommon.m_ScionIntroMatriarch = GetHandle("intro_matriarch")
-        InstantCommon.m_ScionIntroPlayer = GetHandle("scion_player_scout")
         InstantCommon.m_ScionIntroTurret1 = GetHandle("intro_turret_1_scion")
         InstantCommon.m_ScionIntroTurret2 = GetHandle("intro_turret_2_scion")
 
@@ -535,7 +550,8 @@ function InstantCommon.Update()
             -- Check to see that the dropship is clear.
             if (InstantCommon.m_DropshipTakeoffCheck) then
                 if (not InstantCommon.m_Dropship1Takeoff) then
-                    local distCheck1 = CountUnitsNearObject(InstantCommon.m_IntroShip1, 30, InstantCommon.m_PlayerTeam, nil)
+                    local distCheck1 = CountUnitsNearObject(InstantCommon.m_IntroShip1, 30, InstantCommon.m_PlayerTeam,
+                        nil)
 
                     if (distCheck1 == 1) then
                         -- Start the take-off sequence.
@@ -560,7 +576,8 @@ function InstantCommon.Update()
                 end
 
                 if (not InstantCommon.m_Dropship2Takeoff) then
-                    local distCheck2 = CountUnitsNearObject(InstantCommon.m_IntroShip2, 30, InstantCommon.m_PlayerTeam, nil)
+                    local distCheck2 = CountUnitsNearObject(InstantCommon.m_IntroShip2, 30, InstantCommon.m_PlayerTeam,
+                        nil)
 
                     if (distCheck2 == 1) then
                         -- Start the take-off sequence.
@@ -585,7 +602,8 @@ function InstantCommon.Update()
                 end
 
                 if (not InstantCommon.m_Dropship3TakeOff) then
-                    local distCheck3 = CountUnitsNearObject(InstantCommon.m_IntroShip3, 30, InstantCommon.m_PlayerTeam, nil)
+                    local distCheck3 = CountUnitsNearObject(InstantCommon.m_IntroShip3, 30, InstantCommon.m_PlayerTeam,
+                        nil)
 
                     if (distCheck3 == 1) then
                         -- Start the take-off sequence.
@@ -839,6 +857,10 @@ end
 ---@param DeadObjectHandle Handle
 ---@param Team integer
 function InstantCommon.RespawnPilot(DeadObjectHandle, Team)
+    if (not IsNetworkOn() and not InstantCommon.m_CanRespawn) then
+        return
+    end
+
     local spawnpointPosition = SetVector(0, 0, 0)
     local RespawnDistanceAwayXZRange = 32.0
 
@@ -860,7 +882,7 @@ function InstantCommon.RespawnPilot(DeadObjectHandle, Team)
     spawnpointPosition.y = spawnpointPosition.y + 200.0
     spawnpointPosition.y = spawnpointPosition.y + GetRandomFloat(1.0) * 8.0
 
-    local NewPilot = BuildObject(MissionPilotODF, Team, spawnpointPosition)
+    local NewPilot = BuildObject(_Multiplayer.GetInitialPlayerPilotODF(GetRaceOfTeam(Team)), Team, spawnpointPosition)
     SetAsUser(NewPilot, Team)
     AddPilotByHandle(NewPilot)
     SetRandomHeadingAngle(NewPilot)
@@ -1162,7 +1184,6 @@ ScionIntroFunctions[1] = function()
     -- Attempt to mask the emitters on the portal.
     MaskEmitter(InstantCommon.m_ScionIntroPortal, 0)
     SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255))
-    SetAsUser(InstantCommon.m_ScionIntroPlayer, InstantCommon.m_PlayerTeam)
 
     InstantCommon.m_IntroDelay = InstantCommon.m_TurnCounter + SecondsToTurns(4)
     InstantCommon.m_IntroState = InstantCommon.m_IntroState + 1

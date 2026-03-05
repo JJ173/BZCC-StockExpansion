@@ -4,7 +4,8 @@
 --]]
 
 _Multiplayer = {
-    m_ElapsedGameTime = 0,
+    m_ElapsedGameTime   = 0,
+    m_RespawnWithSniper = 0
 };
 
 -------------------------------------------------------------------------------
@@ -23,6 +24,10 @@ local _VoiceManager = require('_VoiceManager');
 -------------------------------------------------------------------------------
 -- Events
 -------------------------------------------------------------------------------
+--- ### This function is called at the Start of the mission.
+function _Multiplayer.Start()
+    _Multiplayer.m_RespawnWithSniper = IFace_GetInteger("network.session.ivar16") > 0
+end
 
 --- ### This is the primary function that runs every game turn. This is where most mission logic will run.
 --- #### Note: In C++ side, this is called Execute().
@@ -145,6 +150,19 @@ end
 -------------------------------------------------------------------------------
 -- Methods
 -------------------------------------------------------------------------------
+
+-- Given a race identifier, get the pilot back (used during a respawn)
+function _Multiplayer.GetInitialPlayerPilotODF(Race, respawnWithSniper)
+    local TempODFName = nil
+
+    if (_Multiplayer.m_RespawnWithSniper) then
+        TempODFName = Race .. "spilo_x" -- With sniper.
+    else
+        TempODFName = Race .. "suser_m" -- Note-- this is the sniper-less variant for a respawn
+    end
+
+    return TempODFName
+end
 
 --- Called from Execute, m_GameTPS of a second has elapsed. Update everything.
 function _Multiplayer.UpdateGameTime(m_GameTPS)

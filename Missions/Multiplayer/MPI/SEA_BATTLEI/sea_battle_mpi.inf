@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: Sea Battle"
+missionName = "MPI 2.0: Sea Battle"
 mapTga = "sea_battle.bmp"
 mapDesc = "sea_battlei.des"
 mySide = 1

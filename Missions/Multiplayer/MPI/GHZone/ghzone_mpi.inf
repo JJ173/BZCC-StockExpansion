@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: GH DropZone"
+missionName = "MPI 2.0: GH DropZone"
 mapTga = "MPIGHZone.bmp"
 mapDesc = "mpighzone.des"
 mySide = 1

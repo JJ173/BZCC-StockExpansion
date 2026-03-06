@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: GH FireStorm"
+missionName = "MPI 2.0: GH FireStorm"
 mapTga = "MPIFire.bmp"
 mapDesc = "MPIFire.des"
 mySide = 1

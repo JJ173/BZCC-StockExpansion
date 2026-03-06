@@ -1,7 +1,7 @@
 [DESCRIPTION]
-missionName = "MPI: Iceberg"
-mapTga = "MPIIsland.bmp"
-mapDesc = "inst006.des"
+missionName = "MPI 2.0: Alien Dunes"
+mapTga = "st_dunes.bmp"
+mapDesc = "dunesi.des"
 mySide = 1
 
 [NetVars]

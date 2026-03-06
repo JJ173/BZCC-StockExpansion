@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: Ground Zero"
+missionName = "MPI 2.0: Ground Zero"
 mapTga = "ground0.bmp"
 mapDesc = "InstantGround0.des"
 mySide = 1

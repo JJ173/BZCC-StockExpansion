@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: GH Instant Circle"
+missionName = "MPI 2.0: GH Instant Circle"
 mapTga = "mpicircle.png"
 mapDesc = "iacirclebzcc.des"
 mySide = 1

@@ -1,5 +1,5 @@
 [DESCRIPTION]
-missionName = "MPI: GH Fortress"
+missionName = "MPI 2.0: GH Fortress"
 mapTga = "MPIFort.bmp"
 mapDesc = "MPIFort.des"
 mySide = 1

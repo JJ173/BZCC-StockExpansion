@@ -1,0 +1,37 @@
+[GameObjectClass]
+classLabel = "fvscout_x"
+
+scrapCost = 0
+
+unitName = "Lieutenant"
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "Lieutenant"
+////////////////////////////////////
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName4 = "Lieutenant"
+////////////////////////////////////
+
+[CraftClass]
+ClosestEnemyGoodEyes = true
+
+CanAIPForceIdle = false // Added to try and prevent the AIP from forcing the unit to an idle state when built.
+DoIdleDispatch = false
+
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+SitAttackAllowCounterattack = true
+SitAttackAllowIndependence = true
+OffensiveProcessIsTenaciousAITeam = true
+
+[HoverCraftClass]
+
+[MorphTankClass]
+
+[DeployableClass]

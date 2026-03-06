@@ -36,7 +36,7 @@ function DeleteObject(handle)
 end
 
 function Start()
-    _InstantCommon.Start(false)
+    _InstantCommon.Start()
 end
 
 function Update()

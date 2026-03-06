@@ -174,6 +174,24 @@ function BuildScoutCommander(team, time)
     return true, "I can replace the Commander in a Scout unit. Tasking Recycler to build.";
 end
 
+function BuildScoutLt(team, time)
+    if (not IsCommanderOptionEnabled(team, time)) then
+        return false, "Commander option is disabled for this game.";
+    end
+
+    local playerCount = GetPlayerCount(team, time)
+
+    if (playerCount == nil or playerCount <= 1) then
+        return false, "Not enough players to counter attack.";
+    end
+
+    if (LtUnitCount(team, time) >= playerCount - 1) then
+        return false, "I have enough Lieutenant units to counter players for now.";
+    end
+
+    return true, "Attempting to counter a player with a Lieutenant craft.";
+end
+
 function BuildTankCommander(team, time)
     if (not IsCommanderOptionEnabled(team, time)) then
         return false, "Commander option is disabled for this game.";
@@ -885,6 +903,10 @@ function AssaultServiceUnitCount(team, time)
     return AIPUtil.CountUnits(team, "AssaultServicer", "sameteam", true);
 end
 
+function LtUnitCount(team, time)
+    return AIPUtil.CountUnits(team, "Lieutenant", "sameteam", true);
+end
+
 -- ATTACKER PLAN CONDITIONS.
 function Attack1Condition(team, time)
     if (ExtractorCount(team, time) <= 0) then
@@ -1041,6 +1063,10 @@ end
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
 function IsCommanderOptionEnabled(team, time)
     return AIPUtil.GetVarItemInt("options.instant.aiCommander") == 1;
+end
+
+function GetPlayerCount(team, time)
+    return AIPUtil.GetVarItemInt("network.session.ivar64");
 end
 
 function GetDifficultyLevel(team, time)

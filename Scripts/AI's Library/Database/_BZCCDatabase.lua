@@ -80,7 +80,8 @@ BZCCDatabase = {
         DROPSHIP_REQUEST = "DropshipRequest",
         LANDING_PAD = "LandingPad",
         PATROL = "Patrol",
-        TURRET = "Turret"
+        TURRET = "Turret",
+        LIEUTENANT = "Lieutenant"
     },
     AnimalStates = {
         GRAZING = "Grazing",
@@ -299,7 +300,8 @@ BZCCDatabase = {
         MPI_WILDLIFE_ENABLED = "network.session.ivar125",
         MPI_COMMANDER_ENABLED = "network.session.ivar124",
         MPI_SNIPEABLE_ENEMIES = "network.session.ivar123",
-        MPI_CPU_TEAM_RACE = "network.session.ivar13"
+        MPI_CPU_TEAM_RACE = "network.session.ivar13",
+        MPI_PLAYER_COUNT = "network.session.ivar64"
     },
     SubtitlePanelSizes = {
         SubtitlesPanel = 0,

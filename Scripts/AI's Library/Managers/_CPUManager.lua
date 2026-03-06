@@ -24,6 +24,8 @@ local _DLLUtils = require("_DLLUtils")
 ---@field Armory? Handle
 ---@field ServiceBay? Handle
 ---@field GunTowers Handle[]
+---@field Lieutenants Handle[]
+---@field LieutenantNames string[]
 
 CPUManager = {
     ---@type CPUTeam[]
@@ -425,31 +427,75 @@ local function HandleAssaultServicer(cpuTeam, servicerUnit, spawnPath)
     end
 end
 
----@param cpuTeam CPUTeam
-local function HandleCommander(cpuTeam)
-    -- Basic commander behavior
-    if (IsIdle(cpuTeam.Commander)) then
-        -- Check for nearby threats
-        local nearestEnemy = GetNearestEnemy(cpuTeam.Commander, true, false, 200)
-        if (nearestEnemy) then
-            -- If enemy is nearby, engage or retreat based on health
-            local health = GetHealth(cpuTeam.Commander)
-            if (health < 0.3) then
-                -- Retreat if low health
-                local retreatPos = GetPositionNear(cpuTeam.spawnPath, 40, 60);
-                Goto(cpuTeam.Commander, retreatPos, 0)
-            else
-                -- Engage if healthy
-                Attack(cpuTeam.Commander, nearestEnemy, 0)
-            end
+---@param commander Handle
+---@param spawnPath string
+local function HandleCommander(commander, spawnPath)
+    if (not IsIdle(commander)) then
+        return
+    end
+
+    -- Check for nearby threats
+    local nearestEnemy = GetNearestEnemy(commander, true, false, 200)
+    if (nearestEnemy) then
+        -- If enemy is nearby, engage or retreat based on health
+        local health = GetHealth(commander)
+        if (health < 0.3) then
+            -- Retreat if low health
+            local retreatPos = GetPositionNear(spawnPath, 40, 60);
+            Goto(commander, retreatPos, 0)
         else
-            -- Patrol if no immediate threats. Don't patrol into the enemy base.
-            local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)]
-            if (patrolPoint) then
-                local pos = GetPosition(patrolPoint)
-                Goto(cpuTeam.Commander, GetPositionNear(pos, 30, 50), 0)
-            end
+            -- Engage if healthy
+            Attack(commander, nearestEnemy, 0)
         end
+
+        return
+    end
+
+    -- Patrol if no immediate threats. Don't patrol into the enemy base.
+    local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)]
+    if (patrolPoint) then
+        local pos = GetPosition(patrolPoint)
+        Goto(commander, GetPositionNear(pos, 30, 50), 0)
+    end
+end
+
+---@param lieutenant Handle
+---@param spawnPath string
+---@param commander Handle
+local function HandleLieutenant(lieutenant, spawnPath, commander)
+    if (not IsIdle(lieutenant)) then
+        return
+    end
+
+    -- Check for nearby threats
+    local nearestEnemy = GetNearestEnemy(lieutenant, true, false, 200)
+    if (nearestEnemy) then
+        local health = GetHealth(lieutenant)
+        if (health < 0.3) then
+            -- Retreat if low health
+            local retreatPos = GetPositionNear(spawnPath, 40, 60);
+            Goto(lieutenant, retreatPos, 0)
+        else
+            -- Engage if healthy
+            Attack(lieutenant, nearestEnemy, 0)
+        end
+
+        return
+    end
+
+    -- Run a check to see if there's a chance we should follow the commander, else patrol the map, or defend something.
+    if (IsAlive(commander)) then
+        local followChance = GetRandomFloat(1)
+        if (followChance < 0.25) then
+            Defend2(lieutenant, commander, 0)
+            return
+        end
+    end
+
+    local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)]
+    if (patrolPoint) then
+        local pos = GetPosition(patrolPoint)
+        Goto(lieutenant, GetPositionNear(pos, 30, 50), 0)
     end
 end
 
@@ -465,11 +511,6 @@ local function HandleAntiAir(cpuTeam, antiAirUnit)
     else
         Goto(antiAirUnit.Handle, path);
     end
-end
-
----@param cpuTeam CPUTeam
-local function HandleCarrier(cpuTeam)
-
 end
 
 ---Creates a new CPU Team object.
@@ -496,7 +537,9 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
         Factory = nil,
         Armory = nil,
         ServiceBay = nil,
-        GunTowers = {}
+        GunTowers = {},
+        Lieutenants = {},
+        LieutenantNames = {}
     }
 
     CPUManager.CPUTeams[#CPUManager.CPUTeams + 1] = newTeam
@@ -519,6 +562,11 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
 
         if (newTeam.CommanderEnabled) then
             BuildObject(faction .. "vcmdr_s", team, GetPositionNear(spawnPath, 30, 60))
+
+            -- Spawn Lts based on number of players in the game.
+            for i = 2, IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT) do
+                BuildObject(faction .. "vlt_c", team, GetPositionNear(spawnPath, 30, 60))
+            end
         end
 
         SetCPUPlan(_BZCCDatabase.AIPTypes.AIPType0, newTeam)
@@ -551,8 +599,16 @@ function CPUManager.Run(missionTurnCount)
                 end
             end
 
-            if (cpuTeam.CommanderEnabled and IsAlive(cpuTeam.Commander)) then
-                HandleCommander(cpuTeam)
+            if (cpuTeam.CommanderEnabled) then
+                if (IsAlive(cpuTeam.Commander)) then
+                    HandleCommander(cpuTeam.Commander, cpuTeam.spawnPath)
+                end
+
+                if (#cpuTeam.Lieutenants > 0) then
+                    for _, lt in pairs(cpuTeam.Lieutenants) do
+                        HandleLieutenant(lt, cpuTeam.spawnPath, cpuTeam.Commander)
+                    end
+                end
             end
         end
 
@@ -635,6 +691,34 @@ function CPUManager.AddTeamObject(handle, missionTurnCount, teamNum)
         return
     end
 
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.LIEUTENANT) then
+        cpuTeam.Lieutenants[#cpuTeam.Lieutenants + 1] = handle
+
+        -- Grab a name from the list that doesn't include the "cpuTeam.Name" value or already used lieutenant names.
+        local lieutenantNames = {}
+        local usedNames = {}
+
+        for _, used in pairs(cpuTeam.LieutenantNames) do
+            usedNames[used] = true
+        end
+
+        usedNames[cpuTeam.Name] = true -- Also exclude the team name
+
+        for _, name in pairs(_BZCCDatabase.CPUNames) do
+            if (not usedNames[name]) then
+                lieutenantNames[#lieutenantNames + 1] = name
+            end
+        end
+
+        local chosenName = lieutenantNames[GetRandomInt(1, #lieutenantNames)]
+        SetLabel(handle, chosenName)
+        SetObjectiveName(handle, "Lt. " .. chosenName)
+
+        -- Throw the name in the list of used names to avoid renaming.
+        cpuTeam.LieutenantNames[#cpuTeam.LieutenantNames + 1] = chosenName
+        return
+    end
+
     if (AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT) then
         cpuTeam.AssaultUnits[#cpuTeam.AssaultUnits + 1] = _AssaultClass.New(handle, team)
     else
@@ -700,7 +784,25 @@ function CPUManager.RemoveTeamObject(handle, teamNum)
         return -- Don't process any units that don't have an appropriate type.
     end
 
-    -- Remove the dispatch object from the right CPU team.
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.COMMANDER) then
+        cpuTeam.Commander = nil
+        return
+    end
+
+    if (AICraftType == _BZCCDatabase.AIUnitTypes.LIEUTENANT) then
+        cpuTeam.Lieutenants = TableRemoveByHandle(cpuTeam.Lieutenants, handle)
+
+        -- Also grab the label of the ship so we can remove the name from the list of already used names.
+        local shipName = GetLabel(handle)
+
+        -- Run through the list of names and remove the name.
+        if (shipName ~= nil and cpuTeam.LieutenantNames[shipName]) then
+            cpuTeam.LieutenantNames[shipName] = nil
+        end
+
+        return
+    end
+
     if (AICraftType == _BZCCDatabase.AIUnitTypes.ASSAULT) then
         local assaultUnit = GetAssaultUnit(cpuTeam, handle)
 

@@ -50,7 +50,15 @@ buildType1 = "fvcmdr_s"
 buildCount1 = 1
 LuaFunction = "BuildScoutCommander"
 
-[Plan3] // Build the Commander (Tank) if the option is enabled.
+[Plan3] // Build a number of Lieutenant Scouts to match player count if the option is enabled.
+planType = "BuildLoop"
+planPriority = 985
+planCondition = "Lua"
+buildType1 = "fvlt_c"
+buildCount1 = 1
+LuaFunction = "BuildScoutLt"
+
+[Plan4] // Build the Commander (Tank) if the option is enabled.
 planType = "BuildMinimums"
 planPriority = 980
 planCondition = "Lua"
@@ -58,7 +66,7 @@ buildType1 = "fvcmdr_t"
 buildCount1 = 1
 LuaFunction = "BuildTankCommander"
 
-[Plan4] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
+[Plan5] // Having a couple of CollectPool plans should help the AIP collect pools quicker.
 planType = "CollectPool"
 planPriority = 970
 planCondition = "Lua"
@@ -66,7 +74,7 @@ LuaFunction = "CollectPoolCondition"
 ContinueEvenIfFail = true
 buildIfNoIdle = true
 
-[Plan5]
+[Plan6]
 planType = "CollectPool"
 planPriority = 960
 planCondition = "Lua"
@@ -74,7 +82,7 @@ LuaFunction = "CollectPoolCondition"
 ContinueEvenIfFail = true
 buildIfNoIdle = true
 
-[Plan6]
+[Plan7]
 planType = "BuildLoop"
 planPriority = 950
 planCondition = "Lua"
@@ -83,14 +91,14 @@ buildCount1 = 3
 LuaFunction = "BuildScavengerCondition"
 ContinueEvenIfFail = true
 
-[Plan7] // Collect Loose First.
+[Plan8] // Collect Loose First.
 planType = "CollectField"
 planPriority = 940
 planCondition = "Lua"
 scavClass = "fvhscav_c"
 LuaFunction = "CollectFieldCondition"
 
-[Plan8]
+[Plan9]
 planType = "BuildMinimums"
 planPriority = 930
 planCondition = "Lua"
@@ -100,7 +108,7 @@ buildType2 = "fvcons_g"
 buildCount2 = 2
 LuaFunction = "BuildConstructorCondition"
 
-[Plan9]
+[Plan10]
 planType = "BuildMinimums"
 planPriority = 920
 buildType1 = "fvturr_c"
@@ -108,7 +116,7 @@ buildCount1 = 2
 planCondition = "Lua"
 LuaFunction = "BuildTurretCondition"
 
-[Plan10]
+[Plan11]
 planType = "BuildMinimums"
 planPriority = 910
 buildType1 = "fvscout_p"
@@ -117,7 +125,7 @@ planCondition = "Lua"
 LuaFunction = "BuildScoutCondition"
 ContinueEvenIfFail = true
 
-[Plan11]
+[Plan12]
 planType = "Attacker"
 planPriority = 900
 planCondition = "Lua"
@@ -133,7 +141,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan12]
+[Plan13]
 planType = "BaseBuildMinimums"
 planPriority = 890
 planCondition = "Lua"
@@ -143,7 +151,7 @@ buildLoc1 = "F_Forge"
 buildHeading = 1
 LuaFunction = "BuildKiln"
 
-[Plan13]
+[Plan14]
 planType = "BuildMinimums"
 planPriority = 880
 buildType1 = "fvsent_p"
@@ -152,7 +160,7 @@ planCondition = "Lua"
 LuaFunction = "BuildSentryCondition"
 ContinueEvenIfFail = true
 
-[Plan14]
+[Plan15]
 planType = "BaseBuildMinimums"
 planPriority = 870
 planCondition = "Lua"
@@ -161,7 +169,7 @@ buildCount1 = 1
 buildLoc1 = "F_Overseer"
 LuaFunction = "BuildAntenna"
 
-[Plan15]
+[Plan16]
 planType = "Upgrade"
 planPriority = 860
 planCondition = "Lua"
@@ -169,7 +177,7 @@ unitType = "fbkiln_c"
 LuaFunction = "UpgradeKilnCondition"
 ContinueEvenIfFail = true
 
-[Plan16]
+[Plan17]
 planType = "BaseBuildMinimums"
 planPriority = 850
 planCondition = "Lua"
@@ -178,7 +186,7 @@ buildCount1 = 1
 buildLoc1 = "F_BaseSpire_1"
 LuaFunction = "BuildGunSpire1"
 
-[Plan17]
+[Plan18]
 planType = "Attacker"
 planPriority = 840
 planCondition = "Lua"
@@ -196,7 +204,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan18]
+[Plan19]
 planType = "Attacker"
 planPriority = 830
 planCondition = "Lua"
@@ -210,7 +218,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan19]
+[Plan20]
 planType = "Upgrade"
 planPriority = 820
 planCondition = "Lua"
@@ -218,7 +226,7 @@ unitType = "fbantm_c"
 LuaFunction = "UpgradeAntennaCondition"
 ContinueEvenIfFail = true
 
-[Plan20]
+[Plan21]
 planType = "BaseBuildMinimums"
 planPriority = 810
 planCondition = "Lua"
@@ -227,7 +235,7 @@ buildCount1 = 1
 buildLoc1 = "F_BaseSpire_2"
 LuaFunction = "BuildGunSpire2"
 
-[Plan21]
+[Plan22]
 planType = "BuildMinimums"
 planPriority = 800
 buildType1 = "fvtank_p"
@@ -238,7 +246,7 @@ planCondition = "Lua"
 LuaFunction = "BuildTankCondition"
 ContinueEvenIfFail = true
 
-[Plan22]
+[Plan23]
 planType = "BaseBuildMinimums"
 planPriority = 790
 planCondition = "Lua"
@@ -247,7 +255,7 @@ buildCount1 = 1
 buildLoc1 = "F_Dower"
 LuaFunction = "BuildDower"
 
-[Plan23]
+[Plan24]
 planType = "BuildMinimums"
 planPriority = 780
 buildType1 = "fvartl_a"
@@ -256,7 +264,7 @@ planCondition = "Lua"
 LuaFunction = "BuildArcherCondition"
 ContinueEvenIfFail = true
 
-[Plan24] // Thin out any threats with artillery.
+[Plan25] // Thin out any threats with artillery.
 planType = "Attacker"
 planPriority = 770
 planCondition = "Lua"
@@ -272,7 +280,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan25]
+[Plan26]
 planType = "Attacker"
 planPriority = 760
 planCondition = "Lua"
@@ -291,7 +299,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan26]
+[Plan27]
 planType = "BaseBuildMinimums"
 planPriority = 750
 planCondition = "Lua"
@@ -300,7 +308,7 @@ buildCount1 = 1
 buildLoc1 = "F_Stronghold"
 LuaFunction = "BuildStronghold"
 
-[Plan27]
+[Plan28]
 planType = "BuildMinimums"
 planPriority = 740
 planCondition = "Lua"
@@ -309,7 +317,7 @@ buildCount1 = 3
 LuaFunction = "BuildServiceTrucks"
 ContinueEvenIfFail = true
 
-[Plan28]
+[Plan29]
 planType = "BuildLoop"
 planPriority = 730
 planCondition = "Lua"
@@ -318,7 +326,7 @@ buildCount1 = 1
 LuaFunction = "BuildAssaultDefenders"
 ContinueEvenIfFail = true
 
-[Plan29]
+[Plan30]
 planType = "BuildLoop"
 planPriority = 720
 planCondition = "Lua"
@@ -327,7 +335,7 @@ buildCount1 = 1
 LuaFunction = "BuildAssaultServicers"
 ContinueEvenIfFail = true
 
-[Plan30]
+[Plan31]
 planType = "BaseBuildMinimums"
 planPriority = 710
 planCondition = "Lua"
@@ -336,7 +344,7 @@ buildCount1 = 1
 buildLoc1 = "F_BaseJammer_1"
 LuaFunction = "BuildJammer1"
 
-[Plan31]
+[Plan32]
 planType = "BaseBuildMinimums"
 planPriority = 700
 planCondition = "Lua"
@@ -345,7 +353,7 @@ buildCount1 = 1
 buildLoc1 = "F_BaseSpire_3"
 LuaFunction = "BuildGunSpire3"
 
-[Plan32]
+[Plan33]
 planType = "BaseBuildMinimums"
 planPriority = 690
 planCondition = "Lua"
@@ -354,7 +362,7 @@ buildCount1 = 1
 buildLoc1 = "i_LandingPad"
 LuaFunction = "BuildLandingPad"
 
-[Plan33]
+[Plan34]
 planType = "BaseBuildMinimums"
 planPriority = 680
 planCondition = "Lua"
@@ -363,7 +371,7 @@ buildCount1 = 1
 buildLoc1 = "F_BaseJammer_2"
 LuaFunction = "BuildJammer2"
 
-[Plan34]
+[Plan35]
 planType = "BaseBuildMinimums"
 planPriority = 670
 planCondition = "Lua"
@@ -372,7 +380,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_1"
 LuaFunction = "BuildBaseAntiAir1"
 
-[Plan35]
+[Plan36]
 planType = "Attacker"
 planPriority = 660
 planCondition = "Lua"
@@ -390,7 +398,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan36]
+[Plan37]
 planType = "BaseBuildMinimums"
 planPriority = 650
 planCondition = "Lua"
@@ -399,7 +407,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_2"
 LuaFunction = "BuildBaseAntiAir2"
 
-[Plan37]
+[Plan38]
 planType = "Attacker"
 planPriority = 640
 planCondition = "Lua"
@@ -416,7 +424,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan38]
+[Plan39]
 planType = "BaseBuildMinimums"
 planPriority = 630
 planCondition = "Lua"
@@ -425,7 +433,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AntiAir_3"
 LuaFunction = "BuildBaseAntiAir3"
 
-[Plan39]
+[Plan40]
 planType = "BaseBuildMinimums"
 planPriority = 620
 planCondition = "Lua"
@@ -434,7 +442,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_1"
 LuaFunction = "BuildBaseAssaultSpire1"
 
-[Plan40]
+[Plan41]
 planType = "BaseBuildMinimums"
 planPriority = 610
 planCondition = "Lua"
@@ -443,7 +451,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_2"
 LuaFunction = "BuildBaseAssaultSpire2"
 
-[Plan41]
+[Plan42]
 planType = "BaseBuildMinimums"
 planPriority = 600
 planCondition = "Lua"
@@ -452,7 +460,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_AssaultSpire_3"
 LuaFunction = "BuildBaseAssaultSpire3"
 
-[Plan42]
+[Plan43]
 planType = "BaseBuildMinimums"
 planPriority = 590
 planCondition = "Lua"
@@ -462,7 +470,7 @@ buildLoc1 = "F_Field_AssaultSpire_1"
 LuaFunction = "BuildFieldAssaultSpire1"
 consClass = "fvcons_g"
 
-[Plan43]
+[Plan44]
 planType = "BaseBuildMinimums"
 planPriority = 580
 planCondition = "Lua"
@@ -472,7 +480,7 @@ buildLoc1 = "F_Field_AssaultSpire_2"
 LuaFunction = "BuildFieldAssaultSpire2"
 consClass = "fvcons_g"
 
-[Plan44]
+[Plan45]
 planType = "BaseBuildMinimums"
 planPriority = 570
 planCondition = "Lua"
@@ -482,7 +490,7 @@ buildLoc1 = "F_Field_AssaultSpire_3"
 LuaFunction = "BuildFieldAssaultSpire3"
 consClass = "fvcons_g"
 
-[Plan45]
+[Plan46]
 planType = "BaseBuildMinimums"
 planPriority = 560
 planCondition = "Lua"
@@ -492,7 +500,7 @@ buildLoc1 = "F_Field_AssaultSpire_4"
 LuaFunction = "BuildFieldAssaultSpire4"
 consClass = "fvcons_g"
 
-[Plan46]
+[Plan47]
 planType = "Attacker"
 planPriority = 550
 planCondition = "Lua"
@@ -512,7 +520,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan47]
+[Plan48]
 planType = "Attacker"
 planPriority = 540
 planCondition = "Lua"
@@ -529,7 +537,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan48]
+[Plan49]
 planType = "BaseBuildMinimums"
 planPriority = 530
 planCondition = "Lua"
@@ -538,7 +546,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_Artillery_1"
 LuaFunction = "BuildBaseArtillery1"
 
-[Plan49]
+[Plan50]
 planType = "BaseBuildMinimums"
 planPriority = 520
 planCondition = "Lua"
@@ -547,7 +555,7 @@ buildCount1 = 1
 buildLoc1 = "F_Base_Artillery_2"
 LuaFunction = "BuildBaseArtillery2"
 
-[Plan50]
+[Plan51]
 planType = "Attacker"
 planPriority = 510
 planCondition = "Lua"
@@ -568,7 +576,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan51]
+[Plan52]
 planType = "BaseBuildMinimums"
 planPriority = 500
 planCondition = "Lua"
@@ -578,7 +586,7 @@ buildLoc1 = "F_Field_RocketTower_1"
 LuaFunction = "BuildFieldRocketTower1"
 consClass = "fvcons_g"
 
-[Plan52]
+[Plan53]
 planType = "BaseBuildMinimums"
 planPriority = 490
 planCondition = "Lua"
@@ -588,7 +596,7 @@ buildLoc1 = "F_Field_RocketTower_2"
 LuaFunction = "BuildFieldRocketTower2"
 consClass = "fvcons_g"
 
-[Plan53]
+[Plan54]
 planType = "BaseBuildMinimums"
 planPriority = 480
 planCondition = "Lua"
@@ -598,7 +606,7 @@ buildLoc1 = "F_Field_RocketTower_3"
 LuaFunction = "BuildFieldRocketTower3"
 consClass = "fvcons_g"
 
-[Plan54]
+[Plan55]
 planType = "Attacker"
 planPriority = 470
 planCondition = "Lua"
@@ -617,7 +625,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan55]
+[Plan56]
 planType = "Attacker"
 planPriority = 460
 planCondition = "Lua"
@@ -635,7 +643,7 @@ AttackAnything = true
 buildIfNoIdle = true
 ContinueEvenIfFail = true
 
-[Plan56]
+[Plan57]
 planType = "Attacker"
 planPriority = 470
 planCondition = "Lua"

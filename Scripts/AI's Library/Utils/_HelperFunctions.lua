@@ -110,6 +110,7 @@ function SquelchDispatchTable(table, obj)
     return newTable
 end
 
+---@return userdata[]
 function TableRemoveByHandle(table, handle)
     local length = #table;
 

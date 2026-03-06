@@ -1,0 +1,56 @@
+[GameObjectClass]
+classLabel = "ivscout_x"
+
+scrapCost = 0
+
+unitName = "Lieutenant"
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "Lieutenant"
+////////////////////////////////////
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName4 = "Lieutenant"
+////////////////////////////////////
+
+[CraftClass]
+ClosestEnemyGoodEyes = true
+AIWeaponMaskVsCombat = 7
+AIWeaponMaskVsAssault = 3
+
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+craftTeamIsPilotTeam = true // Sniped units aren't friendly. They shouldn't be treated as such.
+
+SitAttackAllowCounterattack = true
+SitAttackAllowIndependence = true
+OffensiveProcessIsTenaciousAITeam = true
+
+// Experimental
+engageRange = 175 // 175
+blastDist = 40  // Gets in close
+
+RetargetOnStrafe = true
+
+attackTask = "ArcherAttack"
+subAttackTask = "ArcherSubAttack"
+waitTask = "CircleTask"
+subAttackClass = "ANN" // AA Ability
+
+brAccelFactor = 0.45f;
+strafeFactor = 1.4f; 
+steerFactor = 1.05f;
+omegaFactor = 0.5f; 
+velFactor = 0.3f;
+
+alphaScale = 0.6
+omegaScale = 0.8
+
+[HoverCraftClass]
+aiAccelDrag = 16

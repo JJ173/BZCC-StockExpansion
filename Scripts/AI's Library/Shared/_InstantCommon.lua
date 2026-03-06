@@ -412,6 +412,11 @@ function InstantCommon.Start()
     -- Clean-up if the variable has been populated from a previous MP session. Make sure we reset it.
     if (not InstantCommon.m_IsMPI) then
         IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(1))
+    else
+        local LocalTeamNum = GetLocalPlayerTeamNumber();
+        local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
+        SetAsUser(PlayerH, LocalTeamNum)
+        AddPilotByHandle(PlayerH)
     end
 
     PrintConsoleMessage("[IA 2.0]: Loading Instant Action 2.0. Welcome! Chosen Difficulty: " ..
@@ -785,7 +790,6 @@ end
 ---@param IsNewPlayer boolean
 function InstantCommon.AddPlayer(id, Team, IsNewPlayer)
     if (IsNewPlayer) then
-        UpdatePlayerCount(1)
         local PlayerH = InstantCommon.SetupPlayer(Team)
         SetAsUser(PlayerH, Team)
         AddPilotByHandle(PlayerH)
@@ -811,6 +815,8 @@ end
 
 ---@param Team integer
 function InstantCommon.SetupPlayer(Team)
+    UpdatePlayerCount(1)
+
     if (IsTeamplayOn()) then
         local cmdTeam = GetCommanderTeam(Team)
 

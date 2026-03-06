@@ -1,0 +1,18 @@
+[WeaponClass]
+classLabel = "dispenser"
+altName = "gdrone_gh_c"
+wpnName = "Sentinel"  //Launch 
+fireSound = "gflar00.wav"
+wpnReticle = "gflare"
+wpnCategory = "ROCK"
+localAmmo = 1080  // 1080 = 3 Sentinals each cost 360
+addLocalAmmo = 5 // Like GameObjectClass::addAmmo, but applies only to localAmmo (if > 0)
+aiRange = 400 
+
+isAssault = 0
+ 
+[DispenserClass]
+shotDelay = 120.0
+objectClass = "bvdrone_gh_c"
+salvoCount = 3
+salvoDelay = 0.1

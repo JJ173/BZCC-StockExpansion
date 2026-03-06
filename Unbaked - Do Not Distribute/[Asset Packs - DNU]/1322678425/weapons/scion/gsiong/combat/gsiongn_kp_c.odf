@@ -1,0 +1,28 @@
+[WeaponClass]
+altName = "gsiongn_kp_a"
+classLabel = "machinegun"
+ordName = "ionize_kp_c"
+wpnName = "Super Ion Gun"
+fireSound = "igun01.wav"
+wpnReticle = "gion"
+wpnCategory = "GUN"
+isAssault = 0
+aiRange = 100
+flashName = "gsiongn_kp_c.flash"
+
+[CannonClass]
+shotDelay = 0.1
+shotVariance = 0.03
+
+[Flash]
+renderBase = "draw_geom"
+textureName = "sflash.tga"
+textureBlend = "one one modulate"
+startColor = "0 0 255 255"
+finishColor = "0 0 255 0"
+startRadius = 3.0
+finishRadius = 1.0
+animateTime = 0.1
+geomName = "g_sflash.xsi"
+
+

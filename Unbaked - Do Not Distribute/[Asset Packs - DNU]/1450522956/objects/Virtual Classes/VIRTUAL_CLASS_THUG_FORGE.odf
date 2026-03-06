@@ -1,0 +1,5 @@
+[GameObjectClass]
+classLabel = "fbforg"
+
+providesCount = 1
+provideName1 = "fbforg"

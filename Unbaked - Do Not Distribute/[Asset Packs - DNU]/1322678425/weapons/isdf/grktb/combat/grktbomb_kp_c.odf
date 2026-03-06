@@ -1,0 +1,14 @@
+[WeaponClass]
+classLabel = "cannon"
+altName = "grktbomb_kp_a"
+ordName = "rktbomb_kp_c"
+wpnName = "Rocket Bomb"
+fireSound = "gpopp00.wav"
+wpnReticle = "grktbomb"
+wpnCategory = "ROCK"
+isAssault = 0
+aiRange = 225
+
+[CannonClass]
+shotDelay = 1.5
+shotAlternate = 1

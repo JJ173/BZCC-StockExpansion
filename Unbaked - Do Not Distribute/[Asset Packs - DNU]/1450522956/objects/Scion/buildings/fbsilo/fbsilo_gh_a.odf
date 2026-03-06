@@ -1,0 +1,60 @@
+[GameObjectClass]
+baseName = "fbsilo_gh_a"
+mrmFactor = 0
+geometryName = "fbsilo00_gh_a.fbx"
+classLabel = "silo"
+scrapCost = 40
+scrapValue = 0
+maxHealth = 5000
+maxAmmo = 0
+unitName = "Silo"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+collisionRadius = 1.0
+isAssault = 1
+canInteract=1 // for missile lock
+
+buildSupport = "N"
+buildRequire = "N"
+
+armorClass = H
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+////////////////////////////////////
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fbsilo_gh_a"
+provideName2 = "VIRTUAL_CLASS_SILO"
+provideName3 = "VIRTUAL_CLASS_STORAGE"
+
+////////////////////////////////////
+
+
+/////// OBJECT LIMITS //////////////
+
+isSingle = 0 //Determines whether only one of a certain unit or building can be built per team.
+
+limitClass1 = "fbsilo_gh_a"
+limitClass1Count = 5
+limitClass1Text = "Only Five Allowed"
+
+////////////////////////////////////
+
+lightHard1 = "hp_light_1"
+lightName1 = "omniteal2"
+
+[BuildingClass]
+soundAmbient = "iext01.wav"
+
+[SiloClass]
+initDelay = 1e6 // 10.0 // How long before produces first scrap.
+scrapDelay = 1e6 // 10.0 // How long between scrap after first is created.
+scrapHold = 10 // Scrap capacity. 
+detectRange = 100

@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "fbaspir"
+
+scrapValue = 40
+powerCost = 0
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

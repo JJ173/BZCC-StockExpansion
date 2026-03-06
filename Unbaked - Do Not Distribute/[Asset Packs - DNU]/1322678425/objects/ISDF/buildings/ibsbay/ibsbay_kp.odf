@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibsbay"
+upgradeName = "ibsbay_kp_b"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+supplyParallel = true

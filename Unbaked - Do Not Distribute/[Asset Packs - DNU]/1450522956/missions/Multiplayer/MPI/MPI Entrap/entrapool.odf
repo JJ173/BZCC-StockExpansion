@@ -1,0 +1,7 @@
+[GameObjectClass]
+geometryName = "entrapool.xsi"
+classLabel = "tepool01"
+
+[BuildingClass]
+
+[DepositClass]

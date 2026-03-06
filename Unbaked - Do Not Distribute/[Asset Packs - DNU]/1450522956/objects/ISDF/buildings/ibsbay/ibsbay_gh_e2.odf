@@ -1,0 +1,60 @@
+[GameObjectClass]
+baseName = "ibsbay_gh_e2"
+geometryName = "ibsbay00_gh_a2.fbx"
+classLabel = "supplydepot"
+collisionRadius = 1.0
+scrapCost = 50
+scrapValue = 10
+maxHealth = 5000
+maxAmmo = 0
+unitName = "Assault Depot"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+armorClass = H
+AllowUndergroundSpawn = 1
+
+limitClass1 = "ibsbay_gh_e2"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+buildSupport = "B"  // N = None, A= Adjacent, B = Base 
+buildRequire = "B"
+
+isSingle = 0
+
+CategoryTypeOverride = 15 
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibtcen"
+requireText2 = "Build Tech Center"
+
+/////// PROVIDES ///////////////////
+provideCount = 2
+provideName1 = "ibsbay_gh_e2"
+provideName3 = "base"
+
+///////// LIGHTS & EFFECTS /////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue"
+lightHard2 = "hp_light_2"
+lightName2 = "spotblue"
+
+[PoweredBuildingClass]
+detectRange = 100
+
+[BuildingClass]
+bldEdge = "wttt"
+
+[SupplyDepotClass]
+supplyRange = 16.0	// 32.0
+supplyRate = 75		//150.0
+localAmmoRate = 1 // added to target's localAmmo when healing
+supplySound = "mnu_empt.wav"
+SupplyDepotClassServiceMask = -1
+SupplyDepotClassServiceMatch = 22
+ServiceParallel = true // true == service everyone in range. false = most needy unit only

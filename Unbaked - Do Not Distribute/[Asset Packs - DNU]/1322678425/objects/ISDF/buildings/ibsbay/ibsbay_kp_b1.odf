@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibcommand_supply_kp"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+supplyRange = 32.0
+supplyRate = 75.0
+supplyParallel = true

@@ -1,0 +1,24 @@
+[GameObjectClass]
+geometryName = "apcann00.xsi"
+classLabel = "wpnpower"
+scrapCost = 25
+scrapValue = 0
+maxHealth = 150
+maxAmmo = 0
+unitName = "Slug Refill"
+aiName = "PowerUpProcess"
+
+lightHard1 = "hp_light_1"
+lightName1 = "omnipurple"
+
+requireCount = 1
+requireName1 = "ibsbay_gh_a2"
+requireText1 = "Build Assault Bay"
+
+[PowerUpClass]
+soundPickup = "pickup01.wav"
+soundReject = "reject.wav"
+
+[WeaponPowerupClass]
+weaponName = "gslug_c_gh"
+RefreshWeaponOnly = true

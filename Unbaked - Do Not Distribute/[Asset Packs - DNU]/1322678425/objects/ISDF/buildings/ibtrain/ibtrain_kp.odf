@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibtrain"
+
+unitName = "Training Facility"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[BarracksClass]

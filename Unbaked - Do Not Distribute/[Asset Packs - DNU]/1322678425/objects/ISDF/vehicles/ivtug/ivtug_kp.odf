@@ -1,0 +1,7 @@
+[GameObjectClass]
+classLabel = "ivtug"
+unitName = "Handyman"
+
+[CraftClass]
+[HoverCraftClass]
+[TugClass]

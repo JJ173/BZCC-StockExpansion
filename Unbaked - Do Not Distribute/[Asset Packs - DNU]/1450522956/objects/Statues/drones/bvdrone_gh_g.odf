@@ -1,0 +1,126 @@
+[GameObjectClass]
+baseName = "bvdrone_gh_a"
+geometryName = "bvdrone00_gh_a.fbx"
+classLabel = "wingman"
+scrapValue = 0
+scrapCost = 0
+customCost = 0
+buildTime = 20.0
+customTime = 25.0
+maxHealth = 500
+maxAmmo = 3000
+unitName = "Ambusher"
+
+aiName = "TankFriend"
+aiName2 = "TankEnemy"
+heatSignature = 0.5
+imageSignature = 2.0
+radarSignature = 0.3
+CanAcceptPowerups = 0
+canSnipe = 0
+CanSelect = 0 // can select with point-and-space
+CanDropScrap = false // true = default. If false, won't leave a scrapfield when destroyed
+isGrouped = false
+isLimited = false
+needGroup = false 
+needLimit = false
+needPilot = false
+
+//explosionName = "ivdronexpl"
+//xplBlast = "ivdronexpl"
+
+isAssault = 0
+
+armorClass = N
+
+requireCount = 0
+
+/////// weapons ///////////////////
+
+weaponMask = 00001
+weapongroup1 = 1
+weaponHard1 = "HP_SPECIAL"
+weaponName1 = "gsbomb_gh"
+weaponAssault1 = 0
+weapongroup2 = 1
+weaponHard2 = "HP_SPECIAL"
+weaponName2 = "gautoeject_gh"
+weaponAssault2 = 0
+
+////////////////////////////////////
+
+[CraftClass]
+UseAssaultSpecials = true //
+Lifespan = 50 // -1 == infinite; > 0 is # seconds of life before it goes *boom*
+CanBailout = false 
+CanAIEject = false
+CanRecycle = false 
+CanRescue = 0
+DoBettyLost = false 
+blastDist = 35.0  // Gets in close
+
+chunkEffect1 = "null.msh"  
+chunkEffect2 = "null.msh"
+chunkEffect3 = "null.msh"
+chunkEffect4 = "null.msh"
+chunkEffect5 = "null.msh"
+
+rangeScan = 300.0f
+periodScan = 5.0f
+velocJam = 1.0f
+engageRange = 2800
+
+braccelFactor = 0.03
+velFactor = 0.2
+steerFactor = 1.5
+omegaFactor = 0.2
+strafeFactor = 0.2
+
+avoidSpeed = 20;
+topSpeed = 30;
+
+selectWaitMsg = "silence.wav"
+selectAttackMsg = "silence.wav"
+selectFollowMsg = "silence.wav"
+selectGoMsg = "silence.wav"
+selectOtherMsg = "silence.wav"
+holdMsg = "silence.wav"
+
+goMsg = "silence.wav"
+attackMsg = "silence.wav"
+followMeMsg = "silence.wav"
+followMsg = "silence.wav"
+repairMsg = "silence.wav"
+reloadMsg = "silence.wav"
+rescueMsg = "silence.wav"
+recycleMsg = "silence.wav"
+otherMsg = "silence.wav" 
+user1Msg = "silence.wav"  
+killedMsg = "silence.wav"
+diedMsg = "silence.wav"
+
+[HoverCraftClass]
+velocForward = 55.0 // []
+velocReverse = 10.0 // []
+velocStrafe = 25.0 // []
+accelThrust = 55.0 //acceleration []
+accelDragStop = 2.0 //how fast it stops once hands are off controls []
+accelJump = 1.0 // []
+
+setAltitude = 1.0 // how high off the ground
+
+alphaTrack = 20.0 //springs speed it rights itself []
+alphaDamp = 5.0 //shocks []
+
+pitchPitch = 0.05 //nose up []
+pitchThrust = 0.02 //nose down []
+
+rollStrafe = 0.10 //rolls while strafing []
+omegaSpin = 6.0 //spinning in place speed []
+omegaTurn = 2.0 //turning while moving speed []
+alphaSteer = 5.0 //how fast it responds to steering []
+rollSteer = 0.08 //rolls while steering []
+
+soundThrust = "waspmsl.wav"
+soundTurbo = "avtanke3.wav"
+

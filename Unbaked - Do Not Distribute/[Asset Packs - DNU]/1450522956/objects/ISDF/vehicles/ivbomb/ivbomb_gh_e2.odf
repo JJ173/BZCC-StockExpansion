@@ -1,0 +1,23 @@
+[GameObjectClass]
+classLabel = "ivbomb"
+
+isSingle = 0
+
+StayWithOwner = true
+
+limitClass1 = "VIRTUAL_CLASS_THUG_BOMBER"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+provideCount = 4
+provideName1 = "ivbomb"
+provideName2 = "ivbomb_gh_e2"
+provideName3 = "VIRTUAL_CLASS_THUG_BOMBER"
+provideName4 = "flier"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[BomberClass]
+BayConfig = "ibbomb_gh_e2"

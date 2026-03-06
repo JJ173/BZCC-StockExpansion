@@ -1,0 +1,29 @@
+[GameObjectClass]
+geometryName = ""
+classLabel = "flare"
+scrapCost = 0
+scrapValue = 0
+maxHealth = 150
+maxAmmo = 100
+unitName = "Ambusher"
+heatSignature = 0.1
+
+[MineClass]
+lifeSpan = 0.01
+
+[FlareMineClass]
+payloadName = "eject_gh"
+fireSound = "smine01.wav"
+triggerDelay = 0.0
+shotDelay = 2.0
+shotVariance = 0.0
+damageRadius = 0.0
+damageValue(N) = 0 // none
+damageValue(L) = 0 // light
+damageValue(H) = 0 // heavy
+damageValue(S) = 0 // standard
+damageValue(D) = 0 // deflection
+damageValue(A) = 0 // absorbtion
+kickRadius = 0.0
+kickVeloc = 0.0
+kickOmega = 0.0

@@ -1,0 +1,225 @@
+[GameObjectClass]
+baseName = "ivangel_kp"
+geometryName = "ivangel00_kp.fbx"
+classLabel = "aircraft"
+scrapValue = 10
+scrapReturn = 20
+scrapCost = 75
+customCost = 85
+buildTime = 20.0
+CustomTime = 25.0
+maxHealth = 1500
+maxAmmo = 1200
+unitName = "Angel"
+aiName = "AirCraftFriend"
+aiName2 = "AirCraftEnemy"
+heatSignature = 3.0
+imageSignature = 1.25
+radarSignature = 2.25
+isAssault = 0
+CanSnipe = 1
+needPilot = 1
+armorClass = L
+isFlying = 1
+collisionRadius = 28.0
+boxCollide = 1
+SmartIsAirUnitCheck = false
+enableServiceTruckPull = 0
+LightsOnlyWhenPiloted = true
+tuggable = 0
+serviceTruckAutoHeal = 1
+playerOnly = true
+
+FactoryWeaponConfig = "ivflier_kp_weapon.odf"
+
+TeamLimitClass1 = "ivangel_kp"
+TeamLimitClass1Count = 4
+TeamLimitClass1Text = "Max Four Per Team"
+
+DeployOnBuild = 0
+
+Mass = 25000
+
+provideCount = 6
+provideName1 = "ivangel_kp"
+provideName2 = "flier"
+provideName3 = "DefendUnit"
+provideName4 = "AntiAir"
+provideName5 = "VIRTUAL_CLASS_TANK"
+provideName6 = "assault"
+
+requireCount = 2
+requireName1 = "ibtcen"
+requireText1 = "Build Tech Center"
+requireName2 = "ibbomb"
+requireText2 = "Build Bomber Bay"
+
+effectHard1 = "hp_emit_1"
+effectHard2 = "hp_emit_2"
+effectHard3 = "hp_emit_3"
+effectHard4 = "hp_emit_4"
+effectHard5 = "hp_emit_5"
+effectHard6 = "hp_emit_6"
+effectMinVelocity1 = 20.0
+effectMinVelocity2 = 20.0
+effectMinVelocity3 = 20.0
+effectMinVelocity4 = 20.0
+effectMinVelocity5 = 20.0
+effectMinVelocity6 = 20.0
+effectMaxVelocity1 = 120
+effectMaxVelocity2 = 120
+effectMaxVelocity3 = 120
+effectMaxVelocity4 = 120
+effectMaxVelocity5 = 120
+effectMaxVelocity6 = 120
+effectMinAltitude1 = 20
+effectMinAltitude2 = 20
+effectMinAltitude3 = 20
+effectMinAltitude4 = 20
+effectMinAltitude5 = 20
+effectMinAltitude6 = 20
+effectMaxAltitude1 = 1500
+effectMaxAltitude2 = 1500
+effectMaxAltitude3 = 1500
+effectMaxAltitude4 = 1500
+effectMaxAltitude5 = 1500
+effectMaxAltitude6 = 1500
+effectName1 = "ivangel_kp.wing"
+effectName2 = "ivangel_kp.wing"
+effectName3 = "ivangel_kp.wing"
+effectName4 = "ivangel_kp.wing"
+effectName5 = "ivangel_kp.wing"
+effectName6 = "ivangel_kp.wing"
+
+
+weaponMask = 11111
+
+weaponHard1 = "hp_gun_1"
+weaponName1 = "gangelc_kp"
+weaponAssault1 = 1
+weaponHard2 = "hp_rocket_1"
+weaponName2 = "gerkt_kp"
+weaponAssault2 = 0
+weaponHard3 = "hp_rocket_2"
+weaponName3 = "gerkt_kp"
+weaponAssault3 = 0
+weaponHard4 = "hp_rocket_3"
+weaponName4 = "gerkt_kp"
+weaponAssault4 = 0
+weaponHard5 = "hp_rocket_4"
+weaponName5 = "gerkt_kp"
+weaponAssault5 = 0
+
+[CraftClass]
+AircraftAttackMustDeploy = true
+PathingType = 4
+UseAssaultSpecials = true
+rangeScan = 450.0f
+periodScan = 1.5f
+velocJam = 5.0f
+engageRange = 0 //ai only
+weaponsConverge = false
+canRecycle = false
+canBailout = true
+userCanBailout = false
+DAMAGE_SCALE = 0
+GROUND_ELASTICITY = 0
+OBJECT_ELASTICITY = 0
+CollideTerrainSound = "atstab01.wav"
+
+subAttackClass = "ADN"
+
+selectWaitMsg = "bombgen07.wav"
+selectAttackMsg = "bombgen05.wav"
+selectFollowMsg = ""
+selectGoMsg = ""
+selectOtherMsg = "bombgen07.wav"
+goMsg = "bombgen06.wav"
+attackMsg = "bombgen01.wav"
+followMeMsg = "bombgen03.wav"
+followMsg = "bombgen03.wav"
+repairMsg = "bombgen03.wav"
+reloadMsg = "bombgen03.wav"
+rescueMsg = "bombgen03.wav"
+recycleMsg = "bombgen03.wav"
+otherMsg = ""
+user1Msg = ""
+killedMsg = "bombgen02.wav"
+
+steerFactor = 1.4
+strafeFactor = 1.0
+BraccelFactor = 0.05
+velFactor = 0.7
+omegaFactor = 0.2
+
+modeText28 = "Stay Airborne"
+modeText29 = "Stay Grounded"
+modeText30 = "Clear Order"
+modeText13 = "Defend Area"
+modeText1 = "Fly To"
+modeText31 = "Eject"
+modeText25 = "Co-Ordinates"
+modeText23 = "Re-Assign Squad"
+modeText11 = "Recon Mission"
+modeText2 = "Track Me"
+modeText12 = "Fight"
+modeText9 = "Go To Coordinates"
+
+[AircraftClass]
+subAttackClass = "ADN"
+AlwaysDeployed = false
+velocSet(L) = 20.0 // minimum velocity //20
+velocSet(M) = 55.0 // cruising velocity //35
+velocSet(H) = 100.0 // maximum velocity //65
+accelThrust = 47 // thrust acceleration //26
+accelBrake = 28 // 13.0 // brake acceleration
+accelDrag = 90 // 60// 63.0 // drag acceleration -- affects sliding sideways
+// mouse as rudder
+omegaSteer(L) = 3.55 //5.35 // 2.5 // steer turn rate at minimum
+omegaSteer(M) = 2.70 //4.70 // 2.0 // steer turn rate at cruising
+omegaSteer(H) = 1.95 //1.95 //3.95 // 1.5 // steer turn rate at maximum
+// strafe affecting rudder
+omegaStrafe(L) = 2.30 // airbrake turn rate at minimum
+omegaStrafe(M) = 1.90 // airbrake turn rate at cruising
+omegaStrafe(H) = 1.30 // airbrake turn rate at maximum
+
+//this affects steering but not sliding
+alphaSteer = 1.00 //1.00//1.70// 1.70 steering angular acceleration
+// more = more turning from strafing
+alphaStrafe = 0.18 //0.25 // 0.3 // airbrake angular acceleration
+
+alphaDamp = 12.5 // 14 // damping angular acceleration
+//a low values under 5 get insanely tippy
+pitchPitch = 3.7 //  maximum pitch angle
+
+rollSteer = 0.6 // 0.5 // maximum roll angle from steering
+rollStrafe = 3.87 //0.5 // maximum roll angle from airbraking
+
+OverWaterFlying = true
+overWaterLanded = true
+MaxTakeoffSpeed = 5.0
+aiAltitude = 130
+LiftSpring = 20.0
+AILiftSpring = 150.0
+minAltitude = 10.0
+maxAltitude = 300.0 
+alphaLevel = 3.9
+
+soundThrust = "sdrop01.wav"
+soundTurbo = "sdrop01.wav"
+soundBrake = ""
+timeDeploy = 0.5
+timeUndeploy = 0.5
+soundDeploy = "trdeploy.wav"
+soundUndeploy = "trundepl.wav"
+
+[Wing]
+renderBase = "draw_trail"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "127 127 127 150"
+finishColor = "255 255 255 0"
+startRadius = 0.1
+finishRadius = 0.1
+segmentTime = 3.5
+maxDist = 1600

@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibscup"
+
+StayWithOwner = True
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]
+

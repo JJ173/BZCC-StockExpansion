@@ -1,0 +1,42 @@
+[GameObjectClass]
+classLabel = "fbstro"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_ARMORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "fbstro"
+provideName2 = "fbstro_gh_b1"
+provideName3 = "VIRTUAL_CLASS_ARMORY"
+provideName4 = "VIRTUAL_CLASS_STRONGHOLD"
+provideName5 = "base"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+

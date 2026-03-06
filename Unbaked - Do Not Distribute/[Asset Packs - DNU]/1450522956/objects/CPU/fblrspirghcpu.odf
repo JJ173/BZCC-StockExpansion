@@ -1,0 +1,11 @@
+[GameObjectClass]
+baseName = "fblrspir_gh"
+scrapValue = 40
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

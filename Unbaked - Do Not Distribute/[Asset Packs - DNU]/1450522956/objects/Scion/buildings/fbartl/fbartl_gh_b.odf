@@ -1,0 +1,84 @@
+[GameObjectClass]
+mrmFactor = 0
+baseName = "fbartl_gh_b"
+geometryName = "fbartl00_gh_a2.fbx"
+classLabel = "turret"
+collisionRadius = 1.0
+scrapCost = 80
+scrapValue = 60
+powerCost = 0
+maxHealth = 8000
+maxAmmo = 10000
+unitName = "Artillery Spire (D)"
+aiName = "GunTowerFriend"
+aiName2 = "GunTowerEnemy"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+AllowUnderGroundSpawn = 1
+armorClass = H
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "fbantm"
+requireText1 = "Build Antenna Mound"
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fbartl_gh_b"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+////////////////////////////////////
+
+
+///// WEAPON ///////////////////////
+
+weaponMask = 00011
+weaponHard1 = "hp_mortar_1"
+weaponName1 = "gsartill"
+weaponHard2 = "hp_mortar_2"
+weaponName2 = "gsartill"
+
+////////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+[EntityClass]
+AllowHQShadows = true
+
+[BuildingClass]
+soundAmbient = "sgtow01.wav"
+
+[CraftClass]
+rangeScan = 340
+periodScan = 1.0
+velocJam = 0.0
+weaponPitch = 1.57
+steerFactor = 1.5
+engageRange = 400
+
+GunTowerProcessCheckCantHit = true	// true: retarget if intended victim can't be hit (only if GunTowerProcess is in use)
+//WeaponsConverge = true
+AITargetLocation = 1			// -1 = default, or 0 = center, 1 = high, 2 = low, 3 = left, 4 = right
+//HealthChangeLevelDelta = 0.1
+MinWeaponPitch = 0.5			// For turretcraft/turrettank (i.e. GunTower/GunSpire/turret)
+MustBeLinedUpToHit = false		// This setting determines if a unit will fire when it doesn't have a clear line of sight.
+MustBeLinedUpToFire = true		// Defaults to true for artillery(==archers)
+FireWhenCanHitFriends = true
+
+attackTask = "ArtlAttack"
+subAttackTask = "ArtlSubAttack"
+subAttackClass = "NNS"
+
+[TurretCraftClass]
+powerTap1 = "hp_tap_1"
+powerName = "fblung"
+omegaTurret = 2.0
+detectRange = 210

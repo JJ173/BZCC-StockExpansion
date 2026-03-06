@@ -1,0 +1,29 @@
+[WeaponClass]
+classLabel = "mortar"
+ordName = "pray_gh_c"
+wpnName = "Death Ray"
+fireSound = "dray.wav"
+wpnReticle = "ghartil"
+wpnCategory = "CANN"
+aiRange = 250
+flashName = "ggray_gh_c.flash"
+
+isAssault = 1
+
+[CannonClass]
+shotDelay = 2.0
+shotPitch = 1.0
+shotLead = 0
+
+[Flash]
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "255 63 55 255"
+finishColor = "247 247 20 235"
+startRadius = 4.0
+finishRadius = 1.0
+animateTime = 0.1
+latitudeBands = 8
+longitudeSegments = 16
+

@@ -1,0 +1,14 @@
+[WeaponClass]
+classLabel = "cannon"
+altName = "gwindr_kp_a"
+ordName = "windr_kp_c"
+wpnName = "Winder Msl"
+fireSound = "crckt01.wav"
+wpnReticle = "gfafmsl"
+wpnCategory = "ROCK"
+isAssault = 0
+aiRange = 150
+
+[CannonClass]
+shotDelay = 0.5 // 1/sec
+shotAlternate = 0

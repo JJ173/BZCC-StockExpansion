@@ -1,0 +1,44 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_THUG_ARMORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limitClass2 = "VIRTUAL_CLASS_ARMORY"
+limitClass2Count = 1
+limitClass2Text = "Only One Allowed"
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "ibarmo"
+provideName2 = "ibarmo_gh_b2"
+provideName3 = "VIRTUAL_CLASS_ARMORY"
+provideName4 = "VIRTUAL_CLASS_THUG_ARMORY"
+provideName5 = "base"
+
+///////// LIGHTS & EFFECTS /////////
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]

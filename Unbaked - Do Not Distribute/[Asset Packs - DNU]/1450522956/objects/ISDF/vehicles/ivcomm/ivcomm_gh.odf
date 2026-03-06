@@ -1,0 +1,106 @@
+[GameObjectClass]
+baseName = "ivcomm_gh"
+geometryName = "ivcomm00_gh.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "ivcomm00_gh.fbx"
+runAnimIsLooped = true
+runAnimation = "loop"
+classLabel = "commVehicle"
+scrapValue = 10
+scrapCost = 20
+customCost = 20
+buildTime = 15.0
+customTime = 15.0
+maxHealth = 1500
+addhealth = 9.0
+maxAmmo = 3000
+addAmmo = 5
+unitName = "Cmd Vehicle"
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+heatSignature = 0.5
+imageSignature = 5.0
+radarSignature = 5.0
+isAssault = 1
+LightsOnlyWhenPiloted = True // if true, lights on only when piloted.
+Tuggable = 0
+
+armorClass = N
+
+provideCount = 1
+provideName1 = "ivcomm_gh"
+	
+requireCount = 2
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibcbun"
+requireText2 = "Build Relay Bunk"
+
+/////// weapons ///////////////////
+
+weaponHard1 = "HP_SPECIAL_1"
+weaponName1 = "gsitecam"
+weaponAssault1 = 0
+
+//////////////////////////////////
+
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+
+[CraftClass]
+DoIdleDispatch = false
+rangeScan = 450.0f
+periodScan = 4.0f
+velocJam = 0.0f
+engageRange = 0
+
+braccelFactor = 0.1
+strafeFactor = 0.1
+velFactor =	0.3
+steerFactor = 1.0
+omegaFactor = 0.3
+
+TeamTransferrable = true
+
+selectAttackMsg = "ivserv04.wav"
+selectGoMsg = "ivserv02.wav"
+selectFollowMsg = "ivserv03.wav"
+selectOtherMsg = "ivserv04.wav"
+
+goMsg = "ivserv02.wav"
+goObjectMsg = "ivserv11.wav"
+attackMsg = "ivserv01.wav"
+followMeMsg = "ivserv08.wav"
+followMsg = "ivserv03.wav"
+repairMsg = "ivserv09.wav"
+reloadMsg = "ivserv09.wav"
+rescueMsg = "ivserv11.wav"
+recycleMsg = "ivserv11.wav"
+holdMsg = "ivserv12.wav"
+user1Msg = "ivserv01.wav"
+killedMsg = ""
+diedMsg = ""
+
+[TrackedVehicleClass]
+velocForward = 15.5
+velocReverse = 15.5
+accelThrust = 2.0
+omegaSpin = 1.0
+omegaTurn = 0.5
+alphaSteer = 2.0
+
+engineSound	= "iserv01.wav"
+treadSound = "iserv02.wav"
+
+[TrackedDeployableClass]
+isStealthDeployed = true // just like under DeployableClass
+//soundDeploy = "avturre4.wav"
+//soundUndeploy = "avturre5.wav"
+
+[CommVehicleClass]
+DoBettyOn = true // true = bettyvoice when switched on
+DoBettyOff = true // true = bettyvoice when switched no
+viewDist = 100.0
+MinViewDist = 25.0 // If specified, minimum height of commbunker view
+MaxViewDist = 250.0 // If specified, maximim height of commbunker view

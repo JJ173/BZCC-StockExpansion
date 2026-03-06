@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "fvscav"
+unitName = "Harvester"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = ""
+DeathScrapDropRatio = 1
+doDrop = true
+DropDist = 15
+doDropRecycler = true
+doDropExtractor = false
+doDropSilo = true //there are no silos
+

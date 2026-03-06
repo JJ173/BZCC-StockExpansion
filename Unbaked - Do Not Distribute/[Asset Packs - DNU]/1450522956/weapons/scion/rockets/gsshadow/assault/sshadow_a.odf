@@ -1,0 +1,65 @@
+[OrdnanceClass]
+classLabel = "thermalmissile"
+shotGeometry = "sgstng00.fbx"
+shotSound = "smort03.wav"
+
+xplGround = "xshdwgnd"
+xplVehicle = "xshdwcar"
+xplBuilding = "xshdwbld"
+renderName = "sshadow_a.render"
+
+ammoCost = 125
+lifeSpan = 6.67 // 800m
+shotSpeed = 60.0
+
+damageValue(N) = 900 // none
+damageValue(L) = 800 // light
+damageValue(H) = 700 // heavy
+
+damageValue(S) = 800 // standard
+damageValue(D) = 700 // deflection
+damageValue(A) = 900 // absorbtion
+
+[MissileClass]
+omegaTurn = 1.5
+
+[ThermalMissileClass]
+coneAngle = 0.2
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 3
+renderName1 = "sshadow_a.flare"
+renderName2 = "sshadow_a.halo"
+renderName3 = "sshadow_a.trail"
+
+[Flare]
+renderBase = "draw_sprite"
+textureName = "lightflare.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 255 127"
+finishColor = "255 255 255 127"
+startRadius = 1.0
+finishRadius = 1.0
+
+[Halo]
+renderBase = "draw_sprite"
+textureName = "lighthalo.tga"
+textureBlend = "one one modulate"
+startColor = "255 69 0 63"
+finishColor = "255 165 0 63"
+startRadius = 1.0
+finishRadius = 1.0
+
+[Trail]
+renderBase = "draw_trail"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "255 69 255 255"
+finishColor = "255 165 255 0"
+startRadius = 0.1
+finishRadius = 0.0
+segmentTime = 1.0
+
+
+

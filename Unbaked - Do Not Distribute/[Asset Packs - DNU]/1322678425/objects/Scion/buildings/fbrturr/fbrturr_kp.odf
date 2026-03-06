@@ -1,0 +1,71 @@
+[GameObjectClass]
+mrmFactor = 0
+baseName = "fbrturr_kp"
+geometryName = "fbrturr00_kp.fbx"
+classLabel = "turret"
+collisionRadius = 1.0
+scrapCost = 20
+scrapValue = 0
+maxHealth = 3000
+addHealth = 15
+maxAmmo = 10000
+addAmmo = 10000
+powerCost = 0
+unitName = "Rocket Turret"
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+AllowUndergroundSpawn = 1
+isAssault = 1
+canSelect = 0
+armorClass = H
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+////////////////////////////////////
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fbrturr_kp"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+////////////////////////////////////
+
+///// WEAPON ///////////////////////
+
+weaponMask = 00011
+weaponHard1 = "hp_rocket_1"
+weaponName1 = "gfbrturr_kp"
+weaponHard2 = "hp_rocket_2"
+weaponName2 = "gfbrturr_kp"
+
+////////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+[BuildingClass]
+soundAmbient = "igtow01.wav"
+
+[CraftClass]
+rangeScan = 250
+periodScan = 1.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 1.0
+engageRange = 250
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+
+[TurretCraftClass]
+omegaTurret = 3.0
+detectRange = 250

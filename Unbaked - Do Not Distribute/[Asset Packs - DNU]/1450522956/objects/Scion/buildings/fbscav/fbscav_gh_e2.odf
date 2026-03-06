@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "fbscav"
+
+StayWithOwner = True
+
+upgradeName = "fbscup_gh_e2"
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]

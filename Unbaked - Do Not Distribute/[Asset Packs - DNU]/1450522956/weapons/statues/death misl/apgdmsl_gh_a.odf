@@ -1,0 +1,12 @@
+[GameObjectClass]
+baseName = "apshdw"
+classLabel = "aprocket"
+
+scrapCost = 20
+
+unitName = "Death Msl"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gdmsl_gh_a"

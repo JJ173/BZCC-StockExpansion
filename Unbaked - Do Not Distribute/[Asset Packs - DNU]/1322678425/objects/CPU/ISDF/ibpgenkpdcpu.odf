@@ -1,0 +1,21 @@
+[GameObjectClass]
+classLabel = "ibpgen"
+geometryName = "ibpgen00_kp_d.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "ibpgen00_kp_d.fbx"
+PowerCost = -12
+scrapCost = 40
+unitName = "Power Gen. IV"
+maxHealth = 5000
+explosionName = "xpgenkpdxpl"
+
+lightHard5 = "hp_light_5"
+lightName5 = "o_red_nf"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+
+[BuildingClass]
+
+[PoweredBuildingClass]

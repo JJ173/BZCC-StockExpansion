@@ -1,0 +1,63 @@
+[GameObjectClass]
+baseName = "ibrbun_kp"
+geometryName = "ibgbun00_kp.fbx"
+classLabel = "commbunker"
+collisionRadius = 11.0
+scrapCost = 20
+scrapValue = 20
+maxHealth = 5000
+maxAmmo = 0
+unitName = "Rocket Bunker"
+aiName = "CommTowerProcess"
+aiName2 = "CommTowerProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+requireReplaceTerrainPhysics = true
+armorClass = H
+AllowUndergroundSpawn = 1  //from pb137# to ensure ground preplacement
+
+/////// REQUIREMENTS ///////////////
+requireCount = 3
+requireName1 = "ibpgen"
+requireText1 = "Build Power"
+requireName2 = "ibarmo"
+requireText2 = "Build Armory"
+requireName3 = "ibsbay"
+requireText3 = "Build Service Bay"
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ibrbun_kp"
+provideName2 = "ibcbun"
+provideName3 = "VIRTUAL_CLASS_COMMBUNKER"
+provideName4 = "base"
+
+///////// LIGHTS & EFFECTS /////////
+lightHard1 = "hp_light_1"
+lightName1 = "o_blue_nf"
+
+[BuildingClass]
+soundAmbient = "icomm01.wav"
+bldEdge = "wwww"
+
+[CommBunkerClass]
+rangeScan = 400
+periodScan = 0.0
+viewDist = 300.0
+viewZoom = 1.5
+minZoom = 1.0
+maxZoom = 3.0
+viewPitch = 1.0
+minPitch = 0.75
+maxPitch = 1.5
+nearPlane = 1
+farPlane = 1000
+disableFog = 1
+
+[PoweredBuildingClass]
+detectRange = 300
+powerTap1 = "HP_TAP_1"
+powerName = "ibrturr_kp_b"
+PoweredByTaps = false

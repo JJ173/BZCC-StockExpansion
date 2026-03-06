@@ -1,0 +1,54 @@
+[GameObjectClass]
+classLabel = "fvrecy"
+
+isSingle = 0
+
+unitName = "Thug Matriarch"
+
+scrapCost = 75
+scrapValue = 50
+buildTime = 45.0
+
+StayWithOwner = True
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "fvrecy"
+provideName2 = "fvrecycpu"
+provideName3 = "fvrecy_gh_e2"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERVEHICLE"
+provideName6 = "VIRTUAL_CLASS_THUG_RECYCLER"
+provideName7 = "VIRTUAL_CLASS_THUG_RECYCLERVEHICLE"
+
+////////////////////////////////////
+
+/////// OBJECT LIMITS //////////////
+
+limitClass1 = "VIRTUAL_CLASS_THUG_RECYCLER" // e.g. "ibrecy", *NO* ".odf" on item
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+////////////////////////////////////
+
+////// REQUIREMENTS ////////////////
+
+requireCount = 1
+requireName1 = "fbforg"
+requireText1 = "Upgrade Kiln"
+
+////////////////////////////////////
+
+[CraftClass]
+TeamTransferrable = true
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "fbrecy_gh_e2"
+
+[RecyclerVehicleClass]
+scrapHold = 0

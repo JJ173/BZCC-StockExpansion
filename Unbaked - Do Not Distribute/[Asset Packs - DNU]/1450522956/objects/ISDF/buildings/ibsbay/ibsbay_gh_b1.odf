@@ -1,0 +1,25 @@
+[GameObjectClass]
+classLabel = "ibsbay"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ibsbay"
+provideName2 = "ibsbay_gh_b1"
+provideName3 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+provideName4 = "base"
+
+///////// LIGHTS & EFFECTS /////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+bldEdge = "wttw"
+
+[SupplyDepotClass]
+supplyParallel = true

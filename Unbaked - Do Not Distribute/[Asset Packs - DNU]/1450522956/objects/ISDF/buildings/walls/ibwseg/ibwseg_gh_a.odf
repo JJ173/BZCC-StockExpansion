@@ -1,0 +1,37 @@
+[GameObjectClass]
+geometryName = "ibwseg00_gh_a.fbx"
+classLabel = "powered"		//"i76building"
+collisionRadius = 1.0
+scrapCost = 20
+scrapValue = 10
+scrapReturn = 15
+maxHealth = 10000
+maxAmmo = 0
+unitName = "Wall Segment"
+powerCost = 0
+heatSignature = 1.0
+imageSignature = 1.0
+radarSignature = 1.0
+
+armorClass = H
+
+buildSupport = "A"  // N = None, A= Adjacent, B = Base 
+buildRequire = "N"
+
+requireCount = 0
+
+provideCount = 2
+provideName1 = "ibwseg_gh_a"
+provideName2 = "wall"
+
+[BuildingClass]
+//soundAmbient = "silence.wav"
+bldEdge = "wwww"
+
+tunnelCount = 1
+
+tunnel01X0 = 0
+tunnel01Z0 = 0
+tunnel01DX = 0
+tunnel01DZ = 0
+tunnel01Edge = "wwww"

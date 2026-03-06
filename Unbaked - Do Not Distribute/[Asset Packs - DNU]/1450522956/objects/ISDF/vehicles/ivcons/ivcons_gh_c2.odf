@@ -1,0 +1,93 @@
+[GameObjectClass]
+classLabel = "ivcons"
+
+unitName = "Utility Constructor"
+scrapCost = 65
+unitIcon = "icon_ivcons_gh_a2.tga"
+
+requireCount = 1
+requireName1 = "ibtcen"
+requireText1 = "Build Tech Center"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName2 = "ivcons_gh_c2"
+provideName3 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+TeamTransferrable = true
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibcbun_gh"
+
+[BuildGroup2]
+buildLabel = "Gun Towers"
+buildItem1 = "ibgtow"
+buildItem2 = "ibgtow_gh_w1"
+buildItem3 = "ibgtow_gh_w2"
+
+[BuildGroup3]
+buildLabel = "Short Defenders"
+buildItem1 = "ibatow_gh_b1"
+buildItem2 = "ibatow_gh_b2"
+buildItem3 = "ibatow_gh_bw1"
+buildItem4 = "ibatow_gh_bw2"
+buildItem5 = "ibatow_gh_bw3"
+buildItem6 = "ibatow_gh_bw4"
+
+[BuildGroup4]
+buildLabel = "Tall Defenders"
+buildItem1 = "ibatow_gh_a1"
+buildItem2 = "ibatow_gh_a2"
+buildItem3 = "ibatow_gh_aw1"
+buildItem4 = "ibatow_gh_aw2"
+buildItem5 = "ibatow_gh_aw3"
+buildItem6 = "ibatow_gh_aw4"
+
+[BuildGroup5]
+buildLabel = "Short walls"
+buildItem1 = "ibwseg_gh_b"
+buildItem2 = "ibwstr_gh_b"
+buildItem3 = "ibwtseg_gh_b"
+buildItem4 = "ibwxseg_gh_b"
+
+[BuildGroup6]
+buildLabel = "Tall Walls"
+buildItem1 = "ibwseg_gh_a"
+buildItem2 = "ibwstr_gh_a"
+buildItem3 = "ibwtseg_gh_a"
+buildItem4 = "ibwxseg_gh_a"
+
+[BuildGroup7]
+buildLabel = "Anti-Aircraft"
+buildItem1 = "ibrtow_gh_b"
+buildItem2 = "ibrtow_gh_a"
+buildItem3 = "ibhrtow_gh_b"
+buildItem4 = "ibhrtow_gh_a"
+buildItem5 = "ibrtow_gh_w1"
+buildItem6 = "ibrtow_gh_w2"
+buildItem7 = "ibhrtow_gh_w1"
+buildItem8 = "ibhrtow_gh_w2"
+
+[BuildGroup8]
+buildLabel = "Artillery"
+buildItem1 = "ibartl_gh_a"
+buildItem2 = "ibartl_gh_b"
+
+[BuildGroup9]
+buildLabel = "Other Buildings"
+buildItem1 = "ibsbay_gh_a2"
+buildItem2 = "ibplate_gh_a"
+buildItem3 = "ibplate_gh_b"
+
+[BuildGroup10]
+buildLabel = "Scrap Storage"
+buildItem1 = "ibsilo_gh_a"
+buildItem2 = "ibsilo_gh_b"

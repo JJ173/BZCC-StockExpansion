@@ -1,0 +1,48 @@
+[OrdnanceClass]
+classLabel = "bullet"
+shotGeometry = NULL
+
+xplGround = "xangelcxpl_kp"
+xplVehicle = "xangelcxpl_kp"
+xplBuilding = "xangelcxpl_kp"
+
+renderName = "angelc_kp.render"
+
+ammoCost = 12.0
+lifeSpan = 1.00 // 105m  135 GEC
+shotSpeed = 300.0
+
+damageValue(N) = 12 // none // 320
+damageValue(L) = 12 // light // 320
+damageValue(H) = 8 // heavy // 240
+
+damageValue(S) = 12 // standard // 300
+damageValue(D) = 5 // deflection // 160
+damageValue(A) = 13 // absorbtion // 320
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 2
+renderName1 = "angelc_kp.BulletTrail"
+renderName2 = "angelc_kp.SmokeyTrail"
+
+[BulletTrail]
+renderBase = "draw_tracer"
+textureBlend = "one one modulate"
+textureName = "spark2.tga"
+startColor = "232 155 64 250"
+finishColor = "232 155 64 0"
+startRadius = 0.5
+finishRadius = 0.4
+tracerLength = 5.6
+
+[SmokeyTrail]
+renderBase = "draw_trail"
+textureName = "strail.tga"
+textureBlend = "srcalpha invsrcalpha modulatealpha"
+textureRate = 0.3
+startColor = "255 128 64 40"
+finishColor = "105 105 107 0"
+startRadius = 0.5
+finishRadius = 0.01
+segmentTime = 0.3

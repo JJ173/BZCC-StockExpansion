@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "ibsbay"
+
+provideCount = 4
+provideName1 = "ibsbay"
+provideName2 = "ibsbay_gh_a1"
+provideName3 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+provideName4 = "base"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+bldEdge = "wttw"
+
+[SupplyDepotClass]
+supplyParallel = true

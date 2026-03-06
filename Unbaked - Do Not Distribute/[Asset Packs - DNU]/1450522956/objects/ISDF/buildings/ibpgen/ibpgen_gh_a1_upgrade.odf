@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "ibpgen_gh_a1"
+upgradeName = "ibpgen_gh_a2_upgrade"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+

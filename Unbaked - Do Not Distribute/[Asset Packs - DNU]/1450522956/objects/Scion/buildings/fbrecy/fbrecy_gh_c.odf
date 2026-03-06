@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "fbrecy"
+								   
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "fbrecy"
+provideName2 = "fbrecycpu"
+provideName3 = "fbrecy_gh_c"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+
+////////////////////////////////////
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem8 = "fvscout_m"
+buildEmptyItem = 8
+
+[BuildGroup1]
+buildLabel = "Scavengers"
+buildItem1 = "fvscav"
+buildItem2 = "fvhscav_gh"
+
+[BuildGroup5]
+buildLabel = "Builders"
+buildItem1 = "fvcons_gh_c1"
+buildItem2 = "fvcons_gh_c2"
+
+[RecyclerClass]
+
+[PoweredBuildingClass]

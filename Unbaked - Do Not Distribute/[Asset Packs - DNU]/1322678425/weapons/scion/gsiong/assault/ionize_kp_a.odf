@@ -1,0 +1,38 @@
+[OrdnanceClass]
+classLabel = "bullet"
+
+shotGeometry = NULL
+xplGround = "xsiongnd_kp"
+xplVehicle = "xsioncar_kp"
+xplBuilding = "xsioncar_kp"
+
+ammoCost = 3
+lifeSpan = 0.75 // 150m
+shotSpeed = 200.0
+
+damageValue(N) = 100 // none
+damageValue(L) = 60 // light
+damageValue(H) = 25 // heavy
+
+damageValue(S) = 60 // standard
+damageValue(D) = 100 // deflection
+damageValue(A) = 25 // absorbtion
+
+renderName = "ionize_kp_a.render"
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 4
+renderName1 = "ionize_kp_a.core"
+renderName2 = "ionize_kp_c.tracer"
+renderName3 = "ionize_kp_c.trail"
+renderName4 = "ionize_kp_c.burst"
+
+[Core]
+renderBase = "draw_sprite"
+textureName = "particle.tga"
+textureBlend = "one one modulate"
+startColor = "49 190 255 80"
+finishColor = "49 190 255 80"
+startRadius = 1.0
+finishRadius = 1.0

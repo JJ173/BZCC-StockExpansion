@@ -1,0 +1,17 @@
+[WeaponClass]
+classLabel = "cannon"
+altname = "gautoeject_gh"
+ordName = "autoeject_gh"
+wpnName = "SprayBomb"
+fireSound = "mmine01.wav"
+wpnReticle = "gproxmin"
+wpnCategory = "SPEC"
+aiRange = 35
+isAssault = 0
+
+[CannonClass]
+shotDelay = 4.0 
+salvoCount = 10 
+salvoDelay = 4.0 
+shotVariance = 0.1
+shotPitch = -1.7 // -1.58 = straight down

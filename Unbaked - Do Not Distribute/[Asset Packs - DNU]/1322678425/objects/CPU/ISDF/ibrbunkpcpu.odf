@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "ibrbun_kp"
+
+scrapCost = 20
+scrapValue = 20
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[PoweredBuildingClass]

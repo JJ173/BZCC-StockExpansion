@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "fbdowe"
+upgradeName = "fbdowe_kp_b"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[SupplyDepotClass]
+supplyParallel = true

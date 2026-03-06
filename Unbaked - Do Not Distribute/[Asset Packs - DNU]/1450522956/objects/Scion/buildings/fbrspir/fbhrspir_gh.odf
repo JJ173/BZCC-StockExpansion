@@ -1,0 +1,87 @@
+[GameObjectClass]
+mrmFactor = 0
+baseName = "fbhrspir_gh"
+geometryName = "fbhrspir00_gh.fbx"
+classLabel = "turret"
+scrapCost = 85
+scrapValue = 50
+powerCost = 0
+maxHealth = 8000
+maxAmmo = 10000
+unitName = "Heavy Rocket Spire"
+collisionRadius = 1.0
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+AllowUnderGroundSpawn = 1
+armorClass = H
+buildSupport = "A"
+buildRequire = "F"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "fbantm"
+requireText1 = "Build Antenna Mound"
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fbhrspir_gh"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+////////////////////////////////////
+
+///// WEAPON ///////////////////////
+
+weaponMask = 01111
+weaponHard1 = "hp_rocket_1"
+weaponName1 = "gsshadow_c"
+weaponAssault1 = 0
+weaponHard2 = "hp_rocket_2"
+weaponName2 = "gsshadow_c"
+weaponAssault2 = 0
+weaponHard3 = "hp_rocket_3"
+weaponName3 = "gsshadow_a"
+weaponAssault3 = 1
+weaponHard4 = "hp_rocket_4"
+weaponName4 = "gsshadow_a"
+weaponAssault4 = 1
+
+////////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+[EntityClass]
+AllowHQShadows = true
+
+[BuildingClass]
+soundAmbient = "sgtow01.wav"
+
+[CraftClass]
+rangeScan = 225.0
+periodScan = 0.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 1.0
+engageRange = 225
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+// include air units as attack targets
+// doesn't need to deploy to sub attack
+// doesn't move towards unit in sub attack
+
+[TurretCraftClass]
+powerTap1 = "hp_tap_1"
+powerName = "fblung"
+omegaTurret = 2.0
+detectRange = 225

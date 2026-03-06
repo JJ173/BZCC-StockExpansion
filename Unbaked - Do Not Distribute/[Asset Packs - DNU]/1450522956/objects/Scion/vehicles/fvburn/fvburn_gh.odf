@@ -1,0 +1,128 @@
+[GameObjectClass]
+baseName = "fvburn_gh"
+geometryName = "fvburn00_gh.fbx"
+//cockpitName = "fvtank_cockpit.fbx"
+classLabel = "wingman"
+scrapValue = 40
+scrapCost = 100
+customCost = 110
+buildTime = 15.0
+customTime = 20.0
+maxHealth = 5000
+maxAmmo = 5000
+addAmmo = 10.0
+addhealth = 10.0
+
+unitName = "Burns Fighter"
+aiName = "TankFriend"
+aiName2 = "TankEnemy"
+
+heatSignature = 2.0
+imageSignature = 2.5
+radarSignature = 1.0
+
+isAssault = 1
+
+armorClass = H
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 2
+requireName1 = "fbforg"
+requireText1 = "Upgrade Kiln"
+requireName2 = "fbover"
+requireText2 = "Build Overseer"
+
+////////////////////////////////////
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fvburn_gh"
+provideName2 = "VIRTUAL_CLASS_TANK"
+provideName3 = "DefendUnit"
+
+////////////////////////////////////
+
+
+/////// weapons ////////////////////
+
+weaponMask = 01111
+weaponHard1 = "HP_CANNON_1"
+weaponName1 = "garc_c"
+weaponAssault1 = 0
+
+weaponHard2 = "HP_CANNON_2"
+weaponName2 = "garc_c"
+weaponAssault2 = 0
+
+weaponHard3 = "HP_GUN_1"
+weaponName3 = "giongn_a"
+RecoilName3 = "recoil_1"
+weaponAssault3 = 1
+
+weaponHard4 = "HP_GUN_2"
+weaponName4 = "giongn_a"
+RecoilName4 = "recoil_2"
+weaponAssault4 = 1
+
+weaponHard5 = "HP_SHIELD"
+weaponName5 = "gshield"
+weaponAssault5 = 0
+
+
+////////////////////////////////////
+
+[CraftClass]
+rangeScan = 300.0f
+periodScan = 5.0f
+velocJam = 5.0f
+engageRange = 150
+UseSelectWeapon = false
+AllowLinkWeapons = true
+
+selectWaitMsg = "fvtank04.wav"
+selectAttackMsg = "fvtank01.wav"
+selectFollowMsg = "fvtank03.wav"
+selectGoMsg = "fvtank02.wav"
+selectOtherMsg = "fvtank04.wav"
+holdMsg = "fvtank12.wav"
+goMsg = "fvtank05.wav"
+attackMsg = "fvtank06.wav"
+followMeMsg = "fvtank08.wav"
+followMsg = "fvtank03.wav"
+repairMsg = "fvtank09.wav"
+reloadMsg = "fvtank09.wav"
+rescueMsg = "fvtank10.wav"
+recycleMsg = "fvtank11.wav"
+otherMsg = "fvtank05.wav" 
+
+user1Msg = ""  
+killedMsg = "fvtank07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+velocForward = 30.0 // 
+velocReverse = 18.0 // 
+velocStrafe = 14.0 // 
+accelThrust = 24.0 //acceleration 
+accelBrake = 75.0 //braking 
+accelDragStop = 5.8 //how fast it stops once hands are off controls 
+accelJump = 15.0
+
+setAltitude = 1.0 // how high off the ground
+
+alphaTrack = 22.0 //springs speed it rights itself 
+alphaDamp = 8.0 //shocks 
+
+pitchPitch = 0.19 //nose up 
+pitchThrust = 0.09 //nose down 
+
+rollStrafe = 0.01 //rolls while strafing 
+omegaSpin = 6.0 //spinning in place speed 
+omegaTurn = 2.0 //turning while moving speed 
+alphaSteer = 4.5 //how fast it responds to steering 
+rollSteer = 0.1 //rolls while steering 
+
+soundThrust = "ssent01j.wav"

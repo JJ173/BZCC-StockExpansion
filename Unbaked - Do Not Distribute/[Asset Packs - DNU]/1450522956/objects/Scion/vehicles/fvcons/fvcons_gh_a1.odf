@@ -1,0 +1,23 @@
+[GameObjectClass]
+classLabel = "fvcons"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 2
+provideName1 = "fvcons_gh_a1"
+provideName2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbkiln_gh_a"
+buildItem2 = "fbspir_gh"
+buildItem3 = "fbantm_gh_a"
+buildItem4 = "fbdowe_gh_a"
+buildItem5 = "fbstro_gh_a"

@@ -1,0 +1,45 @@
+[GameObjectClass]
+classLabel = "ivrckt"
+geometryName = "ivlrckt00_gh.fbx"
+
+scrapValue = 15
+scrapCost = 55
+customCost = 65
+buildTime = 15.0
+customTime = 15.0
+
+maxHealth = 3000
+maxAmmo = 2500
+addAmmo = 10
+
+unitName = "Light Rocket Tank"
+
+unitIcon = "icon_ivlrckt_gh.tga"
+unitStatus = "wire_ivlrckt_gh.tga"
+
+/////// REQUIREMENTS ///////////////	
+requireCount = 3
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibcbun"
+requireText2 = "Build Relay Bunk"
+requireName3 = "ibarmo"
+requireText3 = "Build Armory"
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "HP_ROCKET_1"
+weaponName1 = "gshadow_c"
+weaponAssault1 = 0
+weaponHard2 = "HP_ROCKET_2"
+weaponName2 = "gshadow_c"
+weaponAssault2 = 0
+weaponHard3 = ""
+weaponName3 = ""
+weaponAssault3 = 0
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

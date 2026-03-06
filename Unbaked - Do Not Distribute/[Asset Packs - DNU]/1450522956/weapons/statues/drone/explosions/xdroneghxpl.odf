@@ -1,0 +1,49 @@
+// =================
+// COMET EXPLOSION
+// =================
+
+[ExplosionClass]
+classLabel = "explosion"
+
+particleTypes = 2
+particleClass1 = "xdroneghxpl.core"
+particleCount1 = 1
+particleVeloc1 = "0.0 0.0 0.0"
+particleClass2 = "xdroneghxpl.shock"
+particleCount2 = 1
+particleVeloc2 = "0.0 0.0 0.0"
+
+explSound = "xmv1.wav"
+damageRadius = 35.0
+
+damageValue(N) = 900 // none
+damageValue(L) = 800 // light
+damageValue(H) = 700 // heavy
+
+damageValue(S) = 800 // standard
+damageValue(D) = 700 // deflection
+damageValue(A) = 900 // absorbtion
+
+[Core]
+simulateBase = "sim_null"
+lifeTime = 1.0
+renderBase = "draw_twirl"
+textureName = "flame.tga"
+textureBlend = "one one modulate"
+startColor = "63 255 255 255"
+finishColor = "0 0 255 0"
+startRadius = 3.0
+finishRadius = 30.0
+animateTime = 1.0
+
+[Shock]
+simulateBase = "sim_null"
+lifeTime = 0.3
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "63 255 255 127"
+finishColor = "0 0 255 0"
+startRadius = 3.0
+finishRaius = 60.0
+animateTime = 0.3

@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel = "fbstro"
+
+providesCount = 2
+provideName1 = "fbstro"
+provideName2 = "base"

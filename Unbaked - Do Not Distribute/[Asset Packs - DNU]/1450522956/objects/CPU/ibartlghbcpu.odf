@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibartl_gh_b"
+scrapValue = 30
+unitName = "Intimidator (D)"
+powerCost = 0
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

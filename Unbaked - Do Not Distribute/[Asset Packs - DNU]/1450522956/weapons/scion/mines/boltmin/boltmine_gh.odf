@@ -1,0 +1,18 @@
+[GameObjectClass]
+geometryName = "fgbolt00_gh.fbx"
+classLabel = "weaponmine"
+scrapCost = 0
+scrapValue = 0
+maxHealth = 1000
+maxAmmo = 300
+unitName = "Arc Mine"
+
+weaponHard1 = "arcgun"
+weaponName1 = "gmboltmn"
+
+[MineClass]
+lifeSpan = 30
+
+[WeaponMineClass]
+searchRadius = 100.0
+heightScale = 2.0

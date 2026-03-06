@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibsbay"
+geometryName = "ibsbay00_kp_wop.fbx"
+isTerrain = 0
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]

@@ -1,0 +1,29 @@
+[WeaponClass]
+classLabel = "cannon" // "machinegun"
+altName = "garcb_kp_c"
+ordName = "arcbolt_kp_a"
+wpnName = "Arc Beam"
+fireSound = "arc02.wav.wav"
+wpnReticle = "garc_c"
+wpnCategory = "CANN"
+isAssault = 1
+aiRange = 200
+flashName = "garcb_kp_a.flash"
+
+[CannonClass]
+shotDelay =  2
+
+
+[Flash]
+simulateBase = "sim_null"
+lifeTime = 5.0
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "0 255 255 255"
+finishColor = "0 0 255 0"
+startRadius = 0.5
+finishRadius = 10.0
+animateTime = 5.0
+latitudeBands = 8
+longitudeSegments = 16

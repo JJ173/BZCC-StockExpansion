@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ivatank"
+unitName = "Bull Dog"
+
+maxAmmo = 4000
+addAmmo = 100
+
+scrapValue = 45
+scrapCost = 50
+buildTime = 12.0
+
+requireCount = 0
+
+weaponName1 = "gblast_a"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

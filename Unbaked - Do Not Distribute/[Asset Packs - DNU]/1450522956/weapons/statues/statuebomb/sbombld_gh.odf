@@ -1,0 +1,45 @@
+[OrdnanceClass]
+classLabel = "spraybomb"
+geometryName = "bvdrone00_gh_a.fbx"
+shotSound = "baz03.wav"
+xplGround = "xnullgh2xpl"
+xplVehicle = "xgasxpl"
+xplBuilding = "xgasxpl"
+rendername = "sbombld_gh.render"
+isArcing = false
+
+ammoCost = 50
+lifeSpan = 45
+shotSpeed = 70.0 // 356 m
+
+kickRadius = 180.0
+kickOmega = 0.0
+kickVeloc = 25.0
+
+damageValue(N) = 1200
+damageValue(L) = 1000
+damageValue(H) = 800
+
+damageValue(S) = 1000
+damageValue(D) = 800
+damageValue(A) = 1000
+
+[SprayBombClass]
+payloadName = "bvdrone_gh_g"
+HitExplodeTypes = 2
+BuildSprayOnHit = false
+ExplodeOnHit = true
+
+[Render]
+renderBase = "draw_twirl_trail"
+textureName = "smoke.tga"
+textureBlend = "srcalpha invsrcalpha modulatealpha"
+startColor = "255 191 127 32"
+finishColor = "255 0 0 0"
+startRadius = 0.5
+finishRadius = 2.0
+animateTime = 2.0
+emitDelay = 0.01
+emitVelocity = "0.0 0.0 0.0"
+emitVariance = "1.0 1.0 1.0"
+emitLife = 2.0

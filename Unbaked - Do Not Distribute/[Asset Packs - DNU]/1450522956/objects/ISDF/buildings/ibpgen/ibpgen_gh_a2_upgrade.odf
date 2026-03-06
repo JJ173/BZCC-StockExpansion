@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibpgen_gh_a2"
+scrapCost = "45"
+upgradeName = "ibpgen_gh_a3"
+
+[BuildingClass]
+
+
+[ExtractorClass]
+
+

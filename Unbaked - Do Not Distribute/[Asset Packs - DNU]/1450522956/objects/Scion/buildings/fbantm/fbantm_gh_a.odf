@@ -1,0 +1,22 @@
+[GameObjectClass]
+classLabel = "fbantm"
+
+upgradeName = "fbover_gh_a"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 6
+provideName1 = "fbantm"
+provideName2 = "fbantm_gh_a"
+provideName3 = "VIRTUAL_CLASS_COMMBUNKER"
+provideName4 = "VIRTUAL_CLASS_COMMTOWER"
+provideName5 = "VIRTUAL_CLASS_ANTENNA_MOUND"
+provideName6 = "base"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]

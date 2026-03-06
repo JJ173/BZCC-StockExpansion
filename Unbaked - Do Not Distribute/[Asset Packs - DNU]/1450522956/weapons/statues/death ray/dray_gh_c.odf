@@ -1,0 +1,102 @@
+[OrdnanceClass]
+classLabel = "beam"
+shotGeometry = NULL
+xplGround = "xdrayghgnd"
+xplVehicle = "xdrayghcar"
+xplBuilding = "xblastbld"
+
+renderName = "dray_gh_c.render"
+
+ammoCost = 300
+lifeSpan = 0.26 // 250m
+shotSpeed = 1000
+
+damageValue(N) = 900 // none // 450
+damageValue(L) = 640 // light // 320
+damageValue(H) = 400 // heavy // 200
+
+damageValue(S) = 640 // standard // 320
+damageValue(D) = 900 // deflection // 450
+damageValue(A) = 400 // absorbtion // 200
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 4
+renderName1 = "dray_gh_c.beam"
+renderName2 = "dray_gh_c.arc1"
+renderName3 = "dray_gh_c.arc2"
+renderName4 = "dray_gh_c.flash"
+
+[beam]
+renderBase = "draw_bolt"
+textureName = "plasma.tga"
+textureBlend = "one one modulate"
+startColor = "13 238 57 255"
+finishColor = "0 255 0 200"
+startRadius = 0.4
+finishRadius = 0.2
+segmentLength = 5.0
+segmentVariance = "0.0 0.0 0.0"
+animateTime = 0.65
+textureRate = 0.01
+rotationRate = 0.002
+emitDelay = 0.001
+
+[arc1]
+renderBase = "draw_bolt"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "0 255 255 255"
+finishColor = "0 0 255 0"
+startRadius = 0.3
+finishRadius = 0.01
+segmentLength = 7.0 
+segmentVariance = "2.0 2.0 0.5"
+emitVelocity = "2.0 2.0 0.5"
+animateTime = 0.8 // 0.2
+textureRate = 0.01
+emitDelay = 0.02
+
+[arc2]
+renderBase = "draw_bolt"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "250 160 39 255"
+finishColor = "255 150 0 0"
+startRadius = 0.3
+finishRadius = 0.01
+segmentLength = 7.0 
+segmentVariance = "-2.0 2.0 5.5"
+animateTime = 0.8 // 0.2
+emitVelocity = "-2.0 -2.0 -0.5"
+textureRate = 0.01
+emitDelay = 0.02
+
+[Flash]
+simulateBase = "sim_ember"
+lifeTime = 0.1
+renderBase = "draw_emit"
+emitName = "dray_gh_c.spark" // Changed from dray_c.spakr due to console error
+emitDelay = 4.5
+emitVelocity = "2.0 3.0 0.0"//.4 0 0
+emitVariance = "0.85 0.85 0.5"// .5 .5 .5
+
+[Spark]
+simulateBase = "sim_ember"
+lifeTime = 0.51
+renderBase = "draw_bolt"
+textureBlend = "one one modulate"
+startColor = "30 127 255 200"
+finishColor = "0 0 255 0"
+startRadius = 0.01
+finishRadius = 0.0
+trailTime = 1.0
+segmentLength = 1.5
+segmentVariance = "2.0 2.0 1.0"
+animateTime = 0.8 // 0.2
+textureRate = 0.05 //.1
+
+
+
+
+

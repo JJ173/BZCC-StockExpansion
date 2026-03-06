@@ -1,0 +1,11 @@
+[RecyclerList]
+ODFName = "ivrecy_kp_def"
+Description = "KatPak: Defensive Recycler"
+
+[RecyclerListMPI]
+ODFName = "ivrecy_kp_def"
+Description = "KatPak: Defensive Recycler"
+
+[IAHumanRecyclerList]
+ODFName = "ivrecy_kp_def"
+Description = "KatPak: Defensive Recycler"

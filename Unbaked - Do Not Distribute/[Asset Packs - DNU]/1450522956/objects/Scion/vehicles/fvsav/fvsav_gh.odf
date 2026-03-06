@@ -1,0 +1,113 @@
+[GameObjectClass]
+baseName = "fvsav_gh"
+geometryName = "fvsav00_gh.fbx"
+classLabel = "sav"
+scrapValue = 50
+scrapCost = 100
+customCost = 110
+maxHealth = 6000
+addHealth = 10
+maxAmmo = 3000
+addAmmo = 10
+unitName = "Fury"
+aiName = "SAVFriend"
+aiName2 = "SAVEnemy"
+heatSignature = 0.5
+imageSignature = 0.8
+radarSignature = 1.0
+explosionName = "xbldxpl"
+needpilot = 1
+addpilot = 1
+playerOnly = true
+
+armorClass = L
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "fvsav_gh"
+provideName2 = "VIRTUAL_CLASS_SAV"
+provideName3 = "assault"
+provideName4 = "flier"
+provideName5 = "DefendUnit"
+
+////////////////////////////////////
+
+//////// REQUIREMENTS //////////////
+
+requireCount = 3
+requireName1 = "fbforg"
+requireText1 = "Upgrade Kiln"
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+requireName3 = "fbstro"
+requireText3 = "Build Stronghold"
+
+
+/////// weapons ////////////////////
+
+weaponMask = 01111
+weaponHard1 = "HP_CANNON_1"
+weaponAssault1 = 0
+weaponName1 = "garc_c"
+weaponHard2 = "HP_CANNON_2"
+weaponAssault2 = 0
+weaponName2 = "garc_c"
+weaponHard3 = "HP_ROCKET_1"
+weaponAssault3 = 1
+weaponName3 = "gsavrkt_gh"
+weaponHard4 = "HP_SPECIAL"
+weaponAssault4 = 0
+weaponName4 = "gboltmin_gh"
+weaponHard5 = "HP_SHIELD"
+weaponAssault5 = 0
+weaponName5 = "gshield"
+
+////////////////////////////////////
+
+
+/////// OBJECT LIMITS //////////////
+
+teamLimitClass1 = "fvsav_gh"
+teamlimitClass1Count = 2
+teamlimitClass1Text = "Reached Fury Limit"
+
+lightHard1 = "HP_LIGHT_1"
+lightName1 = "omniblue"
+lightHard2 = "HP_LIGHT_2"
+lightName2 = "omniblue"
+lightHard3 = "HP_LIGHT_3"
+lightName3 = "omniblue"
+
+[CraftClass]
+canRescue = 1
+rangeScan = 400.0
+periodScan = 2.0
+velocJam = 5.0
+
+DoIdleDispatch = false
+
+[HoverCraftClass]
+setAltitude = 5.0
+accelDragStop = 5.0
+alphaTrack = 20.0
+alphaDamp = 5.0
+pitchPitch = 0.25
+pitchThrust = 0.1
+rollStrafe = 0.1
+rollSteer = 0.1
+
+velocForward = 80.0
+velocReverse = 20.0
+velocStrafe = 20.0
+accelThrust = 50.0
+omegaSpin = 2.0
+omegaTurn = 1.0
+alphaSteer = 5.0
+accelJump = 400.0
+soundThrust = "avsave0.wav"
+
+[SavClass]
+flightAltitude = 150.0
+soundDeploy = "avsave6.wav"
+soundUndeploy = "avsave5.wav"

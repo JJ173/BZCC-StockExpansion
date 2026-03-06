@@ -1,0 +1,47 @@
+[GameObjectClass]
+classLabel = "ivrecy"
+
+isSingle = 0
+
+unitName = "Thug Recycler"
+
+scrapCost = 75
+ScrapValue = 50
+buildTime = 45.0
+
+StayWithOwner = True
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName3 = "ivrecy_gh_b2"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_THUG_RECYCLER"
+provideName6 = "VIRTUAL_CLASS_RECYCLERVEHICLE"
+provideName7 = "VIRTUAL_CLASS_THUG_RECYCLERVEHICLE"
+
+////////////////////////////////////
+
+
+/////// OBJECT LIMITS //////////////
+
+limitClass1 = "VIRTUAL_CLASS_THUG_RECYCLER" // e.g. "ibrecy", *NO* ".odf" on item
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+////////////////////////////////////
+
+[CraftClass]
+TeamTransferrable = true
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ibrecy_gh_b2"
+
+[RecyclerVehicleClass]
+scrapHold = 0
+
+[Lod1]

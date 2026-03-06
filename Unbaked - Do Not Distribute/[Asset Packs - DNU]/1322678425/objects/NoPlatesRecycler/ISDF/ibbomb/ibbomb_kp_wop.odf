@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibbomb"
+geometryName = "ibbomb00_kp_wop.fbx"
+isTerrain = 0
+
+[BuildingClass]
+
+[BomberBayClass]
+
+[PoweredBuildingClass]

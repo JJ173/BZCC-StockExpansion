@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbspir"
+upgradeName = "fbaspir_gh_upgrade"
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

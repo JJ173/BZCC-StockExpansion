@@ -1,0 +1,29 @@
+[GameObjectClass]
+classLabel = "fvatank"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 1
+
+////////////////////////////////////
+
+
+/////// weapons ////////////////////
+
+weaponMask = 01111
+
+weaponName1 = "garc_c"
+
+weaponName2 = "garc_c"
+
+weaponName3 = "gboltgn_c_kp"
+
+weaponName4 = "gboltgn_c_kp"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

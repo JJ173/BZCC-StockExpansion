@@ -1,0 +1,87 @@
+[GameObjectClass]
+baseName = "bbmega_gh"
+geometryName = "bbmega00_gh.fbx"
+cockpitName = ""
+classLabel = "turret"
+powerCost = 0
+scrapValue = 50
+buildTime = 0.0
+maxHealth = 20000
+addHealth = 35.0
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+addAmmo = 35.0
+unitName = "Mega Statue"
+aiName = "GunTowerFriend"
+aiName2 = "GunTowerEnemy"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+collisionRadius = 11.0
+armorClass = H
+AllowUndergroundSpawn = 1  //from pb137# to ensure ground preplacement
+explosionName = "xmegaghxpl"
+
+buildSupport = "N"
+buildRequire = "N"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "bbmega_gh"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+/////////  Weapons Configuration  ///////////
+
+weaponMask = 01111
+
+// Combat
+weaponHard1 = "HP_CANNON_1" // Death Ray
+weaponAssault1 = 0
+weaponName1 = "gdray_gh_c" 
+
+weaponHard2 = "HP_SPECIAL_1" 
+weaponAssault2 = 0
+weaponName2 = "gdrone_gh_a" // Drone (Torpedo)
+
+
+// Assault
+weaponHard3 = "HP_ROCKET_1" // Missle Swarm 
+weaponAssault3 = 1
+weaponName3 = "gdmsl_gh_a" 
+
+weaponHard4 = "HP_SPECIAL_2" // Sentinal Unit 
+weaponAssault4 = 1
+weaponName4 = "gdrone_gh_c" 
+
+
+/////////////////////////////////////////////
+
+turretCount = 3
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+turretName3 = "hp_eyepoint"
+ 
+[BuildingClass]
+CanDemolish = false
+ReplacesObject = true // but extractors default this to true
+soundAmbient = "igtow01.wav"
+
+[CraftClass]
+GunTowerProcessCheckCantHit = true // true: retarget if intended victim can't be hit (only if GunTowerProcess is in use)
+rangeScan = 300
+periodScan = 1.0
+velocJam = 0
+weaponPitch = 1.5
+steerFactor = 0.5
+engageRange = 300
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+
+[TurretCraftClass]
+omegaTurret = 1.0
+detectRange = 300
+
+

@@ -1,0 +1,17 @@
+[WeaponClass]
+classLabel = "cannon"
+//altName = "grktbomb_gh_c"
+ordName = "rktbomb_gh_a"
+wpnName = "Rocket"
+fireSound = "gpopp00.wav"
+wpnReticle = "grktbomb"
+wpnCategory = "ROCK"
+isAssault = 1
+
+localAmmo = 33
+
+ShowShotsRemaining = true // true = default. False: don't show shots left on a per-weapon basis
+
+[CannonClass]
+shotDelay = 3.0
+

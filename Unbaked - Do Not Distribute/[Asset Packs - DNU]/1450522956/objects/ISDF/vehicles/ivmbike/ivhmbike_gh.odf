@@ -1,0 +1,55 @@
+[GameObjectClass]
+classLabel = "ivmbike"
+geometryName = "ivhmbike00_gh.fbx"
+
+animCount = 3
+animName1 = "forward"
+animFile1 = "ivhmbike00_gh_sf.fbx"
+animName2 = "neutral"
+animFile2 = "ivhmbike00_gh_sn.fbx"
+animName3 = "reverse"
+animFile3 = "ivhmbike00_gh_sr.fbx"
+
+scrapValue = 15
+scrapCost = 55
+customCost = 60
+buildTime = 15.0
+customTime = 15.0
+
+unitName = "Heavy Mortar Bike"
+
+unitIcon = "icon_ivhmbike_gh.tga"
+unitStatus = "wire_ivhmbike_gh.tga"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibarmo"
+requireText2 = "Build Armory"
+requireName3 = "ibtcen"
+requireText3 = "Build Tech Center"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "ivmhbike_gh"
+provideName2 = "VIRTUAL_CLASS_MORTARBIKE"
+provideName3 = "DefendUnit"
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "HP_MORTAR_1"
+weaponName1 = "gmortar"
+recoilName1 = "recoil1"
+weaponAssault1 = 0
+weaponHard2 = "HP_MORTAR_2"
+weaponName2 = "gmortar"
+recoilName2 = "recoil2"
+weaponAssault2 = 0
+weaponHard3 = "HP_SPECIAL_1"
+weaponName3 = ""
+weaponAssault3 = 0
+
+[CraftClass]
+
+[HoverCraftClass]

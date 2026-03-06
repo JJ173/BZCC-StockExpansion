@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ivtank_bdog_kp"
+unitName = "Black Dog Sabre"
+
+weaponMask = 00111
+
+[CraftClass]
+UseSelectWeapon = false
+AllowLinkWeapons = true
+
+[HoverCraftClass]

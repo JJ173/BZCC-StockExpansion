@@ -1,0 +1,79 @@
+[GameObjectClass]
+baseName = "ibpgen_gh_a3"
+classLabel = "extractor"
+geometryName = "ibpgen00_gh_a3.fbx"
+animCount = 2
+animName1 = "deploy"
+animFile1 = "ibpgen00_gh_a3.fbx"
+animName2 = "loop"
+animFile2 = "ibpgen00_gh_a3_loop.fbx"
+maxHealth = 6500
+unitName = "Adv. Power II"
+PowerCost = -15
+scrapCost = 60
+scrapValue = 20
+scrapReturn = 40
+heatSignature = 2.5
+imageSignature = 2.0
+radarSignature = 1.0
+collisionRadius = 11.0
+armorClass = H
+isAssault = 1
+
+buildSupport = "B"  // N = None, A= Adjacent, B = Base 
+buildRequire = "B"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 1
+requireName1 = "ibtcen"
+requireText1 = "Build Tech Cen"
+
+/////// PROVIDES ///////////////////
+provideCount = 2
+provideName1 = "ibpgen"
+provideName2 = "VIRTUAL_CLASS_POWERPLANT"
+
+/////// LIGHTS & EFFECTS /////
+lightHard1 = "hp_light_1"
+lightName1 = "omniblue-small"
+lightHard2 = "hp_light_2"
+lightName2 = "omnired-small"
+lightHard3 = "hp_light_3"
+lightName3 = "omniblue-small"
+lightHard4 = "hp_light_4"
+lightName4 = "omnired-small"
+lightHard5 = "hp_light_5"
+lightName5 = "omniblue-small"
+lightHard6 = "hp_light_6"
+lightName6 = "omnired-small"
+lightHard7 = "hp_light_7"
+lightName7 = "omniblue-small"
+lightHard8 = "hp_light_8"
+lightName8 = "omnired-small"
+
+effectHard1 = "hp_emit_1"
+effectName1 = "emit_cyanblink"
+effectHard2 = "hp_emit_2"
+effectName2 = "emit_blueblink"
+effectHard3 = "hp_emit_3"
+effectName3 = "emit_redblink"
+effectHard4 = "hp_emit_4"
+effectName4 = "emit_yellowblink"
+effectHard5 = "hp_emit_5"
+effectName5 = "emit_cyanblink"
+effectHard6 = "hp_emit_6"
+effectName6 = "emit_blueblink"
+effectHard7 = "hp_emit_7"
+effectName7 = "emit_redblink"
+
+[BuildingClass]
+soundAmbient = "ipgen01.wav"
+
+[ExtractorClass]
+initDelay = 1e30
+scrapDelay = 1e30
+scrapHold = 0
+detectRange = 50
+
+

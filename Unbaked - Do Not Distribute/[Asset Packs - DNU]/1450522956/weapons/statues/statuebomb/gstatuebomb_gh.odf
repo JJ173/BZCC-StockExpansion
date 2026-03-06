@@ -1,0 +1,26 @@
+[WeaponClass]
+classLabel = "mortar"
+ordName = "sbombld_gh"
+wpnName = "StatueBomb"
+fireSound = "smort01.wav"
+wpnReticle = "gsplint"
+wpnLadder = "gmortar.L0"
+wpnPriority = 6
+wpnCategory = "MORT"
+aiRange = 400
+localammo = 200
+addLocalAmmo = 10
+
+needLOS = false
+AllowAimHigh = false
+
+[CannonClass]
+shotDelay = 8.0
+salvoCount = 3
+salvoDelay = 0.02
+shotVariance = 0.1
+
+shotPitch = 1.0
+shotLead = 0
+
+

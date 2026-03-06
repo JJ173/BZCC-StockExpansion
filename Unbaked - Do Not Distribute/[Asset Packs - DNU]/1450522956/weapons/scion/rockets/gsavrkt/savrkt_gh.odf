@@ -1,0 +1,30 @@
+[GameObjectClass]
+baseName = "waspmsl"
+geometryName = "fvrckt00_gh.fbx"
+classLabel = "torpedo"
+scrapValue = 0
+scrapCost = 0
+maxHealth = 100
+maxAmmo = 30
+unitName = "WASP"
+aiName = "TorpedoProcess"
+aiName2 = "TorpedoProcess"
+explosionName = "xmagcar5_a"
+
+[CraftClass]
+rangeScan = 0.0
+periodScan = 0.0
+velocJam = 0.0
+
+[TorpedoClass]
+setAltitude = 1.0
+alphaTrack = 20.0
+alphaDamp = 5.0
+velocForward = 40.0
+accelThrust = 50.0
+omegaTurn = 2.0
+alphaSteer = 5.0
+lifeSpan = 20.0
+xplBlast = "xmagcar6_a"
+
+soundThrust = "waspmsl.wav"

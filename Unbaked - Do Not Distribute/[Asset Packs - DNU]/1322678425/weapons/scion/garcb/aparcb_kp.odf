@@ -1,0 +1,16 @@
+[GameObjectClass]
+baseName = "aparcb_kp"
+classLabel = "apcannon"
+
+scrapCost = 30
+
+unitName = "Arc Beam"
+
+requireCount = 1
+requireName1 = "fbstro"
+requireText1 = "Build Armory"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "garcb_kp_c"

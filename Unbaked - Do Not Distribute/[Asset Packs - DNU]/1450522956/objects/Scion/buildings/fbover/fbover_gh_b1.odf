@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "fbover"
+
+isSingle = 0
+
+/////// PROVIDES ///////////////////
+
+provideCount = 10
+provideName1 = "fbantm"
+provideName2 = "fbover"
+provideName3 = "fbantm_gh_a"
+provideName4 = "fbover_gh_a"
+provideName5 = "VIRTUAL_CLASS_COMMBUNKER"
+provideName6 = "VIRTUAL_CLASS_COMMTOWER"
+provideName7 = "VIRTUAL_CLASS_COMMBUNKER_U"
+provideName8 = "VIRTUAL_CLASS_COMMTOWER_U"
+provideName9 = "VIRTUAL_CLASS_OVERSEER_ARRAY"
+provideName10 = "base"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]

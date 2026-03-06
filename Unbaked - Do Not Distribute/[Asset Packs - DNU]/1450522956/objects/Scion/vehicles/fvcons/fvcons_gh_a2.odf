@@ -1,0 +1,58 @@
+[GameObjectClass]
+classLabel = "fvcons"
+
+scrapValue = 20
+scrapCost = 65
+buildTime = 10.0
+
+unitName = "Utility Builder"
+
+unitIcon = "icon_fvcons_gh_a2.tga"
+
+StayWithOwner = True
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 2
+requireName1 = "fbover"
+requireText1 = "Upgrade Antenna Mound"
+requireName2 = "fbstro"
+requireText2 = "Build Stronghold"
+
+////////////////////////////////////
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 2
+provideName1 = "fvcons_gh_a2"
+provideName2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbspir_gh"
+buildItem2 = "fbaspir_gh"
+buildItem5 = ""
+buildItem6 = ""
+buildItem7 = ""
+buildItem8 = ""
+buildItem9 = ""
+buildItem10 = ""
+
+[BuildGroup3]
+buildLabel = "Rocket Spires"
+buildItem1 = "fblrspir_gh"
+buildItem2 = "fbrspir_gh"
+buildItem3 = "fbhrspir_gh"
+
+[BuildGroup4]
+buildLabel = "Artillery Spires"
+buildItem1 = "fbartl_gh_a"
+buildItem2 = "fbartl_gh_b"

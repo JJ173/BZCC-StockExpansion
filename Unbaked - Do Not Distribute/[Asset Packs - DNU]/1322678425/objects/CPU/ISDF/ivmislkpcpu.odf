@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ivmisl"
+unitName = "Avenger"
+
+buildTime = 10.0
+
+weaponName1 = "gshadow_c"
+
+weaponName2 = "gshadow_c"
+
+[CraftClass]
+[HoverCraftClass]

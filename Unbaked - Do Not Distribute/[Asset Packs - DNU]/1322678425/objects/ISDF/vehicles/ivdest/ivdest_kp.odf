@@ -1,0 +1,145 @@
+[GameObjectClass]
+baseName = "ivdest_kp"
+geometryName = "ivdest00_kp.fbx"
+cockpitName= "ivdest_kp_cockpit.fbx"
+animCount = 3
+animName1 = "forward"
+animFile1 = "ivdest_kp_sf.fbx"
+animName2 = "neutral"
+animFile2 = "ivdest_kp_sn.fbx"
+animName3 = "reverse"
+animFile3 = "ivdest_kp_sr.fbx"
+classLabel = "wingman"
+scrapValue = 20
+scrapCost = 75
+customCost = 85
+buildTime = 15.0
+customTime = 15.0
+maxHealth = 4500
+maxAmmo = 2750
+addAmmo = 5
+unitName = "Destroyer"
+aiName = "TankFriend"
+aiName2 = "TankEnemy"
+heatSignature = 2.5
+imageSignature = 2.5
+radarSignature = 1.0
+isAssault = 0
+armorClass = L
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 3
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibcbun"
+requireText2 = "Build Relay Bunker"
+requireName3 = "ibtcen"
+requireText3 = "Build Tech Center"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "ivdest_kp"
+provideName2 = "VIRTUAL_CLASS_TANK"
+provideName3 = "DefendUnit"
+
+/////// weapons ////////////////////
+weaponMask = 11111
+weaponHard1 = "HP_CANNON_1"
+weaponName1 = "gatstab_c"
+recoilName1 = "recoil1"
+weaponAssault1 = 0
+
+weaponHard2 = "HP_CANNON_2"
+weaponName2 = "gatstab_c"
+recoilName2 = "recoil2"
+weaponAssault2 = 0
+
+weaponHard3 = "HP_GUN_1"
+weaponName3 = "gminigun_c"
+weaponAssault3 = 0
+
+weaponHard4 = "HP_GUN_2"
+weaponName4 = "gminigun_c"
+weaponAssault4 = 0
+
+weaponHard5 = "HP_SPECIAL_1"
+weaponName5 = ""
+weaponAssault5 = 0
+
+/////////LIGHTS AND EFFECTS//////////////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+lightHard2 = "hp_light_2"
+lightName2 = ""
+LightsOnlyWhenPiloted = true
+
+effectHard1 = "hp_dust_1"
+effectName1 = "dusttrail"
+effectMinAltitude1 = 0.0
+effectMaxAltitude1 = 5.0
+effectFlags1 = 2147483135
+
+[CraftClass]
+rangeScan = 300.0f
+periodScan = 5.0f
+velocJam = 5.0f
+engageRange = 120
+
+attackTask = "MortarBikeAttack"  //"AssaultTankAttack"
+subAttackTask = "MortarBikeSubAttack"  //"SupportSubAttack"
+subAttackClass = "ANS"
+// subAttackClass uses 3 letters.
+// 1st letter is either A or N.     A is include Air targets.         N is attack ground only.
+// 2nd letter is either D or N.     D is to deploy before attacking.  N for regular attack.
+// 3rd letter is either S or N.     S is to use Weapon Range.         N is use the Engage Range to attack. 
+
+braccelFactor = 0.03
+velFactor = 0.2
+steerFactor = 1.5
+omegaFactor = 0.2
+strafeFactor = 0.2
+avoidSpeed = 20;
+topSpeed = 25;
+
+selectWaitMsg = "ivdest05.wav"
+selectAttackMsg = "ivdest02.wav"
+selectFollowMsg = "ivdest04.wav"
+selectGoMsg = "ivdest04.wav"
+selectOtherMsg = "ivdest05.wav"
+
+holdMsg = "ivdest12.wav"
+goMsg = "ivdest04.wav"
+attackMsg = "ivdest06.wav"
+followMeMsg = "ivdest08.wav"
+followMsg = "ivdest03.wav"
+repairMsg = "ivdest09.wav"
+reloadMsg = "ivdest09.wav"
+rescueMsg = "ivdest10.wav"
+recycleMsg = "ivdest11.wav"
+otherMsg = "ivdest05.wav" 
+holdMsg = "ivdest12.wav"
+user1Msg = ""  
+killedMsg = "ivdest07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+velocForward = 25.0 // 
+velocReverse = 18.0 // 
+velocStrafe = 16.0 // 
+accelThrust = 24.0 //acceleration 
+accelDragStop = 6.0 //how fast it stops once hands are off controls 
+accelJump = 12.0 // 
+setAltitude = 1.0 // how high off the ground
+alphaTrack = 21.0 //springs speed it rights itself 
+alphaDamp = 8.0 //shocks 
+pitchPitch = 0.25 //nose up 
+pitchThrust = 0.1 //nose down 
+rollStrafe = 0.08 //rolls while strafing 
+omegaSpin = 5.0 //spinning in place speed 
+omegaTurn = 2.0 //turning while moving speed 
+alphaSteer = 5.0 //how fast it responds to steering 
+rollSteer = 0.08 //rolls while steering 
+
+soundThrust = "itank01e.wav"
+soundTurbo = "avtanke3.wav"

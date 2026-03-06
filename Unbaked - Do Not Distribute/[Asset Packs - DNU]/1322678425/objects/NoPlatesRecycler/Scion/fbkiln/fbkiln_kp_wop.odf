@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "fbkiln"
+geometryName = "fbkiln00_kp_wop.fbx"
+isTerrain = 0
+AlignTerrainReplaceType = 0
+
+upgradeName = "fbforg_kp_wop"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+
+

@@ -1,0 +1,32 @@
+[GameObjectClass]
+baseName = "waspmsl"
+classLabel = "torpedo"
+scrapValue = 0
+scrapCost = 0
+maxHealth = 100
+maxAmmo = 30
+unitName = "Drone"
+aiName = "TorpedoProcess"
+aiName2 = "TorpedoProcess"
+geometryName = "bvdrone00_gh_a.fbx"
+
+explosionName = "bvdroneghxpl"
+xplBlast = "bvdroneghxpl"
+
+[CraftClass]
+rangeScan = 0.0
+periodScan = 0.0
+velocJam = 0.0
+
+[TorpedoClass]
+setAltitude = 1.0
+alphaTrack = 20.0
+alphaDamp = 5.0
+velocForward = 40.0
+accelThrust = 50.0
+omegaTurn = 2.0
+alphaSteer = 5.0
+lifeSpan = 240.0
+xplBlast = "bvdroneghxpl"
+
+soundThrust = "waspmsl.wav"

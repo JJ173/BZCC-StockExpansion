@@ -1,0 +1,18 @@
+[GameObjectClass]
+baseName = "aprktbomb_gh"
+classLabel = "aprocket"
+
+scrapCost = 40
+
+unitName = "Rocket Bomb"
+
+requireCount = 1
+requireName1 = "ibsbay_gh_a2"
+requireText1 = "Build Assault Bay"
+
+[PowerUpClass]
+soundPickup = "pickup01.wav"
+soundReject = "reject.wav"
+
+[WeaponPowerupClass]
+weaponName = "grktbomb_gh_a"

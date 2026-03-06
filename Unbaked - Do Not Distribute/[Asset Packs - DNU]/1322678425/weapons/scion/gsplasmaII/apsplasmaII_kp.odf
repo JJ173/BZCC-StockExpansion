@@ -1,0 +1,18 @@
+[GameObjectClass]
+baseName = "apsplasmaII_kp"
+classLabel = "apcannon"
+
+scrapCost = 35
+
+unitName = "Plasma Cannon II"
+
+requireCount = 2
+requireName1 = "fbkiln"
+requireText1 = "Build Kiln"
+requireName2 = "fbantm"
+requireText2 = "Build Antenna Mound"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gsplasmaII_kp_c"

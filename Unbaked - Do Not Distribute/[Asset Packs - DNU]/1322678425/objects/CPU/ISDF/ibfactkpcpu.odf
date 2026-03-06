@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "ibfact"
+
+scrapCost = 50
+scrapValue = 25
+maxHealth = 12000
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "ibfact"
+provideName2 = "ibfactkpcpu"
+provideName3 = "VIRTUAL_CLASS_FACTORY"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+
+[BuildGroup3]
+buildLabel = "Tanks"
+buildItem1 = "ivtankkpcpu"
+buildItem2 = "ivgrizzkpcpu"
+buildItem3 = "ivtankbdogkpcpu"
+
+[BuildGroup5]
+buildLabel = "Assault Tanks"
+buildItem1 = "ivhatankkpcpua"
+buildItem2 = "ivhatankkpcpub"
+buildItem3 = "ivhatankkpcpuc"

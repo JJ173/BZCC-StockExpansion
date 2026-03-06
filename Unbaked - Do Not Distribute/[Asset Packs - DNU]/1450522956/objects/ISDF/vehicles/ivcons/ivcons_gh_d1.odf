@@ -1,0 +1,29 @@
+[GameObjectClass]
+classLabel = "ivcons"
+
+StayWithOwner = true
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName2 = "ivcons_gh_d1"
+provideName3 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen_gh_a1_upgrade"
+buildItem2 = "ibfact_gh_b1"
+buildItem3 = "ibcbun_gh"
+buildItem4 = "ibarmo_gh_b1"
+buildItem5 = "ibsbay_gh_b1"
+buildItem7 = "ibtrain_gh_b1"
+buildItem8 = "ibtcen_gh_b1"
+
+

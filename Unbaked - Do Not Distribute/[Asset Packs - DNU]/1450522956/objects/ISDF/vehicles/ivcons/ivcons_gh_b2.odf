@@ -1,0 +1,35 @@
+[GameObjectClass]
+classLabel = "ivcons"
+
+StayWithOwner = True
+
+/////// PROVIDES ///////////////////
+
+provideCount = 4
+provideName2 = "ivcons_gh_b2"
+provideName3 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+provideName4 = "VIRTUAL_CLASS_THUG_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen"
+buildItem2 = "ibfact_gh_b2"
+buildItem3 = "ibcbun"
+buildItem4 = "ibarmo_gh_b2"
+buildItem5 = "ibsbay_gh_b2"
+buildItem6 = "ibgtow"
+buildItem7 = "ibtrain_gh_b2"
+buildItem8 = "ibtcen_gh_b2"
+
+[BuildGroup9]
+buildLabel = "Scrap Storage"
+buildItem1 = "ibsilo_gh_a"
+buildItem2 = "ibsilo_gh_b"
+

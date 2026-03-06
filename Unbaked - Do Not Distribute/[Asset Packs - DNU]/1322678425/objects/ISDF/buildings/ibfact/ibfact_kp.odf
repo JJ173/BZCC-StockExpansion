@@ -1,0 +1,34 @@
+[GameObjectClass]
+classLabel = "ibfact"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+bldEdge = "twww"
+
+[FactoryClass]
+WeaponConfig = "iweapon_kp.odf"
+
+buildItem1 = "ivmbike_kp"
+buildItem2 = "ivmisl_kp"
+buildItem5 = "ivrckt_kp"
+buildItem7 = "ivwalk_kp"
+buildItem8 = "ivbomb_kp"
+
+[BuildGroup3]
+buildlabel = "Tanks"
+buildItem1 = "ivtank_kp"
+buildItem2 = "ivtank_bdog_kp_def"
+buildItem3 = "ivgrizz_kp"
+
+[BuildGroup4]
+buildlabel = "Destroyers"
+buildItem1 = "ivdest_kp"
+buildItem2 = "ivdest2_kp"
+buildItem3 = "ivdest3_kp"
+buildItem4 = "ivdest4_kp"
+
+[BuildGroup6]
+buildlabel = "Assault Tanks"
+buildItem1 = "ivatank_kp"
+buildItem2 = "ivhatank_kp_def"

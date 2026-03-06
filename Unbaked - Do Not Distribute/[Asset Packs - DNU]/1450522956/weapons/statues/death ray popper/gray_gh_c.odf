@@ -1,0 +1,131 @@
+[OrdnanceClass]
+classLabel = "missile"
+shotGeometry = "sgstng00.xsi"
+shotSound = "crckt02.wav"
+
+renderName = "gray_gh_c.render"
+
+xplGround = "xmslgnd"
+xplVehicle = "xstingcar_c"
+xplBuilding = "xstingcar_c"
+
+ammoCost = 0
+lifeSpan = 0.25 // 250m
+shotSpeed = 1000 //  take the lifespan and shot speed and multiply them
+
+damageValue(N) = 200 // none // 390
+damageValue(L) = 200 // light // 210
+damageValue(H) = 200 // heavy // 45
+
+damageValue(S) = 200 // standard // 210
+damageValue(D) = 200 // deflection // 180
+damageValue(A) = 200 // absorbtion // 255
+
+[MissileClass]
+TeamFilter = 3  // 0 = targets all teams, 1 = targets same team only, 2 = targets only allies, 3 = targets only enemies, 4 = targets not same team
+omegaTurn = 6.0
+coneAngle = 3.14
+omegaWaver = 0.5
+rateWaver = 5.0
+velocForward = 50.0		// powered speed of the missile
+accelThrust = 30.0		// rate the missile can change speed
+delayTime = 1.0			// homing delay time (zero turn rate)
+rampTime = 2.0			// homing ramp time (from zero to full turn rate)
+avoidRange = 10.0		// terrain obstacle-avoidance range
+avoidStrength = 5.0		// terrain obstacle-avoidance strength (~2 seems best)
+
+[ThermalMissileClass]
+coneAngle = 3.14
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 4
+renderName1 = "gray_gh_c.beam"
+renderName2 = "gray_gh_c.fringe"
+renderName3 = "gray_gh_c.arc1"
+renderName4 = "gray_gh_c.arc2"
+
+[beam]
+renderBase = "draw_bolt"
+textureName = "plasma.tga"
+textureBlend = "one one modulate"
+startColor = "13 238 57 255"
+finishColor = "0 255 0 200"
+startRadius = 0.4
+finishRadius = 0.2
+segmentLength = 5.0
+segmentVariance = "0.0 0.0 0.0"
+animateTime = 0.65
+textureRate = 0.01
+rotationRate = 0.002
+emitDelay = 0.001
+
+[fringe]
+renderBase = "draw_twirl_trail"
+textureName = "spark.tga"
+textureblend = "one one modulate"
+startColor = "255 63 55 255"
+finishColor = "247 247 20 235"
+startRadius = 0.5
+finishRadius = 0.3
+emitDelay = 0.002 // 0.002
+emitVariance = "2.0 2.0 1.5"
+
+[arc1]
+renderBase = "draw_bolt"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "0 255 255 255"
+finishColor = "0 0 255 0"
+startRadius = 0.3
+finishRadius = 0.01
+segmentLength = 7.0 
+segmentVariance = "2.0 2.0 0.5"
+emitVelocity = "2.0 2.0 0.5"
+animateTime = 0.8 // 0.2
+textureRate = 0.01
+emitDelay = 0.02
+
+[arc2]
+renderBase = "draw_bolt"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "250 160 39 255"
+finishColor = "255 150 0 0"
+startRadius = 0.3
+finishRadius = 0.01
+segmentLength = 7.0 
+segmentVariance = "-2.0 2.0 5.5"
+animateTime = 0.8 // 0.2
+emitVelocity = "-2.0 -2.0 -0.5"
+textureRate = 0.01
+emitDelay = 0.02
+
+[Flash]
+simulateBase = "sim_ember"
+lifeTime = 0.1
+renderBase = "draw_emit"
+emitName = "dray_gh_c.spark" // Changed from dray_c.spakr due to console error
+emitDelay = 4.5
+emitVelocity = "2.0 3.0 0.0"//.4 0 0
+emitVariance = "0.85 0.85 0.5"// .5 .5 .5
+
+[Spark]
+simulateBase = "sim_ember"
+lifeTime = 0.51
+renderBase = "draw_bolt"
+textureBlend = "one one modulate"
+startColor = "30 127 255 200"
+finishColor = "0 0 255 0"
+startRadius = 0.01
+finishRadius = 0.0
+trailTime = 1.0
+segmentLength = 1.5
+segmentVariance = "2.0 2.0 1.0"
+animateTime = 0.8 // 0.2
+textureRate = 0.05 //.1
+
+
+
+
+

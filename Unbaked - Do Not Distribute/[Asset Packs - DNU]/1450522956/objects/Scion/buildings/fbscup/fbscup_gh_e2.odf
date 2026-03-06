@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbscup"
+
+StayWithOwner = True
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]
+

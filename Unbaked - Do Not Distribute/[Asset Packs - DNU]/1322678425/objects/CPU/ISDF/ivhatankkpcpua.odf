@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivhatank_kp_a"
+unitName = "Heavy Bull Dog"
+
+scrapValue = 45
+scrapCost = 60
+buildTime = 12.0
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

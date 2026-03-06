@@ -1,0 +1,7 @@
+[GameObjectClass]
+classLabel = "ivbomb"
+
+providesCount = 3
+provideName1 = "ivbomb"
+provideName2 = "flier"
+provideName3 = "VIRTUAL_CLASS_BOMBER"

@@ -1,0 +1,129 @@
+// =================
+// VEHICLE EXPLOSION
+// =================
+
+[ExplosionClass]
+classLabel = "explosion"
+FriendlyFireDamage = true
+
+particleTypes = 6
+
+particleClass1 = "xpgenkpcxpl.shock"
+particleCount1 = 1
+particleVeloc1 = "0.0 0.0 0.0"
+
+particleClass2 = "xpgenkpcxpl.light"
+particleCount2 = 1
+particleVeloc2 = "0.0 0.0 0.0"
+
+particleClass3 = "xpgenkpcxpl.flame"
+particleCount3 = 15 //30
+particleVeloc3 = "30.0 10.0 30.0"
+particlePosVar3 = "5.0 0.0 5.0"
+
+particleClass4 = "xpgenkpcxpl.smoke"
+particleCount4 = 15 //30
+particleVeloc4 = "40.0 10.0 40.0"
+particlePosVar4 = "5.0 0.0 5.0"
+
+particleClass5 = "xpgenkpcxpl.ring"
+particleCount5 = 1
+particleVeloc5 = "0.0 0.0 0.0"
+
+particleClass6 = "xpgenkpcxpl.sparks"
+particleCount6 = 60 //30
+particleVeloc6 = "100.0 100.0 100.0"
+particlePosVar6 = "5.0 5.0 5.0""
+
+explSound = "xbuild.wav"
+damageRadius = 65.0
+damageValue(N) = 4000
+damageValue(L) = 4000
+damageValue(H) = 4000
+damageValue(S) = 4000
+damageValue(D) = 4000
+damageValue(A) = 4000
+kickRadius = 70.0
+kickOmega = 0.0
+kickVeloc = 25.0
+
+[Light]
+simulateBase = "sim_null"
+lifeTime = 1.5
+renderBase = "draw_light"
+startColor = "255 140 0 2550"
+finishColor = "255 140 0 0"
+startRadius = 65.0
+finishRadius = 65.0
+animateTime = 1.5
+attenuateConstant = 1.0
+attenuateLinear = 0.0
+attenuateQuadratic = 15.0
+lensFlare = 0
+
+[Flame]
+simulateBase = "sim_smoke"
+lifeTime = 3.0
+renderBase = "draw_twirl"
+textureName = "flame2.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 63 255"
+finishColor = "255 165 0 0"
+startRadius = 10.0
+finishRadius = 65.0
+animateTime = 3.0
+
+[Smoke]
+simulateBase = "sim_smoke"
+lifeTime = 7.0
+renderBase = "draw_twirl"
+textureName = "smoke2.tga"
+textureBlend = "srcalpha invsrcalpha modulatealpha"
+startColor = " 127 70 0 255"
+finishColor = "0 0 0 0"
+startRadius = 12.0
+finishRadius = 68.0
+animateTime = 7.0
+latitudeBands = 16
+longitudeSegments = 32
+
+[Sparks]
+simulateBase = "sim_ember"
+lifeTime = 4.0
+renderBase = "draw_trail"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+textureRate = 0.3
+startColor = "255 127 75 255"
+finishColor = "127 127 127 0"
+startRadius = 0.2
+finishRadius = 0.0
+animateTime = 3.0
+segmentTime = 0.15
+segmentLength = 0.3
+
+[Shock]
+simulateBase = "sim_null"
+lifeTime = 1.0
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "255 140 0 63"
+finishColor = "127 127 127 0"
+startRadius = 10.0
+finishRadius = 65.0
+animateTime = 1.0
+latitudeBands = 16
+longitudeSegments = 32
+
+[Ring]
+simulateBase = "sim_null"
+lifeTime = 1.0
+renderBase = "draw_planar"
+textureName = "ring.tga"
+textureBlend = "one one modulate"
+startColor = "255 140 0 127"
+finishColor = "255 140 127 0"
+startRadius = 10.0
+finishRadius = 65.0
+animateTime = 1.0

@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "fbspir"
+geometryName = "fbspir00_kp_wop.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fbspir00_kp_wop.fbx"
+isTerrain = 0
+AlignTerrainReplaceType = 0
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

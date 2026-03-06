@@ -1,0 +1,30 @@
+[GameObjectClass]
+classLabel = "fbrecy"
+
+[BuildingClass]
+
+[FactoryClass]
+WeaponConfig = "fweapon_kp.odf"
+
+buildItem5 = "fvcons_kp"
+
+[BuildGroup2]
+buildlabel = "Scouts"
+buildItem1 = "fvscout"
+buildItem2 = "fvscout_m"
+buildEmptyItem2 = true
+
+[BuildGroup3]
+buildlabel = "Turrets"
+buildItem1 = "fvturr"
+buildItem2 = "fvhturr_kp"
+buildItem3 = "fvrturr_kp"
+
+[BuildGroup6]
+buildlabel = "Healers"
+buildItem1 = "fvserv"
+buildItem2 = "fvserv_kp"
+
+[RecyclerClass]
+
+[PoweredBuildingClass]

@@ -1,0 +1,31 @@
+[GameObjectClass]
+classLabel = "fbrecy"
+								   
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "fbrecy"
+provideName2 = "fbrecycpu"
+provideName3 = "fbrecy_gh_b"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+provideName6 = "VIRTUAL_CLASS_COMMANDER_RECYCLER"
+provideName7 = "VIRTUAL_CLASS_COMMANDER_RECYCLERBUILDING"
+
+////////////////////////////////////
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem8 = "fvscout_m"
+buildEmptyItem = 8
+buildItem9 = "fvscrap_gh"
+
+[BuildGroup5]
+buildLabel = "Builders"
+buildItem1 = "fvcons_gh_b1"
+buildItem2 = "fvcons_gh_a2"
+
+[RecyclerClass]
+
+[PoweredBuildingClass]

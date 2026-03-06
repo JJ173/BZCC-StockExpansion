@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "fbdowe"
+
+providesCount = 4
+provideName1 = "fbdowe"
+provideName2 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+provideName3 = "VIRTUAL_CLASS_DOWER"
+provideName4 = "base"

@@ -1,0 +1,93 @@
+[OrdnanceClass]
+classLabel = "BULLET"
+shotSound = "spplasball.wav"
+shotGeometry = NULL
+shotRadius = 2.0
+xplGround = "xsplasIIgnd_kp_c"
+xplVehicle = "xsplasIIcar_kp_c"
+xplBuilding = "xsplasIIcar_kp_c"
+
+renderName = "plasballII_kp.render"
+
+ammoCost = 16.5
+lifeSpan = 1.6 // 100m
+shotSpeed = 75.0
+
+damageValue(N) = 220 // none // 366
+damageValue(L) = 200 // light // 333
+damageValue(H) = 180 // heavy // 300
+
+damageValue(S) = 200 // standard // 333
+damageValue(D) = 150 // deflection // 250
+damageValue(A) = 220 // absorbtion // 366
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 5
+renderName1 = "plasballII_kp.flare1"
+renderName2 = "plasballII_kp.trailr"
+renderName3 = "plasballII_kp.core"
+renderName4 = "plasballII_kp.sparks"
+renderName5 = "plasballII_kp.light"
+
+[Flare1]
+renderBase = "draw_twirl_trail"
+textureName = "plasmahitcore2.tga"
+textureBlend = "one one modulate"
+startColor = "50 200 255 255" // "255 63 55 255"
+finishColor = "0 0 255 255" // "255 63 55 255"
+startRadius = 0.5
+finishRadius = 0.02
+rotationRate = 12.0
+animateTime = 0.06
+emitDelay = 0.001
+emitVelocity = "0.0 0.0 0.0"
+emitVariance = "3.0 3.0 3.0"
+emitLife = 0.06
+
+[TrailR]
+renderBase = "draw_twirl_trail"
+textureName = "plasmahitcore2.tga"
+textureBlend = "one one modulate"
+startColor = "10 145 255 200" // "255 63 55 255"
+finishColor = "0 0 255 0" // "255 63 55 255"
+startRadius = 0.3
+finishRadius = 0.0
+animateTime = 0.6
+rotationRate = 5.0
+emitDelay = 0.08
+emitVelocity = "0.1 0.1 0.0"
+emitVariance = "15.0 15.0 0.0"
+emitLife = 0.6
+
+[Core]
+renderBase = "draw_sprite"
+textureName = "particle.tga"
+textureBlend = "one one modulate"
+startColor = "10 145 255 120"
+finishColor = "10 145 255 120"
+startRadius = 1.2 
+finishRadius = 1.2 
+
+[Sparks]
+renderBase = "draw_twirl_trail"
+emitDelay = 0.03
+emitVelocity = "0.0 0.0 0.0"
+emitVariance = "19.0 19.0 19.0"
+emitLife = 0.15
+textureName = "spark2.tga"
+textureBlend = "one one modulate"
+startColor = "38 145 255 255"
+finishColor = "38 145 255 0"
+startRadius = 0.13
+finishRadius = 0.06
+animateTime = 0.15
+rotationRate = 2.0
+
+[Light]
+renderBase = "draw_light"
+startColor = "0 63 255 855"
+finishColor = "0 0 155 0"
+startRadius = 5.0
+finishRadius = 5.0
+lensFlare = 0

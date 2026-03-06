@@ -1,0 +1,15 @@
+[WeaponClass]
+classLabel = "cannon"
+//altName = "grktbomb_a"
+ordName = "erkt_kp"
+wpnName = "Explosive Rocket"
+fireSound = "gpopp00.wav"
+wpnReticle = "grktbomb"
+wpnCategory = "ROCK"
+isAssault = 0
+
+[CannonClass]
+shotDelay = 6.0
+salvoCount = 4
+salvoDelay = 0.01
+shotVariance = 0.1

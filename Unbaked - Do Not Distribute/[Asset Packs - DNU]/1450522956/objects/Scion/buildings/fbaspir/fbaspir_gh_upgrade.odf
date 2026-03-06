@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbaspir_gh"
+scrapCost = 20
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

@@ -1,0 +1,64 @@
+[GameObjectClass]
+baseName = "ibsilo_gh_b2"
+mrmFactor = 0
+geometryName = "ibsilo00_gh_b2.fbx"
+classLabel = "silo"
+scrapCost = 20
+scrapValue = 10
+maxHealth = 5000
+maxAmmo = 0
+unitName = "Silo"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+collisionRadius = 1.0
+isAssault = 1
+canInteract=1 // for missile lock
+canCollide = 1
+
+buildSupport = "N"
+buildRequire = "N"
+
+armorClass = H
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+////////////////////////////////////
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "ibsilo_gh_b2"
+provideName2 = "VIRTUAL_CLASS_SILO"
+provideName3 = "VIRTUAL_CLASS_STORAGE"
+
+////////////////////////////////////
+
+
+/////// OBJECT LIMITS //////////////
+
+limitClass1 = "ivrecy" // e.g. "ibrecy", *NO* ".odf" on item
+limitClass1Count = 1
+limitClass1Text = "Already have a Recycler"
+
+limitClass2 = "ibrecy" // e.g. "ibrecy", *NO* ".odf" on item
+limitClass2Count = 1
+limitClass2Text = "Already have a Recycler"
+
+limitClass3 = "ibsilo_gh_b2" // e.g. "ibrecy", *NO* ".odf" on item
+limitClass3Count = 2
+limitClass3Text = "Only Two Allowed"
+
+////////////////////////////////////
+
+[BuildingClass]
+soundAmbient = "iext01.wav"
+
+[SiloClass]
+initDelay = 1e6 // 10.0 // How long before produces first scrap.
+scrapDelay = 1e6 // 10.0 // How long between scrap after first is created.
+scrapHold = 20 // Scrap capacity. 
+detectRange = 100

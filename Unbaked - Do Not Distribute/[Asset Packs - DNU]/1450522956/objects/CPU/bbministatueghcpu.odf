@@ -1,0 +1,75 @@
+[GameObjectClass]
+geometryName = "bbministatue00_gh.fbx"
+classLabel = "turret"
+powerCost = 0
+scrapCost = 250
+scrapValue = 20
+maxHealth = 20000
+addHealth = 25.0
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+unitName = "Ambush Statue"
+aiName = "GunTowerFriend"
+aiName2 = "GunTowerEnemy"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+collisionRadius = 4.0
+CanAcceptPowerups = false   If false, the unit should blow off powerups they receive.
+isAssault = 1
+
+armorClass = H
+
+requireCount = 0
+
+buildSupport = B
+buildRequire = B
+
+
+/////// weapons ///////////////////
+
+weaponMask = 00011
+weaponHard1 = "HP_MORTAR_1"
+weaponName1 = "gstatuebomb_gh"
+weaponAssault1 = 0
+
+weaponHard2 = "HP_CANNON_1"
+weaponName2 = "ggray_gh_c"
+weaponAssault2 = 1
+
+//////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+[BuildingClass]
+soundAmbient = "igtow01.wav"
+CanDemolish = false
+ReplacesObject = true // but extractors default this to true
+
+[CraftClass]
+rangeScan = 365
+periodScan = 0.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 0.5
+engageRange = 400
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+// subAttackClass uses 3 letters.
+// 1st letter is either A or N.     A is include Air targets.         N is attack ground only.
+// 2nd letter is either D or N.     D is to deploy before attacking.  N for regular attack.
+// 3rd letter is either S or N.     S is to use Weapon Range.
+
+GunTowerProcessCheckCantHit = false // true: retarget if intended victim can't be hit (only if GunTowerProcess is in use)
+//MinWeaponPitch = 0.5 // For turretcraft/turrettank (i.e. GunTower/GunSpire/turret)
+MaxWeaponPitch = 1.6 // For turretcraft/turrettank (i.e. GunTower/GunSpire/turret)
+
+[TurretCraftClass]
+omegaTurret = 2.0
+detectRange = 10
+
+
+

@@ -1,0 +1,17 @@
+[WeaponClass]
+classLabel = "cannon"
+ordName = "statuebomb_gh"
+wpnName = "Popper"
+fireSound = "gpopp00.wav"
+wpnReticle = "glockm"
+wpnLadder = "gpopgun.L0"
+wpnPriority = 6
+wpnCategory = "MORT"
+aiRange = 35
+localammo = 1
+
+[CannonClass]
+shotDelay = 1.0
+shotPitch = 1.0
+shotLead = 0
+

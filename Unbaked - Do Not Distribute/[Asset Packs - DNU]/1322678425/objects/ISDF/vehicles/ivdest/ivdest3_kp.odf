@@ -1,0 +1,31 @@
+[GameObjectClass]
+classLabel = "ivdest_kp"
+unitName = "Destroyer III"
+unitIcon = "icon_ivdest3_kp.tga"
+
+aiName = "RocketTankFriend"
+aiName2 = "RocketTankEnemy"
+
+/////// weapons ////////////////////
+
+weaponHard1 = "HP_ROCKET_2"
+weaponName1 = "gshadow_a"
+weaponAssault1 = 1
+recoilName1 = "recoil4"
+
+weaponHard2 = "HP_ROCKET_4"
+weaponName2 = "gshadow_a"
+weaponAssault2 = 1
+recoilName2 = "recoil6"
+
+weaponHard3 = "HP_ROCKET_1"
+weaponName3 = "gfafmsl_c"
+recoilName3 = "recoil3"
+
+weaponHard4 = "HP_ROCKET_3"
+weaponName4 = "gfafmsl_c"
+recoilName4 = "recoil5"
+
+[CraftClass]
+
+[HoverCraftClass]

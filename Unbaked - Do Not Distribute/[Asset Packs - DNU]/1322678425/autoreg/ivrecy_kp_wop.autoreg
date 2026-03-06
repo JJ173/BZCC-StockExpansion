@@ -1,0 +1,13 @@
+[RecyclerList]
+ODFName = "ivrecy_kp_wop"
+Description = "KatPak: Recycler without BasePlates"
+
+[RecyclerListMPI]
+ODFName = "ivrecy_kp_wop"
+Description = "KatPak: Recycler without BasePlates"
+
+[IAHumanRecyclerList]
+ODFName = "ivrecy_kp_wop"
+Description = "KatPak: Recycler without BasePlates"
+
+

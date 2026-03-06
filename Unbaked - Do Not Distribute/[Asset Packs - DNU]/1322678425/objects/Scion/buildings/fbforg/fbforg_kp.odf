@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "fbforg"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+WeaponConfig = "fweapon_kp.odf"
+buildItem2 = "fvsent_kp"
+buildItem3 = "fvarch"
+buildItem4 = "fvtank"
+buildItem5 = "fvartl"
+buildItem6 = "fvwalk"
+buildItem7 = "fvatank"
+buildItem8 = "fvhatank_kp"
+

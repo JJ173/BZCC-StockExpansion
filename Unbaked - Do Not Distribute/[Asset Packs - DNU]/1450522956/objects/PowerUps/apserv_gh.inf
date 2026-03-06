@@ -1,0 +1,6 @@
+SERVICE POD
+Replenishes up to 1500 units of a vehicle's ammo or health based on need.
+Replenishes 13 local ammo (Slug, Rocket Bomb).
+
+COST: 2
+BUILDER: Armory or Recycler

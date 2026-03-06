@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ivrturr_kp"
+unitName = "Rocket Rattler"
+
+[CraftClass]
+[HoverCraftClass]
+[DeployableClass]
+[TurretTankClass]
+

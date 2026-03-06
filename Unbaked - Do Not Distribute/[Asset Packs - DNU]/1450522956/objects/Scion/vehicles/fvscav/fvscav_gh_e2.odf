@@ -1,0 +1,21 @@
+[GameObjectClass]
+classLabel = "fvscav"
+
+StayWithOwner = True
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "fbscav_gh_e2"
+DeathScrapDropRatio = 1
+doDrop = true
+DropDist = 15
+doDropRecycler = true
+doDropExtractor = true
+doDropSilo = true 
+
+

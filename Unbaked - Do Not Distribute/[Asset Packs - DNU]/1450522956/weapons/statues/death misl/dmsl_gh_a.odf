@@ -1,0 +1,69 @@
+[OrdnanceClass]
+classLabel = "thermalmissile"
+
+shotGeometry = "Iorckt00.xsi"
+shotSound = "smort03.wav"
+
+renderName = "dmsl_gh_a.render"
+
+xplGround = "xdmslghgnd"
+xplVehicle = "xdmslghcar"
+xplBuilding = "xdmslghbld"
+
+ammoCost = 300
+lifeSpan = 2.25 // 350m
+shotSpeed = 155.56
+
+damageValue(N) = 315 // none
+damageValue(L) = 300 // light
+damageValue(H) = 285 // heavy
+
+damageValue(S) = 300 // standard
+damageValue(D) = 270 // deflection
+damageValue(A) = 315 // absorbtion
+
+[MissileClass]
+TeamFilter = 3  // 0 = targets all teams, 1 = targets same team only, 2 = targets only allies, 3 = targets only enemies, 4 = targets not same team
+omegaTurn = 1.25
+
+omegaWaver = 0.7
+rateWaver = 0.9
+
+[ThermalMissileClass]
+
+coneAngle = 0.2
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 3
+renderName1 = "dmsl_gh_a.flare"
+renderName2 = "dmsl_gh_a.halo"
+renderName3 = "dmsl_gh_a.trail"
+
+[Flare]
+renderBase = "draw_sprite"
+textureName = "lightflare.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 255 255"
+finishColor = "255 255 255 255"
+startRadius = 7.0
+finishRadius = 7.0
+
+[Halo]
+renderBase = "draw_sprite"
+textureName = "lighthalo.tga"
+textureBlend = "one one modulate"
+startColor = "255 127 0 64"
+finishColor = "255 127 0 64"
+startRadius = 7.0
+finishRadius = 7.0
+
+[Trail]
+renderBase = "draw_trail"
+textureName = "trail2.tga"
+textureBlend = "one one modulate"
+startColor = "255 127 0 128"
+finishColor = "255 0 0 0"
+startRadius = 1.1
+finishRadius = 1.4
+segmentTime = 1.4

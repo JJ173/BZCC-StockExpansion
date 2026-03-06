@@ -1,0 +1,16 @@
+[GameObjectClass]
+classLabel = "ibgbun_kp"
+
+scrapCost = 50
+scrapValue = 20
+
+upgradeName = "ibrbunkpcpu"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[PoweredBuildingClass]

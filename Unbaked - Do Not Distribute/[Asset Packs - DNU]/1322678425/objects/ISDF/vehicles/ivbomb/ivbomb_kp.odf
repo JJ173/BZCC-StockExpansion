@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivbomb"
+unitName = "Liberator"
+
+[CraftClass]
+TeamTransferrable = true
+
+[HoverCraftClass]
+
+[BomberClass]

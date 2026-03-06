@@ -1,0 +1,42 @@
+[OrdnanceClass]
+classLabel = "imagemissile"
+shotGeometry = ""
+
+xplGround = "xbulgnd"
+xplVehicle = "xbulcar"
+xplBuilding = "xbulbld"
+
+renderName = "bombld_gh.render"
+
+ammoCost = 2.0
+lifeSpan = 1.7 // 120m
+shotSpeed = 70.0 
+
+damageValue(N) = 90 // none // 320
+damageValue(L) = 80 // light // 320
+damageValue(H) = 50 // heavy // 240
+
+damageValue(S) = 70 // standard // 300
+damageValue(D) = 70 // deflection // 160
+damageValue(A) = 70 // absorbtion // 320
+
+[MissileClass]
+TeamFilter = 3  // 0 = targets all teams, 1 = targets same team only, 2 = targets only allies, 3 = targets only enemies, 4 = targets not same team
+omegaTurn = 6.0
+coneAngle = 3.14
+velocForward = 50.0		// powered speed of the missile
+accelThrust = 30.0		// rate the missile can change speed
+delayTime = 1.0			// homing delay time (zero turn rate)
+rampTime = 2.0			// homing ramp time (from zero to full turn rate)
+avoidRange = 10.0		// terrain obstacle-avoidance range
+avoidStrength = 5.0		// terrain obstacle-avoidance strength (~2 seems best)
+
+[Render]
+renderBase = "draw_trail"
+textureBlend = "one one modulate"
+textureName = "trail.tga"
+startColor = "255 127 0 255"
+finishColor = "255 127 0 0"
+startRadius = 0.02
+finishRadius = 0.05
+segmentTime = 0.05

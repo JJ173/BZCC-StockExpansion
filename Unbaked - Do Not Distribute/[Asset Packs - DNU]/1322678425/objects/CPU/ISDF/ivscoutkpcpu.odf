@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ivscout"
+unitName = "Thunderbolt"
+
+scrapValue = 20
+scrapCost = 10
+buildTime = 3.0
+
+weaponName1 = "gchain_c"
+weaponName2 = "gchain_c"
+
+weaponMask = 00111
+
+[CraftClass]
+UseSelectWeapon = false
+AllowLinkWeapons = true
+
+[HoverCraftClass]

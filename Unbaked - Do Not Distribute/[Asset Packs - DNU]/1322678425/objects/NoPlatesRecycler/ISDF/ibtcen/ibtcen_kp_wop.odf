@@ -1,0 +1,8 @@
+[GameObjectClass]
+classLabel = "ibtcen"
+geometryName = "ibtcen00_kp_wop.fbx"
+isTerrain = 0
+
+[BuildingClass]
+
+[PoweredBuildingClass]

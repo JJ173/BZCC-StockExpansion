@@ -1,0 +1,26 @@
+[WeaponClass]
+classLabel = "machinegun"
+altName = "ghchain_kp_a"
+ordName = "hchain_kp_c"
+wpnName = "Hvy Chain Gun"
+fireSound = "gchain_c.wav"
+wpnReticle = "gchain"
+wpnCategory = "GUN"
+isAssault = 0
+flashName = "ghchain_kp_c.flash"
+aiRange = 100
+
+[CannonClass]
+shotDelay = 0.17
+shotVariance = 0.05
+
+[Flash]
+renderBase = "draw_geom"
+textureName = "sflash.tga"
+textureBlend = "one one modulate"
+startColor = "255 0 0 255"
+finishColor = "255 0 0 0"
+startRadius = 2.0
+finishRadius = 0.75
+animateTime = 0.1
+geomName = "g_sflash.xsi"

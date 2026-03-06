@@ -1,0 +1,32 @@
+[GameObjectClass]
+classLabel = "ivtank"
+
+scrapValue = 20
+scrapCost = 40
+buildTime = 10.0
+
+unitName = "Sabre"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+/////// weapons ////////////////////
+weaponMask = 00111
+
+weaponName1 = "gspstab_c"
+
+weaponName2 = "gchain_c"
+
+weaponName3 = "gchain_c"
+
+weaponName4 = "gmortar"
+
+weaponName5 = ""
+
+[CraftClass]
+UseSelectWeapon = false
+AllowLinkWeapons = true
+
+
+[HoverCraftClass]

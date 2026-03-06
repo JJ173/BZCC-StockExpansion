@@ -1,0 +1,25 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+
+classLabel = "ebcbun"
+
+UseCollisionMeshForPathing = 1
+
+provideCount = 5
+provideName4 = "ebcbun_vsr"
+provideName5 = "VIRTUAL_CLASS_COMMTOWER"
+
+[BuildingClass]
+
+[CommBunkerClass]
+// {VSR-011}	As this caused "pulsating" in other "relay bunker" variants, this has been commented out (BZCC VSR release 31)
+//minViewDist = 100.0 // If specified, minimum height of commbunker view
+//maxViewDist = 200.0 // If specified, maximim height of commbunker view
+
+[PoweredBuildingClass]
+
+//Commented out LOD for BZCC (VSR Release 64)
+//[Lod1]
+//geometryName = "ebcbunL1.xsi" ;geometry for lod1
+//distance = 70                   ;bsphere under 200 pixel => switch to lod1
+//dontShiftLOD = 1

@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fbrspir_gh"
+scrapValue = 50
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

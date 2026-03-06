@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "ivrecy"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "ivrecy"
+provideName2 = "ivrecycpu"
+provideName3 = "ivrecy_gh_b"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERVEHICLE"
+provideName6 = "VIRTUAL_CLASS_COMMANDER_RECYCLER"
+provideName7 = "VIRTUAL_CLASS_COMMANDER_RECYCLERVEHICLE"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ibrecy_gh_b"
+
+[RecyclerVehicleClass]

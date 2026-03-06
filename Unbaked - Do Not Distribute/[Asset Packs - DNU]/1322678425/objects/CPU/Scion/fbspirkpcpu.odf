@@ -1,0 +1,24 @@
+[GameObjectClass]
+classLabel = "fbspir"
+
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+
+scrapCost = 50
+scrapValue = 25
+
+///// WEAPON ///////////////////////
+
+weaponName1 = "gmbolt_kp"
+
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+subAttackClass = "ANS"
+
+[TurretCraftClass]

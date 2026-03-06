@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "ibrecy"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "ibrecy"
+provideName2 = "ibrecycpu"
+provideName3 = "ibrecy_gh_c"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem8 = "ivscout_m"
+buildEmptyItem = 8
+
+[BuildGroup1]
+buildLabel = "Scavengers"
+buildItem1 = "ivscav"
+buildItem2 = "ivhscav_gh"
+
+[BuildGroup5]
+buildlabel = "Constructors"
+buildItem1 = "ivcons_gh_c1"
+buildItem2 = "ivcons_gh_c2"
+
+[RecyclerClass]

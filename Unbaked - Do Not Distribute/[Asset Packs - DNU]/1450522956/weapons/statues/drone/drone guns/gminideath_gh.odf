@@ -1,0 +1,16 @@
+[WeaponClass]
+classLabel = "cannon"
+ordName = "minideath_gh"
+wpnName = "Death Msl"
+fireSound = "gmagg06.wav"
+wpnReticle = "ghornet.0"
+wpnPriority = 80
+wpnCategory = "ROCK"
+aiRange = 200
+isAssault = 1
+
+[CannonClass]
+shotDelay = 1.5 // 2/3sec
+shotAlternate = 0
+salvoCount = 10
+salvoDelay = 0.2

@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ibscav"
+
+StayWithOwner = True
+
+upgradeName = "ibscup_gh_e2"
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]

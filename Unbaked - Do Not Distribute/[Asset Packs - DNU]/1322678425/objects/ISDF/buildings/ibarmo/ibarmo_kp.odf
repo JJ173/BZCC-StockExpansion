@@ -1,0 +1,38 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+buildItem3 = "appumm_kp"
+buildItem5 = "aphchain_kp"
+
+[ArmoryGroup2]
+buildItem5 = "apflsh_kp"
+buildItem6 = "apblst"
+buildItem7 = "apmagg"
+
+[ArmoryGroup3]
+buildItem4 = "apwindr_kp"
+buildItem5 = "aprktb_kp"
+
+[ArmoryGroup4]
+buildItem3 = "apspln_kp"
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+buildLabel = "Service"
+buildItem1 = "apammo"
+buildItem2 = "aprepa"
+buildItem3 = "apserv"
+
+[steam]

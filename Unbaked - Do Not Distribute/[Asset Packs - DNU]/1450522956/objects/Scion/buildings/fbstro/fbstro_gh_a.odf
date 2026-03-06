@@ -1,0 +1,36 @@
+[GameObjectClass]
+classLabel = "fbstro"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "fbstro"
+provideName2 = "fbstro_gh_a"
+provideName3 = "VIRTUAL_CLASS_ARMORY"
+provideName4 = "VIRTUAL_CLASS_STRONGHOLD"
+provideName5 = "base"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+

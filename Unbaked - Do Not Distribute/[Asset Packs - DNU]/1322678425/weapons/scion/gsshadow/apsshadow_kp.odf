@@ -1,0 +1,16 @@
+[GameObjectClass]
+baseName = "apsshadow_kp"
+classLabel = "aprocket"
+
+scrapCost = 40
+
+unitName = "Seeker Rkt/Msl"
+
+requireCount = 1
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gsshadow_kp_c"

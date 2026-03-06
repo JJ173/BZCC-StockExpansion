@@ -1,0 +1,56 @@
+[GameObjectClass]
+classLabel = "fbforg"
+
+isSingle = 0
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 1
+requireName1 = "fbkiln"
+requireText1 = "Upgrade Kiln"
+
+////////////////////////////////////
+
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "fbkiln"
+provideName2 = "fbforg"
+provideName3 = "fbkiln_gh_b1"
+provideName4 = "fbforg_gh_b1"
+provideName5 = "VIRTUAL_CLASS_FACTORY"
+provideName6 = "VIRTUAL_CLASS_FACTORY_U"
+provideName7 = "VIRTUAL_CLASS_FORGE"
+
+////////////////////////////////////
+
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent"
+buildItem2 = "fvarch"
+buildItem4 = "fvartl"
+buildItem5 = "fvwalk"
+buildItem6 = "fvatank"
+buildItem8 = "fvrecy_gh_b2"
+
+[BuildGroup3]
+buildLabel = "Warriors"
+buildItem1 = "fvtank"
+buildItem2 = "fvhtank_gh"
+buildItem3 = "fvhtank_gh_s"
+
+[BuildGroup7]
+buildLabel = "Advanced Units"
+buildItem1 = "fvpscout_gh"
+buildItem2 = "fvgship_gh"
+buildItem3 = "fvsav_gh"
+buildEmptyItem3 = true
+buildItem4 = "fvburn_gh"
+buildItem5 = "fvcomm_gh"
+buildEmptyItem5 = true
+

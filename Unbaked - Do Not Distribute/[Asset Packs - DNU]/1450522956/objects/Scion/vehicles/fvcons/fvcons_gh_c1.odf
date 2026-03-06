@@ -1,0 +1,25 @@
+[GameObjectClass]
+classLabel = "fvcons"
+
+StayWithOwner = True
+
+/////// PROVIDES ///////////////////
+
+provideCount = 2
+provideName1 = "fvcons_gh_b1"
+provideName2 = "VIRTUAL_CLASS_CONSTRUCTIONRIG"
+
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "fbkiln_gh_c"
+buildItem2 = "fbspir_gh"
+buildItem3 = "fbantm_gh_b1"
+buildItem4 = "fbdowe_gh_b1"
+buildItem5 = "fbstro_gh_b1"

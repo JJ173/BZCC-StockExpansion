@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+geometryName = "ibarmo00_kp_wop.fbx"
+isTerrain = 0
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[steam]

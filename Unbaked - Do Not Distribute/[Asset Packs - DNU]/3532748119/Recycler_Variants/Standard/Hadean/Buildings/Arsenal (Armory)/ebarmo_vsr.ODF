@@ -1,0 +1,50 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+
+classLabel="ebarmo"
+
+provideCount = 4
+provideName3="ebarmo_vsr"
+provideName4="base"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[ArmoryClass]
+// {VSR-010}
+DropoffDX = 0
+DropoffDZ = 16 // *32
+
+[FactoryClass]
+soundBuild="ibrecy02.wav"
+soundFinish="iapc04.wav"
+
+reloadMsg="evrecy12.wav"
+rescueMsg="evrecy13.wav"
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+buildItem1="approxvsr"
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+// {VSR-045}
+buildItem1="epbazo_vsr"
+buildItem2="epsnip_vsr"
+buildItem3="epgren_vsr"
+buildItem4="epjetp_vsr"
+
+//Commented out LOD for BZCC (VSR Release 64)
+//[Lod1]
+//geometryName="ebarmoL1.xsi" ;geometry for lod1
+//distance=70              ;bsphere under 200 pixel => switch to lod1
+//dontShiftLOD=1

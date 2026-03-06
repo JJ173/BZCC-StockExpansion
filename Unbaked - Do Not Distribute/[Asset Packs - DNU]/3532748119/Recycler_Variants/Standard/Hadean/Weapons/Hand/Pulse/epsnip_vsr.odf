@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel="epsnip"
+scrapCost=30 // *10 {VSR-046}
+
+requireCount=1
+requireName1="ebcbun_vsr"
+requireText1="Build Eyes of Xyr"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName="egsnip_vsr_c"

@@ -1,0 +1,21 @@
+[OrdnanceClass]
+classLabel = "bullet"
+shotGeometry = NULL
+
+xplGround = "xbulgnd"
+xplVehicle = "xbulcar"
+xplBuilding = "xbulbld"
+
+renderName = "pummel_c_kp.render"
+
+ammoCost = 2
+lifeSpan = 0.5 // 99m
+shotSpeed = 300.0
+
+damageValue(N) = 24 // none
+damageValue(L) = 24 // light
+damageValue(H) = 24 // heavy
+
+damageValue(S) = 21 // standard
+damageValue(D) = 19 // deflection
+damageValue(A) = 24 // absorbtion

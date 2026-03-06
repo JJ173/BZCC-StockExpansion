@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibbomb"
+
+[BuildingClass]
+
+[BomberBayClass]
+bomberType = "ivbomb_kp"
+
+[PoweredBuildingClass]

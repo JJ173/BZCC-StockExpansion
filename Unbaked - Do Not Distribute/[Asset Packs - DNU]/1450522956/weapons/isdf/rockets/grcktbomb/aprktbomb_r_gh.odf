@@ -1,0 +1,17 @@
+[GameObjectClass]
+baseName = "aprktbomb_r_gh"
+classLabel = "aprocket"
+
+scrapCost = 25
+
+unitName = "Rocket Bomb Refill"
+
+requireCount = 1
+requireName1 = "ibsbay_gh_a2"
+requireText1 = "Build Assault Bay"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "grktbomb_gh_a"
+RefreshWeaponOnly = true

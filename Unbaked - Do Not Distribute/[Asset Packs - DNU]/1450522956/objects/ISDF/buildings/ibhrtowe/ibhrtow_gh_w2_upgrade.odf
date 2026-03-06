@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibhrtow_gh_w2"
+scrapCost = 20
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

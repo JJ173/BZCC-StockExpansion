@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "fbspir"
+
+///// WEAPON ///////////////////////
+
+weaponMask = 00001
+weaponHard1 = "hp_cannon_1"
+weaponName1 = "gmbolt_kp"
+
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

@@ -1,0 +1,78 @@
+[GameObjectClass]
+baseName = "ibatow_gh_aw3"
+geometryName = "ibatow00_gh_aw3.fbx"
+cockpitName = "ibatow00_gh_a1_cockpit.fbx"
+classLabel = "turret"
+scrapCost = 95
+scrapValue = 25
+maxHealth = 8000
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+unitName = "Assault Tower"
+aiName = "GunTowerFriend"
+aiName2 = "GunTowerEnemy"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+collisionRadius = 11.0
+armorClass = H
+AllowUndergroundSpawn = 1  //from pb137# to ensure ground preplacement
+powerCost = 2
+upgradeName = "ibatow_gh_aw4_upgrade"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "ibcbun"
+requireText1 = "Build Relay Bunker"
+requireName2 = "ibtcen"
+requireText2 = "Build Tech Center"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "ibatow_gh_aw3"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+/////// weapons ////////////////////
+weaponMask = 00021
+weaponHard1 = "hp_cannon_1"
+recoilName1 = "recoil_1"
+weaponName1 = "gplasma_a"
+weaponAssault1 = 1
+weaponHard2 = "hp_cannon_2"
+recoilName2 = "recoil_2"
+weaponName2 = "gplasma_a"
+weaponAssault2 = 1
+
+/////// LIGHTS and EFFECTS /////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+lightHard2 = "hp_light_2"
+lightName2 = "o_red_nf"
+lightHard3 = "hp_light_3"
+lightName3 = "spotblue2"
+
+effectHard1 = "hp_emit_1"
+effectName1 = "emit_blueblink"
+effectFlags1 = "447" //447 powered  479 unpowered
+
+/////// TURRETS ////////////////////
+turretCount = 2
+turretName1 = "turret_y_1"
+turretName2 = "turret_x_1"
+
+[BuildingClass]
+soundAmbient = "igtow01.wav"
+bldEdge = "wwww"
+
+[CraftClass]
+rangeScan = 250
+periodScan = 1.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 0.5
+engageRange = 300
+
+[TurretCraftClass]
+omegaTurret = 2.0
+detectRange = 300

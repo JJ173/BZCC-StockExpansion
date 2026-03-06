@@ -1,0 +1,50 @@
+[GameObjectClass]
+classLabel = "ibrecy"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "ibrecy"
+provideName2 = "ibrecycpu"
+provideName3 = "ibrecy_gh_e2"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+provideName6 = "VIRTUAL_CLASS_THUG_RECYCLER"
+provideName7 = "VIRTUAL_CLASS_THUG_RECYCLERBUILDING"
+
+////////////////////////////////////
+
+/////// OBJECT LIMITS ///////////////////
+
+limitClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limitClass2 = "VIRTUAL_CLASS_THUG_RECYCLERBUILDING"
+limitClass2Count = 2
+limitClass2Text = "Only One Allowed"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivscav_gh_e2"
+buildItem2 = "ivscout"
+buildItem3 = "ivturr"
+buildItem4 = "ivtug"
+buildItem6 = "ivserv"
+buildItem7 = "apserv"
+buildItem8 = "ivscout_m"
+buildEmptyItem = 8
+buildItem9 = "ivscrap_gh"
+
+[BuildGroup5]
+buildlabel = "Constructors"
+buildItem1 = "ivcons_gh_e1"
+buildItem2 = "ivcons_gh_e2"
+
+[RecyclerClass]
+scrapDelay = 3.0

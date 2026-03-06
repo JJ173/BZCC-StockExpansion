@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "fbgturr_kp"
+geometryName = "fbgturr00_kp_r.fbx"
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

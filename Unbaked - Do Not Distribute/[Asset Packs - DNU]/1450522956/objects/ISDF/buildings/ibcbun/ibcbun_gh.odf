@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibcbun"
+
+[BuildingClass]
+
+[CommBunkerClass]
+MinViewDist = 50// If specified, minimum height of commbunker view
+MaxViewDist = 450.0 // If specified, maximim height of commbunker view
+
+[PoweredBuildingClass]

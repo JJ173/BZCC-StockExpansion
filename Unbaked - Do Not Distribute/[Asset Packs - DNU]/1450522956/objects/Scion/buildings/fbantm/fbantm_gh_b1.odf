@@ -1,0 +1,28 @@
+[GameObjectClass]
+classLabel = "fbantm"
+
+upgradeName = "fbover_gh_b1"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_COMMTOWER"
+limitClass1Count = 1
+limitClass1Text = "only One Allowed"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 6
+provideName1 = "fbantm"
+provideName2 = "fbantm_gh_b1"
+provideName3 = "VIRTUAL_CLASS_COMMBUNKER"
+provideName4 = "VIRTUAL_CLASS_COMMTOWER"
+provideName5 = "VIRTUAL_CLASS_ANTENNA_MOUND"
+provideName6 = "base"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[CommBunkerClass]

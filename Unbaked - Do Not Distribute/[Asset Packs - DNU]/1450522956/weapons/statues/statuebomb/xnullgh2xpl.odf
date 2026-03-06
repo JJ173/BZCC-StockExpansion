@@ -1,0 +1,17 @@
+// ==============
+// NULL EXPLOSION
+// ==============
+
+[ExplosionClass]
+classLabel = "explosion"
+
+particleTypes = 0
+
+explSound = "silence.wav" 
+damageRadius = 0.0
+damageValue(N) = 0.0
+damageValue(L) = 0.0
+damageValue(H) = 0.0
+damageValue(S) = 0.0
+damageValue(D) = 0.0
+damageValue(A) = 0.0

@@ -1,0 +1,76 @@
+[OrdnanceClass]
+classLabel = "grenade"
+shotGeometry = "gatstab.xsi"
+shotSound = "Ordin_b.wav"
+
+renderName = "slug_c_gh.render"
+
+xplGround = "xsluggnd_gh"
+xplVehicle = "xslugxpl_gh"
+xplBuilding = "xslugxpl_gh"
+
+ammoCost = 1
+lifeSpan = 1.0		
+shotSpeed = 300.0	
+
+damageValue(N) = 1500 // none // 366			
+damageValue(L) = 1050 // light // 333	
+damageValue(H) = 600 // heavy // 300		
+damageValue(S) = 1050 // standard // 333		
+damageValue(D) = 1500 // deflection // 250	
+damageValue(A) = 600 // absorbtion // 366	
+
+IsArcing = 1 // false/0: use old straight-shot code. true/1: more like mortars
+
+[Render]
+renderBase = "draw_multi"
+renderCount = 4
+renderName1 = "slug_c_gh.smoke"
+renderName2 = "slug_c_gh.smokeb"
+renderName3 = "slug_c_gh.twirl"
+renderName4 = "slug_c_gh.light"
+
+[Smoke]
+renderBase = "draw_trail"
+textureName = "smoke2.tga"
+textureBlend = "one one modulate"
+textureRate = 0.01
+startColor = "155 100 0 175"
+finishColor = "150 100 55 0"
+startRadius = 0.2
+finishRadius = 0.0
+segmentTime = 0.4
+
+[SmokeB]
+renderBase = "draw_trail"
+textureName = "smoke2.tga"
+textureBlend = "one one modulate"
+textureRate = 0.01
+startColor = "255 200 0 200"
+finishColor = "200 150 55 50"
+startRadius = 0.2
+finishRadius = 0.4
+segmentTime = 0.05
+animateTime = 0.1
+
+[Twirl]
+renderBase = "draw_twirl_trail"
+textureName = "raindrop.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 255 75"
+finishColor = "0 0 0 0"
+startRadius = 0.2
+finishRadius = 0.5
+animateTime = 0.4
+emitDelay = 0.02
+emitLife = 0.5
+rotationrate = 20
+
+[Light]
+renderBase = "draw_sprite"
+textureName = "lightflare.tga"
+textureBlend = "one one modulate"
+startColor = "255 255 255 255"
+finishColor = "255 255 255 255"
+startRadius = 0.6
+finishRadius = 0.6

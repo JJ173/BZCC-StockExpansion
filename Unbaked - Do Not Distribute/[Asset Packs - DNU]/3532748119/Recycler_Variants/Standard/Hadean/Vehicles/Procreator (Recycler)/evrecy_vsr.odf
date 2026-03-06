@@ -1,0 +1,31 @@
+[GameObjectClass]
+scrapReturn = 0
+
+classLabel = "evrecy"
+
+startingVariant = "_vsr"
+pilotRespawnWithSniper = "esuser"
+pilotRespawnWithOutSniper = "esuser_m"
+
+provideCount = 5
+provideName4 = "base"
+provideName5 = "evrecy_vsr"
+
+[CraftClass]
+
+damageEffect1 = "dmgvhcl_e1"
+damageEffect2 = "dmgvhcl_e2"
+damageEffect3 = "dmgvhcl_e3"
+damageEffect4 = "dmgvhcl_e4"
+
+[TrackedVehicleClass]
+omegaSpin = 2.0
+
+TREAD_STATIC_FRICTION=1.5
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ebrecym_vsr"
+
+[RecyclerVehicleClass]

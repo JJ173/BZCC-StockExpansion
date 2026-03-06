@@ -1,0 +1,17 @@
+[WeaponClass]
+classLabel = "cannon"
+altName = "gdmsl_gh_a"
+ordName = "dmsl_gh_a"
+wpnName = "Death Msl"
+fireSound = "gmagg06.wav"
+wpnReticle = "ghornet.0"
+wpnCategory = "ROCK"
+aiRange = 300
+isAssault = 1
+
+[CannonClass]
+shotDelay = 1.5 // 2/3sec
+shotAlternate = 0
+salvoCount = 15
+salvoDelay = 0.1
+//shotVariance = 0.07

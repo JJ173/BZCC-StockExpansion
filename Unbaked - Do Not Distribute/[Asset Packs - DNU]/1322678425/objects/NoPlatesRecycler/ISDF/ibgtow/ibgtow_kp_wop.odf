@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibgtow"
+geometryName = "ibgtow00_kp_wop.fbx"
+isTerrain = 0
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

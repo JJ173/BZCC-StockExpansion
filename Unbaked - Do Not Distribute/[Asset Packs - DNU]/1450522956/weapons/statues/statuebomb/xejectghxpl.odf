@@ -1,0 +1,19 @@
+// =================
+// COMET EXPLOSION
+// =================
+
+[ExplosionClass]
+classLabel = "explosion"
+
+particleTypes = 0
+
+explSound = "silence.wav"
+damageRadius = 35.0
+
+damageValue(N) = 600 // none
+damageValue(L) = 0.0 // light
+damageValue(H) = 0.0 // heavy
+
+damageValue(S) = 0.0 // standard
+damageValue(D) = 0.0 // deflection
+damageValue(A) = 0.0 // absorbtion

@@ -1,0 +1,18 @@
+[GameObjectClass]
+baseName = "apsiong_kp"
+classLabel = "apgun"
+
+scrapCost = 35
+
+unitName = "Super Ion Gun"
+
+requireCount = 2 
+requireName1 = "fbkiln"
+requireText1 = "Build Kiln"
+requireName2 = "fbantm"
+requireText2 = "Build Antenna Mound"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gsiongn_kp_c"

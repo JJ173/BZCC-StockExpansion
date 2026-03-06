@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ivrckt"
+unitName = "Griffin"
+
+scrapValue = 25
+scrapCost = 45
+buildTime = 12.0
+
+weaponName3 = "gfafmsl_a"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

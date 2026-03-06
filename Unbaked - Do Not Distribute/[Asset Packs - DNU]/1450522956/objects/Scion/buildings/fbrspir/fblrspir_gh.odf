@@ -1,0 +1,78 @@
+[GameObjectClass]
+mrmFactor = 0
+baseName = "fblrspir_gh"
+geometryName = "fblrspir00_gh.fbx"
+classLabel = "turret"
+scrapCost = 65
+scrapValue = 40
+powerCost = 0
+maxHealth = 8000
+maxAmmo = 10000
+unitName = "Light Rocket Spire"
+collisionRadius = 1.0
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+AllowUnderGroundSpawn = 1
+armorClass = H
+buildSupport = "A"
+buildRequire = "F"
+upgradeName = "fbrspir_gh_upgrade"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 0
+
+/////// PROVIDES ///////////////////
+
+provideCount = 3
+provideName1 = "fblrspir_gh"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+////////////////////////////////////
+
+///// WEAPON ///////////////////////
+
+weaponMask = 00011
+weaponHard1 = "hp_rocket_1"
+weaponName1 = "gsshadow_c"
+weaponAssault1 = 0
+weaponHard2 = "hp_rocket_2"
+weaponName2 = "gsshadow_c"
+weaponAssault2 = 0
+
+////////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+[EntityClass]
+AllowHQShadows = true
+
+[BuildingClass]
+soundAmbient = "sgtow01.wav"
+
+[CraftClass]
+rangeScan = 225.0
+periodScan = 0.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 1.0
+engageRange = 225
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+// include air units as attack targets
+// doesn't need to deploy to sub attack
+// doesn't move towards unit in sub attack
+
+[TurretCraftClass]
+powerTap1 = "hp_tap_1"
+powerName = "fblung"
+omegaTurret = 2.0
+detectRange = 225

@@ -1,0 +1,20 @@
+[OrdnanceClass]
+classLabel = "bullet"
+
+shotGeometry = NULL
+shotRadius = 0.0
+xplGround = "xejectGHxpl"
+xplVehicle = "xejectGHxpl"
+xplBuilding = "xejectGHxpl"
+xplExpire = "xejectGHxpl"
+
+ammoCost = 0
+lifeSpan = 0.01
+shotSpeed = 1.0
+
+damageValue(N) = 0
+damageValue(L) = 0
+damageValue(H) = 0
+damageValue(S) = 0
+damageValue(D) = 0
+damageValue(A) = 0

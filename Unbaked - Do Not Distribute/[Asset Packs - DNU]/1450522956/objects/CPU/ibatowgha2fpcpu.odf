@@ -1,0 +1,21 @@
+[GameObjectClass]
+classLabel = "ibatow_gh_a2"
+scrapValue = 15
+powerCost = 0
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "hp_cannon_1"
+recoilName1 = "recoil_1"
+weaponName1 = "gplasma_a_fastgh"
+weaponAssault1 = 1
+weaponHard2 = "hp_cannon_2"
+recoilName2 = "recoil_2"
+weaponName2 = "gplasma_a_fastgh"
+weaponAssault2 = 1
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

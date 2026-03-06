@@ -1,0 +1,15 @@
+[WeaponClass]
+classLabel = "dispenser"
+altName = "gdrone_gh_a"
+wpnName = "Drone"
+fireSound = "gwasp00.wav"
+wpnReticle = "gcomet.0"
+wpnCategory = "ROCK" //"SPEC"
+aiRange = 300
+
+isAssault = 1
+
+[DispenserClass]
+shotDelay = 3.0
+objectClass = "bvdrone_gh_a"
+

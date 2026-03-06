@@ -1,0 +1,25 @@
+[GameObjectClass]
+classLabel = "ivhatank_kp_b"
+unitName = "Heavy Bull Dog"
+
+scrapValue = 45
+scrapCost = 60
+buildTime = 12.0
+
+maxAmmo = 6000
+addAmmo = 125
+
+weaponName1 = "gatstab_a"
+weaponName2 = "gatstab_a"
+weaponName3 = "gchain_c"
+weaponName4 = "gchain_c"
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

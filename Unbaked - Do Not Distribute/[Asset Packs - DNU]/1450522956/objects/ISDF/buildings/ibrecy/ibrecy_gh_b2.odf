@@ -1,0 +1,51 @@
+[GameObjectClass]
+classLabel = "ibrecy"
+geometryName = "ibrecy00_gh_b2.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "ibrecy00_gh_b2.fbx"
+RunAnimation = "loop"
+RunAnimIsLooped = true
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "ibrecy"
+provideName2 = "ibrecycpu"
+provideName3 = "ibrecy_gh_b2"
+provideName4 = "VIRTUAL_CLASS_RECYCLER"
+provideName5 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+provideName6 = "VIRTUAL_CLASS_THUG_RECYCLER"
+provideName7 = "VIRTUAL_CLASS_THUG_RECYCLERBUILDING"
+
+////////////////////////////////////
+
+/////// OBJECT LIMITS ///////////////////
+
+limitClass1 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limitClass2 = "VIRTUAL_CLASS_THUG_RECYCLERBUILDING"
+limitClass2Count = 2
+limitClass2Text = "Only One Allowed"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivhscav_gh"
+buildItem2 = "ivscout"
+buildItem3 = "ivturr"
+buildItem4 = ""
+buildItem5 = "ivcons_gh_b2"
+buildItem6 = ""
+buildItem7 = "apserv"
+buildItem8 = "ivscout_m"
+buildEmptyItem = 8
+
+[RecyclerClass]
+scrapDelay = 3.0

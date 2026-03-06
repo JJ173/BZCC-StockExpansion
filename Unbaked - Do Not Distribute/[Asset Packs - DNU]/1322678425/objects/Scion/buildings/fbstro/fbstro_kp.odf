@@ -1,0 +1,40 @@
+[GameObjectClass]
+classLabel = "fbstro"
+
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[ArmoryClass]
+
+[ArmoryGroup1]
+buildItem4 = "apionb_kp"
+buildItem5 = "apbolt_kp"
+buildItem6 = "apsiong_kp"
+
+[ArmoryGroup2]
+buildItem5 = "apsplasmaII_kp"
+buildItem6 = "aparcb_kp"
+
+[ArmoryGroup3]
+buildItem3 = "apsshadow_kp"
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+
+[ArmoryGroup9]
+buildLabel = "Service"
+buildItem1 = "apammo"
+buildItem2 = "aprepa"
+buildItem3 = "apserv"
+
+
+

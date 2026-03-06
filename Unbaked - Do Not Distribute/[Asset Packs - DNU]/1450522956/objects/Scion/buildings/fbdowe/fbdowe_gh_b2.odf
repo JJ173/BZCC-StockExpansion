@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "fbdowe"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limitClass2 = "VIRTUAL_CLASS_THUG_SUPPLYDEPOT"
+limitclass2Count = 1
+limitClass2Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 7
+provideName1 = "fbdowe"
+provideName2 = "fbdowe_gh_a"
+providename3 = "VIRTUAL_CLASS_SUPPLYDEPOT"
+provideName4 = "VIRTUAL_CLASS_DOWER"
+provideName5 = "base"
+provideName6 = "VIRTUAL_CLASS_THUG_SUPPLYDEPOY"
+porivdeName7 = "VIRTUAL_CLASS_THUG_DOWER"
+
+////////////////////////////////////
+
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[SupplyDepotClass]
+ServiceParallel = true

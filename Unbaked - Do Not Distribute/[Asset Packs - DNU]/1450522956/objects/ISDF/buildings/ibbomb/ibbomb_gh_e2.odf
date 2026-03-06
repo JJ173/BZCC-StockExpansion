@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "ibbomb"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_BOMBERBAY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 5
+provideName1 = "ibbomb"
+provideName2 = "ibbomb_gh_e2"
+provideName3 = "VIRTUAL_CLASS_BOMBERBAY"
+provideName4 = "VIRTUAL_CLASS_THUG_BOMBERBAY"
+provideName5 = "base"
+
+///////// LIGHTS & EFFECTS /////////
+
+[BuildingClass]
+
+[BomberBayClass]
+bomberType = "ivbomb_gh_e2"
+
+[PoweredBuildingClass]

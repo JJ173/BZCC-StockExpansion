@@ -1,0 +1,26 @@
+[GameObjectClass]
+classLabel = "ibtrain"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_THUG_BARRACKS"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limtiClass2 = "VIRTUAL_CLASS_BARRACKS"
+limitClass2Count = 1
+limitClass2Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+provideCount = 5
+provideName1 = "ibtrain"
+provideName2 = "ibtrain_gh_b2"
+provideName3 = "VIRTUAL_CLASS_BARRACKS"
+provideName4 = "VIRTUAL_CLASS_THUG_BARRACKS"
+provideName5 = "base"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[BarracksClass]

@@ -1,0 +1,40 @@
+[GameObjectClass]
+classLabel = "fbspir"
+geometryName = "fbaspir00_gh.fbx"
+animCount = 1
+animName1 = "deploy"
+animFile1 = "fbaspir00_gh.fbx"
+
+scrapCost = 95
+scrapValue = 65
+powerCost = 0
+maxHealth = 8000
+maxAmmo = 10000
+unitName = "Assault Spire"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "fbantm"
+requireText1 = "Build Antenna Mound"
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+
+///// WEAPON ///////////////////////
+
+weaponMask = 00111
+weaponHard1 = "hp_cannon_1"
+weaponName1 = "gmbolt"
+weaponHard2 = "hp_cannon_2"
+weaponName2 = "gmbolt"
+weaponHard3 = "hp_cannon_3"
+weaponName3 = "gmbolt"
+
+////////////////////////////////////
+
+[EntityClass]
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

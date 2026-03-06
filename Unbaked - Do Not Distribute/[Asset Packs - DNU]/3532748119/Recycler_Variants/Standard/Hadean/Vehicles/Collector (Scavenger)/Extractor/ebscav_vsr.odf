@@ -1,0 +1,15 @@
+[GameObjectClass]
+
+classLabel = "ebscav"
+
+collisionRadius = 12.0
+
+upgradeName="ebscup_vsr"
+
+provideCount = 5
+provideName5 = "ebscav_vsr"
+
+[BuildingClass]
+
+[ExtractorClass]
+initDelay = 0.0 // *12.0 {VSR-017}

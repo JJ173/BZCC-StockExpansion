@@ -1,0 +1,188 @@
+[GameObjectClass]
+baseName = "ivhtank_gh_b1"
+geometryName = "ivhtank00_gh_b.fbx"
+animCount = 3
+animName1 = "forward"
+animFile1 = "ivhtank00_gh_b_sf.fbx"
+animName2 = "neutral"
+animFile2 = "ivhtank00_gh_b_sn.fbx"
+animName3 = "reverse"
+animFile3 = "ivhtank00_gh_b_sr.fbx"
+cockpitName= "ivtank_cockpit.fbx"
+classLabel = "assaulthover"
+scrapValue = 40
+scrapCost = 75
+customCost = 85
+buildTime = 15.0
+customTime = 15.0
+maxHealth = 3500
+maxAmmo = 2200
+addAmmo = 5
+unitName = "Assault Sabre"
+aiName = "AssaultTankProcess"
+aiName2 = "AssaultTankProcess"
+heatSignature = 2.0
+imageSignature = 2.5
+radarSignature = 0.5
+CanSnipe = 1
+
+GameObjectClassPowerUpProvides = 22				// 22 = 01101
+GameObjectClassServiceProvides = 22
+
+isAssault = 1
+
+armorClass = L
+	
+requireCount = 4
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibcbun"
+requireText2 = "Build Relay Bunk"
+requireName3 = "ibsbay"
+requireText3 = "Build Service Bay"
+requireName4 = "ibsbay_gh_a2"
+requireText4 = "Build Assault Bay"
+
+FactoryWeaponConfig = "iweapon_gh.odf"
+
+/////// PROVIDES ///////////////////
+provideCount = 5
+provideName1 = "ivhtank_gh_b1"
+provideName2 = "VIRTUAL_CLASS_ASSAULTCRAFT"
+provideName3 = "VIRTUAL_CLASS_HOVERASSAULTCRAFT"
+provideName4 = "assault"
+provideName5 = "HovAssault"
+
+teamlimitClass1 = "VIRTUAL_CLASS_HOVERASSAULTCRAFT"
+teamlimitClass1Count = 2
+teamlimitClass1Text = "Reached Hover Assault Limit"
+
+/////// weapons ///////////////////
+
+weaponMask = 00111
+
+weaponHard1 = "HP_CANNON_1"
+recoilName1 = "recoil_1"
+weaponName1 = "gslug_c_gh"
+weaponAssault1 = 1
+
+weaponHard2 = "HP_GUN_1"
+weaponName2 = "gchain_c"
+weaponAssault2 = 1
+recoilName2 = "recoil_2"
+
+weaponHard3 = "HP_GUN_2"
+weaponName3 = "gchain_c"
+weaponAssault3 = 1
+recoilName3 = "recoil_3"
+
+weaponHard4 = "HP_MORTAR_1"
+weaponName4 = "gmortar"
+weaponAssault4 = 0
+
+weaponHard5 = "HP_SPECIAL_1"
+weaponName5 = ""
+weaponAssault5 = 0
+
+////////////////////////////////////
+
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+
+effectHard1 = "hp_dust_1"
+effectName1 = "dusttrail"
+effectMinAltitude1 = 0.0
+effectMaxAltitude1 = 5.0
+effectMinVelocity1 = 10.0
+effectMaxVelocity1 = 500.0
+
+[CraftClass]
+AllowLinkWeapons = true  // if true, weapons can be linked
+rangeScan = 300.0f
+periodScan = 4.0f
+velocJam = 5.0f
+engageRange = 260
+UseSelectWeapon = false
+
+PathingType = 0 // -1 = auto, 0 = Hover, 1 = Walker, 2 = Person, 3 = Tracked, 4 = Flyer
+AvoidType = -1 // -1 = auto, 0 = None, 1 = force, 2 = plan
+
+CraftTeamIsPilotTeam = true
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+
+// subAttackClass uses 3 letters.
+// 1st letter is either A or N.     A is include Air targets.         N is attack ground only.
+// 2nd letter is either D or N.     D is to deploy before attacking.  N for regular attack.
+// 3rd letter is either S or N.     S is to use Weapon Range.         N is use the Engage Range to attack. 
+
+braccelFactor = 0.03
+velFactor = 0.2
+steerFactor = 1.5
+omegaFactor = 0.2
+strafeFactor = 0.0 // 8.2
+
+avoidSpeed = 20;
+topSpeed = 30;
+
+selectWaitMsg = "ivtank05.wav"
+selectAttackMsg = "ivtank02.wav"
+selectFollowMsg = "ivtank04.wav"
+selectGoMsg = "ivtank04.wav"
+selectOtherMsg = "ivtank05.wav"
+holdMsg = "ivtank12.wav"
+
+goMsg = "ivtank04.wav"
+attackMsg = "ivtank06.wav"
+followMeMsg = "ivtank08.wav"
+followMsg = "ivtank03.wav"
+repairMsg = "ivtank09.wav"
+reloadMsg = "ivtank09.wav"
+rescueMsg = "ivtank10.wav"
+recycleMsg = "ivtank11.wav"
+otherMsg = "ivtank05.wav" 
+user1Msg = ""  
+killedMsg = "ivtank07.wav"
+diedMsg = ""
+
+[HoverCraftClass]
+
+velocForward = 28.5 // []
+velocReverse = 20.0 // []
+velocStrafe = 16.0 // []
+accelThrust = 24.0 //acceleration []
+accelDragStop = 6.0 //how fast it stops once hands are off controls []
+accelJump = 15.0 // []
+w
+setAltitude = 1.0 // how high off the ground
+
+alphaTrack = 21.0 //springs speed it rights itself []
+alphaDamp = 8.0 //shocks []
+
+pitchPitch = 0.0 //0.25 //nose up []
+pitchThrust = 0.0 //0.1 //nose down []
+
+rollStrafe = 0.0 //0.08 //rolls while strafing []
+omegaSpin = 1.0 // 6.0 //spinning in place speed []
+omegaTurn = 0.55//2.5 //turning while moving speed []
+alphaSteer = 2.0 // 2.0  //4.0 //7.0 //how fast it responds to steering []
+rollSteer = 0.08 //rolls while steering []erCraftClass]
+
+
+soundThrust = "itank01e.wav"
+soundTurbo = "avtanke3.wav"
+
+engineSound	= "silence.wav"
+treadSound = "silence.wav"
+
+[AssaultHoverClass]
+yawRate = 4.0
+yawAlpha = 10.0
+pitchMin = -0.1 
+pitchMax = 0.25

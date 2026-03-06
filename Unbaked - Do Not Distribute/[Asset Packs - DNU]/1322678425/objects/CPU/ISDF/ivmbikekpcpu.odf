@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ivmbike"
+unitName = "Jackal"
+
+buildTime = 9.0
+scrapCost = 40.0
+
+weaponName1 = "gsplint_kp"
+
+[CraftClass]
+
+[HoverCraftClass]

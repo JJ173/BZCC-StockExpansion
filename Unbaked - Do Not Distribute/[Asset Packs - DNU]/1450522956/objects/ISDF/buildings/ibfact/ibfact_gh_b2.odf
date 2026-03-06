@@ -1,0 +1,28 @@
+[GameObjectClass]
+classLabel = "ibfact"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_THUG_FACTORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+limitClass2 = "VIRTUAL_CLASS_FACTORY"
+limitClass2Count = 1
+limitClass2Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ibfact"
+provideName2 = "ibfact_gh_b2"
+provideName3 = "VIRTUAL_CLASS_FACTORY"
+provideName4 = "VIRTUAL_CLASS_THUG_FACTORY"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem8 = ""

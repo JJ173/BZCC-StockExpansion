@@ -1,0 +1,33 @@
+[GameObjectClass]
+classLabel = "ivwalk"
+
+scrapValue = 30
+scrapCost = 120
+customCost = 125
+buildTime = 30.0
+customTime = 60.0
+
+maxHealth = 10000
+addHealth = 20
+maxAmmo = 8000
+addAmmo = 30
+
+unitName = "Heavy Walker"
+
+FactoryWeaponConfig = "iweapon_gh.odf"
+
+unitIcon = "icon_ivhwalk_gh.tga"
+unitStatus = "wire_ivhwalk_gh.tga"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 3
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibtcen"
+requireText2 = "Build Tech Cen"
+requireName3 = "ibsbay_gh_a2"
+requireText3 = "Build Assault Bay"
+
+[CraftClass]
+
+[WalkerClass]

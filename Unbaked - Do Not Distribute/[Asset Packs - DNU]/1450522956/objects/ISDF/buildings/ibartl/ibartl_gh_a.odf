@@ -1,0 +1,79 @@
+[GameObjectClass]
+baseName = "ibartl_gh_a"
+geometryName = "ibartl00_gh_a.fbx"
+cockpitName = "ibartl00_gh_a_cockpit.fbx"
+classLabel = "turret"
+collisionRadius = 10.0
+scrapCost = 60
+scrapValue = 20
+scrapReturn = 35
+maxHealth = 5500
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+unitName = "Intimidator (S)"
+aiName = "GunTowerFriend"
+aiName2 = "GunTowerEnemy"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+AllowUnderGroundSpawn = 1
+upgradeName = "ibartl_gh_b_upgrade"
+armorClass = H
+
+requireCount = 2
+requireName1 = "ibcbun"
+requireText1 = "Build Relay Bunk"
+requireName2 = "ibarmo"
+requireText2 = "Build Armory"
+
+provideCount = 2
+provideName1 = "ibartl_gh_a"
+provideName2 = "defender"
+
+/////// weapons ///////////////////
+
+weaponMask = 00011
+weaponHard1 = "hp_mortar_1"
+recoilName1 = "recoil_1"
+weaponName1 = "gmartill"
+weaponAssault1 = 0
+
+
+//////////////////////////////////
+
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+lightHard2 = "hp_light_2"
+lightName2 = "o_red_nf"
+
+turretCount = 2
+turretName1 = "turret_y_1"
+turretName2 = "turret_x_1"
+
+[BuildingClass]
+soundAmbient = "igtow01.wav"
+
+[CraftClass]
+rangeScan = 340
+periodScan = 1.0
+velocJam = 0.0
+weaponPitch = 1.57
+steerFactor = 1.5
+engageRange = 400
+
+GunTowerProcessCheckCantHit = true	// true: retarget if intended victim can't be hit (only if GunTowerProcess is in use)
+//WeaponsConverge = true
+AITargetLocation = 1			// -1 = default, or 0 = center, 1 = high, 2 = low, 3 = left, 4 = right
+//HealthChangeLevelDelta = 0.1
+MinWeaponPitch = 0.5			// For turretcraft/turrettank (i.e. GunTower/GunSpire/turret)
+MustBeLinedUpToHit = false		// This setting determines if a unit will fire when it doesn't have a clear line of sight.
+MustBeLinedUpToFire = true		// Defaults to true for artillery(==archers)
+FireWhenCanHitFriends = true
+
+attackTask = "ArtlAttack"
+subAttackTask = "ArtlSubAttack"
+subAttackClass = "NNS"
+
+[TurretCraftClass]
+omegaTurret = 2.0
+detectRange = 210

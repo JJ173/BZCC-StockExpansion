@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel = "ivmisl"
+unitName = "Avenger"
+
+[CraftClass]
+[HoverCraftClass]

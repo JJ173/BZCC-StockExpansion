@@ -1,0 +1,46 @@
+[GameObjectClass]
+classLabel = "ivrckt"
+geometryName = "ivhrckt00_gh.fbx"
+
+scrapValue = 25
+scrapCost = 75
+customCost = 85
+buildTime = 15.0
+customTime = 15.0
+
+unitName = "Heavy Rocket Tank"
+
+unitIcon = "icon_ivhrckt_gh.tga"
+unitStatus = "wire_ivhrckt_gh.tga"
+
+/////// REQUIREMENTS ///////////////	
+requireCount = 4
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+requireName2 = "ibcbun"
+requireText2 = "Build Relay Bunk"
+requireName3 = "ibarmo"
+requireText3 = "Build Armory"
+requireName4 = "ibtcen"
+requireText4 = "Build Tech Center"
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "HP_ROCKET_1"
+weaponName1 = "gshadow_c"
+weaponAssault1 = 0
+weaponHard2 = "HP_ROCKET_2"
+weaponName2 = "gshadow_c"
+weaponAssault2 = 0
+weaponHard3 = "HP_ROCKET_3"
+weaponName3 = "gshadow_a"
+weaponAssault3 = 1
+weaponHard4 = "HP_ROCKET_4"
+weaponName4 = "gshadow_a"
+weaponAssault4 = 1
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

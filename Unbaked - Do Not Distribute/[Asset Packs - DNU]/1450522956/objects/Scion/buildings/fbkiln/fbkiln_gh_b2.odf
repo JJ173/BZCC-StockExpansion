@@ -1,0 +1,34 @@
+[GameObjectClass]
+classLabel = "fbkiln"
+
+upgradeName = "fbforg_gh_b2"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_THUG_FACTORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+
+provideCount = 6
+provideName1 = "fbkiln"
+provideName2 = "fbkiln_gh_b2"
+provideName3 = "VIRTUAL_CLASS_FACTORY"
+provideName4 = "VIRTUAL_CLASS_KILN"
+provideName5 = "VIRTUAL_CLASS_THUG_KILN"
+provideName6 = "VIRTUAL_CLASS_THUG_FACTORY"
+
+////////////////////////////////////
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "fvsent"
+buildItem2 = "fvarch"
+buildItem3 = "fvtank"
+buildItem4 = "fvartl"
+buildItem5 = "fvwalk"
+buildItem6 = "fvatank"

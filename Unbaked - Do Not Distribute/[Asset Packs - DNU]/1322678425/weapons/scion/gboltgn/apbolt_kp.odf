@@ -1,0 +1,18 @@
+[GameObjectClass]
+baseName = "apbolt_kp"
+classLabel = "apgun"
+
+scrapCost = 20
+
+unitName = "Bolt Gun"
+
+requireCount = 2
+requireName1 = "fbkiln"
+requireText1 = "Build Kiln"
+requireName2 = "fbover"
+requireText2 = "Upgrade Antenna Mound"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gboltgn_c_kp"

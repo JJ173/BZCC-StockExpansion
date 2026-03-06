@@ -1,0 +1,16 @@
+[GameObjectClass]
+baseName = "appumm_kp"
+classLabel = "apgun"
+
+scrapCost = 20
+
+unitName = "Pummel"
+
+requireCount = 1
+requireName1 = "ibsbay"
+requireText1 = "Build Service Bay"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gpummel_c_kp"

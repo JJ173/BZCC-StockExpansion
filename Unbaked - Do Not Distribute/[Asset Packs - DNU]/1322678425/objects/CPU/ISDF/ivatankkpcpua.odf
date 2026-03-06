@@ -1,0 +1,15 @@
+[GameObjectClass]
+classLabel = "ivatank"
+unitName = "Bull Dog"
+
+scrapValue = 45
+scrapCost = 50
+buildTime = 12.0
+
+requireCount = 0
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]

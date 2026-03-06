@@ -1,0 +1,16 @@
+[GameObjectClass]
+baseName = "apstab_kp"
+classLabel = "apcannon"
+
+scrapCost = 10
+
+unitName = "AT-Stab"
+
+requireCount = 1
+requireName1 = "ibfact"
+requireText1 = "Build Factory"
+
+[PowerUpClass]
+
+[WeaponPowerupClass]
+weaponName = "gatstab_c_kp"

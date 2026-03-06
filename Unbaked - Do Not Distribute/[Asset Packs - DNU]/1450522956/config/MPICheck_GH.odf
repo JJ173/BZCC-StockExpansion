@@ -1,0 +1,38 @@
+[Check]
+Check1 = "ivrecycpu"
+Check2 = "fvrecycpu"
+
+Check3 = "ibrtowghacpu"
+Check4 = "ibrhtowghacpu"
+Check5 = "ibartlghacpu"
+Check6 = "ibartlghbcpu"
+Check7 = "ibatowgha1cpu"
+Check8 = "ibatowgha2cpu"
+Check9 = "ibatowghb1cpu"
+Check10 = "ibatowghb2cpu"
+Check11 = "ibatowgha2fpcpu"
+Check12 = "ibatowghaw1cpu"
+Check13 = "ibgtowghcpu"
+Check14 = "ivscavcpu"
+
+Check15 = "resource"
+Check16 = "extract"
+Check17 = "ipdrop"
+Check18 = "defender"
+Check19 = "flier"
+Check20 = "defender"
+Check21 = "assault"
+
+Check22 = "fbartlghacpu"
+Check23 = "fbartlghbcpu"
+Check24 = "fbaspir_gh"
+Check25 = "fbrspirghcpu"
+Check26 = "fbhrspirghcpu"
+Check27 = "fvscavcpu"
+
+//Statues
+
+Check28 = "bbmega_gh"
+Check29 = "bvmega_gh"
+Check30 = "bbministatue_gh"
+Check31 = "bbgtow_gh"

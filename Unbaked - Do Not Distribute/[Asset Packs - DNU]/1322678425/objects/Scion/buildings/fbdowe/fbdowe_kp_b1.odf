@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ibcommand_supply_kp"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "fbdowe"
+requireText1 = "Build Dower"
+requireName2 = "fbkiln"
+requireText2 = "Build Kiln"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+supplyRange = 32.0
+supplyRate = 75.0
+supplyParallel = true

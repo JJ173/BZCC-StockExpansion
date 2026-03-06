@@ -1,0 +1,148 @@
+[GameObjectClass]
+baseName = "bvdrone_gh_c"
+geometryName = "bvdrone00_gh_c.fbx"
+classLabel = "aircraft"
+scrapValue = 0
+scrapCost = 0
+customCost = 0
+buildTime = 20.0
+customTime = 25.0
+maxHealth = 450
+maxAmmo = 360
+addHealth = 10
+addAmmo = 50
+unitName = "Sentinel"
+aiName = "AirCraftFriend"
+aiName2 = "AirCraftEnemy"
+heatSignature = 0.5
+imageSignature = 2.0
+radarSignature = 0.3
+
+canSnipe = 1
+CanSelect = 1 // can select with point-and-space
+
+needPilot = 1
+addPilot = 1
+
+explosionName = "bvdroneghxpl"
+xplBlast = "bvdroneghxpl"
+
+isAssault = 0
+
+armorClass = N
+
+requireCount = 0
+
+/////// weapons ///////////////////
+
+weaponMask = 00011
+
+weaponHard1 = "HP_ROCKET_1"
+weaponName1 = "gminideath_gh"
+weaponHard2 = "HP_ROCKET_2"
+weaponName2 = "gminideath_gh"
+weaponHard3 = "HP_SHIELD"
+weaponName3 = "gshield"
+weaponAssault3 = 0
+
+////////////////////////////////////
+
+[CraftClass]
+PathingType = -1 // -1 = auto, 0 = Hover, 1 = Walker, 2 = Person, 3 = Tracked, 4 = Flyer
+AvoidType = -1 // -1 = auto, 0 = None, 1 = force, 2 = plan
+
+UseAssaultSpecials = true 
+Lifespan = -1 // -1 == infinite; > 0 is # seconds of life before it goes *boom*
+DoBettyLost = false // true : betty voice when this craft is lost
+xplBlast = "bvdroneghxpl"
+blastDist = 5.0  // Gets in close
+
+attackTask = "DefendArea"
+defendTask = "DefendArea"
+waitTask = "DefendArea"
+
+
+rangeScan = 400.0f
+periodScan = 0.0f
+velocJam = 1.0f
+engageRange = 2800
+
+braccelFactor = 0.03
+velFactor = 0.2
+steerFactor = 1.5
+omegaFactor = 0.2
+strafeFactor = 0.2
+
+avoidSpeed = 20;
+topSpeed = 30;
+
+selectWaitMsg = "silence.wav"
+selectAttackMsg = "silence.wav"
+selectFollowMsg = "silence.wav"
+selectGoMsg = "silence.wav"
+selectOtherMsg = "silence.wav"
+holdMsg = "silence.wav"
+
+goMsg = "silence.wav"
+attackMsg = "silence.wav"
+followMeMsg = "silence.wav"
+followMsg = "silence.wav"
+repairMsg = "silence.wav"
+reloadMsg = "silence.wav"
+rescueMsg = "silence.wav"
+recycleMsg = "silence.wav"
+otherMsg = "silence.wav" 
+user1Msg = "silence.wav"  
+killedMsg = "silence.wav"
+diedMsg = "silence.wav"
+
+[AirCraftClass]
+AlwaysDeployed = false 
+//AlwaysUndeployed = true  
+AircraftAttackMustDeploy = true // == true for any Aircraft
+OverWaterFlying = true
+OverWaterLanded = true
+MaxTakeoffSpeed = 5.0
+aiAltitude = 50.0 // default = minAltitude + 25% of dist between min, maxAltitude
+LiftSpring = 10.0 // all craft/pilots, during takeoff/landing
+AILiftSpring = 10.0 // AI craft ONLY, when flying to get to aiAltitude.
+
+velocSet(L) = -5.0 // minimum velocity
+velocSet(M) = 40.0 // cruising velocity
+velocSet(H) = 70.0 // maximum velocity
+accelThrust = 70.0 // thrust acceleration
+accelBrake = 80.0 // brake acceleration
+accelDrag = 74.9 // drag acceleration
+omegaSteer(L) = 1.0 // steer turn rate at minimum
+omegaSteer(M) = 0.7 // steer turn rate at cruising
+omegaSteer(H) = 0.5 // steer turn rate at maximum
+omegaStrafe(L) = 0.0 // airbrake turn rate at minimum
+omegaStrafe(M) = 0.0 // airbrake turn rate at cruising
+omegaStrafe(H) = 0.0 // airbrake turn rate at maximum
+alphaSteer = 5.0 // steering angular acceleration
+alphaStrafe = 10.0 // airbrake angular acceleration
+minAltitude = 15.0 // minimum altitude
+maxAltitude = 1800 // maximum altitude
+alphaLevel = 2.0 // leveling angular acceleration
+alphaDamp = 8.0 // damping angular acceleration
+pitchPitch = 1.5 // maximum pitch angle
+rollSteer = 0.0 // maximum roll angle from steering
+rollStrafe = 0.0 // maximum roll angle from airbraking
+timeDeploy = 1.0 // time to deploy
+timeUndeploy = 1.0 // time to undeploy
+soundDeploy = "silence.wav"
+soundUndeploy = "silence.wav"
+
+
+soundThrust = ""
+soundTurbo = ""
+engineSound = ""
+treadSound = ""
+soundBrake = ""
+
+[DeployableClass]
+timeDeploy = 0.2
+timeUndeploy = 0.2
+
+ScanTeamLimitDeployed = 0 // 0 = all teams (default), 1 = same team only, 2 = allies only 
+isStealthDeployed = true // just like under DeployableClass

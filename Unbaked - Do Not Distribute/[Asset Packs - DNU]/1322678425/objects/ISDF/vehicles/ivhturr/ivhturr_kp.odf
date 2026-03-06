@@ -1,0 +1,129 @@
+[GameObjectClass]
+baseName = "ivhturr_kp"
+geometryName = "ivhturr00_kp.fbx"
+cockpitName = "ivhturr00_kp_cockpit.fbx"
+animCount = 4
+animName1 = "deploy"
+animFile1 = "ivhturr00_kp.fbx"
+animName2 = "forward"
+animFile2 = "ivhturr00_kp_sf.fbx"
+animName3 = "neutral"
+animFile3 = "ivhturr00_kp_sn.fbx"
+animName4 = "reverse"
+animFile4 = "ivhturr00_kp_sr.fbx"
+classLabel = "turrettank"
+scrapCost = 60
+customCost = 75
+scrapValue = 10
+buildTime = 10.0
+customTime = 10.0
+maxHealth = 3250
+maxAmmo = 3500
+addAmmo = 6
+unitName = "Heavy Turret"
+aiName = "TurretTankFriend"
+aiName2 = "TurretTankEnemy"
+heatSignature = 0.15
+imageSignature = 1.25
+radarSignature = 0.15
+isAssault = 0
+armorClass = L
+
+/////// PROVIDES ///////////////////
+provideCount = 2
+provideName1 = "ivhturr_kp"
+provideName2 = "VIRTUAL_CLASS_TURRET"
+
+/////// REQUIREMENTS ///////////////
+requireCount = 1
+requireName1 = "ibtcen"
+requireText1 = "Build Tech Center"
+
+/////// weapons ////////////////////
+weaponMask = 01111
+weaponHard1 = "HP_GUN_1"
+weaponName1 = "gminigun_a"
+recoilName1 = "recoil1"
+weaponAssault1 = 1
+weaponHard2 = "HP_GUN_2"
+weaponName2 = "gminigun_a"
+recoilName2 = "recoil2"
+weaponAssault2 = 1
+weaponHard3 = "HP_GUN_3"
+weaponName3 = "gminigun_a"
+weaponAssault3 = 1
+weaponHard4 = "HP_GUN_4"
+weaponName4 = "gminigun_a"
+weaponAssault4 = 1
+
+////////////////////////////////////
+turretCount = 2
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+
+/////////LIGHTS AND EFFECTS//////////////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+LightsOnlyWhenPiloted = true
+
+effectHard1 = "hp_dust_1"
+effectName1 = "dusttrail"
+effectMinAltitude1 = 0.0
+effectMaxAltitude1 = 5.0
+effectFlags1 = 2147483127
+
+[CraftClass]
+rangeScan = 300.0
+periodScan = 3.0
+velocJam = 1.0
+engageRange = 150
+weaponPitch = 1.0
+
+selectGoMsg = "ivturr01.wav"
+selectAttackMsg = "ivturr03.wav"
+selectDeployMsg = "ivturr04.wav"
+selectOtherMsg = "ivturr03.wav"
+holdMsg = "ivturr12.wav"
+goMsg = "ivturr05.wav"
+followMeMsg = "ivturr08.wav"
+reloadMsg = "ivturr09.wav"
+repairMsg = "ivturr09.wav"
+rescueMsg = "ivturr10.wav"
+recycleMsg = "ivturr11.wav"
+otherMsg = "ivturr11.wav"
+attackMsg = "ivturr06.wav"
+deployedMsg = "ivturr14.wav"
+killedMsg = "ivturr07.wav"
+
+[HoverCraftClass]
+setAltitude = 1.0
+accelDragStop = 20.0
+alphaTrack = 20.0
+alphaDamp = 5.0
+pitchPitch = 0.1
+pitchThrust = 0.1
+rollStrafe = 0.1
+rollSteer = 0.1
+velocForward = 15.0
+velocReverse = 10.0
+velocStrafe = 15.0
+accelThrust = 50.0
+accelBrake = 50.0
+omegaSpin = 4.0
+omegaTurn = 1.5
+alphaSteer = 10.0
+accelJump = 15.0
+
+soundThrust = "ienge.wav"
+soundSteer = "avturre8.wav"
+
+[DeployableClass]
+timeDeploy = 8.0
+timeUndeploy = 3.0
+heightDeploy = -0.55
+soundDeploy = "avturre4.wav"
+soundUndeploy = "avturre5.wav"
+
+[TurretTankClass]
+omegaTurret = 1.25
+alphaTurret = 5.0

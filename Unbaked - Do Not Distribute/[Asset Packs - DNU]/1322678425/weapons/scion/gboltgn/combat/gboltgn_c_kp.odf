@@ -1,0 +1,30 @@
+[WeaponClass]
+baseName = "gboltgn_c_kp"
+altName = "gboltgn_a_kp"
+classLabel = "machinegun"
+ordName = "boltgn_c_kp"
+wpnName = "Bolt Gun I"
+fireSound = "bltm01.wav"
+wpnReticle = "gbolt"
+wpnCategory = "GUN"
+isAssault = 0
+aiRange = 150
+flashName = "gboltgn_c_kp.flash"
+
+[CannonClass]
+shotDelay = 0.5
+shotVariance = 0
+
+[Flash]
+simulateBase = "sim_null"
+lifeTime = 5.0
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "0 255 255 255"
+finishColor = "0 0 255 0"
+startRadius = 0.5
+finishRadius = 10.0
+animateTime = 5.0
+latitudeBands = 8
+longitudeSegments = 16

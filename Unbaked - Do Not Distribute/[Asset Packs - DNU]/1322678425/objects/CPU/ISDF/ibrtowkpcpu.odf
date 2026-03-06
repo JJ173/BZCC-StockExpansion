@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ibrtow_kp"
+
+scrapCost = 40
+scrapValue = 20
+maxHealth = 5000
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+
+
+/////// REQUIREMENTS ///////////////
+
+requireCount = 0
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

@@ -1,0 +1,27 @@
+[WeaponClass]
+classLabel = "cannon"
+altName = "gdray_gh_c"
+ordName = "dray_gh_c"
+wpnName = "Death Ray"
+fireSound = "dray_gh.wav"
+wpnReticle = "gblast"
+wpnCategory = "CANN"
+isAssault = 0
+aiRange = 300
+flashName = "gdray_gh_c.flash"
+
+[CannonClass]
+shotDelay = 1.0 // .5/sec
+shotAlternate = 0
+
+[Flash]
+renderBase = "draw_sphere"
+textureName = "vsmoke.tga"
+textureBlend = "one one modulate"
+startColor = "255 63 55 255"
+finishColor = "247 247 20 235"
+startRadius = 4.0
+finishRadius = 1.0
+animateTime = 0.1
+latitudeBands = 8
+longitudeSegments = 16

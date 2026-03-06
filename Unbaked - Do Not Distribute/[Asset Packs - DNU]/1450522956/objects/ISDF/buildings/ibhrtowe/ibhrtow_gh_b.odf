@@ -1,0 +1,82 @@
+[GameObjectClass]
+baseName = "ibhrtow_gh_b"
+geometryName = "ibhrtow00_gh_b.fbx"
+//cockpitName = "ibgtow_cockpit.fbx"
+classLabel = "turret"
+scrapCost = 80
+scrapValue = 25
+maxHealth = 5500
+maxAmmo = 10000 // 0 is *not* treated as infinite ammo!
+unitName = "Heavy Rocket Tower"
+aiName = "SupportProcess"
+aiName2 = "SupportProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+collisionRadius = 11.0
+armorClass = H
+AllowUndergroundSpawn = 1  //from pb137# to ensure ground preplacement
+
+/////// REQUIREMENTS ///////////////
+requireCount = 2
+requireName1 = "ibcbun"
+requireText1 = "Build Relay Bunker"
+requireName2 = "ibsbay"
+requireText2 = "Build Service Bay"
+
+/////// PROVIDES ///////////////////
+provideCount = 3
+provideName1 = "ibrtow_gh_a"
+provideName2 = "VIRTUAL_CLASS_GUNTOWER"
+provideName3 = "defender"
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "HP_ROCKET_1"
+weaponName1 = "gshadow_c"
+weaponAssault1 = 0
+weaponHard2 = "HP_ROCKET_2"
+weaponName2 = "gshadow_c"
+weaponAssault2 = 0
+weaponHard3 = "HP_ROCKET_3"
+weaponName3 = "gfafmsl_a"
+weaponAssault3 = 1
+weaponHard4 = "HP_ROCKET_4"
+weaponName4 = "gfafmsl_a"
+weaponAssault4 = 1
+
+/////// LIGHTS and EFFECTS /////////
+lightHard1 = "hp_light_1"
+lightName1 = "spotblue2"
+lightHard2 = "hp_light_2"
+lightName2 = "o_red_nf"
+
+/////// TURRETS ////////////////////
+turretCount = 4
+turretName1 = "turret_y"
+turretName2 = "turret_x"
+turretName3 = "turret_x_2"
+turretName4 = "hp_eyepoint"
+
+[BuildingClass]
+soundAmbient = "igtow01.wav"
+
+[CraftClass]
+rangeScan = 250
+periodScan = 1.0
+velocJam = 0.0
+weaponPitch = 1.5
+steerFactor = 0.5
+engageRange = 210
+
+attackTask = "AssaultTankAttack"
+subAttackTask = "SupportSubAttack"
+subAttackClass = "ANS"
+// include air units as attack targets
+// doesn't need to deploy to sub attack
+// doesn't move towards unit in sub attack
+
+[TurretCraftClass]
+omegaTurret = 2.0
+detectRange = 210

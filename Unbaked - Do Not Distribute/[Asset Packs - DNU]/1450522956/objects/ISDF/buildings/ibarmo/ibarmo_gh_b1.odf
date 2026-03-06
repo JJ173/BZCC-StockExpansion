@@ -1,0 +1,42 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+
+provideCount = 4
+provideName1 = "ibarmo"
+provideName2 = "ibarmo_gh_b1"
+provideName3 = "VIRTUAL_CLASS_ARMORY"
+provideName4 = "base"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_ARMORY"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[FactoryClass]
+
+[ArmoryGroup1]
+
+[ArmoryGroup2]
+
+[ArmoryGroup3]
+
+[ArmoryGroup4]
+
+[ArmoryGroup5]
+
+[ArmoryGroup6]
+
+[ArmoryGroup7]
+
+[ArmoryGroup8]
+buildLabel = "Supplies"
+buildItem1 = "apserv"
+buildItem2 = "aprepa"
+buildItem3 = "apammo"
+buildItem4 = "aprktbomb_r_gh"
+buildItem5 = "apslug_r_gh"

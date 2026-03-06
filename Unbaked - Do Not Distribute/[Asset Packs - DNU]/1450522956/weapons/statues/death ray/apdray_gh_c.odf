@@ -1,0 +1,18 @@
+[GameObjectClass]
+geometryName = "apcann00.xsi"
+classLabel = "wpnpower"
+scrapCost = 35
+scrapValue = 0
+maxHealth = 150
+maxAmmo = 0
+unitName = NULL
+aiName = "PowerUpProcess"
+
+requireCount = 0
+
+[PowerUpClass]
+soundPickup = "pickup01.wav"
+soundReject = "reject.wav"
+
+[WeaponPowerupClass]
+weaponName = "gdray_gh_c"

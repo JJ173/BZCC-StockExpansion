@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "bvmega_gh"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[Effect]

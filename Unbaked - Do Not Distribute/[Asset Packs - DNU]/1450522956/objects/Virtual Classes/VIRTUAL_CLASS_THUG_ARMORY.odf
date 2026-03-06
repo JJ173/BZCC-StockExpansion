@@ -1,0 +1,6 @@
+[GameObjectClass]
+classLabel = "ibarmo"
+
+providesCount = 2
+provideName1 = "ibarmo"
+provideName2 = "base"

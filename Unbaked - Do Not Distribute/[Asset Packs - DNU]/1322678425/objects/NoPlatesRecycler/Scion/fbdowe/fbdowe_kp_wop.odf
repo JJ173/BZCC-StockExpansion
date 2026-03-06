@@ -1,0 +1,17 @@
+[GameObjectClass]
+geometryName = "fbdowe00_kp_wop.fbx"
+classLabel = "fbdowe"
+animCount = 1
+animName1 = "loop"
+animFile1 = "fbdowe00_kp_wop.fbx"
+RunAnimation = "loop"
+RunAnimIsLooped = true
+isTerrain = 0
+AlignTerrainReplaceType = 0
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[SupplyDepotClass]
+

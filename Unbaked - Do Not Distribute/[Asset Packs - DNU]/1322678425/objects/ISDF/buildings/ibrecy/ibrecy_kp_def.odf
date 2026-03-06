@@ -1,0 +1,81 @@
+[GameObjectClass]
+geometryName = "ibrecy00_kp_def.fbx"
+animCount = 1
+animName1 = "loop"
+animFile1 = "ibrecy00_kp_def.fbx"
+RunAnimation = "loop"
+RunAnimIsLooped = true
+classLabel = "recycler"
+powerCost = 0
+scrapCost = 0
+scrapValue = 10
+maxHealth = 12000
+maxAmmo = 0
+unitName = "Recycler"
+aiName = "BuildingProcess"
+aiName2 = "BuildingProcess"
+heatSignature = 2.0
+imageSignature = 1.0
+radarSignature = 1.0
+isAssault = 1
+collisionRadius = 4.0
+armorClass = H
+AllowUndergroundSpawn = 1
+UseCollisionMeshForPathing = 1
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ibrecy"
+provideName2 = "ibrecycpu"
+provideName3 = "VIRTUAL_CLASS_RECYCLER"
+provideName4 = "VIRTUAL_CLASS_RECYCLERBUILDING"
+
+/////////LIGHTS AND EFFECTS/////////
+lightHard1 = "hp_light_5"
+lightName1 = "o_red_nf"
+
+[PoweredBuildingClass]
+detectRange = 100
+powerTap1 = "HP_TAP_1"
+powerTap2 = "HP_TAP_2"
+powerName = "ibgturr_kp"
+PoweredByTaps = false
+
+[BuildingClass]
+bldEdge = "twww"
+
+soundAmbient = "ibrecy01.wav"
+
+[FactoryClass]
+WeaponConfig = "iweapon_kp.odf"
+soundBuild = "ibrecy02.wav"
+soundFinish = "iapc04.wav"
+buildItem1 = "ivscav"
+buildItem4 = "ivtug_kp"
+buildItem5 = "ivcons_kp"
+buildItem7 = "apserv"
+
+[BuildGroup2]
+buildlabel = "Scouts"
+buildItem1 = "ivscout_kp"
+buildItem2 = "ivscout_kp_m"
+buildEmptyItem2 = 1
+
+[BuildGroup3]
+buildlabel = "Turrets"
+buildItem1 = "ivturr_kp"
+buildItem2 = "ivhturr_kp"
+buildItem3 = "ivrturr_kp"
+
+[BuildGroup6]
+buildlabel = "Service Trucks"
+buildItem1 = "ivserv"
+buildItem2 = "ivserv_kp"
+
+reloadMsg = "ivrecy12.wav"
+rescueMsg = "ivrecy13.wav"
+
+[RecyclerClass]
+scrapHold = 40
+scrapDelay = 3.0 // # of seconds before +1 scrap
+

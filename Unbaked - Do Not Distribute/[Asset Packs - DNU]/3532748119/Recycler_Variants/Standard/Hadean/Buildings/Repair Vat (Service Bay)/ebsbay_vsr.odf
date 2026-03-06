@@ -1,0 +1,26 @@
+[GameObjectClass]
+TerrainBlendRadius = 0	//According to GBD, this could help with stuttering in BZCC
+
+classLabel = "ebsbay"
+
+provideCount = 5
+provideName4 = "ebsbay_vsr"
+provideName5 = "VIRTUAL_CLASS_DOWER"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+// Individual classification tweakers
+serviceSTs = 1
+serviceCraft = 1
+serviceBuildings = 0
+servicePilots = 1
+serviceOther = 0
+
+//Commented out LOD for BZCC (VSR Release 64)
+//[Lod1]
+//geometryName = "ebsbayL1.xsi" ;geometry for lod1
+//distance = 70              ;bsphere under 200 pixel => switch to lod1
+//dontShiftLOD = 1

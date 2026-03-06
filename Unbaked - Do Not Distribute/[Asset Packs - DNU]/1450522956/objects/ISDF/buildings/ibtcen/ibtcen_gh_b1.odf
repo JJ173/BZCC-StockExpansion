@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ibtcen"
+
+isSingle = 0
+
+limitClass1 = "VIRTUAL_CLASS_TECHCENTER"
+limitClass1Count = 1
+limitClass1Text = "Only One Allowed"
+
+/////// PROVIDES ///////////////////
+provideCount = 4
+provideName1 = "ibtcen"
+provideName2 = "ibtcen_gh_b1"
+provideName3 = "VIRTUAL_CLASS_TECHCENTER"
+provideName4 = "base"
+
+[BuildingClass]
+
+[PoweredBuildingClass]

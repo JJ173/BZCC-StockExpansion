@@ -1,0 +1,30 @@
+[GameObjectClass]
+geometryName = "ibwtseg00_gh_a.fbx"
+classLabel = "powered"		
+collisionRadius = 1.0
+scrapCost = 20
+scrapValue = 10
+scrapReturn = 15
+maxHealth = 10000
+maxAmmo = 0
+unitName = "T-Wall Segment"
+powerCost = 0
+heatSignature = 1.0
+imageSignature = 1.0
+radarSignature = 1.0
+
+armorClass = H
+
+buildSupport = "A"  
+buildRequire = "N"
+
+requireCount = 0
+
+provideCount = 2
+provideName1 = "ibwtseg_gh_a"
+provideName2 = "wall"
+
+[BuildingClass]
+bldEdge = "wwww"
+
+

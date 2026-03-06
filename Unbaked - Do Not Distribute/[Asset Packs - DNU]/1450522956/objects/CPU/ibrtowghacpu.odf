@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibrtow_gh_a"
+scrapValue = 10
+powerCost = 0
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

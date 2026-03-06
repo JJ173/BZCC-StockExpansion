@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ibgtow"
+geometryName = "ibgtow00_kp.fbx"
+
+/////// weapons ////////////////////
+weaponMask = 00011
+weaponHard1 = "hp_cannon_1"
+recoilName1 = "recoil_r"
+weaponName1 = "gtower_kp"
+weaponAssault1 = 0
+weaponHard2 = "hp_cannon_2"
+recoilName2 = "recoil_l"
+weaponName2 = "gtower_kp"
+weaponAssault2 = 0
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]

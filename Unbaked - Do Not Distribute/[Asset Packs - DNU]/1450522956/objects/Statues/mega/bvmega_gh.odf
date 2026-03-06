@@ -1,0 +1,118 @@
+[GameObjectClass]
+baseName = "bvmega_gh"
+geometryName = "bvmega00_gh.fbx"
+classLabel = "scavenger"
+scrapValue = 10
+scrapCost = 150
+buildTime = 10.0
+maxHealth = 0
+maxAmmo = 0
+unitName = "Mega Statue"
+aiName = "ScavProcess"
+aiName2 = "ScavProcess"
+heatSignature = 5.0
+imageSignature = 3.0
+radarSignature = 2.0
+boxCollide = 1
+CanDetect = 0
+CanInteract = 0
+CanSelect = 0
+CanSnipe = 0
+CanTarget = 0
+IsAssault = 1
+IsGrouped = 0
+IsLimited = 0
+IsStealth = 1
+//Mass = 242503.0 // If <= 0, uses default of Sphere(Width*Height*Breadth) * 800.0
+needGroup = 0
+needLimit = 0
+Tuggable = -1
+needPilot = false
+
+armorClass = H
+
+requireCount = 0
+
+provideCount = 2
+provideName1 = "bvmega_gh"
+provideName2 = "VIRTUAL_CLASS_SCAVENGER"
+
+[CraftClass]
+CanRecycle = false
+CanRescue = false
+CanAIEject = false
+CanBailout = false 
+Lifespan = 180
+DoIdleDispatch = true
+damageEffect1 = "bvmega_gh.Effect"
+damageEffect2 = "bvmega_gh.Effect"
+damageEffect3 = "bvmega_gh.Effect"
+damageEffect4 = "bvmega_gh.Effect"
+chunkEffect1 = ""  
+chunkEffect2 = ""
+chunkEffect3 = ""
+chunkEffect4 = ""
+chunkEffect5 = ""
+rangeScan = 200.0
+periodScan = 0.0
+velocJam = 0.0
+
+braccelFactor = 0.1
+velFactor =	0.3
+steerFactor = 1.0
+omegaFactor = 0.3
+
+TeamTransferrable = false
+
+selectOtherMsg = "silence.wav"
+selectWaitMsg = "silence.wav"
+selectGoMsg = "silence.wav"
+selectFollowMsg = "silence.wav"
+selectPickupMsg = "silence.wav"
+selectDropoffMsg = "silence.wav"
+otherMsg = "silence.wav"
+goMsg = "silence.wav"
+goObjectMsg = "silence.wav"
+followMsg = "silence.wav"
+followMeMsg = "silence.wav"
+repairMsg = "silence.wav"
+rescueMsg = "silence.wav"
+recycleMsg = "silence.wav"
+holdMsg = "silence.wav"
+
+[TrackedVehicleClass]
+velocForward = 15.0
+velocReverse = 10.0
+accelThrust = 5.0
+omegaSpin = 1.0
+omegaTurn = 0.5
+alphaSteer = 2.0
+
+engineSound	= "silence.wav"
+treadSound = "silence.wav"
+
+[TrackedDeployableClass]
+timeDeploy = 5.0
+timeUndeploy = 5.0
+soundDeploy = "silence.wav"
+soundUndeploy = "silence.wav"
+
+[ScavengerClass]
+CanScavenge = false // false: can't scavenge, only deploy
+IsFearless = true
+soundPickup = "suck.wav"
+scrapHold = 0
+deployClass = "bbmega_gh"
+deployOffset = 3.2
+
+[Effect]
+simulateBase = "sim_null"
+lifeTime = 1.0
+renderBase = "draw_twirl"
+textureName = "flame.tga"
+textureBlend = "one one modulate"
+startColor = "0 0 0 0"
+finishColor = "0 0 0 0"
+startRadius = 0.0
+finishRadius = 0.0
+animateTime = 10.0

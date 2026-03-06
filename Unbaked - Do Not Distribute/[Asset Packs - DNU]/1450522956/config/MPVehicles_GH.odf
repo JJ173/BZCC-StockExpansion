@@ -1,0 +1,136 @@
+//
+// MPVehicles.odf - listing of multiplayer vehicles usable in BZ2
+//
+//
+// Tip: do not put .odf extension on cfg# = "" entries; added automatically on loading
+// 
+
+[MPVehicles]
+xsi1 = "ivscout00.fbx"
+cfg1 = "ivscout"
+Description1 = "Thunderbolt"
+
+xsi2 = "ivtank00.fbx"
+cfg2 = "ivtank"
+Description2 = "Sabre"
+
+xsi3 = "ivmbik00.fbx"
+cfg3 = "ivmbike"
+Description3 = "Jackal"
+
+xsi4 = "ivmisl00.fbx"
+cfg4 = "ivmisl"
+Description4 = "Avenger"
+
+xsi5 = "fvsent_skel.fbx"
+cfg5 = "fvsent"
+Description5 = "Sentry"
+
+xsi6 = "fvscout_skel.fbx"
+cfg6 = "fvscout"
+Description6 = "Drone"
+
+xsi7 = "fvtank_skel.fbx"
+cfg7 = "fvtank"
+Description7 = "Warrior"
+
+xsi8 = "fvlancer_skel.fbx"
+cfg8 = "fvarch"
+Description8 = "Lancer"
+
+xsi9 = "ivatnk00.fbx"
+cfg9 = "ivatank"
+Description9 = "Bulldog"
+
+xsi10 = "ivrckt00.fbx"
+cfg10 = "ivrckt"
+Description10 = "Rocket Tank"
+
+xsi11 = "ivwalk_skel.fbx"
+cfg11 = "ivwalk"
+Description11 = "Attila LM"
+
+xsi12 = "ispilo_rifle_skel.fbx"
+cfg12 = "ispilo"
+Description12 = "ISDF Pilot"
+
+xsi13 = "ivturr00.fbx"
+cfg13 = "ivturr"
+Description13 = "Rattler"
+
+xsi14 = "fvtitan_skel.fbx"
+cfg14 = "fvatank"
+Description14 = "Titan"
+
+xsi15 = "fvwalk_skel.fbx"
+cfg15 = "fvwalk"
+Description15 = "Mauler"
+
+xsi16 = "fspilo_rifle_skel.fbx"
+cfg16 = "fspilo"
+Description16 = "Scion Pilot"
+
+xsi17 = "fvturr_skel.fbx"
+cfg17 = "fvturr"
+Description17 = "Guardian"
+
+xsi18 = "ivstas00.fbx"
+cfg18 = "ivintc"
+Description18 = "Interceptor"
+
+xsi19 = "ivhmbike00_gh.fbx"
+cfg19 = "ivhmbike_gh"
+Description19 = "Heavy Jackal"
+
+xsi20 = "ivhmisl00_gh_a.fbx"
+cfg20 = "ivhmisl_gh_a"
+Description20 = "Heavy Avenger"
+
+xsi21 = "ivhmisl00_gh_a.fbx"
+cfg21 = "ivhmisl_gh_b"
+Description21 = "Assault Avenger"
+
+xsi22 = "ivhtank00_gh_a_smoke.fbx"
+cfg22 = "ivhtank_gh_a1"
+Description22 = "Heavy Sabre"
+
+xsi23 = "ivhtank00_gh_a_smoke.fbx"
+cfg23 = "ivhtank_gh_a2"
+Description23 = "Smoke Sabre I"
+
+xsi24 = "ivhtank00_gh_a.fbx"
+cfg24 = "ivhtank_gh_a3"
+Description24 = "Smoke Sabre II"
+
+xsi25 = "ivhtank00_gh_b.fbx"
+cfg25 = "ivhtank_gh_b1"
+Description25 = "Assault Sabre"
+
+xsi26 = "ivhtank00_gh_a.fbx"
+cfg26 = "ivhtank_gh_b2"
+Description26 = "Heavy Assault Sabre"
+
+xsi27 = "ivhtank00_gh_c.fbx"
+cfg27 = "ivhtank_gh_c1"
+Description27 = "Enforcer"
+
+xsi28 = "fvhtank00_gh_skel.fbx"
+cfg28 = "fvhtank_gh"
+Description28 = "Heavy Warrior"
+
+xsi29 = "fvhtank00_gh_skel.fbx"
+cfg29 = "fvhtank_gh_s"
+Description29 = "Smoke Warrior"
+
+xsi30 = "fvgship00_gh.fbx"
+cfg30 = "fvgship_gh"
+Description30 = "Scion Gunship"
+
+xsi31 = "fvburn00_gh.fbx"
+cfg31 = "fvburn_gh"
+Description31 = "Burns Fighter"
+
+xsi32 = "fvscout_skel.fbx"
+cfg32 = "fvpscout_gh"
+Description32 = "Phantom"
+

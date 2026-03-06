@@ -1,0 +1,51 @@
+[GameObjectClass]
+classLabel = "ivhtank_gh_a1"
+
+unitName = "Smoke Sabre I"
+
+geometryName = "ivhtank00_gh_a_smoke.fbx"
+animCount = 3
+animName1 = "forward"
+animFile1 = "ivhtank00_gh_a_sf.fbx"
+animName2 = "neutral"
+animFile2 = "ivhtank00_gh_a_sn.fbx"
+animName3 = "reverse"
+animFile3 = "ivhtank00_gh_a_sr.fbx"
+
+provideCount = 3
+provideName1 = "ivhtank_gh_a2"
+provideName2 = "VIRTUAL_CLASS_TANK"
+provideName3 = "DefendUnit"
+
+unitIcon = "icon_ivhtank_gh_a2.tga"
+unitStatus = "wire_ivhtank_gh_a2.tga"
+
+/////// weapons ////////////////////
+weaponMask = 01111
+weaponGroup1 = 0
+weaponHard1 = "HP_CANNON_1"
+weaponName1 = "gatstab_c"
+recoilName1 = "recoil"
+weaponAssault1 = 0
+
+weaponGroup2 = 1
+weaponHard2 = "HP_CANNON_2"
+weaponName2 = "gplasma_c"
+recoilName2 = "recoil_1"
+weaponAssault2 = 0
+
+weaponHard3 = "HP_GUN_1"
+weaponName3 = "gminigun_c"
+weaponAssault3 = 0
+
+weaponHard4 = "HP_GUN_2"
+weaponName4 = "gminigun_c"
+weaponAssault4 = 0
+
+weaponHard5 = "HP_MORTAR_1"
+weaponName5 = "gmortar"
+weaponAssault5 = 0
+
+[CraftClass]
+
+[HoverCraftClass]

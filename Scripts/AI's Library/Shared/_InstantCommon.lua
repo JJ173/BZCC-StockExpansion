@@ -346,6 +346,15 @@ local function BuildPlayerRecycler(pos)
     SetScrap(InstantCommon.m_StratTeam, 40)
 end
 
+local function CleanSpawns()
+    for i = 1, MAX_PLAYERS do
+        if (i > InstantCommon.m_PlayerCount) then
+            local spawn_handle = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. i)
+            RemoveObject(spawn_handle)
+        end
+    end
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- Event Driven Functions -------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -558,6 +567,9 @@ function InstantCommon.Update()
             -- Create carriers.
             BuildCarriers()
         end
+
+        -- Remove any left-over spawns on the map.
+        CleanSpawns()
 
         return
     end
@@ -1078,17 +1090,10 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 ISDFIntroFunctions[1] = function()
-    PrintConsoleMessage("[IA 2.0]: Running Intro Scene")
-
     RemoveScionIntroUnits()
 
     if (InstantCommon.m_PlayerCount < 2) then
         RemoveObject(InstantCommon.m_IntroShip3)
-
-        for i = 2, MAX_PLAYERS do
-            RemoveObject(GetHandle("player_spawn_" .. GetRaceOfTeam(i) .. "_" .. i))
-        end
-
         InstantCommon.m_Dropship3Takeoff = true
         InstantCommon.m_Dropship3Remove = true
     end

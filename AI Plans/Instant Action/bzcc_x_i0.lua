@@ -1800,7 +1800,7 @@ end
 -- BOOLEAN FUNCTIONS TO CHECK IF A SINGULAR GAME OBJECT EXISTS.
 
 function IsCommanderOptionEnabled(team, time)
-    return AIPUtil.GetVarItemInt("options.instant.aiCommander") == 1;
+    return AIPUtil.GetVarItemInt("options.instant.aiCommander") == 1 or AIPUtil.GetVarItemInt("network.session.ivar124") == 1;
 end
 
 function GetPlayerCount(team, time)

@@ -411,6 +411,8 @@ function InstantCommon.Start()
 
     PrintConsoleMessage("[IA 2.0]: Loading Instant Action 2.0. Welcome! Chosen Difficulty: " ..
         InstantCommon.m_Difficulty .. ".")
+
+
 end
 
 function InstantCommon.Update()
@@ -482,17 +484,6 @@ function InstantCommon.Update()
         InstantCommon.m_IntroShip1 = GetHandle("intro_drop_1")
         InstantCommon.m_IntroShip2 = GetHandle("intro_drop_2")
         InstantCommon.m_IntroShip3 = GetHandle("intro_drop_3")
-
-        if (InstantCommon.m_PlayerCount < 2) then
-            RemoveObject(InstantCommon.m_IntroShip3)
-
-            for i = 2, MAX_PLAYERS do
-                RemoveObject(GetHandle("player_spawn_" .. GetRaceOfTeam(i) .. "_" .. i))
-            end
-
-            InstantCommon.m_Dropship3Takeoff = true
-            InstantCommon.m_Dropship3Remove = true
-        end
 
         -- Grab all Scion intro units.
         InstantCommon.m_ScionIntroHangar = GetHandle("scion_intro_hangar")
@@ -1074,6 +1065,17 @@ end
 
 ISDFIntroFunctions[1] = function()
     RemoveScionIntroUnits()
+
+    if (InstantCommon.m_PlayerCount < 2) then
+        RemoveObject(InstantCommon.m_IntroShip3)
+
+        for i = 2, MAX_PLAYERS do
+            RemoveObject(GetHandle("player_spawn_" .. GetRaceOfTeam(i) .. "_" .. i))
+        end
+
+        InstantCommon.m_Dropship3Takeoff = true
+        InstantCommon.m_Dropship3Remove = true
+    end
 
     SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255))
     StartEarthQuake(5)

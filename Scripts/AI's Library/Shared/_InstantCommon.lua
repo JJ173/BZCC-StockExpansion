@@ -562,6 +562,10 @@ function InstantCommon.Update()
         return
     end
 
+    if (not InstantCommon.m_StartDone) then
+        return
+    end
+
     if (InstantCommon.m_IntroCutsceneEnabled and not InstantCommon.m_IntroDone) then
         if (InstantCommon.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
             ISDFIntroFunctions[InstantCommon.m_IntroState]()

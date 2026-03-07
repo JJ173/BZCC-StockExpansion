@@ -1078,6 +1078,8 @@ end
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 ISDFIntroFunctions[1] = function()
+    PrintConsoleMessage("[IA 2.0]: Running Intro Scene")
+
     RemoveScionIntroUnits()
 
     if (InstantCommon.m_PlayerCount < 2) then

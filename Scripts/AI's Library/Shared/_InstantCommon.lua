@@ -562,10 +562,6 @@ function InstantCommon.Update()
         return
     end
 
-    if (not InstantCommon.m_StartDone) then
-        return
-    end
-
     if (InstantCommon.m_IntroCutsceneEnabled and not InstantCommon.m_IntroDone) then
         if (InstantCommon.m_HumanTeamRace == _BZCCDatabase.Factions.ISDF) then
             ISDFIntroFunctions[InstantCommon.m_IntroState]()
@@ -823,7 +819,10 @@ function InstantCommon.SetupPlayer(Team)
 
     if (InstantCommon.m_IntroCutsceneEnabled) then
         if (InstantCommon.m_IsMPI) then
-            PlayerH = GetHandle("player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. Team)
+            local spawnLabel = "player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. Team
+            PrintConsoleMessage("[IA 2.0]: Attempting to find a handle with the following label: " .. spawnLabel)
+
+            PlayerH = GetHandle(spawnLabel)
 
             -- Unique check here. Replace the ship with anything that the player selected in the shell before we set them to it.
             if (PlayerH ~= nil) then
@@ -835,6 +834,8 @@ function InstantCommon.SetupPlayer(Team)
     end
 
     if (PlayerH == nil) then
+        PrintConsoleMessage("[IA 2.0]: No pre-placed spawns found for team: " .. Team .. ". Spawning a new ship.")
+
         local curFloor = TerrainFindFloor(spawnpointPosition.x, spawnpointPosition.z) + 2.5
 
         if (spawnpointPosition.y < curFloor) then

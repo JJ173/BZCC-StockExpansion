@@ -327,7 +327,7 @@ end
 local function BuildPlayerRecycler(pos)
     local customHumanRecycler
 
-    if (IsNetworkOn()) then
+    if (InstantCommon.m_IsMPI) then
         customHumanRecycler = _DLLUtils.GetCheckedNetworkSvar(5, _BZCCDatabase.NetlistVars.NETLIST_Recyclers)
     else
         customHumanRecycler = IFace_GetString("options.instant.string1")
@@ -831,13 +831,6 @@ function InstantCommon.SetupPlayer(Team)
             local spawnLabel = "player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. Team
             PrintConsoleMessage("[IA 2.0]: Attempting to find a handle with the following label: " .. spawnLabel)
             PlayerH = GetHandle(spawnLabel)
-
-            -- Unique check here. Replace the ship with anything that the player selected in the shell before we set them to it.
-            if (PlayerH ~= nil) then
-                local pos = GetPosition(PlayerH)
-                RemoveObject(PlayerH)
-                PlayerH = BuildObject(GetPlayerODF(Team), Team, pos)
-            end
         else
             PlayerH = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. Team)
         end

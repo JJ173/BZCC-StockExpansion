@@ -564,7 +564,7 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
             BuildObject(faction .. "vcmdr_s", team, GetPositionNear(spawnPath, 30, 60))
 
             -- Spawn Lts based on number of players in the game.
-            for i = 2, IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT) do
+            for i = 1, CountPlayers() do
                 BuildObject(faction .. "vlt_c", team, GetPositionNear(spawnPath, 30, 60))
             end
         end

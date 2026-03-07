@@ -335,11 +335,7 @@ end
 
 local function UpdatePlayerCount(value)
     InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount + value
-
-    if (InstantCommon.m_IsMPI) then
-        IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
-    end
-
+    IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
     PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
 end
 
@@ -403,21 +399,15 @@ function InstantCommon.Start()
     InstantCommon.m_CPUScrapAmount = InstantCommon.m_Difficulty
     InstantCommon.m_CPUScrapDelay = ((1 + InstantCommon.m_Difficulty) * CountPlayers()) * 2
 
-    local PlayerEntryH = GetPlayerHandle()
+    local PlayerEntryH = GetPlayerHandle(1)
 
     if (PlayerEntryH ~= nil) then
         RemoveObject(PlayerEntryH)
     end
 
-    -- Clean-up if the variable has been populated from a previous MP session. Make sure we reset it.
-    if (not InstantCommon.m_IsMPI) then
-        IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(1))
-    else
-        local LocalTeamNum = GetLocalPlayerTeamNumber();
-        local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
-        SetAsUser(PlayerH, LocalTeamNum)
-        AddPilotByHandle(PlayerH)
-    end
+    local LocalTeamNum = GetLocalPlayerTeamNumber();
+    local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
+    SetAsUser(PlayerH, LocalTeamNum)
 
     PrintConsoleMessage("[IA 2.0]: Loading Instant Action 2.0. Welcome! Chosen Difficulty: " ..
         InstantCommon.m_Difficulty .. ".")
@@ -517,10 +507,6 @@ function InstantCommon.Update()
         -- Stop them so they can't be commanded for now.
         Stop(InstantCommon.m_IntroTurret1, 1)
         Stop(InstantCommon.m_IntroTurret2, 1)
-
-        local LocalTeamNum = GetLocalPlayerTeamNumber() -- Query this from game
-        local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
-        SetAsUser(PlayerH, LocalTeamNum)
 
         -- If we are doing anything like RTS mode, or the intro scene is off, don't let the intro scene play.
         -- Instead, just spawn stuff normally.
@@ -833,14 +819,14 @@ function InstantCommon.SetupPlayer(Team)
 
     if (InstantCommon.m_IntroCutsceneEnabled) then
         if (InstantCommon.m_IsMPI) then
-            PlayerH = GetHandle("player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. InstantCommon.m_PlayerCount)
+            PlayerH = GetHandle("player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. Team)
 
             -- Unique check here. Replace the ship with anything that the player selected in the shell before we set them to it.
             if (PlayerH ~= nil) then
                 PlayerH = ReplaceObject(PlayerH, GetPlayerODF(Team))
             end
         else
-            PlayerH = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. InstantCommon.m_PlayerCount)
+            PlayerH = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. Team)
         end
     end
 

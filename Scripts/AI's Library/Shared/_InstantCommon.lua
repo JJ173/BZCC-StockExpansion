@@ -249,7 +249,14 @@ local function GameConditions()
                 InstantCommon.m_EnemyRecycler = DLLHandle
             else
                 DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
-                SucceedMission(GetTime() + 5, "instantw.txt")
+
+                if (not InstantCommon.m_IsMPI) then
+                    SucceedMission(GetTime() + 5, "instantw.txt.txt")
+                else
+                    local WinningTeamgroup = WhichTeamGroup(InstantCommon.m_StratTeam)
+                    NoteGameoverByLastTeamWithBase(WinningTeamgroup)
+                end
+
                 InstantCommon.m_GameOver = true
             end
         elseif (IsAlive(InstantCommon.m_Recycler) == false) then
@@ -264,7 +271,13 @@ local function GameConditions()
                     DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
                 end
 
-                SucceedMission(GetTime() + 5, "instantl.txt")
+                if (not InstantCommon.m_IsMPI) then
+                    FailMission(GetTime() + 5, "instantl.txt")
+                else
+                    local WinningTeamgroup = WhichTeamGroup(InstantCommon.m_CompTeam)
+                    NoteGameoverByLastTeamWithBase(WinningTeamgroup)
+                end
+
                 InstantCommon.m_GameOver = true
             end
         end
@@ -331,12 +344,6 @@ local function BuildPlayerRecycler(pos)
     end
 
     SetScrap(InstantCommon.m_StratTeam, 40)
-end
-
-local function UpdatePlayerCount(value)
-    InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount + value
-    IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
-    PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
 end
 
 ---------------------------------------------------------------------------------------------------------------------------------------
@@ -411,8 +418,6 @@ function InstantCommon.Start()
 
     PrintConsoleMessage("[IA 2.0]: Loading Instant Action 2.0. Welcome! Chosen Difficulty: " ..
         InstantCommon.m_Difficulty .. ".")
-
-
 end
 
 function InstantCommon.Update()
@@ -781,7 +786,9 @@ end
 
 ---@param id integer
 function InstantCommon.DeletePlayer(id)
-    UpdatePlayerCount(-1)
+    InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount - 1
+    IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
+    PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
 
     if (InstantCommon.m_IsMPI) then
         DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_LeftHuman)
@@ -792,7 +799,9 @@ end
 
 ---@param Team integer
 function InstantCommon.SetupPlayer(Team)
-    UpdatePlayerCount(1)
+    InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount + 1
+    IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
+    PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
 
     if (IsTeamplayOn()) then
         local cmdTeam = GetCommanderTeam(Team)

@@ -568,9 +568,6 @@ function InstantCommon.Update()
             BuildCarriers()
         end
 
-        -- Remove any left-over spawns on the map.
-        CleanSpawns()
-
         return
     end
 
@@ -833,12 +830,13 @@ function InstantCommon.SetupPlayer(Team)
         if (InstantCommon.m_IsMPI) then
             local spawnLabel = "player_spawn_" .. GetRaceOfTeam(Team) .. "_" .. Team
             PrintConsoleMessage("[IA 2.0]: Attempting to find a handle with the following label: " .. spawnLabel)
-
             PlayerH = GetHandle(spawnLabel)
 
             -- Unique check here. Replace the ship with anything that the player selected in the shell before we set them to it.
             if (PlayerH ~= nil) then
-                PlayerH = ReplaceObject(PlayerH, GetPlayerODF(Team))
+                local pos = GetPosition(PlayerH)
+                RemoveObject(PlayerH)
+                PlayerH = BuildObject(GetPlayerODF(Team), Team, pos)
             end
         else
             PlayerH = GetHandle("player_spawn_" .. InstantCommon.m_HumanTeamRace .. "_" .. Team)
@@ -1097,6 +1095,9 @@ ISDFIntroFunctions[1] = function()
         InstantCommon.m_Dropship3Takeoff = true
         InstantCommon.m_Dropship3Remove = true
     end
+
+    -- Remove any left-over spawns on the map.
+    CleanSpawns()
 
     SetColorFade(1, 0.5, Make_RGBA(0, 0, 0, 255))
     StartEarthQuake(5)

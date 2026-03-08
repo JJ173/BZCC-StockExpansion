@@ -276,7 +276,8 @@ local function GameConditions()
                     NoteGameoverByLastTeamWithBase(WinningTeamgroup)
                 end
 
-                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
+                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj,
+                    _BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
                 InstantCommon.m_GameOver = true
             end
         end
@@ -385,6 +386,8 @@ function InstantCommon.Start()
         Ally(InstantCommon.m_PlayerTeam, i)
     end
 
+    _TauntManager.SetupTaunts()
+
     InstantCommon.m_IsMPI = IsNetworkOn()
     InstantCommon.m_GameTPS = GetTPS()
     InstantCommon.m_TurnCounter = 0
@@ -394,7 +397,7 @@ function InstantCommon.Start()
     InstantCommon.m_StratTeam = 1
     InstantCommon.m_MapName = GetMapTRNFilename()
 
-    if (IsNetworkOn()) then
+    if (InstantCommon.m_IsMPI) then
         InstantCommon.m_IntroCutsceneEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_INTRO_SCENE_ENABLED) > 0
         InstantCommon.m_WildlifeEnabled = IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_WILDLIFE_ENABLED) > 0
         InstantCommon.m_CPUTeamRace = string.char(IFace_GetInteger(_BZCCDatabase.ShellVariables.MPI_CPU_TEAM_RACE))
@@ -423,10 +426,6 @@ function InstantCommon.Start()
 
     if (PlayerEntryH ~= nil) then
         RemoveObject(PlayerEntryH)
-    end
-
-    if (ImServer() or not InstantCommon.m_IsMPI) then
-        _TauntManager.SetupTaunts()
     end
 
     local LocalTeamNum = GetLocalPlayerTeamNumber();
@@ -498,7 +497,8 @@ function InstantCommon.Update()
         end
 
         -- Register the CPU team with the new manager.
-        InstantCommon.m_CPUTeamObj = _CPUManager.NewTeam(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace, "RecyclerEnemy", false)
+        InstantCommon.m_CPUTeamObj = _CPUManager.NewTeam(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace,
+            "RecyclerEnemy", false)
 
         -- Grab dropship handles for the intro.
         InstantCommon.m_IntroShip1 = GetHandle("intro_drop_1")

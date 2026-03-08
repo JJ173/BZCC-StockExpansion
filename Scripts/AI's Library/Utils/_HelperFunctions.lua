@@ -5,11 +5,7 @@ function AddObjectiveOverride(objective, colour, time, clearExisting, isCoop)
         ClearObjectives();
     end
 
-    if (isCoop) then
-        AddToMessagesBox(TranslateString(objective), colour);
-    else
-        AddObjective(objective, colour, time);
-    end
+    AddObjective(objective, colour, time);
 end
 
 function BuildObjectAtSafePath(handle, team, path, alternativePath, totalPlayers)

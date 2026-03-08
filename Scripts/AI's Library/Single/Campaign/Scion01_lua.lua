@@ -424,16 +424,18 @@ local IntroHandlers = {
             end
         end
 
+        _Cooperative.CleanSpawns()
+
         -- Small enhancement for enemy weapons on higher difficulties.
         Mission.m_ISDFWeaponUpgradeChance = 0.15 * Mission.m_MissionDifficulty
 
         _CPUManager.NewTeam(Mission.m_EnemyTeam, _BZCCDatabase.Factions.ISDF, "airecy", true)
-        _Cooperative.CleanSpawns()
 
         if (Mission.m_IsCooperativeMode) then
             if (Mission.m_PlayerPilo1) then RemoveObject(Mission.m_PlayerPilo1) end
             if (Mission.m_ShabPilo) then RemoveObject(Mission.m_ShabPilo) end
-            Mission.m_IntroState = IntroState.FINISH
+            createShab3Pilot()
+            Mission.m_IntroState = IntroState.YELENA_IN_SHIP
         else
             if (Mission.m_PlayerPilo1) then LookAt(Mission.m_PlayerPilo1, Mission.m_ShabPilo) end
             if (Mission.m_ShabPilo) then LookAt(Mission.m_ShabPilo, Mission.m_PlayerPilo1) end
@@ -541,7 +543,7 @@ local TutorialHandlers = {
         if (not IsAudioMessageFinished(Mission.m_Audioclip, Mission.m_AudioTimer, Mission.m_MissionTime, Mission.m_IsCooperativeMode)) then return end
 
         if (Mission.m_PreTutorialStep == 0) then
-            playAudioWithDelay("scion0101_new.wav", 11.5)
+            playAudioWithDelay("scion0101_new.wav", 17.5)
             Mission.m_PreTutorialStep = Mission.m_PreTutorialStep + 1
         elseif (Mission.m_PreTutorialStep == 1) then
             LookAt(Mission.m_Yelena, Mission.m_Alpha1)

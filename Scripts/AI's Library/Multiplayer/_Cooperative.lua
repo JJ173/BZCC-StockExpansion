@@ -144,7 +144,7 @@ end
 function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilotODF)
     -- Sanity check for multiworld
     if (GetCurWorld() ~= 0) then
-        return _BZCCDatabase.EventReturnCodes.DoEjectPilot
+        return _BZCCDatabase.EventReturnCodes.DoRespawnSafest
     end
 
     local isDeadAI = not IsPlayer(DeadObjectHandle)
@@ -153,10 +153,6 @@ function _Cooperative.ObjectSniped(DeadObjectHandle, KillersHandle, MissionPilot
 end
 
 function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTeam, pOrdnanceODF)
-    if (curWorld ~= 0) then
-        return
-    end
-
     local relationship = GetTeamRelationship(shooterHandle, victimHandle)
 
     if (relationship == _BZCCDatabase.TeamRelationships.TEAMRELATIONSHIP_ALLIEDTEAM) then
@@ -171,12 +167,7 @@ function _Cooperative.PreSnipe(curWorld, shooterHandle, victimHandle, ordnanceTe
 end
 
 function _Cooperative.PreGetIn(curWorld, pilotHandle, emptyCraftHandle)
-    if (curWorld ~= 0) then
-        return
-    end
-
-    _VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
-
+    --_VoiceManager.SwitchVehicleVoices(emptyCraftHandle, pilotHandle)
     return _BZCCDatabase.EventReturnCodes.PREGETIN_ALLOW
 end
 

@@ -1,15 +1,29 @@
 -- Required helper functions.
 require("_HelperFunctions")
 
-TauntManager = {}
-
 -- Constants.
 local TAUNTS_MAX = 16
 
--- Taunt Varbs.
-local TauntList = {} -- List of tauns.
-local TauntHeaders = {} -- Max length is 16.
-local TauntHeaderCount = 0
+TauntManager = {
+    TauntList = {}, -- List of tauns.
+    TauntHeaders = {}, -- Max length is 16.
+    TauntHeaderCount = 0
+}
+
+-- Register Save/Load for saveload system
+_SaveLoad.RegisterSave("TauntManager", function()
+    return TauntManager
+end)
+
+_SaveLoad.RegisterLoad("TauntManager", function(TauntData)
+    if (TauntData ~= nil) then
+        for k, v in pairs(TauntData) do
+            TauntManager[k] = v
+        end
+    else
+        PrintConsoleMessage("[IA 2.0]: WARNING: TauntManager Load called with nil data.")
+    end
+end)
 
 function TauntManager.SetupTaunts()
     -- Get the current map terrain file name.
@@ -33,24 +47,24 @@ function TauntManager.SetupTaunts()
         local CategoryName = "Category" .. (i - 1)
 
         -- Check to see if the ODF string exists.
-        TauntHeaders[i] = GetODFString(FullTauntODFName, "TauntCategories", CategoryName)
+        TauntManager.TauntHeaders[i] = GetODFString(FullTauntODFName, "TauntCategories", CategoryName)
 
         if (TauntHeaders[i] == nil) then
             break -- Bail here if nothing found. 
         end
 
-        PrintConsoleMessage("[TM]: TauntHeader at index: " .. i .. " registered with value: " .. TauntHeaders[i])
+        PrintConsoleMessage("[TM]: TauntHeader at index: " .. i .. " registered with value: " .. TauntManager.TauntHeaders[i])
 
         -- Process the category.
-        TauntHeaderCount = TauntHeaderCount + 1
+        TauntManager.TauntHeaderCount = TauntManager.TauntHeaderCount + 1
     end
 
-    PrintConsoleMessage("[TM]: Found " .. TauntHeaderCount .. " TauntHeaders.")
+    PrintConsoleMessage("[TM]: Found " .. TauntManager.TauntHeaderCount .. " TauntHeaders.")
 
     -- Run through the headers that have been found.
-    for TauntType = 1, TauntHeaderCount do
+    for TauntType = 1, TauntManager.TauntHeaderCount do
         -- This should craft a taunt name from the types and load it. E.G. "Taunts_start.otf"
-        local TauntFileName = TauntODFName .. TauntHeaders[TauntType] .. ".otf"
+        local TauntFileName = TauntODFName .. TauntManager.TauntHeaders[TauntType] .. ".otf"
         PrintConsoleMessage("[TM]: Attempting to load " .. TauntFileName .. ".")
         local File = LoadFile(TauntFileName)
 
@@ -65,11 +79,11 @@ function TauntManager.SetupTaunts()
             end
 
             -- Create a fresh table entry.
-            TauntList[TauntType] = {}
+            TauntManager.TauntList[TauntType] = {}
 
             for i = 1, #lines do
                 if (i > 1) then
-                    TauntList[TauntType][#TauntList[TauntType]+1] = lines[i]
+                    TauntManager.TauntList[TauntType][#TauntManager.TauntList[TauntType]+1] = lines[i]
                 end
             end
         end
@@ -82,13 +96,13 @@ function TauntManager.GetRandomTauntOfType(tauntType)
     local resolvedTauntType = tauntType + 1
 
     -- Just for debug.
-    PrintConsoleMessage("[TM]: Requesting Taunt From .. " .. TauntHeaders[resolvedTauntType])
+    PrintConsoleMessage("[TM]: Requesting Taunt From .. " .. TauntManager.TauntHeaders[resolvedTauntType])
 
     -- Grab the length of the table.
-    local length = #TauntList[resolvedTauntType]
+    local length = #TauntManager.TauntList[resolvedTauntType]
 
     -- Return a random taunt from the requested list.
-    return TauntList[resolvedTauntType][GetRandomInt(1, length)]
+    return TauntManager.TauntList[resolvedTauntType][GetRandomInt(1, length)]
 end
 
 return TauntManager

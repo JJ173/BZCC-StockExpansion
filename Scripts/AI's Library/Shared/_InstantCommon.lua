@@ -168,9 +168,6 @@ _SaveLoad.RegisterSave("InstantCommon", function()
 end)
 
 _SaveLoad.RegisterLoad("InstantCommon", function(InstantData)
-    -- Re-initiate the taunt manager.
-    _TauntManager.SetupTaunts()
-
     if (InstantData ~= nil) then
         for k, v in pairs(InstantData) do
             InstantCommon[k] = v
@@ -428,6 +425,10 @@ function InstantCommon.Start()
         RemoveObject(PlayerEntryH)
     end
 
+    if (ImServer() or not InstantCommon.m_IsMPI) then
+        _TauntManager.SetupTaunts()
+    end
+
     local LocalTeamNum = GetLocalPlayerTeamNumber();
     local PlayerH = InstantCommon.SetupPlayer(LocalTeamNum)
     SetAsUser(PlayerH, LocalTeamNum)
@@ -447,8 +448,6 @@ function InstantCommon.Update()
     _Multiplayer.UpdateGameTime(InstantCommon.m_GameTPS)
 
     if (InstantCommon.m_StartDone == false) then
-        InstantCommon.m_StartDone = true
-
         local customCPURecycler = IFace_GetString("options.instant.string2")
 
         if (customCPURecycler ~= nil) then
@@ -497,9 +496,6 @@ function InstantCommon.Update()
                 _AnimalManager.SetupMapHerds(motherODF, babyODF)
             end
         end
-
-        -- Setup the taunt manager.
-        _TauntManager.SetupTaunts()
 
         -- Register the CPU team with the new manager.
         InstantCommon.m_CPUTeamObj = _CPUManager.NewTeam(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace, "RecyclerEnemy", false)
@@ -578,6 +574,7 @@ function InstantCommon.Update()
             BuildCarriers()
         end
 
+        InstantCommon.m_StartDone = true
         return
     end
 
@@ -691,7 +688,7 @@ function InstantCommon.Update()
     _CarrierManager.Run(InstantCommon.m_TurnCounter)
     _CPUManager.Run(InstantCommon.m_TurnCounter)
 
-    if (InstantCommon.m_IntroDone) then
+    if (InstantCommon.m_StartDone and InstantCommon.m_IntroDone) then
         -- Game conditions to see if either Recycler has been destroyed.
         GameConditions()
 

@@ -168,6 +168,8 @@ _SaveLoad.RegisterSave("InstantCommon", function()
 end)
 
 _SaveLoad.RegisterLoad("InstantCommon", function(InstantData)
+    _TauntManager.SetupTaunts()
+
     if (InstantData ~= nil) then
         for k, v in pairs(InstantData) do
             InstantCommon[k] = v

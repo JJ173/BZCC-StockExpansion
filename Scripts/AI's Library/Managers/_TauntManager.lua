@@ -11,6 +11,11 @@ local TauntHeaders = {} -- Max length is 16.
 local TauntHeaderCount = 0
 
 function TauntManager.SetupTaunts()
+    -- Reset values if any are stored for save/load.
+    TauntList = {}
+    TauntHeaders = {}
+    TauntHeaderCount = 0
+
     -- Get the current map terrain file name.
     local mapTrnFile = GetMapTRNFilename()
 

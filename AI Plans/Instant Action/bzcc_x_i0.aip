@@ -4,7 +4,6 @@ scavClass = "ivscav_c"
 consClass = "ivcons_c"
 CheckProvides = true
 DLLCanSwitch = false
-baseLoc = "RecyclerEnemy"
 
 // --------------------------------
 // >>> Base Building Directions <<<

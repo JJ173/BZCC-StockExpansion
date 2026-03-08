@@ -1,9 +1,16 @@
+-- Database
 local _BZCCDatabase = require("_BZCCDatabase")
 
+-- Classes
 local _AssaultClass = require("_AssaultClass")
 local _DispatchClass = require("_DispatchClass")
-local _SaveLoad = require("_SaveLoad")
+
+-- Managers
+local _TauntManager = require("_TauntManager")
 local _WorldManager = require("_WorldManager")
+
+-- Utilities
+local _SaveLoad = require("_SaveLoad")
 local _DLLUtils = require("_DLLUtils")
 
 ---@class CPUTeam
@@ -64,21 +71,6 @@ local TurretDispatchMethod = {
 
 local MAX_ASSAULT_DEFENDER_COUNT = 1
 local MAX_ASSAULT_SERVICE_COUNT = 2
-
----@param team integer
----@return CPUTeam | nil
-local function GetCPUTeam(team)
-    for i = 1, #CPUManager.CPUTeams do
-        local cpuTeam = CPUManager.CPUTeams[i]
-
-        if (cpuTeam == nil or cpuTeam.Team ~= team) then
-            PrintConsoleMessage("CPUTeam not found for team: " .. team)
-            return nil
-        end
-
-        return cpuTeam
-    end
-end
 
 ---@param cpuTeam CPUTeam
 ---@param handle Handle
@@ -513,6 +505,32 @@ local function HandleAntiAir(cpuTeam, antiAirUnit)
     end
 end
 
+---@param cpuTeam CPUTeam
+---@param tauntType integer
+function CPUManager.SendChatMessage(cpuTeam, tauntType)
+    -- Grab a random taunt back from the taunt manager.
+    local randomTaunt = _TauntManager.GetRandomTauntOfType(tauntType)
+
+    -- Simulate a "chat message".
+    AddToMessagesBox("<" .. cpuTeam.Name .. ">: " .. randomTaunt, Make_RGB(255, 0, 0))
+    StartSoundEffect("select.wav")
+end
+
+---@param team integer
+---@return CPUTeam | nil
+function CPUManager.GetCPUTeam(team)
+    for i = 1, #CPUManager.CPUTeams do
+        local cpuTeam = CPUManager.CPUTeams[i]
+
+        if (cpuTeam == nil or cpuTeam.Team ~= team) then
+            PrintConsoleMessage("CPUTeam not found for team: " .. team)
+            return nil
+        end
+
+        return cpuTeam
+    end
+end
+
 ---Creates a new CPU Team object.
 ---@param team number
 ---@param faction string
@@ -563,9 +581,12 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
         if (newTeam.CommanderEnabled) then
             BuildObject(faction .. "vcmdr_s", team, GetPositionNear(spawnPath, 30, 60))
 
-            -- Spawn Lts based on number of players in the game.
-            for i = 1, CountPlayers() do
-                BuildObject(faction .. "vlt_c", team, GetPositionNear(spawnPath, 30, 60))
+            local pCount = CountPlayers()
+            if (pCount > 1) then
+                -- Spawn Lts based on number of players in the game.
+                for i = 1, pCount - 1 do
+                    BuildObject(faction .. "vlt_c", team, GetPositionNear(spawnPath, 30, 60))
+                end
             end
         end
 
@@ -573,6 +594,8 @@ function CPUManager.NewTeam(team, faction, spawnPath, isCampaign)
     end
 
     SetScrap(team, 40)
+
+    return newTeam
 end
 
 ---@param missionTurnCount integer
@@ -585,18 +608,15 @@ function CPUManager.Run(missionTurnCount)
     for _, cpuTeam in pairs(CPUManager.CPUTeams) do
         -- Handle taunts for this team if it's not a campaign team.
         if (not cpuTeam.isCampaign) then
-            if (not cpuTeam.TauntSetupDone) then
-                if (missionTurnCount == 2) then
-                    SetTauntCPUTeamName(cpuTeam.Name)
-                elseif (missionTurnCount == 4) then
-                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_GameStart)
+            if (cpuTeam.TauntCooldown < missionTurnCount) then
+                if (not cpuTeam.TauntSetupDone) then
+                    CPUManager.SendChatMessage(cpuTeam, _BZCCDatabase.TauntTypes.TAUNTS_GameStart)
                     cpuTeam.TauntSetupDone = true
+                elseif (cpuTeam.TauntCooldown < missionTurnCount) then
+                    CPUManager.SendChatMessage(cpuTeam, _BZCCDatabase.TauntTypes.TAUNTS_Random)
                 end
-            else
-                if (cpuTeam.TauntCooldown < missionTurnCount) then
-                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_Random)
-                    cpuTeam.TauntCooldown = missionTurnCount + SecondsToTurns(90)
-                end
+
+                cpuTeam.TauntCooldown = missionTurnCount + SecondsToTurns(90)
             end
 
             if (cpuTeam.CommanderEnabled) then
@@ -640,7 +660,7 @@ end
 ---@param missionTurnCount integer
 ---@param teamNum integer
 function CPUManager.AddTeamObject(handle, missionTurnCount, teamNum)
-    local cpuTeam = GetCPUTeam(teamNum)
+    local cpuTeam = CPUManager.GetCPUTeam(teamNum)
 
     if (cpuTeam == nil) then
         PrintConsoleMessage("CPUManager.AddTeamObject: Unable to find a CPUTeam object for team: " .. teamNum)
@@ -731,7 +751,7 @@ end
 ---@param teamNum integer
 function CPUManager.RemoveTeamObject(handle, teamNum)
     -- Check for a team.
-    local cpuTeam = GetCPUTeam(teamNum)
+    local cpuTeam = CPUManager.GetCPUTeam(teamNum)
 
     -- No team? Bail.
     if (cpuTeam == nil) then

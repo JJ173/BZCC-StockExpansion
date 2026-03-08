@@ -14,6 +14,9 @@ local _BZCCDatabase = require("_BZCCDatabase")
 local _AnimalManager = require("_AnimalManager")
 local _CarrierManager = require("_CarrierManager")
 local _CPUManager = require("_CPUManager")
+local _TauntManager = require("_TauntManager")
+
+-- Utilities
 local _SaveLoad = require("_SaveLoad")
 local _DLLUtils = require("_DLLUtils")
 local _Multiplayer = require("_Multiplayer")
@@ -26,6 +29,8 @@ InstantCommon = {
 
     m_CPUTeamRace                   = '',
     m_HumanTeamRace                 = '',
+
+    m_CPUTeamObj                    = nil,
 
     -- Keep track of player count.
     m_PlayerCount                   = 0,
@@ -163,6 +168,9 @@ _SaveLoad.RegisterSave("InstantCommon", function()
 end)
 
 _SaveLoad.RegisterLoad("InstantCommon", function(InstantData)
+    -- Re-initiate the taunt manager.
+    _TauntManager.SetupTaunts()
+
     if (InstantData ~= nil) then
         for k, v in pairs(InstantData) do
             InstantCommon[k] = v
@@ -248,8 +256,6 @@ local function GameConditions()
             if (IsAround(DLLHandle)) then
                 InstantCommon.m_EnemyRecycler = DLLHandle
             else
-                DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
-
                 if (not InstantCommon.m_IsMPI) then
                     SucceedMission(GetTime() + 5, "instantw.txt.txt")
                 else
@@ -257,6 +263,7 @@ local function GameConditions()
                     NoteGameoverByLastTeamWithBase(WinningTeamgroup)
                 end
 
+                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
                 InstantCommon.m_GameOver = true
             end
         elseif (IsAlive(InstantCommon.m_Recycler) == false) then
@@ -265,12 +272,6 @@ local function GameConditions()
             if (IsAround(DLLHandle)) then
                 InstantCommon.m_Recycler = DLLHandle
             else
-                if (InstantCommon.m_TurnCounter < InstantCommon.m_VSRTauntEasterEggTime) then
-                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_VSR_EasterEgg)
-                else
-                    DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
-                end
-
                 if (not InstantCommon.m_IsMPI) then
                     FailMission(GetTime() + 5, "instantl.txt")
                 else
@@ -278,6 +279,7 @@ local function GameConditions()
                     NoteGameoverByLastTeamWithBase(WinningTeamgroup)
                 end
 
+                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
                 InstantCommon.m_GameOver = true
             end
         end
@@ -413,7 +415,12 @@ function InstantCommon.Start()
 
     InstantCommon.m_VSRTauntEasterEggTime = InstantCommon.m_TurnCounter + SecondsToTurns(600)
     InstantCommon.m_CPUScrapAmount = InstantCommon.m_Difficulty
-    InstantCommon.m_CPUScrapDelay = ((1 + InstantCommon.m_Difficulty) * CountPlayers()) * 2
+
+    if (InstantCommon.m_IsMPI) then
+        InstantCommon.m_CPUScrapDelay = ((4 - InstantCommon.m_Difficulty) * 2) / CountPlayers()
+    else
+        InstantCommon.m_CPUScrapDelay = ((4 - InstantCommon.m_Difficulty) * 2)
+    end
 
     local PlayerEntryH = GetPlayerHandle(1)
 
@@ -491,8 +498,11 @@ function InstantCommon.Update()
             end
         end
 
+        -- Setup the taunt manager.
+        _TauntManager.SetupTaunts()
+
         -- Register the CPU team with the new manager.
-        _CPUManager.NewTeam(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace, "RecyclerEnemy", false)
+        InstantCommon.m_CPUTeamObj = _CPUManager.NewTeam(InstantCommon.m_CompTeam, InstantCommon.m_CPUTeamRace, "RecyclerEnemy", false)
 
         -- Grab dropship handles for the intro.
         InstantCommon.m_IntroShip1 = GetHandle("intro_drop_1")
@@ -784,10 +794,8 @@ function InstantCommon.AddPlayer(id, Team, IsNewPlayer)
         local PlayerH = InstantCommon.SetupPlayer(Team)
         SetAsUser(PlayerH, Team)
         AddPilotByHandle(PlayerH)
-    end
 
-    if (InstantCommon.m_IsMPI) then
-        DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_NewHuman)
+        _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_NewHuman)
     end
 
     return true
@@ -798,10 +806,7 @@ function InstantCommon.DeletePlayer(id)
     InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount - 1
     IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
     PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
-
-    if (InstantCommon.m_IsMPI) then
-        DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_LeftHuman)
-    end
+    _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_LeftHuman)
 
     return true
 end
@@ -821,7 +826,7 @@ function InstantCommon.SetupPlayer(Team)
         end
     end
 
-    local spawnpointPosition = GetSafestSpawnpoint()
+    local spawnpointPosition = GetPositionNear("Recycler", 25, 50)
     InstantCommon.m_TeamPos[Team] = spawnpointPosition
 
     local PlayerH
@@ -851,6 +856,8 @@ function InstantCommon.SetupPlayer(Team)
         else
             PlayerH = BuildObject(InstantCommon.m_HumanTeamRace .. "vscout_x", Team, spawnpointPosition)
         end
+
+        SetRandomHeadingAngle(PlayerH)
     end
 
     local TempODFName
@@ -969,13 +976,17 @@ function InstantCommon.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson,
     end
 
     if (deadObjectIsPlayer) then
+        local killerTeam = GetTeamNum(KillersHandle)
+
+        if (killerTeam == InstantCommon.m_CompTeam) then
+            _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_HumanShipDestroyed)
+        end
+
         AddScore(DeadObjectHandle, -deadObjectScrapCost)
 
         if (isDeadPerson) then
             AddDeaths(DeadObjectHandle, 1)
         end
-
-        DoTaunt(_BZCCDatabase.TauntTypes.TAUNTS_HumanShipDestroyed)
     else
         AddDeaths(DeadObjectHandle, 1)
         AddScore(DeadObjectHandle, -deadObjectScrapCost)
@@ -1065,7 +1076,7 @@ function InstantCommon.PreOrdnanceHit(ShooterHandle, VictimHandle, OrdnanceTeam,
 
             if (objClass == "CLASS_TURRETTANK") then
                 if (GetCurrentCommand(VictimHandle) ~= _BZCCDatabase.AICommands.CMD_DEFEND) then
-                    Stop(VictimHandle, 0)
+                    Defend(VictimHandle, 0)
                 end
             elseif (objClass == "CLASS_SCAVENGER" or objClass == "CLASS_SCAVENGERH") then
                 if (IsIdle(VictimHandle)) then

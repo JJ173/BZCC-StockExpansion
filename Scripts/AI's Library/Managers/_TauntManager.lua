@@ -1,11 +1,14 @@
 -- Required helper functions.
 require("_HelperFunctions")
 
+-- Utilities
+local _SaveLoad = require("_SaveLoad")
+
 -- Constants.
 local TAUNTS_MAX = 16
 
 TauntManager = {
-    TauntList = {}, -- List of tauns.
+    TauntList = {},    -- List of tauns.
     TauntHeaders = {}, -- Max length is 16.
     TauntHeaderCount = 0
 }
@@ -50,10 +53,11 @@ function TauntManager.SetupTaunts()
         TauntManager.TauntHeaders[i] = GetODFString(FullTauntODFName, "TauntCategories", CategoryName)
 
         if (TauntHeaders[i] == nil) then
-            break -- Bail here if nothing found. 
+            break -- Bail here if nothing found.
         end
 
-        PrintConsoleMessage("[TM]: TauntHeader at index: " .. i .. " registered with value: " .. TauntManager.TauntHeaders[i])
+        PrintConsoleMessage("[TM]: TauntHeader at index: " ..
+        i .. " registered with value: " .. TauntManager.TauntHeaders[i])
 
         -- Process the category.
         TauntManager.TauntHeaderCount = TauntManager.TauntHeaderCount + 1
@@ -83,7 +87,8 @@ function TauntManager.SetupTaunts()
 
             for i = 1, #lines do
                 if (i > 1) then
-                    TauntManager.TauntList[TauntType][#TauntManager.TauntList[TauntType]+1] = lines[i]
+                    local length = #TauntManager.TauntList[TauntType]
+                    TauntManager.TauntList[TauntType][length + 1] = lines[i]
                 end
             end
         end
@@ -98,11 +103,17 @@ function TauntManager.GetRandomTauntOfType(tauntType)
     -- Just for debug.
     PrintConsoleMessage("[TM]: Requesting Taunt From .. " .. TauntManager.TauntHeaders[resolvedTauntType])
 
+    for _, tauntList in pairs(TauntManager.TauntList[resolvedTauntType]) do
+        for _, taunt in pairs(tauntList) do
+            PrintConsoleMessage("[TM]: Checking value in taunt list: " .. taunt)
+        end
+    end
+
     -- Grab the length of the table.
-    local length = #TauntManager.TauntList[resolvedTauntType]
+    -- local length = #TauntManager.TauntList[resolvedTauntType]
 
     -- Return a random taunt from the requested list.
-    return TauntManager.TauntList[resolvedTauntType][GetRandomInt(1, length)]
+    -- return TauntManager.TauntList[resolvedTauntType][GetRandomInt(1, length)]
 end
 
 return TauntManager

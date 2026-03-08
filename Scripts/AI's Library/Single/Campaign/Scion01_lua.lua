@@ -192,6 +192,8 @@ local Mission = {
     m_CanFail = false,
     m_MissionPaused = false,
 
+    m_MissionDelayTime = 0,
+
     m_CurrentPhase = MissionPhase.INTRO,
     m_IntroState = IntroState.SETUP,
     m_TutorialState = TutorialState.PRE_TUTORIAL,

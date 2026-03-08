@@ -1,0 +1,28 @@
+[Size]
+MetersPerGrid = 8.0
+HeightGranularity = 0.1
+MinX = -2048.0
+MinZ = -2048.0
+Width = 4096.0
+Depth = 4096.0
+Height = 100
+Tile = 1
+Color = "255 255 255 255"
+
+[NormalView]
+DiffuseColor = "178.5 178.5 178.5"
+SpecularColor = "10 10 10"
+SpecularPower = 1024.0
+
+[World]
+MusicTrack1=3
+MusicTrack2=4
+MusicTrack3=5
+MusicTrack4=6
+MusicTrack5=7
+
+[CellType]
+GridBoxMaxHeight = 16.0
+
+[Texture]
+TileTexture1 = "core_1.tga"

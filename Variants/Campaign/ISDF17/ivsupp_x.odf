@@ -1,0 +1,21 @@
+[GameObjectClass]
+classLabel = "ivapc_x"
+unitName = "Supply Transport"
+maxAmmo = 0
+
+[CraftClass]
+attackTask = "" // Need to make this AI as dumb as possible.
+defendTask = ""
+waitTask = ""
+specialTask = ""
+subAttackTask = ""
+
+[HoverCraftClass]
+
+[APCClass]
+CanReloadAtRecycler = false // No recycler will be present but you never know.
+soldierType = "" // Just to be sure. Nullify the soldiers.
+soldierCount = 0 // No soldiers, we're not a fighter.
+flightAltitude = 35.0 // Reduced to prevent any possible clipping or bugs with pods.
+
+[Lod1]

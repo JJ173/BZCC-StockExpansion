@@ -152,7 +152,8 @@ BZCCDatabase = {
         "Econchump",
         "Sev",
         "TheBonelord",
-        "Lithium"
+        "Lithium",
+        "Uncle Kunckles"
     },
     Difficulty = {
         DIFFICULTY_EASY = 1,
@@ -174,7 +175,7 @@ BZCCDatabase = {
     },
     DropshipUnits = {
         ["ScavengerDropship"] = "ivscav_x",
-        ["ScrapDropship"] = "ivscrap_x",
+        ["ScrapDropship"] = "ivscrap_gh",
         ["LightDropship"] = "ivmisl_x",
         ["TurretDropship"] = "ivturr_x"
     },
@@ -263,7 +264,7 @@ BZCCDatabase = {
     },
     PortalUnits = {
         ["ScavengerDropship"] = "fvscav_x",
-        ["ScrapDropship"] = "fvscrap_x",
+        ["ScrapDropship"] = "fvscrap_gh",
         ["LightDropship"] = "fvsent_x",
         ["TurretDropship"] = "fvturr_x"
     },

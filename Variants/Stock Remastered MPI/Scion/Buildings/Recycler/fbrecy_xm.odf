@@ -15,7 +15,7 @@ buildEmptyItem = 8
 [BuildGroup1]
 buildLabel = "Scavengers"
 buildItem1 = "fvscav_xm"
-buildItem2 = "fvhscav_gh"
+buildItem2 = "fvhscav_xm"
 
 [BuildGroup5]
 buildlabel = "Constructors"

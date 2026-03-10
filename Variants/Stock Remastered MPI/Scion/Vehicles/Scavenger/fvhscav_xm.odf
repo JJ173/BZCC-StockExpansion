@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "fvhscav_gh"
+geometryName = "fvhscav.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ScavengerHClass]

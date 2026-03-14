@@ -262,7 +262,7 @@ local function GameConditions()
                     NoteGameoverByLastTeamWithBase(WinningTeamgroup)
                 end
 
-                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
+                _CPUManager.SendChatTaunt(InstantCommon.m_CPUTeamObj.Name, _BZCCDatabase.TauntTypes.TAUNTS_CPURecyDestroyed)
                 InstantCommon.m_GameOver = true
             end
         elseif (IsAlive(InstantCommon.m_Recycler) == false) then
@@ -278,8 +278,7 @@ local function GameConditions()
                     NoteGameoverByLastTeamWithBase(WinningTeamgroup)
                 end
 
-                _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj,
-                    _BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
+                _CPUManager.SendChatTaunt(InstantCommon.m_CPUTeamObj.Name, _BZCCDatabase.TauntTypes.TAUNTS_HumanRecyDestroyed)
                 InstantCommon.m_GameOver = true
             end
         end
@@ -794,7 +793,7 @@ function InstantCommon.AddPlayer(id, Team, IsNewPlayer)
         SetAsUser(PlayerH, Team)
         AddPilotByHandle(PlayerH)
 
-        _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_NewHuman)
+        _CPUManager.SendChatTaunt(InstantCommon.m_CPUTeamObj.Name, _BZCCDatabase.TauntTypes.TAUNTS_NewHuman)
     end
 
     return true
@@ -805,7 +804,7 @@ function InstantCommon.DeletePlayer(id)
     InstantCommon.m_PlayerCount = InstantCommon.m_PlayerCount - 1
     IFace_SetInteger(_BZCCDatabase.ShellVariables.MPI_PLAYER_COUNT, tostring(InstantCommon.m_PlayerCount))
     PrintConsoleMessage("[IA 2.0]: Registering New Player Count: " .. InstantCommon.m_PlayerCount)
-    _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_LeftHuman)
+    _CPUManager.SendChatTaunt(InstantCommon.m_CPUTeamObj.Name, _BZCCDatabase.TauntTypes.TAUNTS_LeftHuman)
 
     return true
 end
@@ -978,7 +977,7 @@ function InstantCommon.DeadObject(DeadObjectHandle, KillersHandle, isDeadPerson,
         local killerTeam = GetTeamNum(KillersHandle)
 
         if (killerTeam == InstantCommon.m_CompTeam) then
-            _CPUManager.SendChatMessage(InstantCommon.m_CPUTeamObj, _BZCCDatabase.TauntTypes.TAUNTS_HumanShipDestroyed)
+            _CPUManager.SendChatTaunt(InstantCommon.m_CPUTeamObj.Name, _BZCCDatabase.TauntTypes.TAUNTS_HumanShipDestroyed)
         end
 
         AddScore(DeadObjectHandle, -deadObjectScrapCost)

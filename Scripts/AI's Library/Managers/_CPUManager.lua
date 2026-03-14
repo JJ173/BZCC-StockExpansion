@@ -31,8 +31,12 @@ local _DLLUtils = require("_DLLUtils")
 ---@field Armory? Handle
 ---@field ServiceBay? Handle
 ---@field GunTowers Handle[]
----@field Lieutenants Handle[]
+---@field Lieutenants Lieutenant[]
 ---@field LieutenantNames string[]
+
+---@class Lieutenant
+---@field Handle Handle
+---@field Name string
 
 CPUManager = {
     ---@type CPUTeam[]
@@ -421,25 +425,24 @@ end
 
 ---@param commander Handle
 ---@param spawnPath string
-local function HandleCommander(commander, spawnPath)
-    if (not IsIdle(commander)) then
-        return
+---@param cpuTeam CPUTeam
+local function HandleCommander(commander, spawnPath, cpuTeam)
+    -- If we're not attacking, keep searching for a target.
+    if (GetCurrentCommand(commander) ~= _BZCCDatabase.AICommands.CMD_ATTACK) then
+        -- Check for nearby threats
+        local nearestEnemy = GetNearestEnemy(commander, true, false, 200)
+        if (IsAround(nearestEnemy)) then
+            if (IsPlayer(nearestEnemy)) then -- Send a chat message here.
+                CPUManager.SendChatTaunt(cpuTeam.Name, _BZCCDatabase.TauntTypes.TAUNTS_Attack)
+            end
+
+            Attack(commander, nearestEnemy, 0)
+            return
+        end
     end
 
-    -- Check for nearby threats
-    local nearestEnemy = GetNearestEnemy(commander, true, false, 200)
-    if (nearestEnemy) then
-        -- If enemy is nearby, engage or retreat based on health
-        local health = GetHealth(commander)
-        if (health < 0.3) then
-            -- Retreat if low health
-            local retreatPos = GetPositionNear(spawnPath, 40, 60);
-            Goto(commander, retreatPos, 0)
-        else
-            -- Engage if healthy
-            Attack(commander, nearestEnemy, 0)
-        end
-
+    -- We're not attacking, but we're also no idle, so bail.
+    if (not IsIdle(commander)) then
         return
     end
 
@@ -451,25 +454,26 @@ local function HandleCommander(commander, spawnPath)
     end
 end
 
----@param lieutenant Handle
+---@param lieutenant Lieutenant
 ---@param spawnPath string
 ---@param commander Handle
-local function HandleLieutenant(lieutenant, spawnPath, commander)
-    if (not IsIdle(lieutenant)) then
+---@param cpuTeam CPUTeam
+local function HandleLieutenant(lieutenant, spawnPath, commander, cpuTeam)
+    if (not IsIdle(lieutenant.Handle)) then
         return
     end
 
     -- Check for nearby threats
-    local nearestEnemy = GetNearestEnemy(lieutenant, true, false, 200)
+    local nearestEnemy = GetNearestEnemy(lieutenant.Handle, true, false, 200)
     if (nearestEnemy) then
-        local health = GetHealth(lieutenant)
+        local health = GetHealth(lieutenant.Handle)
         if (health < 0.3) then
             -- Retreat if low health
             local retreatPos = GetPositionNear(spawnPath, 40, 60);
-            Goto(lieutenant, retreatPos, 0)
+            Goto(lieutenant.Handle, retreatPos, 0)
         else
             -- Engage if healthy
-            Attack(lieutenant, nearestEnemy, 0)
+            Attack(lieutenant.Handle, nearestEnemy, 0)
         end
 
         return
@@ -479,7 +483,7 @@ local function HandleLieutenant(lieutenant, spawnPath, commander)
     if (IsAlive(commander)) then
         local followChance = GetRandomFloat(1)
         if (followChance < 0.25) then
-            Defend2(lieutenant, commander, 0)
+            Defend2(lieutenant.Handle, commander, 0)
             return
         end
     end
@@ -487,7 +491,7 @@ local function HandleLieutenant(lieutenant, spawnPath, commander)
     local patrolPoint = CPUManager.Pools[GetRandomInt(1, #CPUManager.Pools - 1)]
     if (patrolPoint) then
         local pos = GetPosition(patrolPoint)
-        Goto(lieutenant, GetPositionNear(pos, 30, 50), 0)
+        Goto(lieutenant.Handle, GetPositionNear(pos, 30, 50), 0)
     end
 end
 
@@ -505,14 +509,49 @@ local function HandleAntiAir(cpuTeam, antiAirUnit)
     end
 end
 
----@param cpuTeam CPUTeam
+---@param cpuTeam any
+---@param handle any
+local function RegisterLieutentant(cpuTeam, handle)
+    -- Grab a name from the list that doesn't include the "cpuTeam.Name" value or already used lieutenant names.
+    local lieutenantNames = {}
+    local usedNames = {}
+
+    for _, used in pairs(cpuTeam.LieutenantNames) do
+        usedNames[used] = true
+    end
+
+    usedNames[cpuTeam.Name] = true -- Also exclude the team name
+
+    for _, name in pairs(_BZCCDatabase.CPUNames) do
+        if (not usedNames[name]) then
+            lieutenantNames[#lieutenantNames + 1] = name
+        end
+    end
+
+    local chosenName = lieutenantNames[GetRandomInt(1, #lieutenantNames)]
+    SetLabel(handle, chosenName)
+    SetObjectiveName(handle, "Lt. " .. chosenName)
+
+    -- Throw the name in the list of used names to avoid renaming.
+    cpuTeam.LieutenantNames[#cpuTeam.LieutenantNames + 1] = chosenName
+
+    ---@type Lieutenant
+    local newLt = {
+        Handle = handle,
+        Name = chosenName,
+    }
+
+    cpuTeam.Lieutenants[#cpuTeam.Lieutenants + 1] = newLt
+end
+
+---@param author string
 ---@param tauntType integer
-function CPUManager.SendChatMessage(cpuTeam, tauntType)
+function CPUManager.SendChatTaunt(author, tauntType)
     -- Grab a random taunt back from the taunt manager.
     local randomTaunt = _TauntManager.GetRandomTauntOfType(tauntType)
 
     -- Simulate a "chat message".
-    AddToMessagesBox("<" .. cpuTeam.Name .. ">: " .. randomTaunt, Make_RGB(255, 0, 0))
+    AddToMessagesBox("<" .. author .. ">: " .. randomTaunt, Make_RGB(255, 0, 0))
     StartSoundEffect("select.wav")
 end
 
@@ -610,10 +649,10 @@ function CPUManager.Run(missionTurnCount)
         if (not cpuTeam.isCampaign) then
             if (cpuTeam.TauntCooldown < missionTurnCount) then
                 if (not cpuTeam.TauntSetupDone) then
-                    CPUManager.SendChatMessage(cpuTeam, _BZCCDatabase.TauntTypes.TAUNTS_GameStart)
+                    CPUManager.SendChatTaunt(cpuTeam.Name, _BZCCDatabase.TauntTypes.TAUNTS_GameStart)
                     cpuTeam.TauntSetupDone = true
                 elseif (cpuTeam.TauntCooldown < missionTurnCount) then
-                    CPUManager.SendChatMessage(cpuTeam, _BZCCDatabase.TauntTypes.TAUNTS_Random)
+                    CPUManager.SendChatTaunt(cpuTeam.Name, _BZCCDatabase.TauntTypes.TAUNTS_Random)
                 end
 
                 cpuTeam.TauntCooldown = missionTurnCount + SecondsToTurns(90)
@@ -621,12 +660,12 @@ function CPUManager.Run(missionTurnCount)
 
             if (cpuTeam.CommanderEnabled) then
                 if (IsAlive(cpuTeam.Commander)) then
-                    HandleCommander(cpuTeam.Commander, cpuTeam.spawnPath)
+                    HandleCommander(cpuTeam.Commander, cpuTeam.spawnPath, cpuTeam)
                 end
 
                 if (#cpuTeam.Lieutenants > 0) then
                     for _, lt in pairs(cpuTeam.Lieutenants) do
-                        HandleLieutenant(lt, cpuTeam.spawnPath, cpuTeam.Commander)
+                        HandleLieutenant(lt, cpuTeam.spawnPath, cpuTeam.Commander, cpuTeam)
                     end
                 end
             end
@@ -712,30 +751,7 @@ function CPUManager.AddTeamObject(handle, missionTurnCount, teamNum)
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.LIEUTENANT) then
-        cpuTeam.Lieutenants[#cpuTeam.Lieutenants + 1] = handle
-
-        -- Grab a name from the list that doesn't include the "cpuTeam.Name" value or already used lieutenant names.
-        local lieutenantNames = {}
-        local usedNames = {}
-
-        for _, used in pairs(cpuTeam.LieutenantNames) do
-            usedNames[used] = true
-        end
-
-        usedNames[cpuTeam.Name] = true -- Also exclude the team name
-
-        for _, name in pairs(_BZCCDatabase.CPUNames) do
-            if (not usedNames[name]) then
-                lieutenantNames[#lieutenantNames + 1] = name
-            end
-        end
-
-        local chosenName = lieutenantNames[GetRandomInt(1, #lieutenantNames)]
-        SetLabel(handle, chosenName)
-        SetObjectiveName(handle, "Lt. " .. chosenName)
-
-        -- Throw the name in the list of used names to avoid renaming.
-        cpuTeam.LieutenantNames[#cpuTeam.LieutenantNames + 1] = chosenName
+        RegisterLieutentant(cpuTeam, handle)
         return
     end
 
@@ -810,7 +826,12 @@ function CPUManager.RemoveTeamObject(handle, teamNum)
     end
 
     if (AICraftType == _BZCCDatabase.AIUnitTypes.LIEUTENANT) then
-        cpuTeam.Lieutenants = TableRemoveByHandle(cpuTeam.Lieutenants, handle)
+        -- Run through the list of cpuTeam Lieutenants and nullify it if found.
+        for i, lt in pairs(cpuTeam.Lieutenants) do
+            if (handle == lt.Handle) then
+                cpuTeam.Lieutenants[i] = nil
+            end
+        end
 
         -- Also grab the label of the ship so we can remove the name from the list of already used names.
         local shipName = GetLabel(handle)

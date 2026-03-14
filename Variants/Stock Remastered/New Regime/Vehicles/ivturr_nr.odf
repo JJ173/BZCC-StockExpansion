@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ivturr_x"
+geometryName = "ivturr00_nr.fbx
+cockpitName = "ivturr_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivturr00_nr.fbx"
+animFile2 = "ivturrsf_nr.fbx"
+animFile3 = "ivturrsn_nr.fbx"
+animFile4 = "ivturrsr_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[TurretTankClass]

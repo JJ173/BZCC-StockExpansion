@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibgtow_x"
+geometryName = "ibgtow00_nr.fbx"
+
+[BuildingClass]
+
+[CraftClass]
+
+[TurretCraftClass]
+
+[Lod1]

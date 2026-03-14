@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ibsbay_x"
+geometryName = "ibsbay00_nr.fbx"
+animFile1 = "ibsbay00_nr.fbx"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[SupplyDepotClass]
+
+[Lod1]

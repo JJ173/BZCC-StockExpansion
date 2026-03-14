@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ivbomb_x"
+geometryName = "ivbomb00_nr.fbx
+PilotConfig = "ispilo_nr"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[BomberClass]

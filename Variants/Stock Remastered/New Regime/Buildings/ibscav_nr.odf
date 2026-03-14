@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ibscav_x"
+geometryName = "ibscav00_nr.fbx"
+animFile1 = "ibscav01_nr.fbx"
+animFile2 = "ibscav00_nr.fbx"
+
+upgradeName = "ibscup_nr"
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]

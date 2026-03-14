@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ivapc_x"
+geometryName = "ivapc00_nr.fbx
+cockpitName = "ivapc_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivapcsf_nr.fbx"
+animFile2 = "ivapcsn_nr.fbx"
+animFile3 = "ivapcsr_nr.fbx"
+animFile4 = "ivapc00_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[APCClass]
+
+[Lod1]

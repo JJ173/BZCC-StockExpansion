@@ -1,0 +1,19 @@
+[GameObjectClass]
+classLabel = "ivrecy_x"
+geometryName = "ivrecy00_nr.fbx
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivrecy00_nr.fbx"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[DeployBuildingClass]
+deployName = "ibrecy_nr"
+
+[RecyclerVehicleClass]
+
+[Lod1]

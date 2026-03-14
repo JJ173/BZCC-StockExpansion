@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ibtrain_x"
+geometryName = "ibtrain00_nr.fbx"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[BarracksClass]
+pilotName = "ispilo_nr"
+
+[Lod1]

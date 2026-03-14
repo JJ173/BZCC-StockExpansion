@@ -1,0 +1,9 @@
+[GameObjectClass]
+classLabel = "ibtcen_x"
+geometryName = "ibtcen00_nr.fbx"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[Lod1]

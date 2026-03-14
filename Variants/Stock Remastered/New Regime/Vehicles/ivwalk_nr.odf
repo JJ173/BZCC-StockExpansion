@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ivwalk_x"
+geometryName = "ivwalk_skel_nr.fbx
+cockpitName = "ivwalk_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivwalk_idle_nr.xsi"
+animFile2 = "ivwalk_idle_nr.xsi"
+animFile3 = "ivwalk_idle_nr.xsi"
+animFile4 = "ivwalk_sitdown_nr.xsi"
+animFile5 = "ivwalk_walk_nr.xsi"
+animFile6 = "ivwalk_turn_nr.xsi"
+animFile7 = "ivwalk_death_nr.xsi"
+animFile8 = "ivwalk_death2_nr.xsi"
+animFile9 = "ivwalk_death3_nr.xsi"
+animFile10 = "ivwalk_walk_nr.xsi"
+
+[CraftClass]
+
+[WalkerClass]

@@ -1,0 +1,11 @@
+[GameObjectClass]
+classLabel = "ibscup_x"
+geometryName = "ibscup00_nr.fbx"
+animFile1 = "ibscup01_nr.fbx"
+animFile2 = "ibscup00_nr.fbx"
+
+[steam]
+
+[BuildingClass]
+
+[ExtractorClass]

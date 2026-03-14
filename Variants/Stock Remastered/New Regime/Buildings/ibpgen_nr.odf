@@ -1,0 +1,10 @@
+[GameObjectClass]
+classLabel = "ibpgen_x"
+geometryName = "ibpgen00_nr.fbx"
+animFile1 = "ibpgen00_nr.fbx"
+
+[BuildingClass]
+
+[PoweredBuildingClass]
+
+[Lod1]

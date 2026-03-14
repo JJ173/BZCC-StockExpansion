@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ibfact_x"
+geometryName = "ibfact00_nr.fbx"
+animFile1 = "ibfact00_nr.fbx"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivmbike_nr"
+buildItem2 = "ivmisl_nr"
+buildItem3 = "ivtank_nr"
+buildItem4 = "ivrckt_nr"
+buildItem5 = "ivatank_nr"
+buildItem6 = "ivwalk_nr"
+buildItem7 = "ivapc_nr"
+buildItem8 = "ivbomb_nr"
+
+[Lod1]

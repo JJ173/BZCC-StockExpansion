@@ -1,0 +1,18 @@
+[GameObjectClass]
+classLabel = "ivscav_x"
+geometryName = "ivscav00_nr.fbx
+cockpitName = "ivscav_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[TrackedDeployableClass]
+
+[ScavengerClass]
+deployClass = "ibscav_nr"
+
+[Lod1]
+
+[Lod2]

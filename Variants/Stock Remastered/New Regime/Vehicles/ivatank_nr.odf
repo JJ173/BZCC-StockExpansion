@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivatank_x"
+geometryName = "ivatnk00_nr.fbx
+cockpitName = "ivatnk_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]

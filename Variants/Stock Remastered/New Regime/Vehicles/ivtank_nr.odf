@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivtank_x"
+geometryName = "ivtank00_nr.fbx
+cockpitName = "ivtank_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivtanksf_nr.fbx"
+animFile2 = "ivtanksn_nr.fbx"
+animFile3 = "ivtanksr_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

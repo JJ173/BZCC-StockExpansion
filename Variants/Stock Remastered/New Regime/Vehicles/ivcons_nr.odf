@@ -1,0 +1,36 @@
+[GameObjectClass]
+classLabel = "ivcons_x"
+geometryName = "ivcons_skel_nr.fbx
+cockpitName = "ivcons_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivcons_idle_nr.fbx"
+animFile2 = "ivcons_idle_nr.fbx"
+animFile3 = "ivcons_idle_nr.fbx"
+animFile4 = "ivcons_startup_nr.fbx"
+animFile5 = "ivcons_walk_nr.fbx"
+animFile6 = "ivcons_turn_nr.fbx"
+animFile7 = "ivcons_death_nr.fbx"
+animFile8 = "ivcons_death2_nr.fbx"
+animFile9 = "ivcons_death3_nr.fbx"
+animFile10 = "ivcons_cons_nr.fbx"
+animFile11 = "ivcons_cons2_nr.fbx"
+animFile12 = "ivcons_cons3_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]
+buildItem1 = "ibpgen_nr"
+buildItem2 = "ibfact_nr"
+buildItem3 = "ibcbun_nr"
+buildItem4 = "ibarmo_nr"
+buildItem5 = "ibsbay_nr"
+buildItem6 = "ibgtow_nr"
+buildItem7 = "ibtrain_nr"
+buildItem8 = "ibtcen_nr"
+buildItem9 = "ibbomb_nr"
+stepSound  = "walker_foot.wav"

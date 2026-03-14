@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ibrecy_x"
+geometryName = "ibrecy00_nr.fbx"
+animFile1 = "ibrecy00_nr.fbx"
+
+[PoweredBuildingClass]
+
+[BuildingClass]
+
+[FactoryClass]
+buildItem1 = "ivscav_nr"
+buildItem2 = "ivscout_nr"
+buildItem3 = "ivturr_nr"
+buildItem4 = "ivtug_nr"
+buildItem5 = "ivcons_nr"
+buildItem6 = "ivserv_nr"
+
+[RecyclerClass]
+
+[Lod1]

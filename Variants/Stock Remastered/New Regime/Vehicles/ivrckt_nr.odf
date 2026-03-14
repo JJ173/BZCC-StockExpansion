@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivrckt_x"
+geometryName = "ivrckt00_nr.fbx
+cockpitName = "ivrckt_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+[CraftClass]
+
+LookAtPitchFactor = 1.0
+
+[TrackedVehicleClass]
+
+[AssaultTankClass]
+
+[Lod1]
+
+[Lod2]

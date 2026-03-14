@@ -1,0 +1,12 @@
+[GameObjectClass]
+classLabel = "ibcbun_x"
+geometryName = "ibcbun00_nr.fbx"
+animFile1 = "ibcbun00_nr.fbx"
+
+[BuildingClass]
+
+[CommBunkerClass]
+
+[PoweredBuildingClass]
+
+[Lod1]

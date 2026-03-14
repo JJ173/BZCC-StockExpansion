@@ -1,0 +1,20 @@
+[GameObjectClass]
+classLabel = "ivserv_x"
+geometryName = "ivserv00_nr.fbx
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivserv00_nr.fbx"
+
+[CraftClass]
+
+[TrackedVehicleClass]
+
+[ServiceTruck]
+
+[Supply]
+
+[Halo]
+
+[Bolt]
+
+[Lod1]

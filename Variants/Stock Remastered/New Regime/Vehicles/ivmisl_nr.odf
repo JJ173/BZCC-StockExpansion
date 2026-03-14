@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivmisl_x"
+geometryName = "ivmisl00_nr.fbx
+cockpitName = "ivmisl_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivmislsf_nr.fbx"
+animFile2 = "ivmislsn_nr.fbx"
+animFile3 = "ivmislsr_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

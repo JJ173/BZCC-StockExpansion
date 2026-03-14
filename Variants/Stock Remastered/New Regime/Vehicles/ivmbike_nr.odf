@@ -1,0 +1,17 @@
+[GameObjectClass]
+classLabel = "ivmbike_x"
+geometryName = "ivmbik00_nr.fbx
+cockpitName = "ivmbik_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivmbiksf_nr.fbx"
+animFile2 = "ivmbiksn_nr.fbx"
+animFile3 = "ivmbiksr_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

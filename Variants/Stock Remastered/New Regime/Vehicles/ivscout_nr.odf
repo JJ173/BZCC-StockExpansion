@@ -1,0 +1,13 @@
+[GameObjectClass]
+classLabel = "ivscout_x"
+geometryName = "ivscout00_nr.fbx
+cockpitName = "ivscout_cockpit_nr.fbx"
+PilotConfig = "ispilo_nr"
+
+animFile1 = "ivscoutsf_nr.fbx"
+animFile2 = "ivscoutsn_nr.fbx"
+animFile3 = "ivscoutsr_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]

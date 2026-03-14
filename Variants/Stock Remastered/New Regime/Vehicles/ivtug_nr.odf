@@ -1,0 +1,14 @@
+[GameObjectClass]
+classLabel = "ivtug_x"
+geometryName = "ivtug00_nr.fbx
+cockpitName = "ivtug_cockpit_nr.fbx"
+
+animFile1 = "ivtug00_nr.fbx"
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[TugClass]
+
+[Lod1]

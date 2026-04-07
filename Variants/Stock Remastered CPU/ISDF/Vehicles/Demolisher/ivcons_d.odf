@@ -1,0 +1,18 @@
+// DEMOLISHER UNIT. USED TO DESTROY ENEMY STRUCTURES
+
+[GameObjectClass]
+classLabel = "ivcons"
+scrapCost = 0
+buildTime = 5
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "Demolisher"
+////////////////////////////////////
+
+[CraftClass]
+
+[HoverCraftClass]
+
+[DeployableClass]
+
+[ConstructionRigClass]

@@ -45,6 +45,7 @@ buildItem4 = "ivlrckt_c"
 buildLabel = "Walkers"
 buildItem1 = "ivwalk_c"
 buildItem2 = "ivhwalk_c"
+buildItem3 = "ivcons_d"
 
 [BuildGroup9]
 buildLabel = "Artillery"

@@ -3,7 +3,7 @@ scrapCount = 40
 scavClass = "fvscav_c"
 consClass = "fvcons_c"
 CheckProvides = true
-DLLCanSwitch = false
+baseLoc = "RecyclerEnemy"
 
 // --------------------------------
 // >>> Base Building Directions <<<

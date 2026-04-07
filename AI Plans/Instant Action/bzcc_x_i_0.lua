@@ -93,6 +93,22 @@ function BuildConstructorCondition(team, time)
     return true, "Tasking Recycler to build a Constructor.";
 end
 
+function BuildDemolisherCondition(team, time)
+    if (not DoesFactoryExist(team, time)) then
+        return false, "I don't have a Factory yet.";
+    end
+
+    if (ExtractorCount(team, time) <= 0) then
+        return false, "I don't have any deployed Scavengers yet.";
+    end
+
+    if (AIPUtil.GetScrap(team, false) < SCAV_SCRAP_COST) then
+        return false, "I don't have enough scrap for a Constructor.";
+    end
+
+    return true, "Tasking Factory to build a Demolisher.";
+end
+
 function BuildTurretCondition(team, time)
     if (not DoesRecyclerExist(team, time)) then
         return false, "I don't have a Recycler yet.";
@@ -329,6 +345,22 @@ function BuildBomber(team, time)
     end
 
     return true, "Tasking Factory to build a Bomber...";
+end
+
+function BuildServicePod(team, time)
+    if (not DoesRecyclerExist(team, time)) then
+        return false, "I don't have a Recycler yet."
+    end
+
+    if (DoesServiceBayExist(team, time)) then
+        return false, "I have a Service Bay so pods are pointless.."
+    end
+
+    if (AIPUtil.CountUnits(team, "apserv", "sameteam", true) >= 2) then
+        return false, "I already have enough pods."
+    end
+
+    return true, "Tasking Recycler to build a Service Pod..."
 end
 
 -- UPGRADE CONDITIONS

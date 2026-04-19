@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel = "ibcbun"
-
-providesCount = 2
-provideName1 = "ibcbun"
-provideName2 = "base"
-

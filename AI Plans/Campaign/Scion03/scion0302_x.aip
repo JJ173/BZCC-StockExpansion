@@ -1,0 +1,219 @@
+[Start]
+scrapCount = 40
+scavClass = "ivscav_x"
+consClass = "ivcons_x"
+idleAllCraft = false
+CheckProvides = true
+
+[Cheat]
+moneyAmount = 6
+moneyDelay = 2
+
+[IdleDispatcher]
+sendAllUnitsOnStartup = false
+CraftTeamIsPilotTeam = false
+UnitIdleSeconds = 999999 
+
+[Plan1]
+planType = "Service"
+planPriority = 295
+serviceUnit = "ivserv_x"
+unitType1 = "ivscout_x"
+unitType2 = "ivmbike_x"
+unitType3 = "ivtank_x"
+unitType4 = "ibscav_x"
+unitType5 = "ibscup_x"
+unitType6 = "ivrckt_x"
+unitType7 = "ivrckts03_x"
+unitType8 = "ivcons_x"
+unitType9 = "ibgtow_x"
+
+[Plan2]
+planType = "CollectPool"
+planPriority = 290
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan3]
+planType = "CollectPool"
+planPriority = 285
+planCondition = "Lua"
+LuaFunction = "CollectPoolCondition"
+ContinueEvenIfFail = true
+buildIfNoIdle = true
+
+[Plan4]
+planType = "CollectField"
+planPriority = 280
+planCondition = "Lua"
+LuaFunction = "CollectFieldCondition"
+buildIfNoIdle = true
+
+[Plan5]
+planType = "BuildMinimums"
+planPriority = 275
+planCondition = "Lua"
+buildType1 = "ivcons_x"
+buildCount1 = 1
+buildType2 = "ivcons_g"
+buildCount2 = 1
+LuaFunction = "BuildConstructorCondition"
+
+[Plan6]
+planType = "BaseBuildMinimums"
+planPriority = 270
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildLoc1 = "aipgen1"
+LuaFunction = "BuildPower1"
+ContinueEvenIfFail = true
+
+[Plan7]
+planType = "BaseBuildMinimums"
+planPriority = 265
+planCondition = "Lua"
+buildType1 = "ibcbun_x"
+buildLoc1 = "aicbun"
+LuaFunction = "BuildRelayBunker"
+ContinueEvenIfFail = true
+
+[Plan8]
+planType = "BaseBuildMinimums"
+planPriority = 260
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildLoc1 = "aigtow1"
+LuaFunction = "BuildGunTower1"
+ContinueEvenIfFail = true
+
+[Plan9]
+planType = "BaseBuildMinimums"
+planPriority = 255
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildLoc1 = "aipgen2"
+LuaFunction = "BuildPower2"
+ContinueEvenIfFail = true
+
+[Plan10]
+planType = "BaseBuildMinimums"
+planPriority = 250
+planCondition = "Lua"
+buildType1 = "ibfact_x"
+buildLoc1 = "aifact"
+LuaFunction = "BuildFactory"
+ContinueEvenIfFail = true
+
+[Plan11]
+planType = "BaseBuildMinimums"
+planPriority = 245
+planCondition = "Lua"
+buildType1 = "ibarmo_x"
+buildLoc1 = "aiarmo"
+LuaFunction = "BuildArmory"
+ContinueEvenIfFail = true
+
+[Plan12]
+planType = "BaseBuildMinimums"
+planPriority = 240
+planCondition = "Lua"
+buildType1 = "ibsbay_x"
+buildLoc1 = "aisbay"
+buildHeading = 3
+LuaFunction = "BuildServiceBay"
+ContinueEvenIfFail = true
+
+[Plan13]
+planType = "BaseBuildMinimums"
+planPriority = 235
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildLoc1 = "aipgen3"
+LuaFunction = "BuildPower3"
+ContinueEvenIfFail = true
+
+[Plan14]
+planType = "BaseBuildMinimums"
+planPriority = 230
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildLoc1 = "aigtow2"
+LuaFunction = "BuildGunTower2"
+ContinueEvenIfFail = true
+
+[Plan15]
+planType = "BaseBuildMinimums"
+planPriority = 225
+planCondition = "Lua"
+buildType1 = "ibgtow_x"
+buildLoc1 = "aigtow3"
+LuaFunction = "BuildGunTower3"
+ContinueEvenIfFail = true
+
+[Plan16]
+planType = "BaseBuildMinimums"
+planPriority = 220
+planCondition = "Lua"
+buildType1 = "ibpgen_x"
+buildLoc1 = "aipgen4"
+LuaFunction = "BuildPower4"
+ContinueEvenIfFail = true
+
+[Plan17]
+planType = "BaseBuildMinimums"
+planPriority = 215
+planCondition = "Lua"
+buildType1 = "ibtrain_x"
+buildLoc1 = "aitrain"
+LuaFunction = "BuildTraining"
+ContinueEvenIfFail = true
+
+[Plan18]
+planType = "BuildMinimums"
+planPriority = 210
+planCondition = "Lua"
+buildType1 = "ivtank_d"
+buildCount1 = 3
+LuaFunction = "BuildAssaultDefenders"
+ContinueEvenIfFail = true
+
+[Plan19]
+planType = "BuildMinimums"
+planPriority = 205
+planCondition = "Lua"
+buildType1 = "ivserv_c"
+buildCount1 = 2
+buildType2 = "ivserv_d"
+buildCount2 = 4
+LuaFunction = "BuildServiceTrucks"
+ContinueEvenIfFail = true
+
+[Plan20]
+planType = "Attacker"
+planPriority = 200
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+attackType1 = "ivscout_x"
+LuaFunction = "EarlyScavengerAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+pickTargetType = 2
+
+[Plan21]
+planType = "Attacker"
+planPriority = 195
+planCondition = "Lua"
+targetType1 = "VIRTUAL_CLASS_EXTRACTOR"
+targetType2 = "VIRTUAL_CLASS_SCAVENGER"
+attackType1 = "ivscout_x"
+LuaFunction = "EarlyScavengerAttackCondition"
+maxAttacks = 0
+AttackAnything = true
+buildIfNoIdle = true
+ContinueEvenIfFail = true
+pickTargetType = 2

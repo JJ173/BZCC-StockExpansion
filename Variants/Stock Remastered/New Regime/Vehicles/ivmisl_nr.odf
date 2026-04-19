@@ -4,8 +4,12 @@ geometryName = "ivmisl00_nr.fbx
 cockpitName = "ivmisl_cockpit_nr.fbx"
 PilotConfig = "ispilo_nr"
 
+animCount = 3
+animName1 = "forward"
 animFile1 = "ivmislsf_nr.fbx"
+animName2 = "neutral"
 animFile2 = "ivmislsn_nr.fbx"
+animName3 = "reverse"
 animFile3 = "ivmislsr_nr.fbx"
 
 [CraftClass]

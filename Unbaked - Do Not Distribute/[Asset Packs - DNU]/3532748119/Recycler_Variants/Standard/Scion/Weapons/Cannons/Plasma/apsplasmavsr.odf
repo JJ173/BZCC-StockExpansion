@@ -1,5 +1,0 @@
-[GameObjectClass]
-classLabel="apsplasma"
-
-// {VSR-403} *Used to require kiln
-requireCount=0

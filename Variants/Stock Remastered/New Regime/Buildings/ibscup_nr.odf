@@ -1,7 +1,11 @@
 [GameObjectClass]
 classLabel = "ibscup_x"
 geometryName = "ibscup00_nr.fbx"
+
+animCount = 2
+animName1 = "deploy"
 animFile1 = "ibscup01_nr.fbx"
+animName2 = "loop"
 animFile2 = "ibscup00_nr.fbx"
 
 [steam]

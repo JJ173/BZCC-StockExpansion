@@ -1,8 +1,0 @@
-[GameObjectClass]
-classLabel = "ivhturr_kp"
-unitName = "Heavy Rattler"
-
-[CraftClass]
-[HoverCraftClass]
-[DeployableClass]
-[TurretTankClass]

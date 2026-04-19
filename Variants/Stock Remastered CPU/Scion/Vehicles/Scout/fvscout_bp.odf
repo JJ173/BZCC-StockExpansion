@@ -1,0 +1,23 @@
+[GameObjectClass]
+classLabel = "fvscout_c"
+
+buildTime = 5 // Halved to stop these units from taking up too much time when being built.
+scrapCost = 0 // Original Scrap Cost (40).
+
+unitName = "Perimeter Guard"
+
+aiAddAmmo = 40 // Stops the AI from running out of ammo.
+
+/////// REIMAGINED  ////////////////
+AIUnitType = "BasePatrol"
+////////////////////////////////////
+
+[CraftClass]
+CanAIPForceIdle = false
+DoIdleDispatch = false
+
+[HoverCraftClass]
+
+[Lod1]
+
+[Lod2]

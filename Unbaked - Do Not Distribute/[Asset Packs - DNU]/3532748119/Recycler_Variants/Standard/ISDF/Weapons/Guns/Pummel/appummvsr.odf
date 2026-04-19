@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel="appumm"
-infoName="apchain.inf"
-scrapCost=20
-
-[WeaponPowerupClass]
-weaponName="gpummelvsr_c"

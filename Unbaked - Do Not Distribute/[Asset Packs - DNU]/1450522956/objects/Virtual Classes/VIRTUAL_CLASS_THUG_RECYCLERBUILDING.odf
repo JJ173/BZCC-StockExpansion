@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel = "ibrecy"
-
-providesCount = 3
-provideName1 = "ibrecy"
-provideName2 = "ibrecycpu"
-provideName3 = "recy"

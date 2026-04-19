@@ -1,7 +1,0 @@
-[GameObjectClass]
-geometryName = "zonepool.xsi"
-classLabel = "tepool01"
-
-[BuildingClass]
-
-[DepositClass]

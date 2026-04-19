@@ -4,15 +4,26 @@ geometryName = "ivwalk_skel_nr.fbx
 cockpitName = "ivwalk_cockpit_nr.fbx"
 PilotConfig = "ispilo_nr"
 
+animCount = 10
+animName1 = "idle"
 animFile1 = "ivwalk_idle_nr.xsi"
+animName2 = "idle2"
 animFile2 = "ivwalk_idle_nr.xsi"
+animName3 = "idle3"
 animFile3 = "ivwalk_idle_nr.xsi"
+animName4 = "sitdown"
 animFile4 = "ivwalk_sitdown_nr.xsi"
+animName5 = "walk"
 animFile5 = "ivwalk_walk_nr.xsi"
+animName6 = "turn"
 animFile6 = "ivwalk_turn_nr.xsi"
+animName7 = "death"
 animFile7 = "ivwalk_death_nr.xsi"
+animName8 = "death2"
 animFile8 = "ivwalk_death2_nr.xsi"
+animName9 = "death3"
 animFile9 = "ivwalk_death3_nr.xsi"
+animName10 = "run"
 animFile10 = "ivwalk_walk_nr.xsi"
 
 [CraftClass]

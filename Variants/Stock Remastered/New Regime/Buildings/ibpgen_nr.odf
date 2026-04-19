@@ -1,6 +1,9 @@
 [GameObjectClass]
 classLabel = "ibpgen_x"
 geometryName = "ibpgen00_nr.fbx"
+
+animCount = 1
+animName1 = "loop"
 animFile1 = "ibpgen00_nr.fbx"
 
 [BuildingClass]

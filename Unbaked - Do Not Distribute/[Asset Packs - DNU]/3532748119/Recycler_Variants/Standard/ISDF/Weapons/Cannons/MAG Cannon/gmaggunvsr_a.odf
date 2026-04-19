@@ -1,6 +1,0 @@
-[WeaponClass]
-classLabel="gmaggun_a"
-altName="gmaggunvsr_c"
-
-[ChargeGunClass]
-holdRate=70.0 // *100.0 {VSR-134}

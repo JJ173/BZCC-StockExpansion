@@ -1,6 +1,0 @@
-[GameObjectClass]
-classLabel="apspln"
-scrapCost=25 // {VSR-137}
-
-[WeaponPowerupClass]
-weaponName="gsplintvsr"

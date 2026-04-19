@@ -1,6 +1,0 @@
-[WeaponClass]
-classLabel="gmcurmin"
-
-[DispenserClass]
-shotDelay=2.5 // *2.0 {VSR-145}
-objectClass="mcurminvsr"

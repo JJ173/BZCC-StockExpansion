@@ -1,3 +1,0 @@
-[GameObjectClass]
-classLabel="flaremine_s"
-isAssault=0 // Mines should not make Scion AI morph {VSR-009}

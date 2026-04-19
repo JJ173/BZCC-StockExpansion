@@ -1,9 +1,0 @@
-[GameObjectClass]
-classLabel = "ivatank"
-unitName = "Bull Dog"
-
-[CraftClass]
-
-[TrackedVehicleClass]
-
-[AssaultTankClass]

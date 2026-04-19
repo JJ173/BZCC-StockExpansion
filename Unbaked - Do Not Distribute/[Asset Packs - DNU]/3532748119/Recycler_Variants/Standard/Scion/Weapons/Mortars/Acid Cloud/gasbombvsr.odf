@@ -1,6 +1,0 @@
-[OrdnanceClass]
-classLabel="gasbomb"
-ammoCost=450 // *1000 {VSR-274}
-
-[SprayBombClass]
-payloadName="gasbomb2vsr"

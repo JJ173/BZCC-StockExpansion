@@ -1,9 +1,0 @@
-[GameObjectClass]
-classLabel = "ivhatank_kp_a"
-unitName = "Heavy Bull Dog"
-
-[CraftClass]
-
-[TrackedVehicleClass]
-
-[AssaultTankClass]

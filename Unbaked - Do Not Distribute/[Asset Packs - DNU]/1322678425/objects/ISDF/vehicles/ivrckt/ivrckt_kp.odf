@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel = "ivrckt"
-unitName = "Griffin"
-
-[CraftClass]
-[TrackedVehicleClass]
-[AssaultTankClass]

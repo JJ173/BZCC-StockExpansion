@@ -3,6 +3,8 @@ classLabel = "ivrecy_x"
 geometryName = "ivrecy00_nr.fbx
 PilotConfig = "ispilo_nr"
 
+animCount = 1
+animName1 = "deploy"
 animFile1 = "ivrecy00_nr.fbx"
 
 [CraftClass]

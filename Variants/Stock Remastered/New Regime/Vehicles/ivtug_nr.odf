@@ -3,6 +3,8 @@ classLabel = "ivtug_x"
 geometryName = "ivtug00_nr.fbx
 cockpitName = "ivtug_cockpit_nr.fbx"
 
+animCount = 1
+animName1 = "deploy"
 animFile1 = "ivtug00_nr.fbx"
 
 [CraftClass]

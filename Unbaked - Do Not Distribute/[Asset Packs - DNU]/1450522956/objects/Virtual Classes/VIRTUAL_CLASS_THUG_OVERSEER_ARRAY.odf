@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel = "fbover"
-
-providesCount = 3
-provideName1 = "fbover"
-provideName2 = "fbantm"
-provideName3 = "base"

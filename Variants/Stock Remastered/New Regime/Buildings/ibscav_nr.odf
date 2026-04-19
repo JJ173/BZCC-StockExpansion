@@ -1,7 +1,11 @@
 [GameObjectClass]
 classLabel = "ibscav_x"
 geometryName = "ibscav00_nr.fbx"
+
+animCount = 2
+animName1 = "deploy"
 animFile1 = "ibscav01_nr.fbx"
+animName2 = "loop"
 animFile2 = "ibscav00_nr.fbx"
 
 upgradeName = "ibscup_nr"

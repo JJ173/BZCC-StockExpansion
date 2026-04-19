@@ -1,7 +1,0 @@
-[GameObjectClass]
-classLabel="aplock"
-infoName="aplockvsr.inf"
-scrapCost=20 // *30 {VSR-391}
-
-[WeaponPowerupClass]
-weaponName="glockvsr_c"

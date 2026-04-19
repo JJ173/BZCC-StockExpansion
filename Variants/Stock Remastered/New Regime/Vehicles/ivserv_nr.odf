@@ -3,6 +3,8 @@ classLabel = "ivserv_x"
 geometryName = "ivserv00_nr.fbx
 PilotConfig = "ispilo_nr"
 
+animCount = 1
+animName1 = "deploy"
 animFile1 = "ivserv00_nr.fbx"
 
 [CraftClass]

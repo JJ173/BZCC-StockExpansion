@@ -1,7 +1,12 @@
 [GameObjectClass]
 classLabel = "ibrecy_x"
 geometryName = "ibrecy00_nr.fbx"
+
+animCount = 1
+animName1 = "loop"
 animFile1 = "ibrecy00_nr.fbx"
+RunAnimation = "loop"
+RunAnimIsLooped = true
 
 [PoweredBuildingClass]
 

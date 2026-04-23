@@ -11,7 +11,7 @@ buildItem3 = "fvturr_x"
 buildItem4 = "fvtug"
 buildItem5 = "fvcons_x"
 buildItem6 = "fvserv_x"
-buildItem7 = "apserv"
+buildItem7 = "apserv_f"
 
 DropoffConfig = "fpdrop_x"
 

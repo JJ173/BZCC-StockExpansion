@@ -1,0 +1,9 @@
+[GameObjectClass]
+geometryName = "dorelc02.fbx"
+classLabel = "apserv"
+
+[blue]
+
+[PowerUpClass]
+
+[ServicePowerupClass]

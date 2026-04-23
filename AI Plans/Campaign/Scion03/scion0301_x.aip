@@ -106,7 +106,7 @@ planPriority = 245
 planCondition = "Lua"
 buildType1 = "ibsbay_x"
 buildLoc1 = "manson_sbay"
-buildHeading = 3
+buildHeading = 0
 LuaFunction = "BuildServiceBay"
 ContinueEvenIfFail = true
 

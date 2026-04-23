@@ -6,7 +6,7 @@ idleAllCraft = false
 CheckProvides = true
 
 [Cheat]
-moneyAmount = 3
+moneyAmount = 6
 moneyDelay = 2
 
 [IdleDispatcher]
@@ -157,89 +157,3 @@ buildType1 = "ivturr_x"
 buildCount1 = 1
 LuaFunction = "BuildTurrets"
 ContinueEvenIfFail = true
-
-[Plan17]
-targetType1 = "fvscav_x"
-targetType2 = "fvturr_x"
-targetType3 = "fvcons_x"
-targetType4 = "fbrecy_x"
-attackType1 = "ivscout_x"
-attackType2 = "ivscout_x"
-planType = "Attacker"
-planPriority = 140
-planCondition = "Lua"
-luaFunction = "Attack1Condition"
-attackAnything = true
-buildIfNoIdle = true
-continueEvenIfFail = true
-
-[Plan18]
-targetType1 = "fvturr_x"
-targetType2 = "fbscav_x"
-targetType3 = "fvcons_x"
-targetType4 = "fbrecy_x"
-attackType1 = "ivmbike_x"
-attackType2 = "ivmbike_x"
-attackType3 = "ivmbike_x"
-planType = "Attacker"
-planPriority = 130
-planCondition = "Lua"
-luaFunction = "Attack2Condition"
-attackAnything = true
-buildIfNoIdle = true
-continueEvenIfFail = true
-maxAttacks = 0
-
-[Plan19]
-targetType1 = "fbspir_x"
-targetType2 = "fvturr_x"
-targetType3 = "fvcons_x"
-targetType4 = "fbscav_x"
-targetType5 = "fvscav_x"
-targetType6 = "fbrecy_x"
-attackType1 = "ivtank_x"
-attackType2 = "ivtank_x"
-attackType3 = "ivmbike_x"
-attackType4 = "ivmbike_x"
-planType = "Attacker"
-planPriority = 120
-planCondition = "Lua"
-luaFunction = "Attack3Condition"
-attackAnything = true
-buildIfNoIdle = true
-continueEvenIfFail = true
-maxAttacks = 0
-
-[Plan20]
-targetType1 = "fbspir_x"
-targetType2 = "fbkiln_x"
-targetType3 = "fbrecy_x"
-attackType1 = "ivatank_x"
-attackType2 = "ivatank_x"
-planType = "Attacker"
-planPriority = 110
-planCondition = "Lua"
-luaFunction = "Attack4Condition"
-attackAnything = true
-buildIfNoIdle = true
-continueEvenIfFail = true
-maxAttacks = 0
-
-[Plan21]
-targetType1 = "fbkiln_x"
-targetType2 = "fbforg_x"
-targetType3 = "fvcons_x"
-targetType4 = "fbscav_x"
-targetType5 = "fvscav_x"
-targetType6 = "fbrecy_x"
-attackType1 = "ivtank_x"
-attackType2 = "ivtank_x"
-attackType3 = "ivtank_x"
-planType = "Attacker"
-planPriority = 100
-planCondition = "Lua"
-luaFunction = "Attack5Condition"
-attackAnything = true
-buildIfNoIdle = true
-continueEvenIfFail = true
-maxAttacks = 0
